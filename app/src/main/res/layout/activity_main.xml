@@ -1,19 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:fillViewport="true"
+    tools:context=".MainActivity">
 
-    <com.zyyoona7.wheelpicker.WheelView
-        android:id="@+id/wheelview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"/>
-</LinearLayout>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingBottom="50dp">
+
+        <com.zyyoona7.wheelpicker.WheelView
+            android:id="@+id/wheelview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wheelview"
+            android:layout_marginTop="10dp"
+            android:text="是否开启循环滚动效果"
+            android:id="@+id/sc_turn_on_cyclic" />
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/cb_smooth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="平滑滚动"
+            app:layout_constraintTop_toBottomOf="@id/sc_turn_on_cyclic" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/sb_smooth_duration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/cb_smooth"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cb_smooth"
+            app:layout_constraintTop_toTopOf="@id/cb_smooth" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/button_random"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="随机滚动到当前下标"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cb_smooth" />
+
+        <RadioGroup
+            android:id="@+id/rg_align"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_random">
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/rb_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="左对齐" />
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/rb_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="居中" />
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/rb_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="右对齐" />
+        </RadioGroup>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_align"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="设置对齐"
+            app:layout_constraintBottom_toBottomOf="@id/rg_align"
+            app:layout_constraintStart_toEndOf="@id/rg_align"
+            app:layout_constraintTop_toTopOf="@id/rg_align" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="设置字体左右边距"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_set_align" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/sb_margin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/btn_set_margin"
+            app:layout_constraintEnd_toStartOf="@id/btn_set_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_set_margin" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_visible_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="设置可见条目"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_set_margin" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/sb_visible_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/btn_set_visible_item"
+            app:layout_constraintEnd_toStartOf="@id/btn_set_visible_item"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_set_visible_item" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_line_space"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="设置行间距"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_set_visible_item" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/sb_line_space"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/btn_set_line_space"
+            app:layout_constraintEnd_toStartOf="@id/btn_set_line_space"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_set_line_space" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/btn_set_line_space"
+            android:layout_marginTop="10dp"
+            android:textSize="14sp"
+            android:text="弯曲（3D）效果"
+            android:id="@+id/tv_curved_guide_line"
+            />
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_curved_guide_line"
+            android:layout_marginTop="10dp"
+            android:text="是否开启弯曲（3D）效果"
+            android:id="@+id/sc_turn_on_curved" />
+
+        <RadioGroup
+            android:id="@+id/rg_curved_align"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sc_turn_on_curved">
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/rb_curved_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="左对齐" />
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/rb_curved_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="居中" />
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/rb_curved_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="右对齐" />
+        </RadioGroup>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_curved_align"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="设置弯曲效果对齐"
+            app:layout_constraintBottom_toBottomOf="@id/rg_curved_align"
+            app:layout_constraintStart_toEndOf="@id/rg_curved_align"
+            app:layout_constraintTop_toTopOf="@id/rg_curved_align" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_curved_bias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="设置行间距"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_set_curved_align" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/sb_curved_bias"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/btn_set_curved_bias"
+            app:layout_constraintEnd_toStartOf="@id/btn_set_curved_bias"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_set_curved_bias" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v4.widget.NestedScrollView>

@@ -1,6 +1,6 @@
 package com.zyyoona7.wheelpicker;
 
-public interface IWheelable {
+public interface IWheelEntity {
 
     /**
      * 获取 wheel text
