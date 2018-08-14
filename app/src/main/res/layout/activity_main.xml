@@ -14,6 +14,16 @@
         android:paddingStart="10dp"
         android:paddingBottom="50dp">
 
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/btn_go_custom_attrs"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="跳转自定义属性展示页"
+            android:layout_marginTop="10dp"/>
+
         <com.zyyoona7.wheelpicker.WheelView
             android:id="@+id/wheelview"
             android:layout_width="wrap_content"
@@ -22,7 +32,7 @@
             android:background="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/btn_go_custom_attrs" />
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="0dp"

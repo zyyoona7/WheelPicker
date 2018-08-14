@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">WheelPicker</string>
+
+    <string name="textSizeValue">字体大小为：%s</string>
+    <string name="textAlignValue">文字对齐方式为：%s</string>
+    <string name="textBoundaryMarginValue">文字距离边界的外边距为：%s</string>
+    <string name="normalItemTextColorValue">未选中文字颜色为：%s</string>
+    <string name="selectedItemTextColorValue">被选中的文字颜色为：%s</string>
+    <string name="lineSpaceValue">行间距为：%s</string>
+    <string name="integerNeedFormatValue">数据为Integer类型时是否需要转换：%s</string>
+    <string name="integerFormatValue">Integer类型转换格式：%s</string>
+
+    <string name="visibleItemsValue">可见item数为：%s</string>
+    <string name="currentItemPositionValue">当前选中下标为：%s</string>
+    <string name="cyclicValue">是否循环滚动：%s</string>
+
+    <string name="showDividerValue">是否显示分割线：%s</string>
+    <string name="dividerTypeValue">分割线类型为：%s</string>
+    <string name="dividerColorValue">分割线颜色为：%s</string>
+    <string name="dividerHeightValue">分割线高度为：%s</string>
+    <string name="dividerPaddingForWrapValue">wrap类型下分割线内边距为：%s</string>
+
+    <string name="curvedValue">是否是弯曲（3D）效果：%s</string>
+    <string name="curvedAlignValue">弯曲（3D）效果对齐方式为：%s</string>
+    <string name="curvedAlignBiasValue">弯曲（3D）效果对齐系数为：%s</string>
+    <string name="curvedRefractXValue">选中条目折射偏移为：%s</string>
 </resources>

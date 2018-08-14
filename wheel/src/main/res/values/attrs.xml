@@ -1,29 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="WheelPicker">
-        <attr name="wheel_data" format="reference" />
-        <attr name="wheel_selected_item_position" format="integer" />
-        <attr name="wheel_item_text_size" format="dimension" />
-        <attr name="wheel_item_text_color" format="color" />
-        <attr name="wheel_selected_item_text_color" format="color" />
-        <attr name="wheel_same_width" format="boolean" />
-        <attr name="wheel_maximum_width_text" format="string" />
-        <attr name="wheel_maximum_width_text_position" format="integer" />
-        <attr name="wheel_visible_item_count" format="integer" />
-        <attr name="wheel_item_space" format="dimension" />
-        <attr name="wheel_cyclic" format="boolean" />
-        <attr name="wheel_indicator" format="boolean" />
-        <attr name="wheel_indicator_color" format="color" />
-        <attr name="wheel_indicator_size" format="dimension" />
-        <attr name="wheel_curtain" format="boolean" />
-        <attr name="wheel_curtain_color" format="color" />
-        <attr name="wheel_atmospheric" format="boolean" />
-        <attr name="wheel_curved" format="boolean" />
-        <attr name="wheel_item_align" format="enum">
-            <enum name="center" value="0" />
-            <enum name="left" value="1" />
-            <enum name="right" value="2" />
+    <declare-styleable name="WheelView">
+        <!--文字大小-->
+        <attr name="wv_textSize" format="dimension"/>
+        <!--文字对齐方式-->
+        <attr name="wv_textAlign" format="enum">
+            <enum name="left" value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="right" value="2"/>
         </attr>
-        <attr name="wheel_font_path" format="string" />
+        <!--文字距离边界的外边距-->
+        <attr name="wv_textBoundaryMargin" format="dimension"/>
+        <!--未选中文字颜色-->
+        <attr name="wv_normalItemTextColor" format="color"/>
+        <!--被选中的文字颜色-->
+        <attr name="wv_selectedItemTextColor" format="color"/>
+        <!--行间距-->
+        <attr name="wv_lineSpace" format="dimension"/>
+        <!--数据为Integer类型时是否需要转换-->
+        <attr name="wv_integerNeedFormat" format="boolean"/>
+        <!--Integer类型转换格式-->
+        <attr name="wv_integerFormat" format="string"/>
+
+        <!--可见item数-->
+        <attr name="wv_visibleItems" format="integer"/>
+        <!--当前选中下标-->
+        <attr name="wv_currentItemPosition" format="integer"/>
+        <!--是否循环滚动-->
+        <attr name="wv_cyclic" format="boolean"/>
+
+        <!--是否显示分割线-->
+        <attr name="wv_showDivider" format="boolean"/>
+        <!--分割线类型-->
+        <attr name="wv_dividerType" format="enum">
+            <enum name="fill" value="0"/>
+            <enum name="wrap" value="1"/>
+        </attr>
+        <!--分割线颜色-->
+        <attr name="wv_dividerColor" format="color"/>
+        <!--分割线高度-->
+        <attr name="wv_dividerHeight" format="dimension"/>
+        <!--wrap类型下分割线内边距-->
+        <attr name="wv_dividerPaddingForWrap" format="dimension"/>
+
+
+        <!--是否是弯曲（3D）效果-->
+        <attr name="wv_curved" format="boolean"/>
+        <!--弯曲（3D）效果对齐方式 可向指定方向偏移-->
+        <attr name="wv_curvedAlign" format="enum">
+            <enum name="left" value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="right" value="2"/>
+        </attr>
+        <!--弯曲（3D）效果对齐系数 偏移系数-->
+        <attr name="wv_curvedAlignBias" format="float"/>
+        <!--选中条目折射偏移-->
+        <attr name="wv_curvedRefractX" format="dimension"/>
     </declare-styleable>
 </resources>

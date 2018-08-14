@@ -2,18 +2,21 @@ package com.zyyoona7.wheelpicker;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -29,14 +32,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class WheelView<T> extends View {
+public class WheelView<T> extends View implements Runnable {
 
     private static final String TAG = "WheelView";
 
-    private static final int DEFAULT_LINE_SPACE = (int) dp2px(2f);
-    private static final int DEFAULT_VISIBLE_ITEM = 3;
+    private static final float DEFAULT_LINE_SPACE = dp2px(2f);
+    private static final float DEFAULT_TEXT_SIZE = sp2px(15f);
+    private static final float DEFAULT_TEXT_BOUNDARY_MARGIN = dp2px(2);
+    private static final float DEFAULT_DIVIDER_HEIGHT = dp2px(1);
+    private static final int DEFAULT_NORMAL_TEXT_COLOR = Color.DKGRAY;
+    private static final int DEFAULT_SELECTED_TEXT_COLOR = Color.BLACK;
+    private static final int DEFAULT_VISIBLE_ITEM = 5;
     private static final int DEFAULT_SCROLL_DURATION = 250;
     private static final long DEFAULT_CLICK_CONFIRM = 120;
+    private static final String DEFAULT_INTEGER_FORMAT = "%02d";
 
     //文字对齐方式
     public static final int TEXT_ALIGN_LEFT = 0;
@@ -70,26 +79,26 @@ public class WheelView<T> extends View {
     //文字中心距离baseline的距离
     private int mCenterToBaselineY;
     //可见的item条数
-    private int mVisibleItems = DEFAULT_VISIBLE_ITEM;
+    private int mVisibleItems;
     //每个item之间的空间
-    private int mLineSpace = DEFAULT_LINE_SPACE;
+    private float mLineSpace;
     //是否循环滚动
-    private boolean isCyclic = false;
+    private boolean isCyclic;
     //文字对齐方式
-    private int mTextAlign = TEXT_ALIGN_CENTER;
+    private int mTextAlign;
     //文字颜色
-    private int mTextColor = Color.DKGRAY;
+    private int mTextColor;
     //选中item文字颜色
-    private int mSelectedItemColor = Color.BLACK;
+    private int mSelectedItemColor;
 
     //是否显示分割线
     private boolean isShowDivider = true;
     //分割线的颜色
-    private int mDividerColor = Color.BLACK;
+    private int mDividerColor;
     //分割线高度
-    private float mDividerHeight = dp2px(1);
+    private float mDividerSize;
     //分割线填充类型
-    private int mDividerType = DIVIDER_TYPE_WRAP;
+    private int mDividerType;
     //分割线类型为DIVIDER_TYPE_WRAP时 分割线左右两端距离文字的间距
     private float mDividerPaddingForWrap = dp2px(2);
     //分割线两端形状，默认圆头
@@ -112,11 +121,11 @@ public class WheelView<T> extends View {
     //绘制区域
     private Rect mDrawRect;
     //字体外边距，目的是留有边距
-    private float mTextBoundaryMargin = dp2px(2);
+    private float mTextBoundaryMargin;
     //数据为Integer类型时，是否需要格式转换
     private boolean isIntegerNeedFormat = false;
     //数据为Integer类型时，转换格式，默认转换为两位数
-    private String mIntegerFormat = "%02d";
+    private String mIntegerFormat;
 
     //3D效果
     private Camera mCamera;
@@ -150,8 +159,9 @@ public class WheelView<T> extends View {
     //手指按下时间，根据按下抬起时间差处理点击滚动
     private long mDownStartTime;
     //是否强制停止滚动
-    private boolean mIsForceFinishScroll = false;
-
+    private boolean isForceFinishScroll = false;
+    //是否是快速滚动，快速滚动结束后跳转位置
+    private boolean isFlingScroll;
     //当前选中的下标
     private int mCurrentItemPosition;
 
@@ -169,11 +179,56 @@ public class WheelView<T> extends View {
 
     public WheelView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        initAttrsAndDefault(context, attrs);
+        initValue(context);
     }
 
-    private void init(Context context) {
-        mPaint.setTextSize(sp2px(15));
+    /**
+     * 初始化自定义属性及默认值
+     *
+     * @param context context
+     * @param attrs   attrs
+     */
+    private void initAttrsAndDefault(Context context, AttributeSet attrs) {
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelView);
+        mTextSize = typedArray.getDimension(R.styleable.WheelView_wv_textSize, DEFAULT_TEXT_SIZE);
+        mTextAlign = typedArray.getInt(R.styleable.WheelView_wv_textAlign, TEXT_ALIGN_CENTER);
+        mTextBoundaryMargin = typedArray.getDimension(R.styleable.WheelView_wv_textBoundaryMargin,
+                DEFAULT_TEXT_BOUNDARY_MARGIN);
+        mTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalItemTextColor, DEFAULT_NORMAL_TEXT_COLOR);
+        mSelectedItemColor = typedArray.getColor(R.styleable.WheelView_wv_selectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR);
+        mLineSpace = typedArray.getDimension(R.styleable.WheelView_wv_lineSpace, DEFAULT_LINE_SPACE);
+        isIntegerNeedFormat = typedArray.getBoolean(R.styleable.WheelView_wv_integerNeedFormat, false);
+        mIntegerFormat = typedArray.getString(R.styleable.WheelView_wv_integerFormat);
+        if (TextUtils.isEmpty(mIntegerFormat)) {
+            mIntegerFormat = DEFAULT_INTEGER_FORMAT;
+        }
+
+        mVisibleItems = typedArray.getInt(R.styleable.WheelView_wv_visibleItems, DEFAULT_VISIBLE_ITEM);
+        mCurrentItemPosition = typedArray.getInt(R.styleable.WheelView_wv_currentItemPosition, 0);
+        isCyclic = typedArray.getBoolean(R.styleable.WheelView_wv_cyclic, true);
+
+        isShowDivider = typedArray.getBoolean(R.styleable.WheelView_wv_showDivider, false);
+        mDividerType = typedArray.getInt(R.styleable.WheelView_wv_dividerType, DIVIDER_TYPE_FILL);
+        mDividerSize = typedArray.getDimension(R.styleable.WheelView_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT);
+        mDividerColor = typedArray.getColor(R.styleable.WheelView_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR);
+        mDividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelView_wv_dividerPaddingForWrap, DEFAULT_TEXT_BOUNDARY_MARGIN);
+
+        isCurved = typedArray.getBoolean(R.styleable.WheelView_wv_curved, true);
+        mCurvedAlign = typedArray.getInt(R.styleable.WheelView_wv_curvedAlign, CURVED_ALIGN_CENTER);
+        mCurvedAlignBias = typedArray.getFloat(R.styleable.WheelView_wv_curvedAlignBias, DEFAULT_CURVED_BIAS);
+        //折射偏移默认值
+        mCurvedRefractX = typedArray.getDimension(R.styleable.WheelView_wv_curvedRefractX, mTextSize * 0.05f);
+        typedArray.recycle();
+    }
+
+    /**
+     * 初始化并设置默认值
+     *
+     * @param context context
+     */
+    private void initValue(Context context) {
+        mPaint.setTextSize(mTextSize);
         ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
         mMaxFlingVelocity = viewConfiguration.getScaledMaximumFlingVelocity();
         mMinFlingVelocity = viewConfiguration.getScaledMinimumFlingVelocity();
@@ -183,15 +238,12 @@ public class WheelView<T> extends View {
         mMatrix = new Matrix();
         calculateTextSize();
         updateTextAlign();
-        //折射偏移默认值
-        mCurvedRefractX = mPaint.getTextSize() * 0.05f;
     }
 
     /**
      * 测量文字最大所占空间
      */
     private void calculateTextSize() {
-
         for (int i = 0; i < mDataList.size(); i++) {
             int textWidth = (int) mPaint.measureText(getDataText(mDataList.get(i)));
             mMaxTextWidth = Math.max(textWidth, mMaxTextWidth);
@@ -199,7 +251,7 @@ public class WheelView<T> extends View {
 
         mFontMetrics = mPaint.getFontMetrics();
         //itemHeight实际等于字体高度+一个行间距
-        mItemHeight = (int) (mFontMetrics.bottom - mFontMetrics.top) + mLineSpace;
+        mItemHeight = (int) (mFontMetrics.bottom - mFontMetrics.top + mLineSpace);
     }
 
     /**
@@ -331,14 +383,14 @@ public class WheelView<T> extends View {
     /**
      * 绘制分割线
      *
-     * @param canvas
+     * @param canvas 画布
      */
     private void drawDivider(Canvas canvas) {
         if (isShowDivider) {
             mPaint.setColor(mDividerColor);
             float originStrokeWidth = mPaint.getStrokeWidth();
             mPaint.setStrokeJoin(mDividerJoin);
-            mPaint.setStrokeWidth(mDividerHeight);
+            mPaint.setStrokeWidth(mDividerSize);
             if (mDividerType == DIVIDER_TYPE_FILL) {
                 canvas.drawLine(mClipLeft, mSelectedItemTopLimit, mClipRight, mSelectedItemTopLimit, mPaint);
                 canvas.drawLine(mClipLeft, mSelectedItemBottomLimit, mClipRight, mSelectedItemBottomLimit, mPaint);
@@ -363,9 +415,9 @@ public class WheelView<T> extends View {
     /**
      * 绘制2D效果
      *
-     * @param canvas
-     * @param index
-     * @param scrolledOffset
+     * @param canvas         画布
+     * @param index          下标
+     * @param scrolledOffset 滚动偏移
      */
     private void drawItem(Canvas canvas, int index, int scrolledOffset) {
         String text = getDataByIndex(index);
@@ -406,11 +458,11 @@ public class WheelView<T> extends View {
     /**
      * 裁剪并绘制2d text
      *
-     * @param canvas
-     * @param text
-     * @param clipTop
-     * @param clipBottom
-     * @param item2CenterOffsetY
+     * @param canvas             画布
+     * @param text               绘制的文字
+     * @param clipTop            裁剪的上边界
+     * @param clipBottom         裁剪的下边界
+     * @param item2CenterOffsetY 距离中间项的偏移
      */
     private void clipAndDraw2DText(Canvas canvas, String text, int clipTop, int clipBottom, int item2CenterOffsetY) {
         canvas.save();
@@ -422,9 +474,9 @@ public class WheelView<T> extends View {
     /**
      * 绘制弯曲（3D）效果的item
      *
-     * @param canvas
-     * @param index
-     * @param scrolledOffset
+     * @param canvas         画布
+     * @param index          下标
+     * @param scrolledOffset 滚动偏移
      */
     private void draw3DItem(Canvas canvas, int index, int scrolledOffset) {
         String text = getDataByIndex(index);
@@ -485,14 +537,14 @@ public class WheelView<T> extends View {
     /**
      * 裁剪并绘制弯曲（3D）效果
      *
-     * @param canvas
-     * @param text
-     * @param clipTop
-     * @param clipBottom
-     * @param refractX
-     * @param rotateX
-     * @param offsetY
-     * @param offsetZ
+     * @param canvas     画布
+     * @param text       绘制的文字
+     * @param clipTop    裁剪的上边界
+     * @param clipBottom 裁剪的下边界
+     * @param refractX   选中item折射效果的偏移量
+     * @param rotateX    绕X轴旋转角度
+     * @param offsetY    Y轴偏移
+     * @param offsetZ    Z轴偏移
      */
     private void clipAndDraw3DText(Canvas canvas, String text, int clipTop, int clipBottom, float refractX,
                                    float rotateX, float offsetY, float offsetZ) {
@@ -510,11 +562,11 @@ public class WheelView<T> extends View {
     /**
      * 绘制弯曲（3D）的文字
      *
-     * @param canvas
-     * @param text
-     * @param rotateX
-     * @param offsetY
-     * @param offsetZ
+     * @param canvas  画布
+     * @param text    绘制的文字
+     * @param rotateX 绕X轴旋转角度
+     * @param offsetY Y轴偏移
+     * @param offsetZ Z轴偏移
      */
     private void draw3DText(Canvas canvas, String text, float rotateX, float offsetY, float offsetZ) {
         mCamera.save();
@@ -544,8 +596,8 @@ public class WheelView<T> extends View {
     /**
      * 根据下标获取到内容
      *
-     * @param index
-     * @return
+     * @param index 下标
+     * @return 绘制的文字内容
      */
     private String getDataByIndex(int index) {
         int dataSize = mDataList.size();
@@ -571,8 +623,8 @@ public class WheelView<T> extends View {
     /**
      * 获取item text
      *
-     * @param item
-     * @return
+     * @param item item数据
+     * @return 文本内容
      */
     private String getDataText(T item) {
         if (item == null) {
@@ -592,7 +644,7 @@ public class WheelView<T> extends View {
     /**
      * 获取数据列表
      *
-     * @return
+     * @return 数据列表
      */
     public List<T> getData() {
         return mDataList;
@@ -601,7 +653,7 @@ public class WheelView<T> extends View {
     /**
      * 设置数据
      *
-     * @param dataList
+     * @param dataList 数据列表
      */
     public void setData(List<T> dataList) {
         if (dataList == null) {
@@ -612,7 +664,7 @@ public class WheelView<T> extends View {
             mCurrentItemPosition = mDataList.size() - 1;
         }
         if (!mOverScroller.isFinished()) {
-            mOverScroller.abortAnimation();
+            mOverScroller.forceFinished(true);
         }
         mScrollOffsetY = 0;
         calculateTextSize();
@@ -637,9 +689,9 @@ public class WheelView<T> extends View {
                 }
                 //如果未滚动完成，强制滚动完成
                 if (!mOverScroller.isFinished()) {
-                    mOverScroller.abortAnimation();
                     //强制滚动完成
-                    mIsForceFinishScroll = true;
+                    mOverScroller.forceFinished(true);
+                    isForceFinishScroll = true;
                 }
                 mLastTouchY = event.getY();
                 //按下时间
@@ -664,16 +716,15 @@ public class WheelView<T> extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 //手指抬起
-                mIsForceFinishScroll = false;
+                isForceFinishScroll = false;
                 mVelocityTracker.computeCurrentVelocity(1000, mMaxFlingVelocity);
                 float velocityY = mVelocityTracker.getYVelocity();
                 if (Math.abs(velocityY) > mMinFlingVelocity) {
                     //快速滑动
+                    mOverScroller.forceFinished(true);
+                    isFlingScroll = true;
                     mOverScroller.fling(0, mScrollOffsetY, 0, (int) -velocityY, 0, 0,
                             mMinScrollY, mMaxScrollY);
-                    //更新结束位置，保证滚动完成后正好选中不发生偏移
-                    mOverScroller.notifyVerticalEdgeReached(mScrollOffsetY, mOverScroller.getFinalY() +
-                            calculateDistanceToEndPoint(mOverScroller.getFinalY() % mItemHeight), 0);
                 } else {
                     int clickToCenterDistance = 0;
                     if (System.currentTimeMillis() - mDownStartTime <= DEFAULT_CLICK_CONFIRM) {
@@ -687,37 +738,35 @@ public class WheelView<T> extends View {
                             calculateDistanceToEndPoint((mScrollOffsetY + clickToCenterDistance) % mItemHeight));
                 }
 
-                if (!isCyclic) {
-                    //修正Scroller边界
-                    if (mOverScroller.getFinalY() < mMinScrollY) {
-                        mOverScroller.notifyVerticalEdgeReached(mScrollOffsetY, mMinScrollY, 0);
-                    } else if (mOverScroller.getFinalY() > mMaxScrollY) {
-                        mOverScroller.notifyVerticalEdgeReached(mScrollOffsetY, mMaxScrollY, 0);
-                    }
-                }
-                postInvalidateOnAnimation();
-                //回收
-                if (mVelocityTracker != null) {
-                    mVelocityTracker.recycle();
-                    mVelocityTracker = null;
-                }
+                invalidate();
+                ViewCompat.postOnAnimation(this, this);
+
+                //回收 VelocityTracker
+                recycleVelocityTracker();
                 break;
             case MotionEvent.ACTION_CANCEL:
                 //事件被终止
                 //回收
-                if (mVelocityTracker != null) {
-                    mVelocityTracker.recycle();
-                    mVelocityTracker = null;
-                }
+                recycleVelocityTracker();
                 break;
         }
         return true;
     }
 
     /**
+     * 回收 VelocityTracker
+     */
+    private void recycleVelocityTracker() {
+        if (mVelocityTracker != null) {
+            mVelocityTracker.recycle();
+            mVelocityTracker = null;
+        }
+    }
+
+    /**
      * 计算滚动偏移
      *
-     * @param distance
+     * @param distance 滚动距离
      */
     private void doScroll(int distance) {
         mScrollOffsetY += distance;
@@ -734,7 +783,7 @@ public class WheelView<T> extends View {
     /**
      * 计算距离终点的偏移，修正选中条目
      *
-     * @param remainder
+     * @param remainder 余数
      * @return
      */
     private int calculateDistanceToEndPoint(int remainder) {
@@ -749,11 +798,13 @@ public class WheelView<T> extends View {
         }
     }
 
+    /**
+     * 使用run方法而不是computeScroll是因为，invalidate也会执行computeScroll导致回调执行不准确
+     */
     @Override
-    public void computeScroll() {
-        super.computeScroll();
+    public void run() {
         //停止滚动更新当前下标
-        if (mOverScroller.isFinished() && !mIsForceFinishScroll) {
+        if (mOverScroller.isFinished() && !isForceFinishScroll) {
             if (mItemHeight == 0) return;
             mCurrentItemPosition = getCurrentPosition();
             //停止滚动，选中条目回调
@@ -772,7 +823,15 @@ public class WheelView<T> extends View {
                 mOnWheelChangedListener.onWheelScrollStateChanged(SCROLL_STATE_SCROLLING);
             }
             mScrollOffsetY = mOverScroller.getCurrY();
-            postInvalidateOnAnimation();
+            invalidate();
+            ViewCompat.postOnAnimation(this, this);
+        } else if (isFlingScroll) {
+            //滚动完成后，根据是否为快速滚动处理是否需要调整最终位置
+            isFlingScroll = false;
+            //快速滚动后需要调整滚动完成后的最终位置，重新启动scroll滑动到中心位置
+            mOverScroller.startScroll(0, mScrollOffsetY, 0, calculateDistanceToEndPoint(mScrollOffsetY % mItemHeight));
+            invalidate();
+            ViewCompat.postOnAnimation(this, this);
         }
     }
 
@@ -798,7 +857,8 @@ public class WheelView<T> extends View {
 
     /**
      * 获取字体大小
-     * @return
+     *
+     * @return 字体大小
      */
     public float getTextSize() {
         return mTextSize;
@@ -806,21 +866,255 @@ public class WheelView<T> extends View {
 
     /**
      * 设置字体大小
-     * @param textSize
+     *
+     * @param textSize 字体大小
      */
-    public void setTextSize(int textSize){
-        setTextSize(textSize,false);
+    public void setTextSize(float textSize) {
+        setTextSize(textSize, false);
     }
 
     /**
      * 设置字体大小
-     * @param textSize
-     * @param isSp
+     *
+     * @param textSize 字体大小
+     * @param isSp     是否是sp
      */
-    public void setTextSize(float textSize,boolean isSp) {
-        mTextSize = isSp?sp2px(textSize):textSize;
+    public void setTextSize(float textSize, boolean isSp) {
+        float tempTextSize = mTextSize;
+        mTextSize = isSp ? sp2px(textSize) : textSize;
+        if (tempTextSize == mTextSize) {
+            return;
+        }
         calculateTextSize();
         calculateDrawStart();
+        requestLayout();
+        invalidate();
+    }
+
+    /**
+     * 获取当前字体
+     *
+     * @return 字体
+     */
+    public Typeface getTypeface() {
+        return mPaint.getTypeface();
+    }
+
+    /**
+     * 设置当前字体
+     *
+     * @param typeface 字体
+     */
+    public void setTypeface(Typeface typeface) {
+        if (mPaint.getTypeface() == typeface) {
+            return;
+        }
+        mPaint.setTypeface(typeface);
+        calculateTextSize();
+        calculateDrawStart();
+        requestLayout();
+        invalidate();
+    }
+
+    /**
+     * 获取文字对齐方式
+     *
+     * @return 文字对齐
+     */
+    public int getTextAlign() {
+        return mTextAlign;
+    }
+
+    /**
+     * 设置文字对齐方式
+     *
+     * @param textAlign
+     */
+    public void setTextAlign(@TextAlign int textAlign) {
+        if (mTextAlign == textAlign) {
+            return;
+        }
+        mTextAlign = textAlign;
+        updateTextAlign();
+        calculateDrawStart();
+        invalidate();
+    }
+
+    /**
+     * 获取未选中条目颜色
+     *
+     * @return
+     */
+    public int getNormalItemTextColor() {
+        return mTextColor;
+    }
+
+    /**
+     * 设置未选中条目颜色
+     *
+     * @param textColorRes
+     */
+    public void setNormalItemTextColorRes(@ColorRes int textColorRes) {
+        setNormalItemTextColor(ContextCompat.getColor(getContext(), textColorRes));
+    }
+
+    /**
+     * 设置未选中条目颜色
+     *
+     * @param textColor
+     */
+    public void setNormalItemTextColor(@ColorInt int textColor) {
+        if (mTextColor == textColor) {
+            return;
+        }
+        mTextColor = textColor;
+        invalidate();
+    }
+
+    /**
+     * 获取选中条目颜色
+     *
+     * @return
+     */
+    public int getSelectedItemColor() {
+        return mSelectedItemColor;
+    }
+
+    /**
+     * 设置选中条目颜色
+     *
+     * @param selectedItemColorRes
+     */
+    public void setSelectedItemColorRes(@ColorRes int selectedItemColorRes) {
+        setSelectedItemColor(ContextCompat.getColor(getContext(), selectedItemColorRes));
+    }
+
+    /**
+     * 设置选中条目颜色
+     *
+     * @param selectedItemColor
+     */
+    public void setSelectedItemColor(@ColorInt int selectedItemColor) {
+        if (mSelectedItemColor == selectedItemColor) {
+            return;
+        }
+        mSelectedItemColor = selectedItemColor;
+        invalidate();
+    }
+
+    /**
+     * 获取文字距离边界的外边距
+     *
+     * @return
+     */
+    public float getTextBoundaryMargin() {
+        return mTextBoundaryMargin;
+    }
+
+    /**
+     * 设置文字距离边界的外边距
+     *
+     * @param textBoundaryMargin
+     */
+    public void setTextBoundaryMargin(float textBoundaryMargin) {
+        setTextBoundaryMargin(textBoundaryMargin, false);
+    }
+
+    /**
+     * 设置文字距离边界的外边距
+     *
+     * @param textBoundaryMargin
+     * @param isDp
+     */
+    public void setTextBoundaryMargin(float textBoundaryMargin, boolean isDp) {
+        float tempTextBoundaryMargin = mTextBoundaryMargin;
+        mTextBoundaryMargin = isDp ? dp2px(textBoundaryMargin) : textBoundaryMargin;
+        if (tempTextBoundaryMargin == mTextBoundaryMargin) {
+            return;
+        }
+        requestLayout();
+        invalidate();
+    }
+
+    /**
+     * 获取item间距
+     *
+     * @return
+     */
+    public float getLineSpace() {
+        return mLineSpace;
+    }
+
+    /**
+     * 设置item间距
+     *
+     * @param lineSpace
+     */
+    public void setLineSpace(float lineSpace) {
+        setLineSpace(lineSpace, false);
+    }
+
+    /**
+     * 设置item间距
+     *
+     * @param lineSpace
+     */
+    public void setLineSpace(float lineSpace, boolean isDp) {
+        float tempLineSpace = mLineSpace;
+        mLineSpace = isDp ? dp2px(lineSpace) : lineSpace;
+        if (tempLineSpace == mLineSpace) {
+            return;
+        }
+        mScrollOffsetY = 0;
+        calculateTextSize();
+        requestLayout();
+        invalidate();
+    }
+
+    /**
+     * 获取数据为Integer类型时是否需要转换
+     *
+     * @return
+     */
+    public boolean isIntegerNeedFormat() {
+        return isIntegerNeedFormat;
+    }
+
+    /**
+     * 设置数据为Integer类型时是否需要转换
+     *
+     * @param integerNeedFormat
+     */
+    public void setIntegerNeedFormat(boolean integerNeedFormat) {
+        if (isIntegerNeedFormat == integerNeedFormat) {
+            return;
+        }
+        isIntegerNeedFormat = integerNeedFormat;
+        calculateTextSize();
+        requestLayout();
+        invalidate();
+    }
+
+    /**
+     * 获取Integer类型转换格式
+     *
+     * @return
+     */
+    public String getIntegerFormat() {
+        return mIntegerFormat;
+    }
+
+    /**
+     * 设置Integer类型转换格式
+     *
+     * @param integerFormat
+     */
+    public void setIntegerFormat(String integerFormat) {
+        if (TextUtils.isEmpty(integerFormat) || integerFormat.equals(mIntegerFormat)) {
+            return;
+        }
+        mIntegerFormat = integerFormat;
+        calculateTextSize();
         requestLayout();
         invalidate();
     }
@@ -840,6 +1134,9 @@ public class WheelView<T> extends View {
      * @param visibleItems
      */
     public void setVisibleItems(int visibleItems) {
+        if (mVisibleItems == visibleItems) {
+            return;
+        }
         mVisibleItems = Math.abs(visibleItems / 2 * 2 + 1); // 当传入的值为偶数时,换算成奇数;
         mScrollOffsetY = 0;
         requestLayout();
@@ -861,6 +1158,9 @@ public class WheelView<T> extends View {
      * @param cyclic
      */
     public void setCyclic(boolean cyclic) {
+        if (isCyclic == cyclic) {
+            return;
+        }
         isCyclic = cyclic;
         mScrollOffsetY = 0;
         calculateLimitY();
@@ -920,7 +1220,9 @@ public class WheelView<T> extends View {
             //如果是平滑滚动并且之前的Scroll滚动完成
             mOverScroller.startScroll(0, mScrollOffsetY, 0, itemDistance,
                     smoothDuration > 0 ? smoothDuration : DEFAULT_SCROLL_DURATION);
-            postInvalidateOnAnimation();
+            invalidate();
+            ViewCompat.postOnAnimation(this, this);
+
         } else {
             doScroll(itemDistance);
             invalidate();
@@ -939,114 +1241,6 @@ public class WheelView<T> extends View {
     }
 
     /**
-     * 获取item间距
-     *
-     * @return
-     */
-    public int getLineSpace() {
-        return mLineSpace;
-    }
-
-    /**
-     * 设置item间距
-     *
-     * @param lineSpace
-     */
-    public void setLineSpace(int lineSpace) {
-        setLineSpace(lineSpace, false);
-    }
-
-    /**
-     * 设置item间距
-     *
-     * @param lineSpace
-     */
-    public void setLineSpace(float lineSpace, boolean isDp) {
-        mLineSpace = isDp ? (int) dp2px(lineSpace) : (int) lineSpace;
-        mScrollOffsetY = 0;
-        calculateTextSize();
-        requestLayout();
-        invalidate();
-    }
-
-    /**
-     * 获取文字对齐方式
-     *
-     * @return
-     */
-    public int getTextAlign() {
-        return mTextAlign;
-    }
-
-    /**
-     * 设置文字对齐方式
-     *
-     * @param textAlign
-     */
-    public void setTextAlign(@TextAlign int textAlign) {
-        mTextAlign = textAlign;
-        updateTextAlign();
-        calculateDrawStart();
-        invalidate();
-    }
-
-    /**
-     * 获取未选中条目颜色
-     *
-     * @return
-     */
-    public int getNormalItemTextColor() {
-        return mTextColor;
-    }
-
-    /**
-     * 设置未选中条目颜色
-     *
-     * @param textColorRes
-     */
-    public void setNormalItemTextColorRes(@ColorRes int textColorRes) {
-        setNormalItemTextColor(ContextCompat.getColor(getContext(), textColorRes));
-    }
-
-    /**
-     * 设置未选中条目颜色
-     *
-     * @param textColor
-     */
-    public void setNormalItemTextColor(@ColorInt int textColor) {
-        mTextColor = textColor;
-        invalidate();
-    }
-
-    /**
-     * 获取选中条目颜色
-     *
-     * @return
-     */
-    public int getSelectedItemColor() {
-        return mSelectedItemColor;
-    }
-
-    /**
-     * 设置选中条目颜色
-     *
-     * @param selectedItemColorRes
-     */
-    public void setSelectedItemColorRes(@ColorRes int selectedItemColorRes) {
-        setSelectedItemColor(ContextCompat.getColor(getContext(), selectedItemColorRes));
-    }
-
-    /**
-     * 设置选中条目颜色
-     *
-     * @param selectedItemColor
-     */
-    public void setSelectedItemColor(@ColorInt int selectedItemColor) {
-        mSelectedItemColor = selectedItemColor;
-        invalidate();
-    }
-
-    /**
      * 获取是否显示分割线
      *
      * @return
@@ -1061,6 +1255,9 @@ public class WheelView<T> extends View {
      * @param showDivider
      */
     public void setShowDivider(boolean showDivider) {
+        if (isShowDivider == showDivider) {
+            return;
+        }
         isShowDivider = showDivider;
         invalidate();
     }
@@ -1084,6 +1281,9 @@ public class WheelView<T> extends View {
      * @param dividerColor
      */
     public void setDividerColor(@ColorInt int dividerColor) {
+        if (mDividerColor == dividerColor) {
+            return;
+        }
         mDividerColor = dividerColor;
         invalidate();
     }
@@ -1094,7 +1294,7 @@ public class WheelView<T> extends View {
      * @return
      */
     public float getDividerHeight() {
-        return mDividerHeight;
+        return mDividerSize;
     }
 
     /**
@@ -1102,7 +1302,7 @@ public class WheelView<T> extends View {
      *
      * @param dividerHeight
      */
-    public void setDividerHeight(int dividerHeight) {
+    public void setDividerHeight(float dividerHeight) {
         setDividerHeight(dividerHeight, false);
     }
 
@@ -1113,7 +1313,11 @@ public class WheelView<T> extends View {
      * @param isDp
      */
     public void setDividerHeight(float dividerHeight, boolean isDp) {
-        mDividerHeight = isDp ? dp2px(dividerHeight) : dividerHeight;
+        float tempDividerHeight = mDividerSize;
+        mDividerSize = isDp ? dp2px(dividerHeight) : dividerHeight;
+        if (tempDividerHeight == mDividerSize) {
+            return;
+        }
         invalidate();
     }
 
@@ -1132,7 +1336,11 @@ public class WheelView<T> extends View {
      * @param dividerType
      */
     public void setDividerType(@DividerType int dividerType) {
+        if (mDividerType == dividerType) {
+            return;
+        }
         mDividerType = dividerType;
+        invalidate();
     }
 
     /**
@@ -1149,7 +1357,7 @@ public class WheelView<T> extends View {
      *
      * @param dividerPaddingForWrap
      */
-    public void setDividerPaddingForWrap(int dividerPaddingForWrap) {
+    public void setDividerPaddingForWrap(float dividerPaddingForWrap) {
         setDividerPaddingForWrap(dividerPaddingForWrap, false);
     }
 
@@ -1160,7 +1368,11 @@ public class WheelView<T> extends View {
      * @param isDp
      */
     public void setDividerPaddingForWrap(float wrapDividerPadding, boolean isDp) {
+        float tempDividerPadding = mDividerPaddingForWrap;
         mDividerPaddingForWrap = isDp ? dp2px(wrapDividerPadding) : wrapDividerPadding;
+        if (tempDividerPadding == mDividerPaddingForWrap) {
+            return;
+        }
         invalidate();
     }
 
@@ -1179,82 +1391,10 @@ public class WheelView<T> extends View {
      * @param dividerJoin
      */
     public void setDividerJoin(Paint.Join dividerJoin) {
-        mDividerJoin = dividerJoin;
-        invalidate();
-    }
-
-    /**
-     * 获取文字距离边界的外边距
-     *
-     * @return
-     */
-    public float getTextBoundaryMargin() {
-        return mTextBoundaryMargin;
-    }
-
-    /**
-     * 设置文字距离边界的外边距
-     *
-     * @param textBoundaryMargin
-     */
-    public void setTextBoundaryMargin(int textBoundaryMargin) {
-        setTextBoundaryMargin(textBoundaryMargin, false);
-    }
-
-    /**
-     * 设置文字距离边界的外边距
-     *
-     * @param textBoundaryMargin
-     * @param isDp
-     */
-    public void setTextBoundaryMargin(float textBoundaryMargin, boolean isDp) {
-        mTextBoundaryMargin = isDp ? dp2px(textBoundaryMargin) : textBoundaryMargin;
-        requestLayout();
-        invalidate();
-    }
-
-    /**
-     * 获取数据为Integer类型时是否需要转换
-     *
-     * @return
-     */
-    public boolean isIntegerNeedFormat() {
-        return isIntegerNeedFormat;
-    }
-
-    /**
-     * 设置数据为Integer类型时是否需要转换
-     *
-     * @param integerNeedFormat
-     */
-    public void setIntegerNeedFormat(boolean integerNeedFormat) {
-        isIntegerNeedFormat = integerNeedFormat;
-        calculateTextSize();
-        requestLayout();
-        invalidate();
-    }
-
-    /**
-     * 获取Integer类型转换格式
-     *
-     * @return
-     */
-    public String getIntegerFormat() {
-        return mIntegerFormat;
-    }
-
-    /**
-     * 设置Integer类型转换格式
-     *
-     * @param integerFormat
-     */
-    public void setIntegerFormat(String integerFormat) {
-        if (TextUtils.isEmpty(integerFormat)) {
+        if (mDividerJoin == dividerJoin) {
             return;
         }
-        mIntegerFormat = integerFormat;
-        calculateTextSize();
-        requestLayout();
+        mDividerJoin = dividerJoin;
         invalidate();
     }
 
@@ -1273,6 +1413,9 @@ public class WheelView<T> extends View {
      * @param isCurved
      */
     public void setCurved(boolean isCurved) {
+        if (this.isCurved == isCurved) {
+            return;
+        }
         this.isCurved = isCurved;
         calculateTextSize();
         requestLayout();
@@ -1291,9 +1434,12 @@ public class WheelView<T> extends View {
     /**
      * 设置弯曲（3D）效果对齐方式
      *
-     * @param curvedAlign
+     * @param curvedAlign 向指定方向倾斜
      */
     public void setCurvedAlign(@CurvedAlign int curvedAlign) {
+        if (mCurvedAlign == curvedAlign) {
+            return;
+        }
         mCurvedAlign = curvedAlign;
         invalidate();
     }
@@ -1313,6 +1459,14 @@ public class WheelView<T> extends View {
      * @param curvedAlignBias 0-1之间
      */
     public void setCurvedAlignBias(@FloatRange(from = 0, to = 1.0) float curvedAlignBias) {
+        if (mCurvedAlignBias == curvedAlignBias) {
+            return;
+        }
+        if (curvedAlignBias < 0) {
+            curvedAlignBias = 0f;
+        } else if (curvedAlignBias > 1) {
+            curvedAlignBias = 1f;
+        }
         mCurvedAlignBias = curvedAlignBias;
         invalidate();
     }
@@ -1331,7 +1485,7 @@ public class WheelView<T> extends View {
      *
      * @param curvedRefractX
      */
-    public void setCurvedRefractX(int curvedRefractX) {
+    public void setCurvedRefractX(float curvedRefractX) {
         setCurvedRefractX(curvedRefractX, false);
     }
 
@@ -1342,7 +1496,11 @@ public class WheelView<T> extends View {
      * @param isDp
      */
     public void setCurvedRefractX(float curvedRefractX, boolean isDp) {
+        float tempRefractX = mCurvedRefractX;
         mCurvedRefractX = isDp ? dp2px(curvedRefractX) : curvedRefractX;
+        if (tempRefractX == mCurvedRefractX) {
+            return;
+        }
         invalidate();
     }
 

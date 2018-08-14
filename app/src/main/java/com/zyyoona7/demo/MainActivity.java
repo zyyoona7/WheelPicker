@@ -1,5 +1,6 @@
 package com.zyyoona7.demo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -47,6 +48,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AppCompatButton goCustomAttrsBtn=findViewById(R.id.btn_go_custom_attrs);
+        goCustomAttrsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,Main2Activity.class);
+                startActivity(intent);
+            }
+        });
 
         final WheelView<Integer> wheelView = findViewById(R.id.wheelview);
 //        List<String> list = new ArrayList<>(1);
