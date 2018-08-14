@@ -641,38 +641,6 @@ public class WheelView<T> extends View implements Runnable {
         return item.toString();
     }
 
-    /**
-     * 获取数据列表
-     *
-     * @return 数据列表
-     */
-    public List<T> getData() {
-        return mDataList;
-    }
-
-    /**
-     * 设置数据
-     *
-     * @param dataList 数据列表
-     */
-    public void setData(List<T> dataList) {
-        if (dataList == null) {
-            return;
-        }
-        mDataList = dataList;
-        if (mCurrentItemPosition > mDataList.size()) {
-            mCurrentItemPosition = mDataList.size() - 1;
-        }
-        if (!mOverScroller.isFinished()) {
-            mOverScroller.forceFinished(true);
-        }
-        mScrollOffsetY = 0;
-        calculateTextSize();
-        calculateLimitY();
-        requestLayout();
-        invalidate();
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (mVelocityTracker == null) {
@@ -781,6 +749,24 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     /**
+     * 强制滚动完成，直接停止
+     */
+    public void forceFinishScroll() {
+        if (!mOverScroller.isFinished()) {
+            mOverScroller.forceFinished(true);
+        }
+    }
+
+    /**
+     * 强制滚动完成，并且直接滚动到最终位置
+     */
+    public void abortFinishScroll() {
+        if (!mOverScroller.isFinished()) {
+            mOverScroller.abortAnimation();
+        }
+    }
+
+    /**
      * 计算距离终点的偏移，修正选中条目
      *
      * @param remainder 余数
@@ -853,6 +839,37 @@ public class WheelView<T> extends View implements Runnable {
         }
 
         return currentPosition;
+    }
+
+    /**
+     * 获取数据列表
+     *
+     * @return 数据列表
+     */
+    public List<T> getData() {
+        return mDataList;
+    }
+
+    /**
+     * 设置数据
+     *
+     * @param dataList 数据列表
+     */
+    public void setData(List<T> dataList) {
+        if (dataList == null) {
+            return;
+        }
+        mDataList = dataList;
+        if (mCurrentItemPosition > mDataList.size()) {
+            mCurrentItemPosition = mDataList.size() - 1;
+        }
+        //强制滚动完成
+        forceFinishScroll();
+        mScrollOffsetY = 0;
+        calculateTextSize();
+        calculateLimitY();
+        requestLayout();
+        invalidate();
     }
 
     /**
@@ -1162,6 +1179,8 @@ public class WheelView<T> extends View implements Runnable {
             return;
         }
         isCyclic = cyclic;
+
+        forceFinishScroll();
         mScrollOffsetY = 0;
         calculateLimitY();
         invalidate();
@@ -1213,9 +1232,8 @@ public class WheelView<T> extends View implements Runnable {
             return;
         }
         //如果Scroller滑动未停止，强制结束动画
-        if (!mOverScroller.isFinished()) {
-            mOverScroller.abortAnimation();
-        }
+        abortFinishScroll();
+
         if (isSmoothScroll) {
             //如果是平滑滚动并且之前的Scroll滚动完成
             mOverScroller.startScroll(0, mScrollOffsetY, 0, itemDistance,

@@ -19,14 +19,6 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        WheelPicker wheelPicker=findViewById(R.id.wheelPicker);
-        wheelPicker.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(WheelPicker picker, Object data, int position) {
-                Log.d(TAG, "onItemSelected: position="+position);
-            }
-        });
-
         final WheelView<Integer> wheelView = findViewById(R.id.wheelview);
         List<Integer> list = new ArrayList<>(1);
         for (int i = 0; i < 20; i++) {
