@@ -10,39 +10,45 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="50dp"
         android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:paddingBottom="50dp">
+        android:paddingStart="10dp">
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_go_custom_attrs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/btn_go_custom_attrs"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="10dp"
             android:text="跳转自定义属性展示页"
-            android:layout_marginTop="10dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.zyyoona7.wheelpicker.WheelView
             android:id="@+id/wheelview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:background="@color/colorAccent"
+            android:background="#f0f4c3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_go_custom_attrs" />
+            app:layout_constraintTop_toBottomOf="@id/btn_go_custom_attrs"
+            app:wv_normalItemTextColor="#00796b"
+            app:wv_selectedItemTextColor="#004d40"
+            app:wv_dividerColor="#699f38"
+            app:wv_showDivider="true"
+            app:wv_textSize="24sp" />
 
         <android.support.v7.widget.SwitchCompat
+            android:id="@+id/sc_turn_on_cyclic"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/wheelview"
             android:layout_marginTop="10dp"
             android:text="是否开启循环滚动效果"
-            android:id="@+id/sc_turn_on_cyclic" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wheelview" />
+
         <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/cb_smooth"
             android:layout_width="wrap_content"
@@ -113,13 +119,32 @@
             app:layout_constraintTop_toTopOf="@id/rg_align" />
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="设置字体大小"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_set_align" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/sb_text_size"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/btn_set_text_size"
+            app:layout_constraintEnd_toStartOf="@id/btn_set_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_set_text_size" />
+
+
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_set_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text="设置字体左右边距"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_set_align" />
+            app:layout_constraintTop_toBottomOf="@id/btn_set_text_size" />
 
         <android.support.v7.widget.AppCompatSeekBar
             android:id="@+id/sb_margin"
@@ -167,23 +192,23 @@
             app:layout_constraintTop_toTopOf="@id/btn_set_line_space" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_curved_guide_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/btn_set_line_space"
             android:layout_marginTop="10dp"
-            android:textSize="14sp"
             android:text="弯曲（3D）效果"
-            android:id="@+id/tv_curved_guide_line"
-            />
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/btn_set_line_space" />
+
         <android.support.v7.widget.SwitchCompat
+            android:id="@+id/sc_turn_on_curved"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_curved_guide_line"
             android:layout_marginTop="10dp"
             android:text="是否开启弯曲（3D）效果"
-            android:id="@+id/sc_turn_on_curved" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_curved_guide_line" />
 
         <RadioGroup
             android:id="@+id/rg_curved_align"
@@ -242,6 +267,96 @@
             app:layout_constraintEnd_toStartOf="@id/btn_set_curved_bias"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_set_curved_bias" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_divider_guide_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="分割线"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/btn_set_curved_bias" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/sc_turn_on_divider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="是否显示分割线"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_divider_guide_line" />
+
+        <RadioGroup
+            android:id="@+id/rg_divider_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sc_turn_on_divider">
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/rb_divider_fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="FILL" />
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/rb_divider_wrap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WRAP" />
+
+        </RadioGroup>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_divider_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="设置分割线类型"
+            app:layout_constraintBottom_toBottomOf="@id/rg_divider_type"
+            app:layout_constraintStart_toEndOf="@id/rg_divider_type"
+            app:layout_constraintTop_toTopOf="@id/rg_divider_type" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_divider_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="设置分割线高度"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_set_divider_type" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/sb_divider_height"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/btn_set_divider_height"
+            app:layout_constraintEnd_toStartOf="@id/btn_set_divider_height"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_set_divider_height" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_divider_padding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="设置分割线内间距"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sb_divider_height" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/sb_divider_padding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/btn_set_divider_padding"
+            app:layout_constraintEnd_toStartOf="@id/btn_set_divider_padding"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_set_divider_padding" />
 
     </android.support.constraint.ConstraintLayout>
 

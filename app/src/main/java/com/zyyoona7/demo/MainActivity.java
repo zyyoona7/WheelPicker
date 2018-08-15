@@ -135,6 +135,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final AppCompatSeekBar textSizeSb=findViewById(R.id.sb_text_size);
+        textSizeSb.setMax(100);
+        textSizeSb.setProgress((int) wheelView.getTextSize());
+        final AppCompatButton setTextSizeBtn=findViewById(R.id.btn_set_text_size);
+        setTextSizeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wheelView.setTextSize(textSizeSb.getProgress());
+            }
+        });
+
         mMarginSb = findViewById(R.id.sb_margin);
         mMarginSb.setMax(500);
         mMarginSb.setProgress(50);
@@ -211,6 +222,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        SwitchCompat dividerSc=findViewById(R.id.sc_turn_on_divider);
+        dividerSc.setChecked(wheelView.isShowDivider());
+        dividerSc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                wheelView.setShowDivider(isChecked);
+            }
+        });
 
+        final RadioGroup typeRg=findViewById(R.id.rg_divider_type);
+        AppCompatButton setTypeBtn=findViewById(R.id.btn_set_divider_type);
+        setTypeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (typeRg.getCheckedRadioButtonId()== R.id.rb_divider_fill) {
+                    wheelView.setDividerType(WheelView.DIVIDER_TYPE_FILL);
+                }else {
+                    wheelView.setDividerType(WheelView.DIVIDER_TYPE_WRAP);
+                }
+            }
+        });
+
+        final AppCompatSeekBar heightSb=findViewById(R.id.sb_divider_height);
+        heightSb.setMax(20);
+        heightSb.setProgress((int) wheelView.getDividerHeight());
+        AppCompatButton setHeightBtn=findViewById(R.id.btn_set_divider_height);
+        setHeightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wheelView.setDividerHeight(heightSb.getProgress());
+            }
+        });
+
+        final AppCompatSeekBar paddingSb=findViewById(R.id.sb_divider_padding);
+        paddingSb.setMax(100);
+        paddingSb.setProgress((int) wheelView.getDividerPaddingForWrap());
+        AppCompatButton setPaddingBtn=findViewById(R.id.btn_set_divider_padding);
+        setPaddingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wheelView.setDividerPaddingForWrap(paddingSb.getProgress());
+            }
+        });
     }
 }
