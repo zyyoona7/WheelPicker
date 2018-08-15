@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:paddingBottom="50dp">
 
-        <com.zyyoona7.wheelpicker.WheelView
+        <com.zyyoona7.wheel.WheelView
             android:id="@+id/wheelview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

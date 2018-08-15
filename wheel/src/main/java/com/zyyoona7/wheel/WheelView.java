@@ -1,4 +1,4 @@
-package com.zyyoona7.wheelpicker;
+package com.zyyoona7.wheel;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -206,7 +206,7 @@ public class WheelView<T> extends View implements Runnable {
 
         mVisibleItems = typedArray.getInt(R.styleable.WheelView_wv_visibleItems, DEFAULT_VISIBLE_ITEM);
         //跳转可见item为奇数
-        mVisibleItems=adjustVisibleItems(mVisibleItems);
+        mVisibleItems = adjustVisibleItems(mVisibleItems);
         mCurrentItemPosition = typedArray.getInt(R.styleable.WheelView_wv_currentItemPosition, 0);
         isCyclic = typedArray.getBoolean(R.styleable.WheelView_wv_cyclic, true);
 
@@ -646,9 +646,7 @@ public class WheelView<T> extends View implements Runnable {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (mVelocityTracker == null) {
-            mVelocityTracker = VelocityTracker.obtain();
-        }
+        initVelocityTracker();
         mVelocityTracker.addMovement(event);
 
         switch (event.getActionMasked()) {
@@ -722,6 +720,15 @@ public class WheelView<T> extends View implements Runnable {
                 break;
         }
         return true;
+    }
+
+    /**
+     * 初始化 VelocityTracker
+     */
+    private void initVelocityTracker() {
+        if (mVelocityTracker == null) {
+            mVelocityTracker = VelocityTracker.obtain();
+        }
     }
 
     /**
@@ -1166,11 +1173,12 @@ public class WheelView<T> extends View implements Runnable {
 
     /**
      * 跳转可见条目数为奇数
+     *
      * @param visibleItems
      * @return
      */
-    private int adjustVisibleItems(int visibleItems){
-       return Math.abs(visibleItems / 2 * 2 + 1); // 当传入的值为偶数时,换算成奇数;
+    private int adjustVisibleItems(int visibleItems) {
+        return Math.abs(visibleItems / 2 * 2 + 1); // 当传入的值为偶数时,换算成奇数;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.zyyoona7.wheelpicker;
+package com.zyyoona7.picker;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.zyyoona7.wheelpicker.test", appContext.getPackageName());
+        assertEquals("com.zyyoona7.picker.test", appContext.getPackageName());
     }
 }

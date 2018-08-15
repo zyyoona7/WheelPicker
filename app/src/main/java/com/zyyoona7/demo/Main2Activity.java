@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 
-import com.zyyoona7.wheelpicker.WheelView;
+
+import com.zyyoona7.wheel.WheelView;
 
 import java.util.ArrayList;
 import java.util.List;

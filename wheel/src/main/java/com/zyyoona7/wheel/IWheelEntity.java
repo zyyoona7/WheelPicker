@@ -1,4 +1,4 @@
-package com.zyyoona7.wheelpicker;
+package com.zyyoona7.wheel;
 
 public interface IWheelEntity {
 

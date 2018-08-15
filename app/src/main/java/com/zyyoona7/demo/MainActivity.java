@@ -12,7 +12,8 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 
-import com.zyyoona7.wheelpicker.WheelView;
+
+import com.zyyoona7.wheel.WheelView;
 
 import java.util.ArrayList;
 import java.util.List;

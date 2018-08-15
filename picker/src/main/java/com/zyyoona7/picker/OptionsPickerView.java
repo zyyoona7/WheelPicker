@@ -1,4 +1,4 @@
-package com.zyyoona7.wheelpicker.picker;
+package com.zyyoona7.picker;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
