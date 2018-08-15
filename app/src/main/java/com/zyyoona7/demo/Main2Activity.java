@@ -3,7 +3,6 @@ package com.zyyoona7.demo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 
 
 import com.zyyoona7.wheel.WheelView;
@@ -44,7 +43,7 @@ public class Main2Activity extends AppCompatActivity {
         AppCompatTextView selectedItemTextColorTv=findViewById(R.id.tv_selectedItemTextColor);
         selectedItemTextColorTv.setText(getString(R.string.selectedItemTextColorValue,"#"+Integer.toHexString(wheelView.getSelectedItemColor()).toUpperCase()));
         AppCompatTextView lineSpaceTv=findViewById(R.id.tv_lineSpace);
-        lineSpaceTv.setText(getString(R.string.lineSpaceValue,wheelView.getLineSpace()+""));
+        lineSpaceTv.setText(getString(R.string.lineSpaceValue,wheelView.getLineSpacing()+""));
         AppCompatTextView integerNeedFormatTv=findViewById(R.id.tv_integerNeedFormat);
         integerNeedFormatTv.setText(getString(R.string.integerNeedFormatValue,wheelView.isIntegerNeedFormat()+""));
         AppCompatTextView integerFormatTv=findViewById(R.id.tv_integerFormat);
@@ -69,16 +68,16 @@ public class Main2Activity extends AppCompatActivity {
         dividerPaddingForWrapTv.setText(getString(R.string.dividerPaddingForWrapValue,wheelView.getDividerPaddingForWrap()+""));
         AppCompatTextView curvedTv=findViewById(R.id.tv_curved);
         curvedTv.setText(getString(R.string.curvedValue,wheelView.isCurved()+""));
-        AppCompatTextView curvedAlignTv=findViewById(R.id.tv_curvedAlign);
+        AppCompatTextView curvedArcDirectionTv=findViewById(R.id.tv_curvedAlign);
         String curvedAlign="Center";
-        if (wheelView.getCurvedAlign()==WheelView.CURVED_ALIGN_LEFT){
+        if (wheelView.getCurvedArcDirection()==WheelView.CURVED_ARC_DIRECTION_LEFT){
             curvedAlign="Left";
-        }else if (wheelView.getCurvedAlign()==WheelView.CURVED_ALIGN_RIGHT){
+        }else if (wheelView.getCurvedArcDirection()==WheelView.CURVED_ARC_DIRECTION_RIGHT){
             curvedAlign="Right";
         }
-        curvedAlignTv.setText(getString(R.string.curvedAlignValue,curvedAlign));
-        AppCompatTextView curvedAlignBiasTv=findViewById(R.id.tv_curvedAlignBias);
-        curvedAlignBiasTv.setText(getString(R.string.curvedAlignBiasValue,wheelView.getCurvedAlignBias()+""));
+        curvedArcDirectionTv.setText(getString(R.string.curvedArcDirectionValue,curvedAlign));
+        AppCompatTextView curvedArcDirectionBiasTv=findViewById(R.id.tv_curvedAlignBias);
+        curvedArcDirectionBiasTv.setText(getString(R.string.curvedArcDirectionBiasValue,wheelView.getCurvedArcDirectionBias()+""));
         AppCompatTextView curvedRefractXTv=findViewById(R.id.tv_curvedRefractX);
         curvedRefractXTv.setText(getString(R.string.curvedRefractXValue,wheelView.getCurvedRefractX()+""));
 

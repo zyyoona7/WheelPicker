@@ -63,9 +63,9 @@ public class WheelView<T> extends View implements Runnable {
     public static final int SCROLL_STATE_SCROLLING = 2;
 
     //弯曲效果对齐方式
-    public static final int CURVED_ALIGN_LEFT = 0;
-    public static final int CURVED_ALIGN_CENTER = 1;
-    public static final int CURVED_ALIGN_RIGHT = 2;
+    public static final int CURVED_ARC_DIRECTION_LEFT = 0;
+    public static final int CURVED_ARC_DIRECTION_CENTER = 1;
+    public static final int CURVED_ARC_DIRECTION_RIGHT = 2;
 
     public static final float DEFAULT_CURVED_BIAS = 0.75f;
 
@@ -85,8 +85,8 @@ public class WheelView<T> extends View implements Runnable {
     private int mCenterToBaselineY;
     //可见的item条数
     private int mVisibleItems;
-    //每个item之间的空间
-    private float mLineSpace;
+    //每个item之间的空间，行间距
+    private float mLineSpacing;
     //是否循环滚动
     private boolean isCyclic;
     //文字对齐方式
@@ -137,10 +137,10 @@ public class WheelView<T> extends View implements Runnable {
     private Matrix mMatrix;
     //是否是弯曲（3D）效果
     private boolean isCurved = true;
-    //弯曲（3D）效果对齐方式
-    private int mCurvedAlign = CURVED_ALIGN_CENTER;
-    //弯曲（3D）效果偏移系数
-    private float mCurvedAlignBias = DEFAULT_CURVED_BIAS;
+    //弯曲（3D）效果左右圆弧偏移效果方向 center 不偏移
+    private int mCurvedArcDirection = CURVED_ARC_DIRECTION_CENTER;
+    //弯曲（3D）效果左右圆弧偏移效果系数 0-1之间 越大越明显
+    private float mCurvedArcDirectionBias = DEFAULT_CURVED_BIAS;
     //弯曲（3D）效果选中后折射的偏移
     private float mCurvedRefractX;
 
@@ -202,7 +202,7 @@ public class WheelView<T> extends View implements Runnable {
                 DEFAULT_TEXT_BOUNDARY_MARGIN);
         mTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalItemTextColor, DEFAULT_NORMAL_TEXT_COLOR);
         mSelectedItemColor = typedArray.getColor(R.styleable.WheelView_wv_selectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR);
-        mLineSpace = typedArray.getDimension(R.styleable.WheelView_wv_lineSpace, DEFAULT_LINE_SPACE);
+        mLineSpacing = typedArray.getDimension(R.styleable.WheelView_wv_lineSpace, DEFAULT_LINE_SPACE);
         isIntegerNeedFormat = typedArray.getBoolean(R.styleable.WheelView_wv_integerNeedFormat, false);
         mIntegerFormat = typedArray.getString(R.styleable.WheelView_wv_integerFormat);
         if (TextUtils.isEmpty(mIntegerFormat)) {
@@ -222,8 +222,8 @@ public class WheelView<T> extends View implements Runnable {
         mDividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelView_wv_dividerPaddingForWrap, DEFAULT_TEXT_BOUNDARY_MARGIN);
 
         isCurved = typedArray.getBoolean(R.styleable.WheelView_wv_curved, true);
-        mCurvedAlign = typedArray.getInt(R.styleable.WheelView_wv_curvedAlign, CURVED_ALIGN_CENTER);
-        mCurvedAlignBias = typedArray.getFloat(R.styleable.WheelView_wv_curvedAlignBias, DEFAULT_CURVED_BIAS);
+        mCurvedArcDirection = typedArray.getInt(R.styleable.WheelView_wv_curvedAlign, CURVED_ARC_DIRECTION_CENTER);
+        mCurvedArcDirectionBias = typedArray.getFloat(R.styleable.WheelView_wv_curvedAlignBias, DEFAULT_CURVED_BIAS);
         //折射偏移默认值
         mCurvedRefractX = typedArray.getDimension(R.styleable.WheelView_wv_curvedRefractX, mTextSize * 0.05f);
         typedArray.recycle();
@@ -258,7 +258,7 @@ public class WheelView<T> extends View implements Runnable {
 
         mFontMetrics = mPaint.getFontMetrics();
         //itemHeight实际等于字体高度+一个行间距
-        mItemHeight = (int) (mFontMetrics.bottom - mFontMetrics.top + mLineSpace);
+        mItemHeight = (int) (mFontMetrics.bottom - mFontMetrics.top + mLineSpacing);
     }
 
     /**
@@ -586,10 +586,10 @@ public class WheelView<T> extends View implements Runnable {
         // 调节中心点
         float centerX = mCenterX;
         //根据弯曲（3d）对齐方式设置系数
-        if (mCurvedAlign == CURVED_ALIGN_LEFT) {
-            centerX = mCenterX * (1 + mCurvedAlignBias);
-        } else if (mCurvedAlign == CURVED_ALIGN_RIGHT) {
-            centerX = mCenterX * (1 - mCurvedAlignBias);
+        if (mCurvedArcDirection == CURVED_ARC_DIRECTION_LEFT) {
+            centerX = mCenterX * (1 + mCurvedArcDirectionBias);
+        } else if (mCurvedArcDirection == CURVED_ARC_DIRECTION_RIGHT) {
+            centerX = mCenterX * (1 - mCurvedArcDirectionBias);
         }
 
         float centerY = mCenterY + offsetY;
@@ -1074,28 +1074,28 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @return
      */
-    public float getLineSpace() {
-        return mLineSpace;
+    public float getLineSpacing() {
+        return mLineSpacing;
     }
 
     /**
      * 设置item间距
      *
-     * @param lineSpace
+     * @param lineSpacing
      */
-    public void setLineSpace(float lineSpace) {
-        setLineSpace(lineSpace, false);
+    public void setLineSpacing(float lineSpacing) {
+        setLineSpacing(lineSpacing, false);
     }
 
     /**
      * 设置item间距
      *
-     * @param lineSpace
+     * @param lineSpacing
      */
-    public void setLineSpace(float lineSpace, boolean isDp) {
-        float tempLineSpace = mLineSpace;
-        mLineSpace = isDp ? dp2px(lineSpace) : lineSpace;
-        if (tempLineSpace == mLineSpace) {
+    public void setLineSpacing(float lineSpacing, boolean isDp) {
+        float tempLineSpace = mLineSpacing;
+        mLineSpacing = isDp ? dp2px(lineSpacing) : lineSpacing;
+        if (tempLineSpace == mLineSpacing) {
             return;
         }
         mScrollOffsetY = 0;
@@ -1467,51 +1467,51 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     /**
-     * 获取弯曲（3D）效果对齐方式
+     * 获取弯曲（3D）效果左右圆弧效果方向
      *
      * @return
      */
-    public int getCurvedAlign() {
-        return mCurvedAlign;
+    public int getCurvedArcDirection() {
+        return mCurvedArcDirection;
     }
 
     /**
-     * 设置弯曲（3D）效果对齐方式
+     * 设置弯曲（3D）效果左右圆弧效果方向
      *
-     * @param curvedAlign 向指定方向倾斜
+     * @param curvedArcDirection 指定弧度方向
      */
-    public void setCurvedAlign(@CurvedAlign int curvedAlign) {
-        if (mCurvedAlign == curvedAlign) {
+    public void setCurvedArcDirection(@CurvedArcDirection int curvedArcDirection) {
+        if (mCurvedArcDirection == curvedArcDirection) {
             return;
         }
-        mCurvedAlign = curvedAlign;
+        mCurvedArcDirection = curvedArcDirection;
         invalidate();
     }
 
     /**
-     * 获取弯曲（3D）效果对齐系数
+     * 获取弯曲（3D）效果左右圆弧偏移效果方向系数
      *
      * @return
      */
-    public float getCurvedAlignBias() {
-        return mCurvedAlignBias;
+    public float getCurvedArcDirectionBias() {
+        return mCurvedArcDirectionBias;
     }
 
     /**
-     * 设置弯曲（3D）效果对齐系数
+     * 设置弯曲（3D）效果左右圆弧偏移效果方向系数
      *
-     * @param curvedAlignBias 0-1之间
+     * @param curvedArcDirectionBias 0-1之间 越大越明显
      */
-    public void setCurvedAlignBias(@FloatRange(from = 0, to = 1.0) float curvedAlignBias) {
-        if (mCurvedAlignBias == curvedAlignBias) {
+    public void setCurvedArcDirectionBias(@FloatRange(from = 0, to = 1.0) float curvedArcDirectionBias) {
+        if (mCurvedArcDirectionBias == curvedArcDirectionBias) {
             return;
         }
-        if (curvedAlignBias < 0) {
-            curvedAlignBias = 0f;
-        } else if (curvedAlignBias > 1) {
-            curvedAlignBias = 1f;
+        if (curvedArcDirectionBias < 0) {
+            curvedArcDirectionBias = 0f;
+        } else if (curvedArcDirectionBias > 1) {
+            curvedArcDirectionBias = 1f;
         }
-        mCurvedAlignBias = curvedAlignBias;
+        mCurvedArcDirectionBias = curvedArcDirectionBias;
         invalidate();
     }
 
@@ -1597,8 +1597,8 @@ public class WheelView<T> extends View implements Runnable {
     @interface TextAlign {
     }
 
-    @IntDef({CURVED_ALIGN_LEFT, CURVED_ALIGN_CENTER, CURVED_ALIGN_RIGHT})
-    @interface CurvedAlign {
+    @IntDef({CURVED_ARC_DIRECTION_LEFT, CURVED_ARC_DIRECTION_CENTER, CURVED_ARC_DIRECTION_RIGHT})
+    @interface CurvedArcDirection {
     }
 
     @IntDef({DIVIDER_TYPE_FILL, DIVIDER_TYPE_WRAP})

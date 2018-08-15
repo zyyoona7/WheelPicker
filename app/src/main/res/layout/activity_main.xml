@@ -211,53 +211,55 @@
             app:layout_constraintTop_toBottomOf="@id/tv_curved_guide_line" />
 
         <RadioGroup
-            android:id="@+id/rg_curved_align"
+            android:id="@+id/rg_curved_arc_direction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sc_turn_on_curved">
 
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/rb_curved_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="左对齐" />
+                android:text="左偏移" />
 
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/rb_curved_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="居中" />
+                android:text="不偏移" />
 
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/rb_curved_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="右对齐" />
+                android:text="右偏移" />
         </RadioGroup>
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_set_curved_align"
+            android:id="@+id/btn_set_curved_arc_direction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:text="设置弯曲效果对齐"
-            app:layout_constraintBottom_toBottomOf="@id/rg_curved_align"
-            app:layout_constraintStart_toEndOf="@id/rg_curved_align"
-            app:layout_constraintTop_toTopOf="@id/rg_curved_align" />
+            android:text="设置弯曲（3D）圆弧偏移效果"
+            app:layout_constraintTop_toBottomOf="@id/rg_curved_arc_direction"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_set_curved_bias"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="设置对齐系数"
+            android:text="设置圆弧偏移效果系数"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_set_curved_align" />
+            app:layout_constraintTop_toBottomOf="@id/btn_set_curved_arc_direction" />
 
         <android.support.v7.widget.AppCompatSeekBar
             android:id="@+id/sb_curved_bias"

@@ -36,12 +36,12 @@ public class MainActivity extends AppCompatActivity {
     private AppCompatButton mSetVisibleItemBtn;
     private AppCompatSeekBar mVisibleItemSb;
 
-    private AppCompatSeekBar mLineSpaceSb;
-    private AppCompatButton mSetLineSpaceBtn;
+    private AppCompatSeekBar mLineSpacingSb;
+    private AppCompatButton mSetLineSpacingBtn;
 
     private SwitchCompat mCurvedSc;
-    private RadioGroup mCurvedAlignRg;
-    private AppCompatButton mSetCurvedAlignBtn;
+    private RadioGroup mCurvedArcDirectionRg;
+    private AppCompatButton mSetCurvedArcDirectionBtn;
     private AppCompatButton mSetCurvedBiasBtn;
     private AppCompatSeekBar mCurvedBiasSb;
 
@@ -176,15 +176,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mLineSpaceSb = findViewById(R.id.sb_line_space);
-        mLineSpaceSb.setMax(100);
-        mLineSpaceSb.setProgress(30);
-        wheelView.setLineSpace(30);
-        mSetLineSpaceBtn = findViewById(R.id.btn_set_line_space);
-        mSetLineSpaceBtn.setOnClickListener(new View.OnClickListener() {
+        mLineSpacingSb = findViewById(R.id.sb_line_space);
+        mLineSpacingSb.setMax(100);
+        mLineSpacingSb.setProgress(30);
+        wheelView.setLineSpacing(30);
+        mSetLineSpacingBtn = findViewById(R.id.btn_set_line_space);
+        mSetLineSpacingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wheelView.setLineSpace(mLineSpaceSb.getProgress());
+                wheelView.setLineSpacing(mLineSpacingSb.getProgress());
             }
         });
 
@@ -197,29 +197,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mCurvedAlignRg=findViewById(R.id.rg_curved_align);
-        mSetCurvedAlignBtn=findViewById(R.id.btn_set_curved_align);
-        mSetCurvedAlignBtn.setOnClickListener(new View.OnClickListener() {
+        mCurvedArcDirectionRg =findViewById(R.id.rg_curved_arc_direction);
+        mSetCurvedArcDirectionBtn =findViewById(R.id.btn_set_curved_arc_direction);
+        mSetCurvedArcDirectionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mCurvedAlignRg.getCheckedRadioButtonId()== R.id.rb_curved_left) {
-                    wheelView.setCurvedAlign(WheelView.CURVED_ALIGN_LEFT);
-                }else if (mCurvedAlignRg.getCheckedRadioButtonId()==R.id.rb_curved_right){
-                    wheelView.setCurvedAlign(WheelView.CURVED_ALIGN_RIGHT);
+                if (mCurvedArcDirectionRg.getCheckedRadioButtonId()== R.id.rb_curved_left) {
+                    wheelView.setCurvedArcDirection(WheelView.CURVED_ARC_DIRECTION_LEFT);
+                }else if (mCurvedArcDirectionRg.getCheckedRadioButtonId()==R.id.rb_curved_right){
+                    wheelView.setCurvedArcDirection(WheelView.CURVED_ARC_DIRECTION_RIGHT);
                 }else {
-                    wheelView.setCurvedAlign(WheelView.CURVED_ALIGN_CENTER);
+                    wheelView.setCurvedArcDirection(WheelView.CURVED_ARC_DIRECTION_CENTER);
                 }
             }
         });
 
         mCurvedBiasSb =findViewById(R.id.sb_curved_bias);
         mCurvedBiasSb.setMax(10);
-        mCurvedBiasSb.setProgress((int) (wheelView.getCurvedAlignBias()*10));
+        mCurvedBiasSb.setProgress((int) (wheelView.getCurvedArcDirectionBias()*10));
         mSetCurvedBiasBtn=findViewById(R.id.btn_set_curved_bias);
         mSetCurvedBiasBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wheelView.setCurvedAlignBias(mCurvedBiasSb.getProgress()*0.1f);
+                wheelView.setCurvedArcDirectionBias(mCurvedBiasSb.getProgress()*0.1f);
             }
         });
 
