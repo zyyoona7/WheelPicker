@@ -32,6 +32,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * @author zyyoona7
+ * @version v1.0
+ * @since 2018/8/7.
+ */
 public class WheelView<T> extends View implements Runnable {
 
     private static final String TAG = "WheelView";
