@@ -102,7 +102,7 @@ public class WheelView<T> extends View implements Runnable {
     //分割线类型为DIVIDER_TYPE_WRAP时 分割线左右两端距离文字的间距
     private float mDividerPaddingForWrap = dp2px(2);
     //分割线两端形状，默认圆头
-    private Paint.Join mDividerJoin = Paint.Join.ROUND;
+    private Paint.Cap mDividerCap = Paint.Cap.ROUND;
 
     //文字起始X
     private int mStartX;
@@ -205,6 +205,8 @@ public class WheelView<T> extends View implements Runnable {
         }
 
         mVisibleItems = typedArray.getInt(R.styleable.WheelView_wv_visibleItems, DEFAULT_VISIBLE_ITEM);
+        //跳转可见item为奇数
+        mVisibleItems=adjustVisibleItems(mVisibleItems);
         mCurrentItemPosition = typedArray.getInt(R.styleable.WheelView_wv_currentItemPosition, 0);
         isCyclic = typedArray.getBoolean(R.styleable.WheelView_wv_cyclic, true);
 
@@ -228,7 +230,6 @@ public class WheelView<T> extends View implements Runnable {
      * @param context context
      */
     private void initValue(Context context) {
-        mPaint.setTextSize(mTextSize);
         ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
         mMaxFlingVelocity = viewConfiguration.getScaledMaximumFlingVelocity();
         mMinFlingVelocity = viewConfiguration.getScaledMinimumFlingVelocity();
@@ -244,6 +245,7 @@ public class WheelView<T> extends View implements Runnable {
      * 测量文字最大所占空间
      */
     private void calculateTextSize() {
+        mPaint.setTextSize(mTextSize);
         for (int i = 0; i < mDataList.size(); i++) {
             int textWidth = (int) mPaint.measureText(getDataText(mDataList.get(i)));
             mMaxTextWidth = Math.max(textWidth, mMaxTextWidth);
@@ -389,7 +391,8 @@ public class WheelView<T> extends View implements Runnable {
         if (isShowDivider) {
             mPaint.setColor(mDividerColor);
             float originStrokeWidth = mPaint.getStrokeWidth();
-            mPaint.setStrokeJoin(mDividerJoin);
+            mPaint.setStrokeJoin(Paint.Join.ROUND);
+            mPaint.setStrokeCap(Paint.Cap.ROUND);
             mPaint.setStrokeWidth(mDividerSize);
             if (mDividerType == DIVIDER_TYPE_FILL) {
                 canvas.drawLine(mClipLeft, mSelectedItemTopLimit, mClipRight, mSelectedItemTopLimit, mPaint);
@@ -904,6 +907,7 @@ public class WheelView<T> extends View implements Runnable {
         }
         calculateTextSize();
         calculateDrawStart();
+        calculateLimitY();
         requestLayout();
         invalidate();
     }
@@ -1154,10 +1158,19 @@ public class WheelView<T> extends View implements Runnable {
         if (mVisibleItems == visibleItems) {
             return;
         }
-        mVisibleItems = Math.abs(visibleItems / 2 * 2 + 1); // 当传入的值为偶数时,换算成奇数;
+        mVisibleItems = adjustVisibleItems(visibleItems);
         mScrollOffsetY = 0;
         requestLayout();
         invalidate();
+    }
+
+    /**
+     * 跳转可见条目数为奇数
+     * @param visibleItems
+     * @return
+     */
+    private int adjustVisibleItems(int visibleItems){
+       return Math.abs(visibleItems / 2 * 2 + 1); // 当传入的值为偶数时,换算成奇数;
     }
 
     /**
@@ -1399,20 +1412,20 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @return
      */
-    public Paint.Join getDividerJoin() {
-        return mDividerJoin;
+    public Paint.Cap getDividerCap() {
+        return mDividerCap;
     }
 
     /**
      * 设置分割线两端形状
      *
-     * @param dividerJoin
+     * @param dividerCap
      */
-    public void setDividerJoin(Paint.Join dividerJoin) {
-        if (mDividerJoin == dividerJoin) {
+    public void setDividerCap(Paint.Cap dividerCap) {
+        if (mDividerCap == dividerCap) {
             return;
         }
-        mDividerJoin = dividerJoin;
+        mDividerCap = dividerCap;
         invalidate();
     }
 
