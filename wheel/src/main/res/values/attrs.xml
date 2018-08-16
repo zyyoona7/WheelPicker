@@ -46,14 +46,14 @@
 
         <!--是否是弯曲（3D）效果-->
         <attr name="wv_curved" format="boolean"/>
-        <!--弯曲（3D）效果对齐方式 可向指定方向偏移-->
-        <attr name="wv_curvedAlign" format="enum">
+        <!--弯曲（3D）效果左右圆弧偏移效果方向 可向指定方向偏移-->
+        <attr name="wv_curvedArcDirection" format="enum">
             <enum name="left" value="0"/>
             <enum name="center" value="1"/>
             <enum name="right" value="2"/>
         </attr>
-        <!--弯曲（3D）效果对齐系数 偏移系数-->
-        <attr name="wv_curvedAlignBias" format="float"/>
+        <!--弯曲（3D）效果左右圆弧偏移效果方向系数 偏移系数-->
+        <attr name="wv_curvedArcDirectionBias" format="float"/>
         <!--选中条目折射偏移-->
         <attr name="wv_curvedRefractX" format="dimension"/>
     </declare-styleable>

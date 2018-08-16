@@ -38,8 +38,8 @@
             app:wv_dividerHeight="2dp"
             app:wv_dividerType="fill"
             app:wv_dividerPaddingForWrap="10dp"
-            app:wv_curvedAlign="left"
-            app:wv_curvedAlignBias="0.5"
+            app:wv_curvedArcDirection="left"
+            app:wv_curvedArcDirectionBias="0.5"
             app:wv_curvedRefractX="10dp"/>
 
         <android.support.v7.widget.AppCompatTextView

@@ -69,13 +69,13 @@ public class Main2Activity extends AppCompatActivity {
         AppCompatTextView curvedTv=findViewById(R.id.tv_curved);
         curvedTv.setText(getString(R.string.curvedValue,wheelView.isCurved()+""));
         AppCompatTextView curvedArcDirectionTv=findViewById(R.id.tv_curvedAlign);
-        String curvedAlign="Center";
+        String curvedArcDirection="Center";
         if (wheelView.getCurvedArcDirection()==WheelView.CURVED_ARC_DIRECTION_LEFT){
-            curvedAlign="Left";
+            curvedArcDirection="Left";
         }else if (wheelView.getCurvedArcDirection()==WheelView.CURVED_ARC_DIRECTION_RIGHT){
-            curvedAlign="Right";
+            curvedArcDirection="Right";
         }
-        curvedArcDirectionTv.setText(getString(R.string.curvedArcDirectionValue,curvedAlign));
+        curvedArcDirectionTv.setText(getString(R.string.curvedArcDirectionValue,curvedArcDirection));
         AppCompatTextView curvedArcDirectionBiasTv=findViewById(R.id.tv_curvedAlignBias);
         curvedArcDirectionBiasTv.setText(getString(R.string.curvedArcDirectionBiasValue,wheelView.getCurvedArcDirectionBias()+""));
         AppCompatTextView curvedRefractXTv=findViewById(R.id.tv_curvedRefractX);

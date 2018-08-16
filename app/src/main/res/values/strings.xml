@@ -21,7 +21,7 @@
     <string name="dividerPaddingForWrapValue">wrap类型下分割线内边距为：%s</string>
 
     <string name="curvedValue">是否是弯曲（3D）效果：%s</string>
-    <string name="curvedArcDirectionValue">弯曲（3D）效果对齐方式为：%s</string>
-    <string name="curvedArcDirectionBiasValue">弯曲（3D）效果对齐系数为：%s</string>
+    <string name="curvedArcDirectionValue">弯曲（3D）效果左右圆弧偏移效果方向为：%s</string>
+    <string name="curvedArcDirectionBiasValue">弯曲（3D）效果左右圆弧偏移效果方向系数为：%s</string>
     <string name="curvedRefractXValue">选中条目折射偏移为：%s</string>
 </resources>

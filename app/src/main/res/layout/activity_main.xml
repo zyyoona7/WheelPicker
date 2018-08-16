@@ -33,11 +33,38 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_go_custom_attrs"
+            app:wv_dividerColor="#699f38"
             app:wv_normalItemTextColor="#00796b"
             app:wv_selectedItemTextColor="#004d40"
-            app:wv_dividerColor="#699f38"
             app:wv_showDivider="true"
             app:wv_textSize="24sp" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/sc_turn_on_sound"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="是否开启滚动音效"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wheelview" />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_sound_effect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="设置滚动音效音量"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sc_turn_on_sound" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/sb_sound_effect"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/btn_set_sound_effect"
+            app:layout_constraintEnd_toStartOf="@id/btn_set_sound_effect"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_set_sound_effect" />
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/sc_turn_on_cyclic"
@@ -47,7 +74,7 @@
             android:text="是否开启循环滚动效果"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/wheelview" />
+            app:layout_constraintTop_toBottomOf="@id/btn_set_sound_effect" />
 
         <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/cb_smooth"
@@ -216,8 +243,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sc_turn_on_curved">
 
             <android.support.v7.widget.AppCompatRadioButton
@@ -247,10 +274,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:text="设置弯曲（3D）圆弧偏移效果"
-            app:layout_constraintTop_toBottomOf="@id/rg_curved_arc_direction"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rg_curved_arc_direction" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_set_curved_bias"

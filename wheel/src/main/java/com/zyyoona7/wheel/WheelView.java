@@ -10,11 +10,14 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
+import android.support.annotation.RawRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
@@ -169,10 +172,17 @@ public class WheelView<T> extends View implements Runnable {
     private boolean isFlingScroll;
     //当前选中的下标
     private int mCurrentItemPosition;
+    //当前滚动经过的下标
+    private int mCurrentScrollPosition;
 
     //监听器
     private OnItemSelectedListener<T> mOnItemSelectedListener;
     private OnWheelChangedListener mOnWheelChangedListener;
+
+    //音频
+    private SoundHelper mSoundHelper;
+    //是否开启音频效果
+    private boolean isSoundEffect = false;
 
     public WheelView(Context context) {
         this(context, null);
@@ -213,6 +223,8 @@ public class WheelView<T> extends View implements Runnable {
         //跳转可见item为奇数
         mVisibleItems = adjustVisibleItems(mVisibleItems);
         mCurrentItemPosition = typedArray.getInt(R.styleable.WheelView_wv_currentItemPosition, 0);
+        //初始化滚动下标
+        mCurrentScrollPosition = mCurrentItemPosition;
         isCyclic = typedArray.getBoolean(R.styleable.WheelView_wv_cyclic, true);
 
         isShowDivider = typedArray.getBoolean(R.styleable.WheelView_wv_showDivider, false);
@@ -222,8 +234,8 @@ public class WheelView<T> extends View implements Runnable {
         mDividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelView_wv_dividerPaddingForWrap, DEFAULT_TEXT_BOUNDARY_MARGIN);
 
         isCurved = typedArray.getBoolean(R.styleable.WheelView_wv_curved, true);
-        mCurvedArcDirection = typedArray.getInt(R.styleable.WheelView_wv_curvedAlign, CURVED_ARC_DIRECTION_CENTER);
-        mCurvedArcDirectionBias = typedArray.getFloat(R.styleable.WheelView_wv_curvedAlignBias, DEFAULT_CURVED_BIAS);
+        mCurvedArcDirection = typedArray.getInt(R.styleable.WheelView_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER);
+        mCurvedArcDirectionBias = typedArray.getFloat(R.styleable.WheelView_wv_curvedArcDirectionBias, DEFAULT_CURVED_BIAS);
         //折射偏移默认值
         mCurvedRefractX = typedArray.getDimension(R.styleable.WheelView_wv_curvedRefractX, mTextSize * 0.05f);
         typedArray.recycle();
@@ -242,8 +254,37 @@ public class WheelView<T> extends View implements Runnable {
         mDrawRect = new Rect();
         mCamera = new Camera();
         mMatrix = new Matrix();
+        mSoundHelper = SoundHelper.obtain();
+        initDefaultVolume(context);
         calculateTextSize();
         updateTextAlign();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mSoundHelper != null) {
+            mSoundHelper.release();
+        }
+    }
+
+    /**
+     * 初始化默认音量
+     *
+     * @param context
+     */
+    private void initDefaultVolume(Context context) {
+        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager != null) {
+            //获取系统媒体当前音量
+            int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            //获取系统媒体最大音量
+            int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+            //设置播放音量
+            mSoundHelper.setPlayVolume(currentVolume * 1.0f / maxVolume);
+        } else {
+            mSoundHelper.setPlayVolume(0.3f);
+        }
     }
 
     /**
@@ -384,6 +425,29 @@ public class WheelView<T> extends View implements Runnable {
 
         if (mOnWheelChangedListener != null) {
             mOnWheelChangedListener.onWheelScroll(mScrollOffsetY);
+
+            //item改变回调
+            int oldPosition = mCurrentScrollPosition;
+            int newPosition = getCurrentPosition();
+            if (oldPosition != newPosition) {
+                //改变了
+                if (mOnWheelChangedListener != null) {
+                    mOnWheelChangedListener.onWheelItemChanged(oldPosition, newPosition);
+                }
+                //播放音频
+                playSoundEffect();
+                //更新下标
+                mCurrentScrollPosition = newPosition;
+            }
+        }
+    }
+
+    /**
+     * 播放滚动音效
+     */
+    public void playSoundEffect() {
+        if (mSoundHelper != null && isSoundEffect) {
+            mSoundHelper.playSoundEffect();
         }
     }
 
@@ -808,6 +872,9 @@ public class WheelView<T> extends View implements Runnable {
         if (mOverScroller.isFinished() && !isForceFinishScroll) {
             if (mItemHeight == 0) return;
             mCurrentItemPosition = getCurrentPosition();
+            //停止后重新赋值
+            mCurrentScrollPosition = mCurrentItemPosition;
+
             //停止滚动，选中条目回调
             if (mOnItemSelectedListener != null) {
                 mOnItemSelectedListener.onItemSelected(this, mDataList.get(mCurrentItemPosition), mCurrentItemPosition);
@@ -857,6 +924,55 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     /**
+     * 获取音效开关状态
+     *
+     * @return
+     */
+    public boolean isSoundEffect() {
+        return isSoundEffect;
+    }
+
+    /**
+     * 设置音效开关
+     *
+     * @param isSoundEffect
+     */
+    public void setSoundEffect(boolean isSoundEffect) {
+        this.isSoundEffect = isSoundEffect;
+    }
+
+    /**
+     * 设置声音效果资源
+     *
+     * @param resId
+     */
+    public void setSoundEffectResource(@RawRes int resId) {
+        if (mSoundHelper != null) {
+            mSoundHelper.load(getContext(), resId);
+        }
+    }
+
+    /**
+     * 获取播放音量
+     *
+     * @return
+     */
+    public float getPlayVolume() {
+        return mSoundHelper == null ? 0 : mSoundHelper.getPlayVolume();
+    }
+
+    /**
+     * 设置播放音量
+     *
+     * @param playVolume
+     */
+    public void setPlayVolume(@FloatRange(from = 0.0, to = 1.0) float playVolume) {
+        if (mSoundHelper != null) {
+            mSoundHelper.setPlayVolume(playVolume);
+        }
+    }
+
+    /**
      * 获取数据列表
      *
      * @return 数据列表
@@ -877,6 +993,8 @@ public class WheelView<T> extends View implements Runnable {
         mDataList = dataList;
         if (mCurrentItemPosition > mDataList.size()) {
             mCurrentItemPosition = mDataList.size() - 1;
+            //重置滚动下标
+            mCurrentScrollPosition = mCurrentItemPosition;
         }
         //强制滚动完成
         forceFinishScroll();
@@ -917,8 +1035,12 @@ public class WheelView<T> extends View implements Runnable {
         if (tempTextSize == mTextSize) {
             return;
         }
+        //强制滚动完成
+        forceFinishScroll();
         calculateTextSize();
         calculateDrawStart();
+        //字体大小变化，偏移距离也变化了
+        mScrollOffsetY = mCurrentItemPosition * mItemHeight;
         calculateLimitY();
         requestLayout();
         invalidate();
@@ -942,9 +1064,14 @@ public class WheelView<T> extends View implements Runnable {
         if (mPaint.getTypeface() == typeface) {
             return;
         }
+        //强制滚动完成
+        forceFinishScroll();
         mPaint.setTypeface(typeface);
         calculateTextSize();
         calculateDrawStart();
+        //字体大小变化，偏移距离也变化了
+        mScrollOffsetY = mCurrentItemPosition * mItemHeight;
+        calculateLimitY();
         requestLayout();
         invalidate();
     }
@@ -1635,6 +1762,14 @@ public class WheelView<T> extends View implements Runnable {
         void onWheelScroll(int scrollOffsetY);
 
         /**
+         * WheelView 条目变化
+         *
+         * @param oldPosition
+         * @param newPosition
+         */
+        void onWheelItemChanged(int oldPosition, int newPosition);
+
+        /**
          * WheelView 选中
          *
          * @param position
@@ -1647,5 +1782,69 @@ public class WheelView<T> extends View implements Runnable {
          * @param state
          */
         void onWheelScrollStateChanged(int state);
+    }
+
+    private static class SoundHelper {
+
+        private SoundPool mSoundPool;
+        private int mSoundId;
+        private float mPlayVolume;
+
+        private SoundHelper() {
+            mSoundPool = new SoundPool(1, AudioManager.STREAM_SYSTEM, 1);
+        }
+
+        public static SoundHelper obtain() {
+            return new SoundHelper();
+        }
+
+        /**
+         * 加载音频资源
+         *
+         * @param context
+         * @param resId
+         */
+        public void load(Context context, @RawRes int resId) {
+            if (mSoundPool != null) {
+                mSoundId = mSoundPool.load(context, resId, 1);
+            }
+        }
+
+        /**
+         * 设置音量
+         *
+         * @param playVolume
+         */
+        public void setPlayVolume(@FloatRange(from = 0.0, to = 1.0) float playVolume) {
+            this.mPlayVolume = playVolume;
+        }
+
+        /**
+         * 获取音量
+         *
+         * @return
+         */
+        public float getPlayVolume() {
+            return mPlayVolume;
+        }
+
+        /**
+         * 播放声音效果
+         */
+        public void playSoundEffect() {
+            if (mSoundPool != null && mSoundId != 0) {
+                mSoundPool.play(mSoundId, mPlayVolume, mPlayVolume, 1, 0, 1);
+            }
+        }
+
+        /**
+         * 释放SoundPool
+         */
+        public void release() {
+            if (mSoundPool != null) {
+                mSoundPool.release();
+                mSoundPool = null;
+            }
+        }
     }
 }

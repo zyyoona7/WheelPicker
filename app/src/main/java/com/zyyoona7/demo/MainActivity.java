@@ -80,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onWheelItemChanged(int oldPosition, int newPosition) {
+                Log.i(TAG, "onWheelItemChanged: oldPosition="+oldPosition+",newPosition="+newPosition);
+            }
+
+            @Override
             public void onWheelSelected(int position) {
                 Log.d(TAG, "onWheelSelected: position=" + position);
             }
@@ -91,6 +96,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
         wheelView.setData(list);
+
+        //经过测试 OGG 格式比 MP3 效果好
+        wheelView.setSoundEffectResource(R.raw.button_choose);
+        SwitchCompat soundSc=findViewById(R.id.sc_turn_on_sound);
+        soundSc.setChecked(wheelView.isSoundEffect());
+        soundSc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                wheelView.setSoundEffect(isChecked);
+            }
+        });
+        final AppCompatSeekBar soundVolumeSb=findViewById(R.id.sb_sound_effect);
+        soundVolumeSb.setMax(100);
+        soundVolumeSb.setProgress((int) (wheelView.getPlayVolume()*100));
+        AppCompatButton setSoundVolumeBtn=findViewById(R.id.btn_set_sound_effect);
+        setSoundVolumeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wheelView.setPlayVolume(soundVolumeSb.getProgress()*1.0f/100);
+            }
+        });
 
         SwitchCompat cyclicSc=findViewById(R.id.sc_turn_on_cyclic);
         cyclicSc.setChecked(wheelView.isCyclic());
