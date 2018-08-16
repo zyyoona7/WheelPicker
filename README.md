@@ -58,6 +58,13 @@
 
 详细使用请阅读 [WIKI](https://github.com/zyyoona7/WheelPicker/wiki)
 
+### 感谢（Thanks）
+[**WheelPicker**](https://github.com/AigeStudio/WheelPicker)<br>
+[**Android-PickerView**](https://github.com/Bigkoo/Android-PickerView)<br>
+[**WheelView**](https://github.com/CNCoderX/WheelView)<br>
+[**WheelView-3d**](https://github.com/youxiaochen/WheelView-3d)<br>
+[**DatePicker**](https://github.com/chenglei1986/DatePicker)
+
 ### LICENSE
 ```
 Copyright 2018 zyyoona7
