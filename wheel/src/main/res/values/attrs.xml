@@ -3,6 +3,8 @@
     <declare-styleable name="WheelView">
         <!--文字大小-->
         <attr name="wv_textSize" format="dimension"/>
+        <!--是否自适应文字大小以完全显示过长的文字-->
+        <attr name="wv_autoFitTextSize" format="boolean"/>
         <!--文字对齐方式-->
         <attr name="wv_textAlign" format="enum">
             <enum name="left" value="0"/>
@@ -53,8 +55,8 @@
             <enum name="right" value="2"/>
         </attr>
         <!--弯曲（3D）效果左右圆弧偏移效果方向系数 偏移系数-->
-        <attr name="wv_curvedArcDirectionBias" format="float"/>
+        <attr name="wv_curvedArcDirectionFactor" format="float"/>
         <!--选中条目折射偏移-->
-        <attr name="wv_curvedRefractX" format="dimension"/>
+        <attr name="wv_curvedRefractRatio" format="float"/>
     </declare-styleable>
 </resources>

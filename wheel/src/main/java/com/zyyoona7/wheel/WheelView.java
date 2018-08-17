@@ -54,6 +54,8 @@ public class WheelView<T> extends View implements Runnable {
     private static final int DEFAULT_SCROLL_DURATION = 250;
     private static final long DEFAULT_CLICK_CONFIRM = 120;
     private static final String DEFAULT_INTEGER_FORMAT = "%02d";
+    //默认折射比值，通过字体大小来实现折射视觉差
+    private static final float DEFAULT_REFRACT_RATIO = 0.9f;
 
     //文字对齐方式
     public static final int TEXT_ALIGN_LEFT = 0;
@@ -70,7 +72,7 @@ public class WheelView<T> extends View implements Runnable {
     public static final int CURVED_ARC_DIRECTION_CENTER = 1;
     public static final int CURVED_ARC_DIRECTION_RIGHT = 2;
 
-    public static final float DEFAULT_CURVED_BIAS = 0.75f;
+    public static final float DEFAULT_CURVED_FACTOR = 0.75f;
 
     //分割线填充类型
     public static final int DIVIDER_TYPE_FILL = 0;
@@ -79,6 +81,8 @@ public class WheelView<T> extends View implements Runnable {
     private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     //字体大小
     private float mTextSize;
+    //是否自动调整字体大小以显示完全
+    private boolean isAutoFitTextSize;
     private Paint.FontMetrics mFontMetrics;
     //每个item的高度
     private int mItemHeight;
@@ -143,9 +147,9 @@ public class WheelView<T> extends View implements Runnable {
     //弯曲（3D）效果左右圆弧偏移效果方向 center 不偏移
     private int mCurvedArcDirection = CURVED_ARC_DIRECTION_CENTER;
     //弯曲（3D）效果左右圆弧偏移效果系数 0-1之间 越大越明显
-    private float mCurvedArcDirectionBias = DEFAULT_CURVED_BIAS;
-    //弯曲（3D）效果选中后折射的偏移
-    private float mCurvedRefractX;
+    private float mCurvedArcDirectionFactor = DEFAULT_CURVED_FACTOR;
+    //弯曲（3D）效果选中后折射的偏移 与字体大小的比值，1为不偏移 越小偏移越明显
+    private float mCurvedRefractRatio;
 
     //数据列表
     List<T> mDataList = new ArrayList<>(1);
@@ -207,6 +211,7 @@ public class WheelView<T> extends View implements Runnable {
     private void initAttrsAndDefault(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelView);
         mTextSize = typedArray.getDimension(R.styleable.WheelView_wv_textSize, DEFAULT_TEXT_SIZE);
+        isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelView_wv_autoFitTextSize, false);
         mTextAlign = typedArray.getInt(R.styleable.WheelView_wv_textAlign, TEXT_ALIGN_CENTER);
         mTextBoundaryMargin = typedArray.getDimension(R.styleable.WheelView_wv_textBoundaryMargin,
                 DEFAULT_TEXT_BOUNDARY_MARGIN);
@@ -235,9 +240,14 @@ public class WheelView<T> extends View implements Runnable {
 
         isCurved = typedArray.getBoolean(R.styleable.WheelView_wv_curved, true);
         mCurvedArcDirection = typedArray.getInt(R.styleable.WheelView_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER);
-        mCurvedArcDirectionBias = typedArray.getFloat(R.styleable.WheelView_wv_curvedArcDirectionBias, DEFAULT_CURVED_BIAS);
+        mCurvedArcDirectionFactor = typedArray.getFloat(R.styleable.WheelView_wv_curvedArcDirectionFactor, DEFAULT_CURVED_FACTOR);
         //折射偏移默认值
-        mCurvedRefractX = typedArray.getDimension(R.styleable.WheelView_wv_curvedRefractX, mTextSize * 0.05f);
+        mCurvedRefractRatio = typedArray.getFloat(R.styleable.WheelView_wv_curvedRefractRatio, DEFAULT_REFRACT_RATIO);
+        if (mCurvedRefractRatio > 1f) {
+            mCurvedRefractRatio = 1.0f;
+        } else if (mCurvedRefractRatio < 0f) {
+            mCurvedRefractRatio = DEFAULT_REFRACT_RATIO;
+        }
         typedArray.recycle();
     }
 
@@ -335,7 +345,8 @@ public class WheelView<T> extends View implements Runnable {
             int towardRange = (int) (Math.sin(Math.PI / 48) * height);
             width += towardRange;
         }
-        setMeasuredDimension(resolveSize(width, widthMeasureSpec), resolveSize(height, heightMeasureSpec));
+        setMeasuredDimension(resolveSizeAndState(width, widthMeasureSpec, 0),
+                resolveSizeAndState(height, heightMeasureSpec, 0));
     }
 
     @Override
@@ -470,11 +481,7 @@ public class WheelView<T> extends View implements Runnable {
                 //边界处理 超过边界直接按照DIVIDER_TYPE_FILL类型处理
                 int startX = (int) (mCenterX - mMaxTextWidth / 2 - mDividerPaddingForWrap);
                 int stopX = (int) (mCenterX + mMaxTextWidth / 2 + mDividerPaddingForWrap);
-                if (isCurved) {
-                    // 弯曲效果时加上折射偏移量x
-                    startX -= mCurvedRefractX;
-                    stopX += mCurvedRefractX;
-                }
+
                 int wrapStartX = startX < mClipLeft ? mClipLeft : startX;
                 int wrapStopX = stopX > mClipRight ? mClipRight : stopX;
                 canvas.drawLine(wrapStartX, mSelectedItemTopLimit, wrapStopX, mSelectedItemTopLimit, mPaint);
@@ -499,31 +506,41 @@ public class WheelView<T> extends View implements Runnable {
 
         //index 的 item 距离中间项的偏移
         int item2CenterOffsetY = (index - mScrollOffsetY / mItemHeight) * mItemHeight - scrolledOffset;
+        //记录初始测量的字体起始X
+        int startX = mStartX;
+        //重新测量字体宽度和基线偏移
+        int centerToBaselineY = isAutoFitTextSize ? remeasureTextSize(text) : mCenterToBaselineY;
 
         if (Math.abs(item2CenterOffsetY) <= 0) {
             //绘制选中的条目
             mPaint.setColor(mSelectedItemColor);
-            clipAndDraw2DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit, item2CenterOffsetY);
+            clipAndDraw2DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit, item2CenterOffsetY, centerToBaselineY);
         } else if (item2CenterOffsetY > 0 && item2CenterOffsetY < mItemHeight) {
             //绘制与下边界交汇的条目
             mPaint.setColor(mSelectedItemColor);
-            clipAndDraw2DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit, item2CenterOffsetY);
+            clipAndDraw2DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit, item2CenterOffsetY, centerToBaselineY);
 
             mPaint.setColor(mTextColor);
-            clipAndDraw2DText(canvas, text, mSelectedItemBottomLimit, mClipBottom, item2CenterOffsetY);
+            clipAndDraw2DText(canvas, text, mSelectedItemBottomLimit, mClipBottom, item2CenterOffsetY, centerToBaselineY);
 
         } else if (item2CenterOffsetY < 0 && item2CenterOffsetY > -mItemHeight) {
             //绘制与上边界交汇的条目
             mPaint.setColor(mSelectedItemColor);
-            clipAndDraw2DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit, item2CenterOffsetY);
+            clipAndDraw2DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit, item2CenterOffsetY, centerToBaselineY);
 
             mPaint.setColor(mTextColor);
-            clipAndDraw2DText(canvas, text, mClipTop, mSelectedItemTopLimit, item2CenterOffsetY);
+            clipAndDraw2DText(canvas, text, mClipTop, mSelectedItemTopLimit, item2CenterOffsetY, centerToBaselineY);
 
         } else {
             //绘制其他条目
             mPaint.setColor(mTextColor);
-            clipAndDraw2DText(canvas, text, mClipTop, mClipBottom, item2CenterOffsetY);
+            clipAndDraw2DText(canvas, text, mClipTop, mClipBottom, item2CenterOffsetY, centerToBaselineY);
+        }
+
+        if (isAutoFitTextSize) {
+            //恢复重新测量之前的样式
+            mPaint.setTextSize(mTextSize);
+            mStartX = startX;
         }
     }
 
@@ -535,12 +552,79 @@ public class WheelView<T> extends View implements Runnable {
      * @param clipTop            裁剪的上边界
      * @param clipBottom         裁剪的下边界
      * @param item2CenterOffsetY 距离中间项的偏移
+     * @param centerToBaselineY  文字中心距离baseline的距离
      */
-    private void clipAndDraw2DText(Canvas canvas, String text, int clipTop, int clipBottom, int item2CenterOffsetY) {
+    private void clipAndDraw2DText(Canvas canvas, String text, int clipTop, int clipBottom,
+                                   int item2CenterOffsetY, int centerToBaselineY) {
         canvas.save();
         canvas.clipRect(mClipLeft, clipTop, mClipRight, clipBottom);
-        canvas.drawText(text, 0, text.length(), mStartX, mCenterY + item2CenterOffsetY - mCenterToBaselineY, mPaint);
+        canvas.drawText(text, 0, text.length(), mStartX, mCenterY + item2CenterOffsetY - centerToBaselineY, mPaint);
         canvas.restore();
+    }
+
+    /**
+     * 重新测量字体大小
+     *
+     * @param contentText
+     * @return
+     */
+    private int remeasureTextSize(String contentText) {
+        float textWidth = mPaint.measureText(contentText);
+        float drawWidth = getWidth();
+        float textMargin = mTextBoundaryMargin * 2;
+        //稍微增加了一点文字边距 最大为宽度的1/10
+        if (textMargin > (drawWidth / 10f)) {
+            drawWidth = drawWidth * 9f / 10f;
+            textMargin = drawWidth / 10f;
+        } else {
+            drawWidth = drawWidth - textMargin;
+        }
+        if (drawWidth <= 0) {
+            return mCenterToBaselineY;
+        }
+        float textSize = mTextSize;
+        while (textWidth > drawWidth) {
+            textSize--;
+            if (textSize <= 0) {
+                break;
+            }
+            mPaint.setTextSize(textSize);
+            textWidth = mPaint.measureText(contentText);
+        }
+        //重新计算文字起始X
+        recalculateStartX(textMargin / 2.0f);
+        //高度起点也变了
+        return recalculateCenterToBaselineY();
+    }
+
+    /**
+     * 重新计算字体起始X
+     *
+     * @param textMargin
+     */
+    private void recalculateStartX(float textMargin) {
+        switch (mTextAlign) {
+            case TEXT_ALIGN_LEFT:
+                mStartX = (int) textMargin;
+                break;
+            case TEXT_ALIGN_RIGHT:
+                mStartX = (int) (getWidth() - textMargin);
+                break;
+            default:
+                mStartX = getWidth() / 2;
+                break;
+        }
+    }
+
+    /**
+     * 字体大小变化后重新计算距离基线的距离
+     *
+     * @return
+     */
+    private int recalculateCenterToBaselineY() {
+        Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
+        //高度起点也变了
+        return (int) (fontMetrics.ascent + (fontMetrics.descent - fontMetrics.ascent) / 2);
     }
 
     /**
@@ -570,77 +654,109 @@ public class WheelView<T> extends View implements Runnable {
         float translateY = (float) (Math.sin(angle) * radius);
         // 滚动的距离映射到z轴的长度
         float translateZ = (float) ((1 - Math.cos(angle)) * radius);
-        // 折射偏移量x
-        float refractX = mCurvedRefractX;
         // 透明度
         int alpha = (int) (Math.cos(angle) * 255);
 
+        //记录初始测量的字体起始X
+        int startX = mStartX;
+        //重新测量字体宽度和基线偏移
+        int centerToBaselineY = isAutoFitTextSize ? remeasureTextSize(text) : mCenterToBaselineY;
         if (Math.abs(item2CenterOffsetY) <= 0) {
             //绘制选中的条目
             mPaint.setColor(mSelectedItemColor);
             mPaint.setAlpha(255);
-            clipAndDraw3DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit, refractX, rotateX, translateY, translateZ);
+            clipAndDraw3DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit,
+                    rotateX, translateY, translateZ, centerToBaselineY);
         } else if (item2CenterOffsetY > 0 && item2CenterOffsetY < mItemHeight) {
             //绘制与下边界交汇的条目
             mPaint.setColor(mSelectedItemColor);
             mPaint.setAlpha(255);
-            clipAndDraw3DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit, refractX, rotateX, translateY, translateZ);
+            clipAndDraw3DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit,
+                    rotateX, translateY, translateZ, centerToBaselineY);
 
             mPaint.setColor(mTextColor);
             mPaint.setAlpha(alpha);
-            clipAndDraw3DText(canvas, text, mSelectedItemBottomLimit, mClipBottom, -1, rotateX, translateY, translateZ);
+            //缩小字体，实现折射效果
+            float textSize = mPaint.getTextSize();
+            mPaint.setTextSize(textSize * mCurvedRefractRatio);
+            //字体变化，重新计算距离基线偏移
+            int reCenterToBaselineY = recalculateCenterToBaselineY();
+            clipAndDraw3DText(canvas, text, mSelectedItemBottomLimit, mClipBottom,
+                    rotateX, translateY, translateZ, reCenterToBaselineY);
+            mPaint.setTextSize(textSize);
         } else if (item2CenterOffsetY < 0 && item2CenterOffsetY > -mItemHeight) {
             //绘制与上边界交汇的条目
             mPaint.setColor(mSelectedItemColor);
             mPaint.setAlpha(255);
-            clipAndDraw3DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit, refractX, rotateX, translateY, translateZ);
+            clipAndDraw3DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit,
+                    rotateX, translateY, translateZ, centerToBaselineY);
 
             mPaint.setColor(mTextColor);
             mPaint.setAlpha(alpha);
-            clipAndDraw3DText(canvas, text, mClipTop, mSelectedItemTopLimit, -1, rotateX, translateY, translateZ);
+
+            //缩小字体，实现折射效果
+            float textSize = mPaint.getTextSize();
+            mPaint.setTextSize(textSize * mCurvedRefractRatio);
+            //字体变化，重新计算距离基线偏移
+            int reCenterToBaselineY = recalculateCenterToBaselineY();
+            clipAndDraw3DText(canvas, text, mClipTop, mSelectedItemTopLimit,
+                    rotateX, translateY, translateZ, reCenterToBaselineY);
+            mPaint.setTextSize(textSize);
         } else {
             //绘制其他条目
             mPaint.setColor(mTextColor);
             mPaint.setAlpha(alpha);
-            clipAndDraw3DText(canvas, text, mClipTop, mClipBottom, -1, rotateX, translateY, translateZ);
+
+            //缩小字体，实现折射效果
+            float textSize = mPaint.getTextSize();
+            mPaint.setTextSize(textSize * mCurvedRefractRatio);
+            //字体变化，重新计算距离基线偏移
+            int reCenterToBaselineY = recalculateCenterToBaselineY();
+            clipAndDraw3DText(canvas, text, mClipTop, mClipBottom,
+                    rotateX, translateY, translateZ, reCenterToBaselineY);
+            mPaint.setTextSize(textSize);
+        }
+
+        if (isAutoFitTextSize) {
+            //恢复重新测量之前的样式
+            mPaint.setTextSize(mTextSize);
+            mStartX = startX;
         }
     }
 
     /**
      * 裁剪并绘制弯曲（3D）效果
      *
-     * @param canvas     画布
-     * @param text       绘制的文字
-     * @param clipTop    裁剪的上边界
-     * @param clipBottom 裁剪的下边界
-     * @param refractX   选中item折射效果的偏移量
-     * @param rotateX    绕X轴旋转角度
-     * @param offsetY    Y轴偏移
-     * @param offsetZ    Z轴偏移
+     * @param canvas            画布
+     * @param text              绘制的文字
+     * @param clipTop           裁剪的上边界
+     * @param clipBottom        裁剪的下边界
+     * @param rotateX           绕X轴旋转角度
+     * @param offsetY           Y轴偏移
+     * @param offsetZ           Z轴偏移
+     * @param centerToBaselineY
      */
-    private void clipAndDraw3DText(Canvas canvas, String text, int clipTop, int clipBottom, float refractX,
-                                   float rotateX, float offsetY, float offsetZ) {
+    private void clipAndDraw3DText(Canvas canvas, String text, int clipTop, int clipBottom,
+                                   float rotateX, float offsetY, float offsetZ, int centerToBaselineY) {
 
         canvas.save();
-        //refractX大于0实现偏移效果
-        if (refractX > 0) {
-            canvas.translate(refractX, 0);
-        }
         canvas.clipRect(mClipLeft, clipTop, mClipRight, clipBottom);
-        draw3DText(canvas, text, rotateX, offsetY, offsetZ);
+        draw3DText(canvas, text, rotateX, offsetY, offsetZ, centerToBaselineY);
         canvas.restore();
     }
 
     /**
      * 绘制弯曲（3D）的文字
      *
-     * @param canvas  画布
-     * @param text    绘制的文字
-     * @param rotateX 绕X轴旋转角度
-     * @param offsetY Y轴偏移
-     * @param offsetZ Z轴偏移
+     * @param canvas            画布
+     * @param text              绘制的文字
+     * @param rotateX           绕X轴旋转角度
+     * @param offsetY           Y轴偏移
+     * @param offsetZ           Z轴偏移
+     * @param centerToBaselineY
      */
-    private void draw3DText(Canvas canvas, String text, float rotateX, float offsetY, float offsetZ) {
+    private void draw3DText(Canvas canvas, String text, float rotateX, float offsetY,
+                            float offsetZ, int centerToBaselineY) {
         mCamera.save();
         mCamera.translate(0, 0, offsetZ);
         mCamera.rotateX(rotateX);
@@ -651,9 +767,9 @@ public class WheelView<T> extends View implements Runnable {
         float centerX = mCenterX;
         //根据弯曲（3d）对齐方式设置系数
         if (mCurvedArcDirection == CURVED_ARC_DIRECTION_LEFT) {
-            centerX = mCenterX * (1 + mCurvedArcDirectionBias);
+            centerX = mCenterX * (1 + mCurvedArcDirectionFactor);
         } else if (mCurvedArcDirection == CURVED_ARC_DIRECTION_RIGHT) {
-            centerX = mCenterX * (1 - mCurvedArcDirectionBias);
+            centerX = mCenterX * (1 - mCurvedArcDirectionFactor);
         }
 
         float centerY = mCenterY + offsetY;
@@ -661,7 +777,7 @@ public class WheelView<T> extends View implements Runnable {
         mMatrix.postTranslate(centerX, centerY);
 
         canvas.concat(mMatrix);
-        canvas.drawText(text, 0, text.length(), mStartX, centerY - mCenterToBaselineY, mPaint);
+        canvas.drawText(text, 0, text.length(), mStartX, centerY - centerToBaselineY, mPaint);
 
     }
 
@@ -1043,6 +1159,25 @@ public class WheelView<T> extends View implements Runnable {
         mScrollOffsetY = mCurrentItemPosition * mItemHeight;
         calculateLimitY();
         requestLayout();
+        invalidate();
+    }
+
+    /**
+     * 获取是否自动调整字体大小，以显示完全
+     *
+     * @return
+     */
+    private boolean isAutoFitTextSize() {
+        return isAutoFitTextSize;
+    }
+
+    /**
+     * 设置是否自动调整字体大小，以显示完全
+     *
+     * @param autoFitTextSize
+     */
+    private void setAutoFitTextSize(boolean autoFitTextSize) {
+        isAutoFitTextSize = autoFitTextSize;
         invalidate();
     }
 
@@ -1620,56 +1755,51 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @return
      */
-    public float getCurvedArcDirectionBias() {
-        return mCurvedArcDirectionBias;
+    public float getCurvedArcDirectionFactor() {
+        return mCurvedArcDirectionFactor;
     }
 
     /**
      * 设置弯曲（3D）效果左右圆弧偏移效果方向系数
      *
-     * @param curvedArcDirectionBias 0-1之间 越大越明显
+     * @param curvedArcDirectionFactor 0-1之间 越大越明显
      */
-    public void setCurvedArcDirectionBias(@FloatRange(from = 0, to = 1.0) float curvedArcDirectionBias) {
-        if (mCurvedArcDirectionBias == curvedArcDirectionBias) {
+    public void setCurvedArcDirectionFactor(@FloatRange(from = 0, to = 1.0) float curvedArcDirectionFactor) {
+        if (mCurvedArcDirectionFactor == curvedArcDirectionFactor) {
             return;
         }
-        if (curvedArcDirectionBias < 0) {
-            curvedArcDirectionBias = 0f;
-        } else if (curvedArcDirectionBias > 1) {
-            curvedArcDirectionBias = 1f;
+        if (curvedArcDirectionFactor < 0) {
+            curvedArcDirectionFactor = 0f;
+        } else if (curvedArcDirectionFactor > 1) {
+            curvedArcDirectionFactor = 1f;
         }
-        mCurvedArcDirectionBias = curvedArcDirectionBias;
+        mCurvedArcDirectionFactor = curvedArcDirectionFactor;
         invalidate();
     }
 
     /**
-     * 获取折射偏移
+     * 获取折射偏移比例
      *
      * @return
      */
-    public float getCurvedRefractX() {
-        return mCurvedRefractX;
+    public float getCurvedRefractRatio() {
+        return mCurvedRefractRatio;
     }
 
     /**
-     * 设置选中条目折射偏移
+     * 设置选中条目折射偏移比例
      *
-     * @param curvedRefractX
+     * @param curvedRefractRatio
      */
-    public void setCurvedRefractX(float curvedRefractX) {
-        setCurvedRefractX(curvedRefractX, false);
-    }
-
-    /**
-     * 设置选中条目折射偏移
-     *
-     * @param curvedRefractX
-     * @param isDp
-     */
-    public void setCurvedRefractX(float curvedRefractX, boolean isDp) {
-        float tempRefractX = mCurvedRefractX;
-        mCurvedRefractX = isDp ? dp2px(curvedRefractX) : curvedRefractX;
-        if (tempRefractX == mCurvedRefractX) {
+    public void setCurvedRefractRatio(@FloatRange(from = 0f, to = 1.0f) float curvedRefractRatio) {
+        float tempRefractRatio = mCurvedRefractRatio;
+        mCurvedRefractRatio = curvedRefractRatio;
+        if (mCurvedRefractRatio > 1f) {
+            mCurvedRefractRatio = 1.0f;
+        } else if (mCurvedRefractRatio < 0f) {
+            mCurvedRefractRatio = DEFAULT_REFRACT_RATIO;
+        }
+        if (tempRefractRatio == mCurvedRefractRatio) {
             return;
         }
         invalidate();

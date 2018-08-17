@@ -59,17 +59,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final WheelView<Integer> wheelView = findViewById(R.id.wheelview);
+        final WheelView<String> wheelView = findViewById(R.id.wheelview);
 //        List<String> list = new ArrayList<>(1);
-        List<Integer> list = new ArrayList<>(1);
+        List<String> list = new ArrayList<>(1);
         for (int i = 0; i < 20; i++) {
 //            list.add("DEFAULT_TEXT" + i);
-            list.add(i);
+            list.add(i+"日");
         }
 //        wheelView.setIntegerNeedFormat(true);
-        wheelView.setOnItemSelectedListener(new WheelView.OnItemSelectedListener<Integer>() {
+        wheelView.setOnItemSelectedListener(new WheelView.OnItemSelectedListener<String>() {
             @Override
-            public void onItemSelected(WheelView<Integer> wheelView, Integer data, int position) {
+            public void onItemSelected(WheelView<String> wheelView, String data, int position) {
                 Log.i(TAG, "onItemSelected: data=" + data + ",position=" + position);
             }
         });
@@ -240,12 +240,12 @@ public class MainActivity extends AppCompatActivity {
 
         mCurvedBiasSb =findViewById(R.id.sb_curved_bias);
         mCurvedBiasSb.setMax(10);
-        mCurvedBiasSb.setProgress((int) (wheelView.getCurvedArcDirectionBias()*10));
+        mCurvedBiasSb.setProgress((int) (wheelView.getCurvedArcDirectionFactor()*10));
         mSetCurvedBiasBtn=findViewById(R.id.btn_set_curved_bias);
         mSetCurvedBiasBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wheelView.setCurvedArcDirectionBias(mCurvedBiasSb.getProgress()*0.1f);
+                wheelView.setCurvedArcDirectionFactor(mCurvedBiasSb.getProgress()*0.1f);
             }
         });
 

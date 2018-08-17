@@ -77,9 +77,9 @@ public class Main2Activity extends AppCompatActivity {
         }
         curvedArcDirectionTv.setText(getString(R.string.curvedArcDirectionValue,curvedArcDirection));
         AppCompatTextView curvedArcDirectionBiasTv=findViewById(R.id.tv_curvedAlignBias);
-        curvedArcDirectionBiasTv.setText(getString(R.string.curvedArcDirectionBiasValue,wheelView.getCurvedArcDirectionBias()+""));
+        curvedArcDirectionBiasTv.setText(getString(R.string.curvedArcDirectionBiasValue,wheelView.getCurvedArcDirectionFactor()+""));
         AppCompatTextView curvedRefractXTv=findViewById(R.id.tv_curvedRefractX);
-        curvedRefractXTv.setText(getString(R.string.curvedRefractXValue,wheelView.getCurvedRefractX()+""));
+        curvedRefractXTv.setText(getString(R.string.curvedRefractXValue,wheelView.getCurvedRefractRatio()+""));
 
         wheelView.setOnItemSelectedListener(new WheelView.OnItemSelectedListener<Integer>() {
             @Override
