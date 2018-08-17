@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 // JitPack Maven
 apply plugin: 'com.github.dcendents.android-maven'
 
-group='com.github.zyyoona7'
 android {
     compileSdkVersion 27
 

@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.FloatRange;
@@ -1855,10 +1856,12 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     @IntDef({CURVED_ARC_DIRECTION_LEFT, CURVED_ARC_DIRECTION_CENTER, CURVED_ARC_DIRECTION_RIGHT})
+    @Retention(value = RetentionPolicy.SOURCE)
     @interface CurvedArcDirection {
     }
 
     @IntDef({DIVIDER_TYPE_FILL, DIVIDER_TYPE_WRAP})
+    @Retention(value = RetentionPolicy.SOURCE)
     @interface DividerType {
     }
 
@@ -1920,8 +1923,13 @@ public class WheelView<T> extends View implements Runnable {
         private int mSoundId;
         private float mPlayVolume;
 
+        @SuppressWarnings("deprecation")
         private SoundHelper() {
-            mSoundPool = new SoundPool(1, AudioManager.STREAM_SYSTEM, 1);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mSoundPool = new SoundPool.Builder().build();
+            } else {
+                mSoundPool = new SoundPool(1, AudioManager.STREAM_SYSTEM, 1);
+            }
         }
 
         public static SoundHelper obtain() {

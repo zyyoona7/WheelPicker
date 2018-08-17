@@ -3,11 +3,10 @@
 buildscript {
     
     repositories {
-        google()
         //解决 Can not resolve Junit
         maven { url 'http://repo1.maven.org/maven2' }
         mavenCentral()
-        mavenLocal()
+        google()
         jcenter()
     }
     dependencies {
@@ -23,12 +22,17 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
         //解决 Can not resolve Junit
         maven { url 'http://repo1.maven.org/maven2' }
         mavenCentral()
-        mavenLocal()
+        google()
         jcenter()
+    }
+
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
     }
 }
 
