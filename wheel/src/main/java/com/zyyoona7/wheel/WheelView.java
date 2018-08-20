@@ -845,7 +845,7 @@ public class WheelView<T> extends View implements Runnable {
      * @param item item数据
      * @return 文本内容
      */
-    private String getDataText(T item) {
+    protected String getDataText(T item) {
         if (item == null) {
             return "";
         } else if (item instanceof IWheelEntity) {
@@ -1016,7 +1016,7 @@ public class WheelView<T> extends View implements Runnable {
     @Override
     public void run() {
         //停止滚动更新当前下标
-        if (mOverScroller.isFinished() && !isForceFinishScroll) {
+        if (mOverScroller.isFinished() && !isForceFinishScroll && !isFlingScroll) {
             if (mItemHeight == 0) return;
             mCurrentItemPosition = getCurrentPosition();
             //停止后重新赋值
