@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -37,7 +37,7 @@ publish {
     //项目名称 project name
     artifactId = 'wheelview'
     //版本号 version code
-    publishVersion = '1.0.0'
+    publishVersion = '1.0.1'
     //项目描述 description
     desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
     //项目网址链接 link

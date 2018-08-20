@@ -58,5 +58,10 @@
         <attr name="wv_curvedArcDirectionFactor" format="float"/>
         <!--弯曲（3D）效果选中后折射的偏移 与字体大小的比值，1为不偏移 越小偏移越明显-->
         <attr name="wv_curvedRefractRatio" format="float"/>
+
+        <!--是否绘制选中区域-->
+        <attr name="wv_drawSelectedRect" format="boolean"/>
+        <!--选中区域颜色-->
+        <attr name="wv_selectedRectColor" format="color"/>
     </declare-styleable>
 </resources>

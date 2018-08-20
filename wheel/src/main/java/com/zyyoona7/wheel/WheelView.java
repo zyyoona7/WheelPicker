@@ -38,7 +38,7 @@ import java.util.Locale;
 
 /**
  * @author zyyoona7
- * @version v1.0
+ * @version v1.0.1
  * @since 2018/8/7.
  */
 public class WheelView<T> extends View implements Runnable {
@@ -116,6 +116,18 @@ public class WheelView<T> extends View implements Runnable {
     private float mDividerPaddingForWrap;
     //分割线两端形状，默认圆头
     private Paint.Cap mDividerCap = Paint.Cap.ROUND;
+
+    /*
+      ----------since version 1.0.1 ----------
+     */
+    //是否绘制选中区域
+    private boolean isDrawSelectedRect;
+    //选中区域颜色
+    private int mSelectedRectColor;
+    /*
+      ----------since version 1.0.1 ----------
+     */
+
 
     //文字起始X
     private int mStartX;
@@ -238,6 +250,9 @@ public class WheelView<T> extends View implements Runnable {
         mDividerSize = typedArray.getDimension(R.styleable.WheelView_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT);
         mDividerColor = typedArray.getColor(R.styleable.WheelView_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR);
         mDividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelView_wv_dividerPaddingForWrap, DEFAULT_TEXT_BOUNDARY_MARGIN);
+
+        isDrawSelectedRect = typedArray.getBoolean(R.styleable.WheelView_wv_drawSelectedRect, false);
+        mSelectedRectColor = typedArray.getColor(R.styleable.WheelView_wv_selectedRectColor, Color.TRANSPARENT);
 
         isCurved = typedArray.getBoolean(R.styleable.WheelView_wv_curved, true);
         mCurvedArcDirection = typedArray.getInt(R.styleable.WheelView_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER);
@@ -401,6 +416,12 @@ public class WheelView<T> extends View implements Runnable {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        //绘制选中区域
+        drawSelectedRect(canvas);
+        //绘制分割线
+        drawDivider(canvas);
+
         //滚动了多少个item，滚动的Y值高度除去每行Item的高度
         int scrolledItem = mScrollOffsetY / mItemHeight;
         //没有滚动完一个item时的偏移值，平滑滑动
@@ -431,9 +452,6 @@ public class WheelView<T> extends View implements Runnable {
                 drawItem(canvas, i, scrolledOffset);
             }
         }
-
-        //绘制分割线
-        drawDivider(canvas);
 
         if (mOnWheelChangedListener != null) {
             mOnWheelChangedListener.onWheelScroll(mScrollOffsetY);
@@ -489,6 +507,18 @@ public class WheelView<T> extends View implements Runnable {
                 canvas.drawLine(wrapStartX, mSelectedItemBottomLimit, wrapStopX, mSelectedItemBottomLimit, mPaint);
             }
             mPaint.setStrokeWidth(originStrokeWidth);
+        }
+    }
+
+    /**
+     * 绘制选中区域
+     *
+     * @param canvas
+     */
+    private void drawSelectedRect(Canvas canvas) {
+        if (isDrawSelectedRect) {
+            mPaint.setColor(mSelectedRectColor);
+            canvas.drawRect(mClipLeft, mSelectedItemTopLimit, mClipRight, mSelectedItemBottomLimit, mPaint);
         }
     }
 
@@ -1578,6 +1608,11 @@ public class WheelView<T> extends View implements Runnable {
         return mDividerColor;
     }
 
+    /**
+     * 设置分割线颜色
+     *
+     * @param dividerColorRes
+     */
     public void setDividerColorRes(@ColorRes int dividerColorRes) {
         setDividerColor(ContextCompat.getColor(getContext(), dividerColorRes));
     }
@@ -1702,6 +1737,53 @@ public class WheelView<T> extends View implements Runnable {
             return;
         }
         mDividerCap = dividerCap;
+        invalidate();
+    }
+
+    /**
+     * 获取是否绘制选中区域
+     *
+     * @return
+     */
+    public boolean isDrawSelectedRect() {
+        return isDrawSelectedRect;
+    }
+
+    /**
+     * 设置是否绘制选中区域
+     *
+     * @param drawSelectedRect
+     */
+    public void setDrawSelectedRect(boolean drawSelectedRect) {
+        isDrawSelectedRect = drawSelectedRect;
+        invalidate();
+    }
+
+    /**
+     * 获取选中区域颜色
+     *
+     * @return
+     */
+    public int getSelectedRectColor() {
+        return mSelectedRectColor;
+    }
+
+    /**
+     * 设置选中区域颜色
+     *
+     * @param selectedRectColorRes
+     */
+    public void setSelectedRectColorRes(@ColorRes int selectedRectColorRes) {
+        setSelectedRectColor(ContextCompat.getColor(getContext(), selectedRectColorRes));
+    }
+
+    /**
+     * 设置选中区域颜色
+     *
+     * @param selectedRectColor
+     */
+    public void setSelectedRectColor(@ColorInt int selectedRectColor) {
+        mSelectedRectColor = selectedRectColor;
         invalidate();
     }
 
