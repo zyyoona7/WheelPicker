@@ -45,7 +45,7 @@ public class WheelView<T> extends View implements Runnable {
 
     private static final String TAG = "WheelView";
 
-    private static final float DEFAULT_LINE_SPACE = dp2px(2f);
+    private static final float DEFAULT_LINE_SPACING = dp2px(2f);
     private static final float DEFAULT_TEXT_SIZE = sp2px(15f);
     private static final float DEFAULT_TEXT_BOUNDARY_MARGIN = dp2px(2);
     private static final float DEFAULT_DIVIDER_HEIGHT = dp2px(1);
@@ -105,7 +105,7 @@ public class WheelView<T> extends View implements Runnable {
     private int mSelectedItemColor;
 
     //是否显示分割线
-    private boolean isShowDivider = true;
+    private boolean isShowDivider;
     //分割线的颜色
     private int mDividerColor;
     //分割线高度
@@ -113,7 +113,7 @@ public class WheelView<T> extends View implements Runnable {
     //分割线填充类型
     private int mDividerType;
     //分割线类型为DIVIDER_TYPE_WRAP时 分割线左右两端距离文字的间距
-    private float mDividerPaddingForWrap = dp2px(2);
+    private float mDividerPaddingForWrap;
     //分割线两端形状，默认圆头
     private Paint.Cap mDividerCap = Paint.Cap.ROUND;
 
@@ -136,7 +136,7 @@ public class WheelView<T> extends View implements Runnable {
     //字体外边距，目的是留有边距
     private float mTextBoundaryMargin;
     //数据为Integer类型时，是否需要格式转换
-    private boolean isIntegerNeedFormat = false;
+    private boolean isIntegerNeedFormat;
     //数据为Integer类型时，转换格式，默认转换为两位数
     private String mIntegerFormat;
 
@@ -144,11 +144,11 @@ public class WheelView<T> extends View implements Runnable {
     private Camera mCamera;
     private Matrix mMatrix;
     //是否是弯曲（3D）效果
-    private boolean isCurved = true;
+    private boolean isCurved;
     //弯曲（3D）效果左右圆弧偏移效果方向 center 不偏移
-    private int mCurvedArcDirection = CURVED_ARC_DIRECTION_CENTER;
+    private int mCurvedArcDirection;
     //弯曲（3D）效果左右圆弧偏移效果系数 0-1之间 越大越明显
-    private float mCurvedArcDirectionFactor = DEFAULT_CURVED_FACTOR;
+    private float mCurvedArcDirectionFactor;
     //弯曲（3D）效果选中后折射的偏移 与字体大小的比值，1为不偏移 越小偏移越明显
     private float mCurvedRefractRatio;
 
@@ -218,7 +218,7 @@ public class WheelView<T> extends View implements Runnable {
                 DEFAULT_TEXT_BOUNDARY_MARGIN);
         mTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalItemTextColor, DEFAULT_NORMAL_TEXT_COLOR);
         mSelectedItemColor = typedArray.getColor(R.styleable.WheelView_wv_selectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR);
-        mLineSpacing = typedArray.getDimension(R.styleable.WheelView_wv_lineSpace, DEFAULT_LINE_SPACE);
+        mLineSpacing = typedArray.getDimension(R.styleable.WheelView_wv_lineSpacing, DEFAULT_LINE_SPACING);
         isIntegerNeedFormat = typedArray.getBoolean(R.styleable.WheelView_wv_integerNeedFormat, false);
         mIntegerFormat = typedArray.getString(R.styleable.WheelView_wv_integerFormat);
         if (TextUtils.isEmpty(mIntegerFormat)) {
