@@ -12,10 +12,10 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 
-
 import com.zyyoona7.wheel.WheelView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -42,19 +42,28 @@ public class MainActivity extends AppCompatActivity {
     private SwitchCompat mCurvedSc;
     private RadioGroup mCurvedArcDirectionRg;
     private AppCompatButton mSetCurvedArcDirectionBtn;
-    private AppCompatButton mSetCurvedBiasBtn;
-    private AppCompatSeekBar mCurvedBiasSb;
+    private AppCompatButton mSetCurvedFactorBtn;
+    private AppCompatSeekBar mCurvedFactorSb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AppCompatButton goCustomAttrsBtn=findViewById(R.id.btn_go_custom_attrs);
+        AppCompatButton goCustomAttrsBtn = findViewById(R.id.btn_go_custom_attrs);
         goCustomAttrsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,Main2Activity.class);
+                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                startActivity(intent);
+            }
+        });
+
+        AppCompatButton goPickerBtn=findViewById(R.id.btn_go_picker_view);
+        goPickerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,Main3Activity.class);
                 startActivity(intent);
             }
         });
@@ -64,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> list = new ArrayList<>(1);
         for (int i = 0; i < 20; i++) {
 //            list.add("DEFAULT_TEXT" + i);
-            list.add(i+"日");
+            list.add(i + "日");
         }
 //        wheelView.setIntegerNeedFormat(true);
         wheelView.setOnItemSelectedListener(new WheelView.OnItemSelectedListener<String>() {
@@ -81,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onWheelItemChanged(int oldPosition, int newPosition) {
-                Log.i(TAG, "onWheelItemChanged: oldPosition="+oldPosition+",newPosition="+newPosition);
+                Log.i(TAG, "onWheelItemChanged: oldPosition=" + oldPosition + ",newPosition=" + newPosition);
             }
 
             @Override
@@ -99,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
         //经过测试 OGG 格式比 MP3 效果好
         wheelView.setSoundEffectResource(R.raw.button_choose);
-        SwitchCompat soundSc=findViewById(R.id.sc_turn_on_sound);
+        SwitchCompat soundSc = findViewById(R.id.sc_turn_on_sound);
         soundSc.setChecked(wheelView.isSoundEffect());
         soundSc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -107,18 +116,18 @@ public class MainActivity extends AppCompatActivity {
                 wheelView.setSoundEffect(isChecked);
             }
         });
-        final AppCompatSeekBar soundVolumeSb=findViewById(R.id.sb_sound_effect);
+        final AppCompatSeekBar soundVolumeSb = findViewById(R.id.sb_sound_effect);
         soundVolumeSb.setMax(100);
-        soundVolumeSb.setProgress((int) (wheelView.getPlayVolume()*100));
-        AppCompatButton setSoundVolumeBtn=findViewById(R.id.btn_set_sound_effect);
+        soundVolumeSb.setProgress((int) (wheelView.getPlayVolume() * 100));
+        AppCompatButton setSoundVolumeBtn = findViewById(R.id.btn_set_sound_effect);
         setSoundVolumeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wheelView.setPlayVolume(soundVolumeSb.getProgress()*1.0f/100);
+                wheelView.setPlayVolume(soundVolumeSb.getProgress() * 1.0f / 100);
             }
         });
 
-        SwitchCompat cyclicSc=findViewById(R.id.sc_turn_on_cyclic);
+        SwitchCompat cyclicSc = findViewById(R.id.sc_turn_on_cyclic);
         cyclicSc.setChecked(wheelView.isCyclic());
         cyclicSc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -162,10 +171,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final AppCompatSeekBar textSizeSb=findViewById(R.id.sb_text_size);
+        final AppCompatSeekBar textSizeSb = findViewById(R.id.sb_text_size);
         textSizeSb.setMax(100);
         textSizeSb.setProgress((int) wheelView.getTextSize());
-        final AppCompatButton setTextSizeBtn=findViewById(R.id.btn_set_text_size);
+        final AppCompatButton setTextSizeBtn = findViewById(R.id.btn_set_text_size);
         setTextSizeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,11 +211,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mLineSpacingSb = findViewById(R.id.sb_line_space);
+        mLineSpacingSb = findViewById(R.id.sb_line_spacing);
         mLineSpacingSb.setMax(100);
         mLineSpacingSb.setProgress(30);
         wheelView.setLineSpacing(30);
-        mSetLineSpacingBtn = findViewById(R.id.btn_set_line_space);
+        mSetLineSpacingBtn = findViewById(R.id.btn_set_line_spacing);
         mSetLineSpacingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,33 +232,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mCurvedArcDirectionRg =findViewById(R.id.rg_curved_arc_direction);
-        mSetCurvedArcDirectionBtn =findViewById(R.id.btn_set_curved_arc_direction);
+        mCurvedArcDirectionRg = findViewById(R.id.rg_curved_arc_direction);
+        mSetCurvedArcDirectionBtn = findViewById(R.id.btn_set_curved_arc_direction);
         mSetCurvedArcDirectionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mCurvedArcDirectionRg.getCheckedRadioButtonId()== R.id.rb_curved_left) {
+                if (mCurvedArcDirectionRg.getCheckedRadioButtonId() == R.id.rb_curved_left) {
                     wheelView.setCurvedArcDirection(WheelView.CURVED_ARC_DIRECTION_LEFT);
-                }else if (mCurvedArcDirectionRg.getCheckedRadioButtonId()==R.id.rb_curved_right){
+                } else if (mCurvedArcDirectionRg.getCheckedRadioButtonId() == R.id.rb_curved_right) {
                     wheelView.setCurvedArcDirection(WheelView.CURVED_ARC_DIRECTION_RIGHT);
-                }else {
+                } else {
                     wheelView.setCurvedArcDirection(WheelView.CURVED_ARC_DIRECTION_CENTER);
                 }
             }
         });
 
-        mCurvedBiasSb =findViewById(R.id.sb_curved_bias);
-        mCurvedBiasSb.setMax(10);
-        mCurvedBiasSb.setProgress((int) (wheelView.getCurvedArcDirectionFactor()*10));
-        mSetCurvedBiasBtn=findViewById(R.id.btn_set_curved_bias);
-        mSetCurvedBiasBtn.setOnClickListener(new View.OnClickListener() {
+        mCurvedFactorSb = findViewById(R.id.sb_curved_factor);
+        mCurvedFactorSb.setMax(10);
+        mCurvedFactorSb.setProgress((int) (wheelView.getCurvedArcDirectionFactor() * 10));
+        mSetCurvedFactorBtn = findViewById(R.id.btn_set_curved_factor);
+        mSetCurvedFactorBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wheelView.setCurvedArcDirectionFactor(mCurvedBiasSb.getProgress()*0.1f);
+                wheelView.setCurvedArcDirectionFactor(mCurvedFactorSb.getProgress() * 0.1f);
             }
         });
 
-        SwitchCompat dividerSc=findViewById(R.id.sc_turn_on_divider);
+        SwitchCompat dividerSc = findViewById(R.id.sc_turn_on_divider);
         dividerSc.setChecked(wheelView.isShowDivider());
         dividerSc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -258,23 +267,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final RadioGroup typeRg=findViewById(R.id.rg_divider_type);
-        AppCompatButton setTypeBtn=findViewById(R.id.btn_set_divider_type);
+        final RadioGroup typeRg = findViewById(R.id.rg_divider_type);
+        AppCompatButton setTypeBtn = findViewById(R.id.btn_set_divider_type);
         setTypeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (typeRg.getCheckedRadioButtonId()== R.id.rb_divider_fill) {
+                if (typeRg.getCheckedRadioButtonId() == R.id.rb_divider_fill) {
                     wheelView.setDividerType(WheelView.DIVIDER_TYPE_FILL);
-                }else {
+                } else {
                     wheelView.setDividerType(WheelView.DIVIDER_TYPE_WRAP);
                 }
             }
         });
 
-        final AppCompatSeekBar heightSb=findViewById(R.id.sb_divider_height);
+        final AppCompatSeekBar heightSb = findViewById(R.id.sb_divider_height);
         heightSb.setMax(20);
         heightSb.setProgress((int) wheelView.getDividerHeight());
-        AppCompatButton setHeightBtn=findViewById(R.id.btn_set_divider_height);
+        AppCompatButton setHeightBtn = findViewById(R.id.btn_set_divider_height);
         setHeightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -282,15 +291,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final AppCompatSeekBar paddingSb=findViewById(R.id.sb_divider_padding);
+        final AppCompatSeekBar paddingSb = findViewById(R.id.sb_divider_padding);
         paddingSb.setMax(100);
         paddingSb.setProgress((int) wheelView.getDividerPaddingForWrap());
-        AppCompatButton setPaddingBtn=findViewById(R.id.btn_set_divider_padding);
+        AppCompatButton setPaddingBtn = findViewById(R.id.btn_set_divider_padding);
         setPaddingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 wheelView.setDividerPaddingForWrap(paddingSb.getProgress());
             }
         });
+
+        Calendar calendar=Calendar.getInstance();
+        calendar.set(Calendar.YEAR,2017);
+
+        Log.d(TAG, "onCreate: time="+calendar.getTime().toString());
     }
 }

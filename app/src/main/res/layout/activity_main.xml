@@ -15,6 +15,15 @@
         android:paddingStart="10dp">
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_go_picker_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="跳转 PickerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_go_custom_attrs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -22,7 +31,7 @@
             android:text="跳转自定义属性展示页"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/btn_go_picker_view" />
 
         <com.zyyoona7.wheel.WheelView
             android:id="@+id/wheelview"
@@ -201,7 +210,7 @@
             app:layout_constraintTop_toTopOf="@id/btn_set_visible_item" />
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_set_line_space"
+            android:id="@+id/btn_set_line_spacing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -210,13 +219,13 @@
             app:layout_constraintTop_toBottomOf="@id/btn_set_visible_item" />
 
         <android.support.v7.widget.AppCompatSeekBar
-            android:id="@+id/sb_line_space"
+            android:id="@+id/sb_line_spacing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/btn_set_line_space"
-            app:layout_constraintEnd_toStartOf="@id/btn_set_line_space"
+            app:layout_constraintBottom_toBottomOf="@id/btn_set_line_spacing"
+            app:layout_constraintEnd_toStartOf="@id/btn_set_line_spacing"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btn_set_line_space" />
+            app:layout_constraintTop_toTopOf="@id/btn_set_line_spacing" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_curved_guide_line"
@@ -225,7 +234,7 @@
             android:layout_marginTop="10dp"
             android:text="弯曲（3D）效果"
             android:textSize="14sp"
-            app:layout_constraintTop_toBottomOf="@id/btn_set_line_space" />
+            app:layout_constraintTop_toBottomOf="@id/btn_set_line_spacing" />
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/sc_turn_on_curved"
@@ -279,7 +288,7 @@
             app:layout_constraintTop_toBottomOf="@id/rg_curved_arc_direction" />
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_set_curved_bias"
+            android:id="@+id/btn_set_curved_factor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -288,13 +297,13 @@
             app:layout_constraintTop_toBottomOf="@id/btn_set_curved_arc_direction" />
 
         <android.support.v7.widget.AppCompatSeekBar
-            android:id="@+id/sb_curved_bias"
+            android:id="@+id/sb_curved_factor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/btn_set_curved_bias"
-            app:layout_constraintEnd_toStartOf="@id/btn_set_curved_bias"
+            app:layout_constraintBottom_toBottomOf="@id/btn_set_curved_factor"
+            app:layout_constraintEnd_toStartOf="@id/btn_set_curved_factor"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btn_set_curved_bias" />
+            app:layout_constraintTop_toTopOf="@id/btn_set_curved_factor" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_divider_guide_line"
@@ -303,7 +312,7 @@
             android:layout_marginTop="10dp"
             android:text="分割线"
             android:textSize="14sp"
-            app:layout_constraintTop_toBottomOf="@id/btn_set_curved_bias" />
+            app:layout_constraintTop_toBottomOf="@id/btn_set_curved_factor" />
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/sc_turn_on_divider"
