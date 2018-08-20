@@ -30,7 +30,9 @@
 
 ### WheelView 使用（Usage）
 #### 1.依赖（dependency）
-//TODO publish jitpack
+```groovy
+implementation 'com.github.zyyoona7:wheelview:1.0.0'
+```
 
 #### 2.基本用法（Basic Usage）
 在布局文件中添加
