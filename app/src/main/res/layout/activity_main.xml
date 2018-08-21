@@ -23,6 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_go_custom_attrs"
             android:layout_width="0dp"
@@ -57,6 +58,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/wheelview" />
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_set_sound_effect"
             android:layout_width="wrap_content"
@@ -395,6 +397,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_set_divider_padding" />
 
+        <com.zyyoona7.wheel.WheelView
+            android:id="@+id/wv_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_set_divider_padding"
+
+            app:wv_textSize="24sp"
+            app:wv_textAlign="center"
+            app:wv_textBoundaryMargin="10dp"
+            app:wv_lineSpacing="10dp"
+            app:wv_visibleItems="6"
+            app:wv_currentItemPosition="4"
+            app:wv_curved="true"
+            app:wv_normalItemTextColor="@color/colorPrimaryDark"
+            app:wv_selectedItemTextColor="@color/colorPrimary"
+            app:wv_cyclic="true"
+            app:wv_showDivider="true"
+            app:wv_dividerColor="#e0f2f1"
+            app:wv_dividerHeight="0.5dp"
+            app:wv_dividerType="fill"
+            app:wv_dividerPaddingForWrap="10dp"
+            app:wv_curvedArcDirection="left"
+            app:wv_curvedArcDirectionFactor="0.5"
+            app:wv_curvedRefractRatio="0.8"
+
+            app:wv_drawSelectedRect="true"
+            app:wv_selectedRectColor="#aebfbe"/>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v4.widget.NestedScrollView>

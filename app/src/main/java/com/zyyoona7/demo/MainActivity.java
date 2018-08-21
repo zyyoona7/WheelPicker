@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 
+import com.zyyoona7.demo.entities.CityEntity;
+import com.zyyoona7.demo.utils.ParseHelper;
 import com.zyyoona7.wheel.WheelView;
 
 import java.util.ArrayList;
@@ -302,9 +304,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Calendar calendar=Calendar.getInstance();
-        calendar.set(Calendar.YEAR,2017);
 
-        Log.d(TAG, "onCreate: time="+calendar.getTime().toString());
+        WheelView<CityEntity> cityWv=findViewById(R.id.wv_city);
+        List<CityEntity> cityData= ParseHelper.parseTwoLevelCityList(this);
+        cityWv.setData(cityData);
     }
 }
