@@ -17,6 +17,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
 import android.support.v4.content.ContextCompat;
@@ -165,6 +166,7 @@ public class WheelView<T> extends View implements Runnable {
     private float mCurvedRefractRatio;
 
     //数据列表
+    @NonNull
     List<T> mDataList = new ArrayList<>(1);
 
     private VelocityTracker mVelocityTracker;
@@ -188,7 +190,7 @@ public class WheelView<T> extends View implements Runnable {
     //是否是快速滚动，快速滚动结束后跳转位置
     private boolean isFlingScroll;
     //当前选中的下标
-    private int mCurrentItemPosition;
+    private int mSelectedItemPosition;
     //当前滚动经过的下标
     private int mCurrentScrollPosition;
 
@@ -240,9 +242,9 @@ public class WheelView<T> extends View implements Runnable {
         mVisibleItems = typedArray.getInt(R.styleable.WheelView_wv_visibleItems, DEFAULT_VISIBLE_ITEM);
         //跳转可见item为奇数
         mVisibleItems = adjustVisibleItems(mVisibleItems);
-        mCurrentItemPosition = typedArray.getInt(R.styleable.WheelView_wv_currentItemPosition, 0);
+        mSelectedItemPosition = typedArray.getInt(R.styleable.WheelView_wv_selectedItemPosition, 0);
         //初始化滚动下标
-        mCurrentScrollPosition = mCurrentItemPosition;
+        mCurrentScrollPosition = mSelectedItemPosition;
         isCyclic = typedArray.getBoolean(R.styleable.WheelView_wv_cyclic, true);
 
         isShowDivider = typedArray.getBoolean(R.styleable.WheelView_wv_showDivider, false);
@@ -852,7 +854,7 @@ public class WheelView<T> extends View implements Runnable {
             return ((IWheelEntity) item).getWheelText();
         } else if (item instanceof Integer) {
             //如果为整形则最少保留两位数.
-            return isIntegerNeedFormat ? String.format(Locale.getDefault(), mIntegerFormat, (Integer) item)
+            return isIntegerNeedFormat ? String.format(Locale.getDefault(), mIntegerFormat, item)
                     : String.valueOf(item);
         } else if (item instanceof String) {
             return (String) item;
@@ -1018,17 +1020,17 @@ public class WheelView<T> extends View implements Runnable {
         //停止滚动更新当前下标
         if (mOverScroller.isFinished() && !isForceFinishScroll && !isFlingScroll) {
             if (mItemHeight == 0) return;
-            mCurrentItemPosition = getCurrentPosition();
+            mSelectedItemPosition = getCurrentPosition();
             //停止后重新赋值
-            mCurrentScrollPosition = mCurrentItemPosition;
+            mCurrentScrollPosition = mSelectedItemPosition;
 
             //停止滚动，选中条目回调
             if (mOnItemSelectedListener != null) {
-                mOnItemSelectedListener.onItemSelected(this, mDataList.get(mCurrentItemPosition), mCurrentItemPosition);
+                mOnItemSelectedListener.onItemSelected(this, mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
             }
             //滚动状态回调
             if (mOnWheelChangedListener != null) {
-                mOnWheelChangedListener.onWheelSelected(mCurrentItemPosition);
+                mOnWheelChangedListener.onWheelSelected(mSelectedItemPosition);
                 mOnWheelChangedListener.onWheelScrollStateChanged(SCROLL_STATE_IDLE);
             }
         }
@@ -1120,6 +1122,29 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     /**
+     * 获取指定 position 的数据
+     *
+     * @param position
+     * @return
+     */
+    public T getItemData(int position) {
+        if (isPositionInRange(position)) {
+            return mDataList.get(position);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 获取当前选中的item数据
+     *
+     * @return
+     */
+    public T getSelectedItemData() {
+        return getItemData(getSelectedItemPosition());
+    }
+
+    /**
      * 获取数据列表
      *
      * @return 数据列表
@@ -1138,10 +1163,10 @@ public class WheelView<T> extends View implements Runnable {
             return;
         }
         mDataList = dataList;
-        if (mCurrentItemPosition > mDataList.size()) {
-            mCurrentItemPosition = mDataList.size() - 1;
+        if (mSelectedItemPosition > mDataList.size()) {
+            mSelectedItemPosition = mDataList.size() - 1;
             //重置滚动下标
-            mCurrentScrollPosition = mCurrentItemPosition;
+            mCurrentScrollPosition = mSelectedItemPosition;
         }
         //强制滚动完成
         forceFinishScroll();
@@ -1187,7 +1212,7 @@ public class WheelView<T> extends View implements Runnable {
         calculateTextSize();
         calculateDrawStart();
         //字体大小变化，偏移距离也变化了
-        mScrollOffsetY = mCurrentItemPosition * mItemHeight;
+        mScrollOffsetY = mSelectedItemPosition * mItemHeight;
         calculateLimitY();
         requestLayout();
         invalidate();
@@ -1236,7 +1261,7 @@ public class WheelView<T> extends View implements Runnable {
         calculateTextSize();
         calculateDrawStart();
         //字体大小变化，偏移距离也变化了
-        mScrollOffsetY = mCurrentItemPosition * mItemHeight;
+        mScrollOffsetY = mSelectedItemPosition * mItemHeight;
         calculateLimitY();
         requestLayout();
         invalidate();
@@ -1422,6 +1447,19 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     /**
+     * 同时设置 isIntegerNeedFormat=true 和 mIntegerFormat=integerFormat
+     *
+     * @param integerFormat
+     */
+    public void setIntegerNeedFormat(String integerFormat) {
+        isIntegerNeedFormat = true;
+        mIntegerFormat = integerFormat;
+        calculateTextSize();
+        requestLayout();
+        invalidate();
+    }
+
+    /**
      * 获取Integer类型转换格式
      *
      * @return
@@ -1510,8 +1548,8 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @return
      */
-    public int getCurrentItemPosition() {
-        return mCurrentItemPosition;
+    public int getSelectedItemPosition() {
+        return mSelectedItemPosition;
     }
 
     /**
@@ -1519,8 +1557,8 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @param position 下标
      */
-    public void setCurrentItemPosition(int position) {
-        setCurrentItemPosition(position, true);
+    public void setSelectedItemPosition(int position) {
+        setSelectedItemPosition(position, true);
     }
 
     /**
@@ -1529,8 +1567,8 @@ public class WheelView<T> extends View implements Runnable {
      * @param position       下标
      * @param isSmoothScroll 是否平滑滚动
      */
-    public void setCurrentItemPosition(int position, boolean isSmoothScroll) {
-        setCurrentItemPosition(position, isSmoothScroll, 0);
+    public void setSelectedItemPosition(int position, boolean isSmoothScroll) {
+        setSelectedItemPosition(position, isSmoothScroll, 0);
     }
 
     /**
@@ -1540,7 +1578,7 @@ public class WheelView<T> extends View implements Runnable {
      * @param isSmoothScroll 是否平滑滚动
      * @param smoothDuration 平滑滚动时间
      */
-    public void setCurrentItemPosition(int position, boolean isSmoothScroll, int smoothDuration) {
+    public void setSelectedItemPosition(int position, boolean isSmoothScroll, int smoothDuration) {
         if (!isPositionInRange(position)) {
             return;
         }
