@@ -84,6 +84,10 @@ public class CityEntity implements IWheelEntity, Serializable {
                 '}';
     }
 
+    /**
+     * 重点：重写此方法，返回 WheelView 显示的文字
+     * @return
+     */
     @Override
     public String getWheelText() {
         return name == null ? "" : name;

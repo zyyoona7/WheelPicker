@@ -306,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         WheelView<CityEntity> cityWv=findViewById(R.id.wv_city);
+        //解析城市列表
         List<CityEntity> cityData= ParseHelper.parseTwoLevelCityList(this);
         cityWv.setData(cityData);
     }
