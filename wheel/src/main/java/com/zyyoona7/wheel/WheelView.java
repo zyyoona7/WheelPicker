@@ -99,6 +99,7 @@ public class WheelView<T> extends View implements Runnable {
     //是否循环滚动
     private boolean isCyclic;
     //文字对齐方式
+    @TextAlign
     private int mTextAlign;
     //文字颜色
     private int mTextColor;
@@ -112,6 +113,7 @@ public class WheelView<T> extends View implements Runnable {
     //分割线高度
     private float mDividerSize;
     //分割线填充类型
+    @DividerType
     private int mDividerType;
     //分割线类型为DIVIDER_TYPE_WRAP时 分割线左右两端距离文字的间距
     private float mDividerPaddingForWrap;
@@ -159,6 +161,7 @@ public class WheelView<T> extends View implements Runnable {
     //是否是弯曲（3D）效果
     private boolean isCurved;
     //弯曲（3D）效果左右圆弧偏移效果方向 center 不偏移
+    @CurvedArcDirection
     private int mCurvedArcDirection;
     //弯曲（3D）效果左右圆弧偏移效果系数 0-1之间 越大越明显
     private float mCurvedArcDirectionFactor;
@@ -220,7 +223,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 初始化自定义属性及默认值
      *
-     * @param context context
+     * @param context 上下文
      * @param attrs   attrs
      */
     private void initAttrsAndDefault(Context context, AttributeSet attrs) {
@@ -272,7 +275,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 初始化并设置默认值
      *
-     * @param context context
+     * @param context 上下文
      */
     private void initValue(Context context) {
         ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
@@ -299,7 +302,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 初始化默认音量
      *
-     * @param context
+     * @param context 上下文
      */
     private void initDefaultVolume(Context context) {
         AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -515,7 +518,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 绘制选中区域
      *
-     * @param canvas
+     * @param canvas 画布
      */
     private void drawSelectedRect(Canvas canvas) {
         if (isDrawSelectedRect) {
@@ -598,8 +601,8 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 重新测量字体大小
      *
-     * @param contentText
-     * @return
+     * @param contentText 被测量文字内容
+     * @return 文字中心距离baseline的距离
      */
     private int remeasureTextSize(String contentText) {
         float textWidth = mPaint.measureText(contentText);
@@ -633,7 +636,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 重新计算字体起始X
      *
-     * @param textMargin
+     * @param textMargin 文字外边距
      */
     private void recalculateStartX(float textMargin) {
         switch (mTextAlign) {
@@ -652,7 +655,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 字体大小变化后重新计算距离基线的距离
      *
-     * @return
+     * @return 文字中心距离baseline的距离
      */
     private int recalculateCenterToBaselineY() {
         Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
@@ -767,7 +770,7 @@ public class WheelView<T> extends View implements Runnable {
      * @param rotateX           绕X轴旋转角度
      * @param offsetY           Y轴偏移
      * @param offsetZ           Z轴偏移
-     * @param centerToBaselineY
+     * @param centerToBaselineY 文字中心距离baseline的距离
      */
     private void clipAndDraw3DText(Canvas canvas, String text, int clipTop, int clipBottom,
                                    float rotateX, float offsetY, float offsetZ, int centerToBaselineY) {
@@ -786,7 +789,7 @@ public class WheelView<T> extends View implements Runnable {
      * @param rotateX           绕X轴旋转角度
      * @param offsetY           Y轴偏移
      * @param offsetZ           Z轴偏移
-     * @param centerToBaselineY
+     * @param centerToBaselineY 文字中心距离baseline的距离
      */
     private void draw3DText(Canvas canvas, String text, float rotateX, float offsetY,
                             float offsetZ, int centerToBaselineY) {
@@ -998,7 +1001,7 @@ public class WheelView<T> extends View implements Runnable {
      * 计算距离终点的偏移，修正选中条目
      *
      * @param remainder 余数
-     * @return
+     * @return 偏移量
      */
     private int calculateDistanceToEndPoint(int remainder) {
         if (Math.abs(remainder) > mItemHeight / 2) {
@@ -1055,7 +1058,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 根据偏移计算当前位置下标
      *
-     * @return
+     * @return 偏移量对应的当前下标
      */
     private int getCurrentPosition() {
         int itemPosition;
@@ -1075,7 +1078,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取音效开关状态
      *
-     * @return
+     * @return 是否开启滚动音效
      */
     public boolean isSoundEffect() {
         return isSoundEffect;
@@ -1084,7 +1087,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置音效开关
      *
-     * @param isSoundEffect
+     * @param isSoundEffect 是否开启滚动音效
      */
     public void setSoundEffect(boolean isSoundEffect) {
         this.isSoundEffect = isSoundEffect;
@@ -1093,7 +1096,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置声音效果资源
      *
-     * @param resId
+     * @param resId 声音效果资源 越小效果越好 {@link RawRes}
      */
     public void setSoundEffectResource(@RawRes int resId) {
         if (mSoundHelper != null) {
@@ -1104,7 +1107,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取播放音量
      *
-     * @return
+     * @return 播放音量 range 0.0-1.0
      */
     public float getPlayVolume() {
         return mSoundHelper == null ? 0 : mSoundHelper.getPlayVolume();
@@ -1113,7 +1116,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置播放音量
      *
-     * @param playVolume
+     * @param playVolume 播放音量 range 0.0-1.0
      */
     public void setPlayVolume(@FloatRange(from = 0.0, to = 1.0) float playVolume) {
         if (mSoundHelper != null) {
@@ -1124,8 +1127,8 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取指定 position 的数据
      *
-     * @param position
-     * @return
+     * @param position 下标
+     * @return position 对应的数据
      */
     public T getItemData(int position) {
         if (isPositionInRange(position)) {
@@ -1138,7 +1141,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取当前选中的item数据
      *
-     * @return
+     * @return 当前选中的item数据
      */
     public T getSelectedItemData() {
         return getItemData(getSelectedItemPosition());
@@ -1199,7 +1202,7 @@ public class WheelView<T> extends View implements Runnable {
      * 设置字体大小
      *
      * @param textSize 字体大小
-     * @param isSp     是否是sp
+     * @param isSp     单位是否是 sp
      */
     public void setTextSize(float textSize, boolean isSp) {
         float tempTextSize = mTextSize;
@@ -1221,7 +1224,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取是否自动调整字体大小，以显示完全
      *
-     * @return
+     * @return 是否自动调整字体大小
      */
     private boolean isAutoFitTextSize() {
         return isAutoFitTextSize;
@@ -1230,7 +1233,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置是否自动调整字体大小，以显示完全
      *
-     * @param autoFitTextSize
+     * @param autoFitTextSize 是否自动调整字体大小
      */
     private void setAutoFitTextSize(boolean autoFitTextSize) {
         isAutoFitTextSize = autoFitTextSize;
@@ -1271,6 +1274,9 @@ public class WheelView<T> extends View implements Runnable {
      * 获取文字对齐方式
      *
      * @return 文字对齐
+     * {@link #TEXT_ALIGN_LEFT}
+     * {@link #TEXT_ALIGN_CENTER}
+     * {@link #TEXT_ALIGN_RIGHT}
      */
     public int getTextAlign() {
         return mTextAlign;
@@ -1279,7 +1285,10 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置文字对齐方式
      *
-     * @param textAlign
+     * @param textAlign 文字对齐方式
+     *                  {@link #TEXT_ALIGN_LEFT}
+     *                  {@link #TEXT_ALIGN_CENTER}
+     *                  {@link #TEXT_ALIGN_RIGHT}
      */
     public void setTextAlign(@TextAlign int textAlign) {
         if (mTextAlign == textAlign) {
@@ -1294,7 +1303,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取未选中条目颜色
      *
-     * @return
+     * @return 未选中条目颜色 ColorInt
      */
     public int getNormalItemTextColor() {
         return mTextColor;
@@ -1303,7 +1312,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置未选中条目颜色
      *
-     * @param textColorRes
+     * @param textColorRes 未选中条目颜色 {@link ColorRes}
      */
     public void setNormalItemTextColorRes(@ColorRes int textColorRes) {
         setNormalItemTextColor(ContextCompat.getColor(getContext(), textColorRes));
@@ -1312,7 +1321,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置未选中条目颜色
      *
-     * @param textColor
+     * @param textColor 未选中条目颜色 {@link ColorInt}
      */
     public void setNormalItemTextColor(@ColorInt int textColor) {
         if (mTextColor == textColor) {
@@ -1325,7 +1334,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取选中条目颜色
      *
-     * @return
+     * @return 选中条目颜色 ColorInt
      */
     public int getSelectedItemColor() {
         return mSelectedItemColor;
@@ -1334,7 +1343,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置选中条目颜色
      *
-     * @param selectedItemColorRes
+     * @param selectedItemColorRes 选中条目颜色 {@link ColorRes}
      */
     public void setSelectedItemColorRes(@ColorRes int selectedItemColorRes) {
         setSelectedItemColor(ContextCompat.getColor(getContext(), selectedItemColorRes));
@@ -1343,7 +1352,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置选中条目颜色
      *
-     * @param selectedItemColor
+     * @param selectedItemColor 选中条目颜色 {@link ColorInt}
      */
     public void setSelectedItemColor(@ColorInt int selectedItemColor) {
         if (mSelectedItemColor == selectedItemColor) {
@@ -1356,7 +1365,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取文字距离边界的外边距
      *
-     * @return
+     * @return 外边距值
      */
     public float getTextBoundaryMargin() {
         return mTextBoundaryMargin;
@@ -1365,7 +1374,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置文字距离边界的外边距
      *
-     * @param textBoundaryMargin
+     * @param textBoundaryMargin 外边距值
      */
     public void setTextBoundaryMargin(float textBoundaryMargin) {
         setTextBoundaryMargin(textBoundaryMargin, false);
@@ -1374,8 +1383,8 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置文字距离边界的外边距
      *
-     * @param textBoundaryMargin
-     * @param isDp
+     * @param textBoundaryMargin 外边距值
+     * @param isDp               单位是否为 dp
      */
     public void setTextBoundaryMargin(float textBoundaryMargin, boolean isDp) {
         float tempTextBoundaryMargin = mTextBoundaryMargin;
@@ -1390,7 +1399,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取item间距
      *
-     * @return
+     * @return 行间距值
      */
     public float getLineSpacing() {
         return mLineSpacing;
@@ -1399,7 +1408,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置item间距
      *
-     * @param lineSpacing
+     * @param lineSpacing 行间距值
      */
     public void setLineSpacing(float lineSpacing) {
         setLineSpacing(lineSpacing, false);
@@ -1408,7 +1417,8 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置item间距
      *
-     * @param lineSpacing
+     * @param lineSpacing 行间距值
+     * @param isDp        lineSpacing 单位是否为 dp
      */
     public void setLineSpacing(float lineSpacing, boolean isDp) {
         float tempLineSpace = mLineSpacing;
@@ -1425,7 +1435,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取数据为Integer类型时是否需要转换
      *
-     * @return
+     * @return isIntegerNeedFormat
      */
     public boolean isIntegerNeedFormat() {
         return isIntegerNeedFormat;
@@ -1434,7 +1444,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置数据为Integer类型时是否需要转换
      *
-     * @param integerNeedFormat
+     * @param integerNeedFormat 数据为Integer类型时是否需要转换
      */
     public void setIntegerNeedFormat(boolean integerNeedFormat) {
         if (isIntegerNeedFormat == integerNeedFormat) {
@@ -1449,7 +1459,10 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 同时设置 isIntegerNeedFormat=true 和 mIntegerFormat=integerFormat
      *
-     * @param integerFormat
+     * @param integerFormat 注意：integerFormat 中必须包含并且只能包含一个格式说明符（format specifier）
+     *                      格式说明符请参照 http://java2s.com/Tutorials/Java/Data_Format/Java_Format_Specifier.htm
+     *                      <p>
+     *                      如果有多个格式说明符会抛出 java.util.MissingFormatArgumentException: Format specifier '%s'(多出来的说明符)
      */
     public void setIntegerNeedFormat(String integerFormat) {
         isIntegerNeedFormat = true;
@@ -1462,7 +1475,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取Integer类型转换格式
      *
-     * @return
+     * @return integerFormat
      */
     public String getIntegerFormat() {
         return mIntegerFormat;
@@ -1471,7 +1484,10 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置Integer类型转换格式
      *
-     * @param integerFormat
+     * @param integerFormat 注意：integerFormat 中必须包含并且只能包含一个格式说明符（format specifier）
+     *                      格式说明符请参照 http://java2s.com/Tutorials/Java/Data_Format/Java_Format_Specifier.htm
+     *                      <p>
+     *                      如果有多个格式说明符会抛出 java.util.MissingFormatArgumentException: Format specifier '%s'(多出来的说明符)
      */
     public void setIntegerFormat(String integerFormat) {
         if (TextUtils.isEmpty(integerFormat) || integerFormat.equals(mIntegerFormat)) {
@@ -1486,7 +1502,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取可见条目数
      *
-     * @return
+     * @return 可见条目数
      */
     public int getVisibleItems() {
         return mVisibleItems;
@@ -1495,7 +1511,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置可见的条目数
      *
-     * @param visibleItems
+     * @param visibleItems 可见条目数
      */
     public void setVisibleItems(int visibleItems) {
         if (mVisibleItems == visibleItems) {
@@ -1510,8 +1526,8 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 跳转可见条目数为奇数
      *
-     * @param visibleItems
-     * @return
+     * @param visibleItems 可见条目数
+     * @return 调整后的可见条目数
      */
     private int adjustVisibleItems(int visibleItems) {
         return Math.abs(visibleItems / 2 * 2 + 1); // 当传入的值为偶数时,换算成奇数;
@@ -1520,7 +1536,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 是否是循环滚动
      *
-     * @return
+     * @return 是否是循环滚动
      */
     public boolean isCyclic() {
         return isCyclic;
@@ -1529,7 +1545,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置是否循环滚动
      *
-     * @param cyclic
+     * @param cyclic 是否是循环滚动
      */
     public void setCyclic(boolean cyclic) {
         if (isCyclic == cyclic) {
@@ -1544,16 +1560,16 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     /**
-     * 获取当前下标
+     * 获取当前选中下标
      *
-     * @return
+     * @return 当前选中的下标
      */
     public int getSelectedItemPosition() {
         return mSelectedItemPosition;
     }
 
     /**
-     * 设置当前下标
+     * 设置当前选中下标
      *
      * @param position 下标
      */
@@ -1562,7 +1578,7 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     /**
-     * 设置当前下标
+     * 设置当前选中下标
      *
      * @param position       下标
      * @param isSmoothScroll 是否平滑滚动
@@ -1572,7 +1588,7 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     /**
-     * 设置当前下标
+     * 设置当前选中下标
      *
      * @param position       下标
      * @param isSmoothScroll 是否平滑滚动
@@ -1608,8 +1624,8 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 判断下标是否在数据列表范围内
      *
-     * @param position
-     * @return
+     * @param position 下标
+     * @return 是否在数据列表范围内
      */
     private boolean isPositionInRange(int position) {
         return position >= 0 && position < mDataList.size();
@@ -1618,7 +1634,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取是否显示分割线
      *
-     * @return
+     * @return 是否显示分割线
      */
     public boolean isShowDivider() {
         return isShowDivider;
@@ -1627,7 +1643,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置是否显示分割线
      *
-     * @param showDivider
+     * @param showDivider 是否显示分割线
      */
     public void setShowDivider(boolean showDivider) {
         if (isShowDivider == showDivider) {
@@ -1640,7 +1656,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取分割线颜色
      *
-     * @return
+     * @return 分割线颜色 ColorInt
      */
     public int getDividerColor() {
         return mDividerColor;
@@ -1649,7 +1665,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置分割线颜色
      *
-     * @param dividerColorRes
+     * @param dividerColorRes 分割线颜色 {@link ColorRes}
      */
     public void setDividerColorRes(@ColorRes int dividerColorRes) {
         setDividerColor(ContextCompat.getColor(getContext(), dividerColorRes));
@@ -1658,7 +1674,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置分割线颜色
      *
-     * @param dividerColor
+     * @param dividerColor 分割线颜色 {@link ColorInt}
      */
     public void setDividerColor(@ColorInt int dividerColor) {
         if (mDividerColor == dividerColor) {
@@ -1671,7 +1687,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取分割线高度
      *
-     * @return
+     * @return 分割线高度
      */
     public float getDividerHeight() {
         return mDividerSize;
@@ -1680,7 +1696,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置分割线高度
      *
-     * @param dividerHeight
+     * @param dividerHeight 分割线高度
      */
     public void setDividerHeight(float dividerHeight) {
         setDividerHeight(dividerHeight, false);
@@ -1689,8 +1705,8 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置分割线高度
      *
-     * @param dividerHeight
-     * @param isDp
+     * @param dividerHeight 分割线高度
+     * @param isDp          单位是否是 dp
      */
     public void setDividerHeight(float dividerHeight, boolean isDp) {
         float tempDividerHeight = mDividerSize;
@@ -1704,7 +1720,9 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取分割线填充类型
      *
-     * @return
+     * @return 分割线填充类型
+     * {@link #DIVIDER_TYPE_FILL}
+     * {@link #DIVIDER_TYPE_WRAP}
      */
     public int getDividerType() {
         return mDividerType;
@@ -1713,7 +1731,9 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置分割线填充类型
      *
-     * @param dividerType
+     * @param dividerType 分割线填充类型
+     *                    {@link #DIVIDER_TYPE_FILL}
+     *                    {@link #DIVIDER_TYPE_WRAP}
      */
     public void setDividerType(@DividerType int dividerType) {
         if (mDividerType == dividerType) {
@@ -1726,7 +1746,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取自适应分割线类型时的分割线内边距
      *
-     * @return
+     * @return 分割线内边距
      */
     public float getDividerPaddingForWrap() {
         return mDividerPaddingForWrap;
@@ -1735,7 +1755,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置自适应分割线类型时的分割线内边距
      *
-     * @param dividerPaddingForWrap
+     * @param dividerPaddingForWrap 分割线内边距
      */
     public void setDividerPaddingForWrap(float dividerPaddingForWrap) {
         setDividerPaddingForWrap(dividerPaddingForWrap, false);
@@ -1744,8 +1764,8 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置自适应分割线类型时的分割线内边距
      *
-     * @param wrapDividerPadding
-     * @param isDp
+     * @param wrapDividerPadding 分割线内边距
+     * @param isDp               单位是否是 dp
      */
     public void setDividerPaddingForWrap(float wrapDividerPadding, boolean isDp) {
         float tempDividerPadding = mDividerPaddingForWrap;
@@ -1759,7 +1779,10 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取分割线两端形状
      *
-     * @return
+     * @return 分割线两端形状
+     * {@link Paint.Cap#BUTT}
+     * {@link Paint.Cap#ROUND}
+     * {@link Paint.Cap#SQUARE}
      */
     public Paint.Cap getDividerCap() {
         return mDividerCap;
@@ -1768,7 +1791,10 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置分割线两端形状
      *
-     * @param dividerCap
+     * @param dividerCap 分割线两端形状
+     *                   {@link Paint.Cap#BUTT}
+     *                   {@link Paint.Cap#ROUND}
+     *                   {@link Paint.Cap#SQUARE}
      */
     public void setDividerCap(Paint.Cap dividerCap) {
         if (mDividerCap == dividerCap) {
@@ -1781,7 +1807,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取是否绘制选中区域
      *
-     * @return
+     * @return 是否绘制选中区域
      */
     public boolean isDrawSelectedRect() {
         return isDrawSelectedRect;
@@ -1790,7 +1816,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置是否绘制选中区域
      *
-     * @param drawSelectedRect
+     * @param drawSelectedRect 是否绘制选中区域
      */
     public void setDrawSelectedRect(boolean drawSelectedRect) {
         isDrawSelectedRect = drawSelectedRect;
@@ -1800,7 +1826,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取选中区域颜色
      *
-     * @return
+     * @return 选中区域颜色 ColorInt
      */
     public int getSelectedRectColor() {
         return mSelectedRectColor;
@@ -1809,7 +1835,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置选中区域颜色
      *
-     * @param selectedRectColorRes
+     * @param selectedRectColorRes 选中区域颜色 {@link ColorRes}
      */
     public void setSelectedRectColorRes(@ColorRes int selectedRectColorRes) {
         setSelectedRectColor(ContextCompat.getColor(getContext(), selectedRectColorRes));
@@ -1818,7 +1844,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置选中区域颜色
      *
-     * @param selectedRectColor
+     * @param selectedRectColor 选中区域颜色 {@link ColorInt}
      */
     public void setSelectedRectColor(@ColorInt int selectedRectColor) {
         mSelectedRectColor = selectedRectColor;
@@ -1828,7 +1854,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取是否是弯曲（3D）效果
      *
-     * @return
+     * @return 是否是弯曲（3D）效果
      */
     public boolean isCurved() {
         return isCurved;
@@ -1837,7 +1863,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置是否是弯曲（3D）效果
      *
-     * @param isCurved
+     * @param isCurved 是否是弯曲（3D）效果
      */
     public void setCurved(boolean isCurved) {
         if (this.isCurved == isCurved) {
@@ -1852,7 +1878,10 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取弯曲（3D）效果左右圆弧效果方向
      *
-     * @return
+     * @return 左右圆弧效果方向
+     * {@link #CURVED_ARC_DIRECTION_LEFT}
+     * {@link #CURVED_ARC_DIRECTION_CENTER}
+     * {@link #CURVED_ARC_DIRECTION_RIGHT}
      */
     public int getCurvedArcDirection() {
         return mCurvedArcDirection;
@@ -1861,7 +1890,10 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置弯曲（3D）效果左右圆弧效果方向
      *
-     * @param curvedArcDirection 指定弧度方向
+     * @param curvedArcDirection 左右圆弧效果方向
+     *                           {@link #CURVED_ARC_DIRECTION_LEFT}
+     *                           {@link #CURVED_ARC_DIRECTION_CENTER}
+     *                           {@link #CURVED_ARC_DIRECTION_RIGHT}
      */
     public void setCurvedArcDirection(@CurvedArcDirection int curvedArcDirection) {
         if (mCurvedArcDirection == curvedArcDirection) {
@@ -1874,7 +1906,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取弯曲（3D）效果左右圆弧偏移效果方向系数
      *
-     * @return
+     * @return 左右圆弧偏移效果方向系数
      */
     public float getCurvedArcDirectionFactor() {
         return mCurvedArcDirectionFactor;
@@ -1883,9 +1915,10 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置弯曲（3D）效果左右圆弧偏移效果方向系数
      *
-     * @param curvedArcDirectionFactor 0-1之间 越大越明显
+     * @param curvedArcDirectionFactor 左右圆弧偏移效果方向系数
+     *                                 range 0.0-1.0 越大越明显
      */
-    public void setCurvedArcDirectionFactor(@FloatRange(from = 0, to = 1.0) float curvedArcDirectionFactor) {
+    public void setCurvedArcDirectionFactor(@FloatRange(from = 0.0f, to = 1.0f) float curvedArcDirectionFactor) {
         if (mCurvedArcDirectionFactor == curvedArcDirectionFactor) {
             return;
         }
@@ -1901,7 +1934,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取折射偏移比例
      *
-     * @return
+     * @return 折射偏移比例
      */
     public float getCurvedRefractRatio() {
         return mCurvedRefractRatio;
@@ -1910,9 +1943,9 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置选中条目折射偏移比例
      *
-     * @param curvedRefractRatio
+     * @param curvedRefractRatio 折射偏移比例 range 0.0-1.0
      */
-    public void setCurvedRefractRatio(@FloatRange(from = 0f, to = 1.0f) float curvedRefractRatio) {
+    public void setCurvedRefractRatio(@FloatRange(from = 0.0f, to = 1.0f) float curvedRefractRatio) {
         float tempRefractRatio = mCurvedRefractRatio;
         mCurvedRefractRatio = curvedRefractRatio;
         if (mCurvedRefractRatio > 1f) {
@@ -1929,7 +1962,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取选中监听
      *
-     * @return
+     * @return 选中监听器
      */
     public OnItemSelectedListener<T> getOnItemSelectedListener() {
         return mOnItemSelectedListener;
@@ -1938,7 +1971,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置选中监听
      *
-     * @param onItemSelectedListener
+     * @param onItemSelectedListener 选中监听器
      */
     public void setOnItemSelectedListener(OnItemSelectedListener<T> onItemSelectedListener) {
         mOnItemSelectedListener = onItemSelectedListener;
@@ -1947,7 +1980,7 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 获取滚动变化监听
      *
-     * @return
+     * @return 滚动变化监听器
      */
     public OnWheelChangedListener getOnWheelChangedListener() {
         return mOnWheelChangedListener;
@@ -1956,30 +1989,60 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置滚动变化监听
      *
-     * @param onWheelChangedListener
+     * @param onWheelChangedListener 滚动变化监听器
      */
     public void setOnWheelChangedListener(OnWheelChangedListener onWheelChangedListener) {
         mOnWheelChangedListener = onWheelChangedListener;
     }
 
+    /**
+     * dp转换px
+     *
+     * @param dp dp值
+     * @return 转换后的px值
+     */
     protected static float dp2px(float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Resources.getSystem().getDisplayMetrics());
     }
 
+    /**
+     * sp转换px
+     *
+     * @param sp sp值
+     * @return 转换后的px值
+     */
     protected static float sp2px(float sp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, Resources.getSystem().getDisplayMetrics());
     }
 
+    /**
+     * 自定义文字对齐方式注解
+     * <p>
+     * {@link #mTextAlign}
+     * {@link #setTextAlign(int)}
+     */
     @IntDef({TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, TEXT_ALIGN_RIGHT})
     @Retention(value = RetentionPolicy.SOURCE)
     @interface TextAlign {
     }
 
+    /**
+     * 自定义左右圆弧效果方向注解
+     * <p>
+     * {@link #mCurvedArcDirection}
+     * {@link #setCurvedArcDirection(int)}
+     */
     @IntDef({CURVED_ARC_DIRECTION_LEFT, CURVED_ARC_DIRECTION_CENTER, CURVED_ARC_DIRECTION_RIGHT})
     @Retention(value = RetentionPolicy.SOURCE)
     @interface CurvedArcDirection {
     }
 
+    /**
+     * 自定义分割线类型注解
+     * <p>
+     * {@link #mDividerType}
+     * {@link #setDividerType(int)}
+     */
     @IntDef({DIVIDER_TYPE_FILL, DIVIDER_TYPE_WRAP})
     @Retention(value = RetentionPolicy.SOURCE)
     @interface DividerType {
@@ -2010,33 +2073,39 @@ public class WheelView<T> extends View implements Runnable {
         /**
          * WheelView 滚动
          *
-         * @param scrollOffsetY
+         * @param scrollOffsetY 滚动偏移
          */
         void onWheelScroll(int scrollOffsetY);
 
         /**
          * WheelView 条目变化
          *
-         * @param oldPosition
-         * @param newPosition
+         * @param oldPosition 旧的下标
+         * @param newPosition 新下标
          */
         void onWheelItemChanged(int oldPosition, int newPosition);
 
         /**
          * WheelView 选中
          *
-         * @param position
+         * @param position 选中的下标
          */
         void onWheelSelected(int position);
 
         /**
          * WheelView 滚动状态
          *
-         * @param state
+         * @param state 滚动状态
+         *              {@link WheelView#SCROLL_STATE_IDLE}
+         *              {@link WheelView#SCROLL_STATE_DRAGGING}
+         *              {@link WheelView#SCROLL_STATE_SCROLLING}
          */
         void onWheelScrollStateChanged(int state);
     }
 
+    /**
+     * SoundPool 辅助类
+     */
     private static class SoundHelper {
 
         private SoundPool mSoundPool;
@@ -2052,6 +2121,11 @@ public class WheelView<T> extends View implements Runnable {
             }
         }
 
+        /**
+         * 初始化 SoundHelper
+         *
+         * @return SoundHelper 对象
+         */
         public static SoundHelper obtain() {
             return new SoundHelper();
         }
@@ -2059,8 +2133,8 @@ public class WheelView<T> extends View implements Runnable {
         /**
          * 加载音频资源
          *
-         * @param context
-         * @param resId
+         * @param context 上下文
+         * @param resId   音频资源 {@link RawRes}
          */
         public void load(Context context, @RawRes int resId) {
             if (mSoundPool != null) {
@@ -2071,7 +2145,7 @@ public class WheelView<T> extends View implements Runnable {
         /**
          * 设置音量
          *
-         * @param playVolume
+         * @param playVolume 音频播放音量 range 0.0-1.0
          */
         public void setPlayVolume(@FloatRange(from = 0.0, to = 1.0) float playVolume) {
             this.mPlayVolume = playVolume;
@@ -2080,7 +2154,7 @@ public class WheelView<T> extends View implements Runnable {
         /**
          * 获取音量
          *
-         * @return
+         * @return 音频播放音量 range 0.0-1.0
          */
         public float getPlayVolume() {
             return mPlayVolume;
