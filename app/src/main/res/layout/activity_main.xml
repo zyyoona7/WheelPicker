@@ -411,7 +411,7 @@
             app:wv_textBoundaryMargin="10dp"
             app:wv_lineSpacing="10dp"
             app:wv_visibleItems="6"
-            app:wv_currentItemPosition="4"
+            app:wv_selectedItemPosition="4"
             app:wv_curved="true"
             app:wv_normalItemTextColor="@color/colorPrimaryDark"
             app:wv_selectedItemTextColor="@color/colorPrimary"

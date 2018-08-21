@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 int randomPosition = random.nextInt(20);
                 Log.d(TAG, "onClick: randomPosition=" + randomPosition);
                 mScrollBtn.setText("随机滚动到 " + randomPosition + " 下标");
-                wheelView.setCurrentItemPosition(randomPosition, mSmoothCb.isChecked(), mDurationSb.getProgress());
+                wheelView.setSelectedItemPosition(randomPosition, mSmoothCb.isChecked(), mDurationSb.getProgress());
 //                wheelView.setCyclic(mSmoothCb.isChecked());
             }
         });

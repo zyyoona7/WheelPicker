@@ -6,19 +6,20 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 /**
- * 选项PickerView
- * @param <T>
+ * 选项选择器
+ *
+ * @author zyyoona7
+ * @version v1.0.0
+ * @since 2018/8/21.
  */
 public class OptionsPickerView<T> extends LinearLayout {
 
-    // TODO: 2018/8/14 联动，不联动
-
     public OptionsPickerView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public OptionsPickerView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public OptionsPickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {

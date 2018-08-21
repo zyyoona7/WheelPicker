@@ -1,28 +1,31 @@
 package com.zyyoona7.picker.ex;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 
-import java.text.SimpleDateFormat;
+import com.zyyoona7.picker.R;
+import com.zyyoona7.wheel.WheelView;
+
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
+ * 日 WheelView
+ *
  * @author zyyoona7
  * @version v1.0.0
  * @since 2018/8/20.
  */
-public class DayWheelView extends BaseDateWheelView {
-    private static final SparseArray<List<Date>> DAYS = new SparseArray<>(1);
+public class DayWheelView extends WheelView<Integer> {
+    private static final SparseArray<List<Integer>> DAYS = new SparseArray<>(1);
 
     private int mYear;
     private int mMonth;
-    private int mSelectedDay;
+    private Calendar mCalendar;
 
     public DayWheelView(Context context) {
         this(context, null);
@@ -34,27 +37,14 @@ public class DayWheelView extends BaseDateWheelView {
 
     public DayWheelView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mSimpleDateFormat = new SimpleDateFormat("dd", Locale.getDefault());
-    }
-
-    public void setSelectedDay(int selectedDay) {
-        int days = mCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        if (selectedDay >= 1 && selectedDay <= days) {
-            mSelectedDay = selectedDay;
-            updateSelectedDay();
-        }
-    }
-
-    public int getSelectedDay() {
-        return mSelectedDay;
-    }
-
-    public void setYearAndMonth(Date yearAndMonthDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(yearAndMonthDate);
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        setYearAndMonth(year, month);
+        mCalendar = Calendar.getInstance();
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DayWheelView);
+        mYear = typedArray.getInt(R.styleable.DayWheelView_wv_year, mCalendar.get(Calendar.YEAR));
+        mMonth = typedArray.getInt(R.styleable.DayWheelView_wv_month, mCalendar.get(Calendar.MONTH) + 1);
+        int selectedDay = typedArray.getInt(R.styleable.DayWheelView_wv_selectedDay, 1);
+        typedArray.recycle();
+        updateDay();
+        setSelectedDay(selectedDay);
     }
 
     public void setYearAndMonth(int year, int month) {
@@ -63,12 +53,6 @@ public class DayWheelView extends BaseDateWheelView {
         updateDay();
     }
 
-    public void setYear(Date yearDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(yearDate);
-        int year = calendar.get(Calendar.YEAR);
-        setYear(year);
-    }
 
     public void setYear(int year) {
         mYear = year;
@@ -77,13 +61,6 @@ public class DayWheelView extends BaseDateWheelView {
 
     public int getYear() {
         return mYear;
-    }
-
-    public void setMonth(Date monthDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(monthDate);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        setMonth(month);
     }
 
     public void setMonth(int month) {
@@ -99,27 +76,45 @@ public class DayWheelView extends BaseDateWheelView {
         mCalendar.set(Calendar.YEAR, mYear);
         mCalendar.set(Calendar.MONTH, mMonth - 1);
         mCalendar.set(Calendar.DATE, 1);
-        resetUnderDay();
         mCalendar.roll(Calendar.DATE, -1);
 
         int days = mCalendar.get(Calendar.DATE);
-        List<Date> data = DAYS.get(days);
+        List<Integer> data = DAYS.get(days);
         if (data == null) {
             data = new ArrayList<>(1);
             for (int i = 1; i <= days; i++) {
-                mCalendar.set(Calendar.DAY_OF_MONTH, i);
-                data.add(mCalendar.getTime());
+                data.add(i);
             }
             DAYS.put(days, data);
         }
         super.setData(data);
     }
 
-    private void updateSelectedDay() {
-        setCurrentItemPosition(mSelectedDay - 1);
+    public int getSelectedDay() {
+        return getItemData(getSelectedItemPosition());
     }
 
-    public Date getCurrentDate(){
-        return getData().get(getCurrentItemPosition());
+    public void setSelectedDay(int selectedDay) {
+        setSelectedDay(selectedDay, false);
+    }
+
+    public void setSelectedDay(int selectedDay, boolean isSmoothScroll) {
+        setSelectedDay(selectedDay, isSmoothScroll, 0);
+    }
+
+    public void setSelectedDay(int selectedDay, boolean isSmoothScroll, int smoothDuration) {
+        int days = mCalendar.get(Calendar.DATE);
+        if (selectedDay >= 1 && selectedDay <= days) {
+            updateSelectedDay(selectedDay, isSmoothScroll, smoothDuration);
+        }
+    }
+
+    private void updateSelectedDay(int selectedDay, boolean isSmoothScroll, int smoothDuration) {
+        setSelectedItemPosition(selectedDay - 1, isSmoothScroll, smoothDuration);
+    }
+
+    @Override
+    public void setData(List<Integer> dataList) {
+        throw new UnsupportedOperationException("You can not invoke setData method in " + DayWheelView.class.getSimpleName() + ".");
     }
 }

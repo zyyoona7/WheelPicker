@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="YearWheelView">
+        <attr name="wv_startYear" format="integer" />
+        <attr name="wv_endYear" format="integer" />
+        <attr name="wv_selectedYear" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="MonthWheelView">
+        <attr name="wv_selectedMonth" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="DayWheelView">
+        <attr name="wv_year" format="integer" />
+        <attr name="wv_month" format="integer" />
+        <attr name="wv_selectedDay" format="integer" />
+    </declare-styleable>
+</resources>

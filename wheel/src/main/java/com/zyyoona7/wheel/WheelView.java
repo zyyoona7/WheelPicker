@@ -104,7 +104,7 @@ public class WheelView<T> extends View implements Runnable {
     //文字颜色
     private int mTextColor;
     //选中item文字颜色
-    private int mSelectedItemColor;
+    private int mSelectedItemTextColor;
 
     //是否显示分割线
     private boolean isShowDivider;
@@ -234,7 +234,7 @@ public class WheelView<T> extends View implements Runnable {
         mTextBoundaryMargin = typedArray.getDimension(R.styleable.WheelView_wv_textBoundaryMargin,
                 DEFAULT_TEXT_BOUNDARY_MARGIN);
         mTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalItemTextColor, DEFAULT_NORMAL_TEXT_COLOR);
-        mSelectedItemColor = typedArray.getColor(R.styleable.WheelView_wv_selectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR);
+        mSelectedItemTextColor = typedArray.getColor(R.styleable.WheelView_wv_selectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR);
         mLineSpacing = typedArray.getDimension(R.styleable.WheelView_wv_lineSpacing, DEFAULT_LINE_SPACING);
         isIntegerNeedFormat = typedArray.getBoolean(R.styleable.WheelView_wv_integerNeedFormat, false);
         mIntegerFormat = typedArray.getString(R.styleable.WheelView_wv_integerFormat);
@@ -549,11 +549,11 @@ public class WheelView<T> extends View implements Runnable {
 
         if (Math.abs(item2CenterOffsetY) <= 0) {
             //绘制选中的条目
-            mPaint.setColor(mSelectedItemColor);
+            mPaint.setColor(mSelectedItemTextColor);
             clipAndDraw2DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit, item2CenterOffsetY, centerToBaselineY);
         } else if (item2CenterOffsetY > 0 && item2CenterOffsetY < mItemHeight) {
             //绘制与下边界交汇的条目
-            mPaint.setColor(mSelectedItemColor);
+            mPaint.setColor(mSelectedItemTextColor);
             clipAndDraw2DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit, item2CenterOffsetY, centerToBaselineY);
 
             mPaint.setColor(mTextColor);
@@ -561,7 +561,7 @@ public class WheelView<T> extends View implements Runnable {
 
         } else if (item2CenterOffsetY < 0 && item2CenterOffsetY > -mItemHeight) {
             //绘制与上边界交汇的条目
-            mPaint.setColor(mSelectedItemColor);
+            mPaint.setColor(mSelectedItemTextColor);
             clipAndDraw2DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit, item2CenterOffsetY, centerToBaselineY);
 
             mPaint.setColor(mTextColor);
@@ -699,13 +699,13 @@ public class WheelView<T> extends View implements Runnable {
         int centerToBaselineY = isAutoFitTextSize ? remeasureTextSize(text) : mCenterToBaselineY;
         if (Math.abs(item2CenterOffsetY) <= 0) {
             //绘制选中的条目
-            mPaint.setColor(mSelectedItemColor);
+            mPaint.setColor(mSelectedItemTextColor);
             mPaint.setAlpha(255);
             clipAndDraw3DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit,
                     rotateX, translateY, translateZ, centerToBaselineY);
         } else if (item2CenterOffsetY > 0 && item2CenterOffsetY < mItemHeight) {
             //绘制与下边界交汇的条目
-            mPaint.setColor(mSelectedItemColor);
+            mPaint.setColor(mSelectedItemTextColor);
             mPaint.setAlpha(255);
             clipAndDraw3DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit,
                     rotateX, translateY, translateZ, centerToBaselineY);
@@ -722,7 +722,7 @@ public class WheelView<T> extends View implements Runnable {
             mPaint.setTextSize(textSize);
         } else if (item2CenterOffsetY < 0 && item2CenterOffsetY > -mItemHeight) {
             //绘制与上边界交汇的条目
-            mPaint.setColor(mSelectedItemColor);
+            mPaint.setColor(mSelectedItemTextColor);
             mPaint.setAlpha(255);
             clipAndDraw3DText(canvas, text, mSelectedItemTopLimit, mSelectedItemBottomLimit,
                     rotateX, translateY, translateZ, centerToBaselineY);
@@ -1336,8 +1336,8 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @return 选中条目颜色 ColorInt
      */
-    public int getSelectedItemColor() {
-        return mSelectedItemColor;
+    public int getSelectedItemTextColor() {
+        return mSelectedItemTextColor;
     }
 
     /**
@@ -1345,20 +1345,20 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @param selectedItemColorRes 选中条目颜色 {@link ColorRes}
      */
-    public void setSelectedItemColorRes(@ColorRes int selectedItemColorRes) {
-        setSelectedItemColor(ContextCompat.getColor(getContext(), selectedItemColorRes));
+    public void setSelectedItemTextColorRes(@ColorRes int selectedItemColorRes) {
+        setSelectedItemTextColor(ContextCompat.getColor(getContext(), selectedItemColorRes));
     }
 
     /**
      * 设置选中条目颜色
      *
-     * @param selectedItemColor 选中条目颜色 {@link ColorInt}
+     * @param selectedItemTextColor 选中条目颜色 {@link ColorInt}
      */
-    public void setSelectedItemColor(@ColorInt int selectedItemColor) {
-        if (mSelectedItemColor == selectedItemColor) {
+    public void setSelectedItemTextColor(@ColorInt int selectedItemTextColor) {
+        if (mSelectedItemTextColor == selectedItemTextColor) {
             return;
         }
-        mSelectedItemColor = selectedItemColor;
+        mSelectedItemTextColor = selectedItemTextColor;
         invalidate();
     }
 
@@ -1574,7 +1574,7 @@ public class WheelView<T> extends View implements Runnable {
      * @param position 下标
      */
     public void setSelectedItemPosition(int position) {
-        setSelectedItemPosition(position, true);
+        setSelectedItemPosition(position, false);
     }
 
     /**

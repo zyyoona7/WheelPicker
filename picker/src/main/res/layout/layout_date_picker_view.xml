@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:showIn="@layout/layout_date_picker"
+    android:layout_gravity="center">
+
+    <com.zyyoona7.picker.ex.YearWheelView
+        android:id="@+id/wv_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/date_picker_view_margins"
+        android:layout_marginStart="@dimen/date_picker_view_margins" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/date_picker_view_margins"
+        android:layout_marginLeft="@dimen/date_picker_view_margins"
+        android:layout_marginRight="@dimen/date_picker_view_margins"
+        android:layout_marginStart="@dimen/date_picker_view_margins"
+        android:text="@string/date_picker_view_year"
+        tools:textSize="20sp"
+        android:id="@+id/tv_year"/>
+
+    <com.zyyoona7.picker.ex.MonthWheelView
+        android:id="@+id/wv_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/date_picker_view_margins"
+        android:layout_marginLeft="@dimen/date_picker_view_margins"
+        android:layout_marginRight="@dimen/date_picker_view_margins"
+        android:layout_marginStart="@dimen/date_picker_view_margins"
+        android:text="@string/date_picker_view_month"
+        tools:textSize="20sp"
+        android:id="@+id/tv_month"/>
+
+    <com.zyyoona7.picker.ex.DayWheelView
+        android:id="@+id/wv_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/date_picker_view_margins"
+        android:layout_marginLeft="@dimen/date_picker_view_margins"
+        android:layout_marginRight="@dimen/date_picker_view_margins"
+        android:layout_marginStart="@dimen/date_picker_view_margins"
+        android:text="@string/date_picker_view_day"
+        tools:textSize="20sp"
+        android:id="@+id/tv_day"/>
+</merge>

@@ -41,7 +41,7 @@ public class Main2Activity extends AppCompatActivity {
         AppCompatTextView normalItemTextColorTv=findViewById(R.id.tv_normalItemTextColor);
         normalItemTextColorTv.setText(getString(R.string.normalItemTextColorValue,"#"+Integer.toHexString(wheelView.getNormalItemTextColor()).toUpperCase()));
         AppCompatTextView selectedItemTextColorTv=findViewById(R.id.tv_selectedItemTextColor);
-        selectedItemTextColorTv.setText(getString(R.string.selectedItemTextColorValue,"#"+Integer.toHexString(wheelView.getSelectedItemColor()).toUpperCase()));
+        selectedItemTextColorTv.setText(getString(R.string.selectedItemTextColorValue,"#"+Integer.toHexString(wheelView.getSelectedItemTextColor()).toUpperCase()));
         AppCompatTextView lineSpaceTv=findViewById(R.id.tv_lineSpace);
         lineSpaceTv.setText(getString(R.string.lineSpaceValue,wheelView.getLineSpacing()+""));
         AppCompatTextView integerNeedFormatTv=findViewById(R.id.tv_integerNeedFormat);
@@ -51,7 +51,7 @@ public class Main2Activity extends AppCompatActivity {
         AppCompatTextView visibleItemsTv=findViewById(R.id.tv_visibleItems);
         visibleItemsTv.setText(getString(R.string.visibleItemsValue,wheelView.getVisibleItems()+""));
         final AppCompatTextView currentItemPositionTv=findViewById(R.id.tv_currentItemPosition);
-        currentItemPositionTv.setText(getString(R.string.currentItemPositionValue,wheelView.getCurrentItemPosition()+""));
+        currentItemPositionTv.setText(getString(R.string.currentItemPositionValue,wheelView.getSelectedItemPosition()+""));
         AppCompatTextView showDividerTv=findViewById(R.id.tv_showDivider);
         showDividerTv.setText(getString(R.string.showDividerValue,wheelView.isShowDivider()+""));
         AppCompatTextView dividerTypeTv=findViewById(R.id.tv_dividerType);
