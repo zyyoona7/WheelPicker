@@ -58,8 +58,144 @@ implementation 'com.github.zyyoona7:wheelview:1.0.0'
     wheelView.setTextSize(24f,true);
     //more...
 ```
+#### 2.进阶用法（Advanced Usage）
 
-详细使用请阅读 [WIKI](https://github.com/zyyoona7/WheelPicker/wiki)
+> 问：我已经有了创建好的实体怎么办？
+
+> 答：好办~
+
+**我已城市列表为例（其他实体同理）**
+
+我的城市列表实体是这样的：
+```java 
+public class CityEntity implements IWheelEntity, Serializable {
+
+    //国家
+    public static final String LEVEL_COUNTRY = "country";
+    //省
+    public static final String LEVEL_PROVINCE = "province";
+    //市
+    public static final String LEVEL_CITY = "city";
+    //区
+    public static final String LEVEL_DISTRICT = "district";
+
+    private String citycode;
+    private String adcode;
+    private String name;
+    private String center;
+    private String level;
+    private List<CityEntity> districts;
+
+    public String getCitycode() {
+        return citycode;
+    }
+
+    public void setCitycode(String citycode) {
+        this.citycode = citycode;
+    }
+
+    public String getAdcode() {
+        return adcode;
+    }
+
+    public void setAdcode(String adcode) {
+        this.adcode = adcode;
+    }
+
+    public String getName() {
+        return name == null ? "" : name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCenter() {
+        return center;
+    }
+
+    public void setCenter(String center) {
+        this.center = center;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public List<CityEntity> getDistricts() {
+        return districts == null ? new ArrayList<CityEntity>(1) : districts;
+    }
+
+    public void setDistricts(List<CityEntity> districts) {
+        this.districts = districts;
+    }
+
+    @Override
+    public String toString() {
+        return "CityEntity{" +
+                "citycode='" + citycode + '\'' +
+                ", adcode='" + adcode + '\'' +
+                ", name='" + name + '\'' +
+                ", center='" + center + '\'' +
+                ", level='" + level + '\'' +
+                ", districts=" + districts +
+                '}';
+    }
+
+    /**
+     * 重点：重写此方法，返回 WheelView 显示的文字
+     * @return
+     */
+    @Override
+    public String getWheelText() {
+        return name == null ? "" : name;
+    }
+}
+```
+注意，我的 CityEntity 中多实现了一个 IWheelEntity 接口，这个接口是在 WheelView 库中定义好的，实现之后在 getWheelText() 方法返回你想在 WheelView 中展示的字段就大功告成了。
+
+MainActivity WheelView 相关代码：
+```java 
+WheelView<CityEntity> cityWv=findViewById(R.id.wv_city);
+//解析城市列表
+List<CityEntity> cityData= ParseHelper.parseTwoLevelCityList(this);
+cityWv.setData(cityData);
+```
+然后，效果图是这样的~
+
+![WheelView_City](https://github.com/zyyoona7/WheelPicker/blob/master/perview/wheel_view_city.gif)
+
+> 冷知识：其实不实现 IWheelEntity 也是可以的，偷偷给你们看下源码：
+```java
+    //WheelView.java
+    /**
+     * 获取item text
+     *
+     * @param item item数据
+     * @return 文本内容
+     */
+    protected String getDataText(T item) {
+        if (item == null) {
+            return "";
+        } else if (item instanceof IWheelEntity) {
+            return ((IWheelEntity) item).getWheelText();
+        } else if (item instanceof Integer) {
+            //如果为整形则最少保留两位数.
+            return isIntegerNeedFormat ? String.format(Locale.getDefault(), mIntegerFormat, (Integer) item)
+                    : String.valueOf(item);
+        } else if (item instanceof String) {
+            return (String) item;
+        }
+        return item.toString();
+    }
+```
+如果条件都不满足的话会默认执行 toString() 方法，所以理论上也可以在实体的 toString() 方法返回你想展示的字段，但是**不推荐**，毕竟 toString() 方法以我个人的习惯都是输出 CityEntity 那种的信息~你也可能输出别的信息。
+
+更多信息请阅读 [WIKI](https://github.com/zyyoona7/WheelPicker/wiki)
 
 ### 感谢（Thanks）
 [**WheelPicker**](https://github.com/AigeStudio/WheelPicker)<br>
