@@ -170,7 +170,9 @@ public class WheelView<T> extends View implements Runnable {
 
     //数据列表
     @NonNull
-    List<T> mDataList = new ArrayList<>(1);
+    private List<T> mDataList = new ArrayList<>(1);
+    //数据变化时，是否重置选中下标到第一个位置
+    private boolean isResetSelectedPosition = false;
 
     private VelocityTracker mVelocityTracker;
     private int mMaxFlingVelocity;
@@ -1170,10 +1172,16 @@ public class WheelView<T> extends View implements Runnable {
             return;
         }
         mDataList = dataList;
-        if (mSelectedItemPosition >= mDataList.size()) {
-            mSelectedItemPosition = mDataList.size() - 1;
-            //重置滚动下标
-            mCurrentScrollPosition = mSelectedItemPosition;
+        if (!isResetSelectedPosition && mDataList.size() > 0) {
+            //不重置选中下标
+            if (mSelectedItemPosition >= mDataList.size()) {
+                mSelectedItemPosition = mDataList.size() - 1;
+                //重置滚动下标
+                mCurrentScrollPosition = mSelectedItemPosition;
+            }
+        } else {
+            //重置选中下标和滚动下标
+            mCurrentScrollPosition = mSelectedItemPosition = 0;
         }
         //强制滚动完成
         forceFinishScroll();
@@ -1183,6 +1191,24 @@ public class WheelView<T> extends View implements Runnable {
         mScrollOffsetY = mSelectedItemPosition * mItemHeight;
         requestLayout();
         invalidate();
+    }
+
+    /**
+     * 当数据变化时，是否重置选中下标到第一个
+     *
+     * @return 是否重置选中下标到第一个
+     */
+    public boolean isResetSelectedPosition() {
+        return isResetSelectedPosition;
+    }
+
+    /**
+     * 设置当数据变化时，是否重置选中下标到第一个
+     *
+     * @param isResetSelectedPosition 当数据变化时,是否重置选中下标到第一个
+     */
+    public void setResetSelectedPosition(boolean isResetSelectedPosition) {
+        this.isResetSelectedPosition = isResetSelectedPosition;
     }
 
     /**
