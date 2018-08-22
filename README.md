@@ -195,7 +195,26 @@ cityWv.setData(cityData);
 ```
 如果条件都不满足的话会默认执行 toString() 方法，所以理论上也可以在实体的 toString() 方法返回你想展示的字段，但是**不推荐**，毕竟 toString() 方法以我个人的习惯都是输出 CityEntity 那种的信息~你也可能输出别的信息。
 
-更多信息请阅读 [WIKI](https://github.com/zyyoona7/WheelPicker/wiki)
+更多信息请阅读 [Wiki](https://github.com/zyyoona7/WheelPicker/wiki)
+
+### 更新日志（Update Logs）
+
+- **1.0.1 版本（暂未发布）**
+    - 规范命名，将方法名和属性名保持一致命名
+    - 增加绘制选中区域，设置选中区域颜色
+    - 修复单次滑动 onItemSelected() 可能执行两次的问题
+    - 修改 mCurrentItemPosition 为 mSelectedItemPosition，并同时修改了对应的 getter/setter 方法及属性名
+    - 增加 getItemData(int position) 方法：获取指定 position 的数据
+    - 增加 getSelectedItemData() 方法：获取当前选中的item数据
+    - 增加 setIntegerNeedFormat(String integerFormat) 方法：同时设置 isIntegerNeedFormat=true 和 mIntegerFormat=integerFormat 两个属性
+    - 修改 mSelectedItemColor 为 mSelectedItemTextColor，并同时修改了对应的 getter/setter 方法名
+    - 修改 setSelectedItemPosition(int position) 默认不开启平滑滚动
+
+- **2018/08/20 发布 1.0.0 版本**
+    - 泛型设置数据类型
+    - 滚动音效，3D 效果等
+    - 增加自动调整字体大小以使得长文字显示完全（需手动开启）
+    - 丰富的监听器
 
 ### 感谢（Thanks）
 [**WheelPicker**](https://github.com/AigeStudio/WheelPicker)<br>
