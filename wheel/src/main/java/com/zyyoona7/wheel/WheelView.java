@@ -250,7 +250,7 @@ public class WheelView<T> extends View implements Runnable {
         mSelectedItemPosition = typedArray.getInt(R.styleable.WheelView_wv_selectedItemPosition, 0);
         //初始化滚动下标
         mCurrentScrollPosition = mSelectedItemPosition;
-        isCyclic = typedArray.getBoolean(R.styleable.WheelView_wv_cyclic, true);
+        isCyclic = typedArray.getBoolean(R.styleable.WheelView_wv_cyclic, false);
 
         isShowDivider = typedArray.getBoolean(R.styleable.WheelView_wv_showDivider, false);
         mDividerType = typedArray.getInt(R.styleable.WheelView_wv_dividerType, DIVIDER_TYPE_FILL);
@@ -1257,7 +1257,7 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @return 是否自动调整字体大小
      */
-    private boolean isAutoFitTextSize() {
+    public boolean isAutoFitTextSize() {
         return isAutoFitTextSize;
     }
 
@@ -1266,7 +1266,7 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @param autoFitTextSize 是否自动调整字体大小
      */
-    private void setAutoFitTextSize(boolean autoFitTextSize) {
+    public void setAutoFitTextSize(boolean autoFitTextSize) {
         isAutoFitTextSize = autoFitTextSize;
         invalidate();
     }
@@ -1648,7 +1648,7 @@ public class WheelView<T> extends View implements Runnable {
 
         } else {
             doScroll(itemDistance);
-            mSelectedItemPosition = position;
+            mCurrentScrollPosition = mSelectedItemPosition = position;
             invalidate();
         }
 
