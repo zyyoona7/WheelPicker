@@ -1214,9 +1214,9 @@ public class WheelView<T> extends View implements Runnable {
         forceFinishScroll();
         calculateTextSize();
         calculateDrawStart();
+        calculateLimitY();
         //字体大小变化，偏移距离也变化了
         mScrollOffsetY = mSelectedItemPosition * mItemHeight;
-        calculateLimitY();
         requestLayout();
         invalidate();
     }
@@ -1444,13 +1444,13 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置数据为Integer类型时是否需要转换
      *
-     * @param integerNeedFormat 数据为Integer类型时是否需要转换
+     * @param isIntegerNeedFormat 数据为Integer类型时是否需要转换
      */
-    public void setIntegerNeedFormat(boolean integerNeedFormat) {
-        if (isIntegerNeedFormat == integerNeedFormat) {
+    public void setIntegerNeedFormat(boolean isIntegerNeedFormat) {
+        if (this.isIntegerNeedFormat == isIntegerNeedFormat) {
             return;
         }
-        isIntegerNeedFormat = integerNeedFormat;
+        this.isIntegerNeedFormat = isIntegerNeedFormat;
         calculateTextSize();
         requestLayout();
         invalidate();
@@ -1545,17 +1545,18 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置是否循环滚动
      *
-     * @param cyclic 是否是循环滚动
+     * @param isCyclic 是否是循环滚动
      */
-    public void setCyclic(boolean cyclic) {
-        if (isCyclic == cyclic) {
+    public void setCyclic(boolean isCyclic) {
+        if (this.isCyclic == isCyclic) {
             return;
         }
-        isCyclic = cyclic;
+        this.isCyclic = isCyclic;
 
         forceFinishScroll();
-        mScrollOffsetY = 0;
         calculateLimitY();
+        //设置当前选中的偏移值
+        mScrollOffsetY = mSelectedItemPosition * mItemHeight;
         invalidate();
     }
 
@@ -1616,6 +1617,7 @@ public class WheelView<T> extends View implements Runnable {
 
         } else {
             doScroll(itemDistance);
+            mSelectedItemPosition = position;
             invalidate();
         }
 
@@ -1643,13 +1645,13 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置是否显示分割线
      *
-     * @param showDivider 是否显示分割线
+     * @param isShowDivider 是否显示分割线
      */
-    public void setShowDivider(boolean showDivider) {
-        if (isShowDivider == showDivider) {
+    public void setShowDivider(boolean isShowDivider) {
+        if (this.isShowDivider == isShowDivider) {
             return;
         }
-        isShowDivider = showDivider;
+        this.isShowDivider = isShowDivider;
         invalidate();
     }
 
@@ -1764,12 +1766,12 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置自适应分割线类型时的分割线内边距
      *
-     * @param wrapDividerPadding 分割线内边距
-     * @param isDp               单位是否是 dp
+     * @param dividerPaddingForWrap 分割线内边距
+     * @param isDp                  单位是否是 dp
      */
-    public void setDividerPaddingForWrap(float wrapDividerPadding, boolean isDp) {
+    public void setDividerPaddingForWrap(float dividerPaddingForWrap, boolean isDp) {
         float tempDividerPadding = mDividerPaddingForWrap;
-        mDividerPaddingForWrap = isDp ? dp2px(wrapDividerPadding) : wrapDividerPadding;
+        mDividerPaddingForWrap = isDp ? dp2px(dividerPaddingForWrap) : dividerPaddingForWrap;
         if (tempDividerPadding == mDividerPaddingForWrap) {
             return;
         }
@@ -1816,10 +1818,10 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置是否绘制选中区域
      *
-     * @param drawSelectedRect 是否绘制选中区域
+     * @param isDrawSelectedRect 是否绘制选中区域
      */
-    public void setDrawSelectedRect(boolean drawSelectedRect) {
-        isDrawSelectedRect = drawSelectedRect;
+    public void setDrawSelectedRect(boolean isDrawSelectedRect) {
+        this.isDrawSelectedRect = isDrawSelectedRect;
         invalidate();
     }
 
@@ -2023,7 +2025,7 @@ public class WheelView<T> extends View implements Runnable {
      */
     @IntDef({TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, TEXT_ALIGN_RIGHT})
     @Retention(value = RetentionPolicy.SOURCE)
-    @interface TextAlign {
+    public @interface TextAlign {
     }
 
     /**
@@ -2034,7 +2036,7 @@ public class WheelView<T> extends View implements Runnable {
      */
     @IntDef({CURVED_ARC_DIRECTION_LEFT, CURVED_ARC_DIRECTION_CENTER, CURVED_ARC_DIRECTION_RIGHT})
     @Retention(value = RetentionPolicy.SOURCE)
-    @interface CurvedArcDirection {
+    public @interface CurvedArcDirection {
     }
 
     /**
@@ -2045,7 +2047,7 @@ public class WheelView<T> extends View implements Runnable {
      */
     @IntDef({DIVIDER_TYPE_FILL, DIVIDER_TYPE_WRAP})
     @Retention(value = RetentionPolicy.SOURCE)
-    @interface DividerType {
+    public @interface DividerType {
     }
 
     /**
