@@ -1128,14 +1128,18 @@ public class WheelView<T> extends View implements Runnable {
      * 获取指定 position 的数据
      *
      * @param position 下标
-     * @return position 对应的数据
+     * @return position 对应的数据 {@link Nullable}
      */
+    @Nullable
     public T getItemData(int position) {
         if (isPositionInRange(position)) {
             return mDataList.get(position);
-        } else {
-            return null;
+        } else if (mDataList.size() > 0 && position >= mDataList.size()) {
+            return mDataList.get(mDataList.size() - 1);
+        } else if (mDataList.size() > 0 && position < 0) {
+            return mDataList.get(0);
         }
+        return null;
     }
 
     /**
@@ -1144,7 +1148,7 @@ public class WheelView<T> extends View implements Runnable {
      * @return 当前选中的item数据
      */
     public T getSelectedItemData() {
-        return getItemData(getSelectedItemPosition());
+        return getItemData(mSelectedItemPosition);
     }
 
     /**
@@ -1166,16 +1170,17 @@ public class WheelView<T> extends View implements Runnable {
             return;
         }
         mDataList = dataList;
-        if (mSelectedItemPosition > mDataList.size()) {
+        if (mSelectedItemPosition >= mDataList.size()) {
             mSelectedItemPosition = mDataList.size() - 1;
             //重置滚动下标
             mCurrentScrollPosition = mSelectedItemPosition;
         }
         //强制滚动完成
         forceFinishScroll();
-        mScrollOffsetY = 0;
         calculateTextSize();
         calculateLimitY();
+        //重置滚动偏移
+        mScrollOffsetY = mSelectedItemPosition * mItemHeight;
         requestLayout();
         invalidate();
     }
