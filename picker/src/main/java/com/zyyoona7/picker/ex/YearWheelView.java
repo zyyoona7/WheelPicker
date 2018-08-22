@@ -9,6 +9,7 @@ import com.zyyoona7.picker.R;
 import com.zyyoona7.wheel.WheelView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -36,20 +37,29 @@ public class YearWheelView extends WheelView<Integer> {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.YearWheelView);
         mStartYear = typedArray.getInt(R.styleable.YearWheelView_wv_startYear, 1900);
         mEndYear = typedArray.getInt(R.styleable.YearWheelView_wv_endYear, 2100);
-        int selectedYear = typedArray.getInt(R.styleable.YearWheelView_wv_selectedYear, 2018);
+        int selectedYear = typedArray.getInt(R.styleable.YearWheelView_wv_selectedYear, Calendar.getInstance().get(Calendar.YEAR));
         typedArray.recycle();
 
         updateYear();
         setSelectedYear(selectedYear);
     }
 
+    /**
+     * 设置年份区间
+     *
+     * @param start 起始年份
+     * @param end   结束年份
+     */
     public void setYearRange(int start, int end) {
         mStartYear = start;
         mEndYear = end;
         updateYear();
     }
 
-    public void updateYear() {
+    /**
+     * 更新年份数据
+     */
+    private void updateYear() {
         List<Integer> list = new ArrayList<>(1);
         for (int i = mStartYear; i < mEndYear; i++) {
             list.add(i);
@@ -57,22 +67,43 @@ public class YearWheelView extends WheelView<Integer> {
         super.setData(list);
     }
 
-    private void updateSelectedYear(int selectedYear, boolean isSmoothScroll, int smoothDuration) {
-        setSelectedItemPosition(selectedYear - mStartYear, isSmoothScroll, smoothDuration);
-    }
 
+    /**
+     * 获取当前选中的年份
+     *
+     * @return 当前选中的年份
+     */
     public int getSelectedYear() {
         return getSelectedItemData();
     }
 
+    /**
+     * 设置当前选中的年份
+     *
+     * @param selectedYear 选中的年份
+     */
     public void setSelectedYear(int selectedYear) {
         setSelectedYear(selectedYear, false);
     }
 
+    /**
+     * 设置当前选中的年份
+     *
+     * @param selectedYear   选中的年份
+     * @param isSmoothScroll 是否平滑滚动
+     */
     public void setSelectedYear(int selectedYear, boolean isSmoothScroll) {
         setSelectedYear(selectedYear, isSmoothScroll, 0);
     }
 
+    /**
+     * 设置当前选中的年份
+     *
+     * @param selectedYear   选中的年份
+     * @param isSmoothScroll 是否平滑滚动
+     * @param smoothDuration 平滑滚动持续时间
+     * @return 设置选中的年份是否在数据范围内
+     */
     public boolean setSelectedYear(int selectedYear, boolean isSmoothScroll, int smoothDuration) {
         if (selectedYear >= mStartYear && selectedYear <= mEndYear) {
             updateSelectedYear(selectedYear, isSmoothScroll, smoothDuration);
@@ -80,6 +111,17 @@ public class YearWheelView extends WheelView<Integer> {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 更新选中的年份
+     *
+     * @param selectedYear   选中的年
+     * @param isSmoothScroll 是否平滑滚动
+     * @param smoothDuration 平滑滚动持续时间
+     */
+    private void updateSelectedYear(int selectedYear, boolean isSmoothScroll, int smoothDuration) {
+        setSelectedItemPosition(selectedYear - mStartYear, isSmoothScroll, smoothDuration);
     }
 
     @Override

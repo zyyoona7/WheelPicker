@@ -38,6 +38,9 @@ public class MonthWheelView extends WheelView<Integer> {
         setSelectedMonth(selectedMonth);
     }
 
+    /**
+     * 初始化数据
+     */
     private void initData() {
         List<Integer> list = new ArrayList<>(1);
         for (int i = 1; i <= 12; i++) {
@@ -46,27 +49,58 @@ public class MonthWheelView extends WheelView<Integer> {
         super.setData(list);
     }
 
+    /**
+     * 获取选中的月
+     *
+     * @return 选中的月
+     */
     public int getSelectedMonth() {
         return getSelectedItemData();
     }
 
+    /**
+     * 设置选中的月
+     *
+     * @param selectedMonth 选中的月
+     */
     public void setSelectedMonth(int selectedMonth) {
         setSelectedMonth(selectedMonth, false);
     }
 
+    /**
+     * 设置选中的月
+     *
+     * @param selectedMonth  选中的月
+     * @param isSmoothScroll 是否平滑滚动
+     */
     public void setSelectedMonth(int selectedMonth, boolean isSmoothScroll) {
         setSelectedMonth(selectedMonth, isSmoothScroll, 0);
     }
 
+    /**
+     * 设置选中的月
+     *
+     * @param selectedMonth  选中的月
+     * @param isSmoothScroll 是否平滑滚动
+     * @param smoothDuration 平滑滚动持续时间
+     * @return 设置的月是否在数据范围之内
+     */
     public boolean setSelectedMonth(int selectedMonth, boolean isSmoothScroll, int smoothDuration) {
         if (selectedMonth >= 1 && selectedMonth <= 12) {
             updateSelectedMonth(selectedMonth, isSmoothScroll, smoothDuration);
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
+    /**
+     * 更新选中的月份
+     *
+     * @param selectedMonth  选中的月份
+     * @param isSmoothScroll 是否平滑滚动
+     * @param smoothDuration 平滑滚动持续时间
+     */
     private void updateSelectedMonth(int selectedMonth, boolean isSmoothScroll, int smoothDuration) {
         setSelectedItemPosition(selectedMonth - 1, isSmoothScroll, smoothDuration);
     }

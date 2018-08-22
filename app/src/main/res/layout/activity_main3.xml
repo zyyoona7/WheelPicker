@@ -1,56 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:fillViewport="true"
     tools:context="com.zyyoona7.demo.Main3Activity">
 
-    <LinearLayout
-        android:id="@+id/ll_date"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
 
-        <com.zyyoona7.picker.ex.YearWheelView
-            android:id="@+id/wv_year"
+        <LinearLayout
+            android:id="@+id/ll_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:wv_textSize="24sp"
-            app:wv_startYear="1970"
-            app:wv_endYear="2100"
-            app:wv_selectedYear="2000"/>
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.zyyoona7.picker.ex.MonthWheelView
-            android:id="@+id/wv_month"
-            android:layout_width="0dp"
+            <com.zyyoona7.picker.ex.YearWheelView
+                android:id="@+id/wv_year"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:wv_endYear="2100"
+                app:wv_selectedYear="2000"
+                app:wv_startYear="1970"
+                app:wv_textSize="24sp" />
+
+            <com.zyyoona7.picker.ex.MonthWheelView
+                android:id="@+id/wv_month"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:wv_selectedMonth="10"
+                app:wv_textSize="24sp" />
+
+            <com.zyyoona7.picker.ex.DayWheelView
+                android:id="@+id/wv_day"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:wv_month="10"
+                app:wv_selectedDay="21"
+                app:wv_textSize="24sp"
+                app:wv_year="2000" />
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_datePickerView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:wv_textSize="24sp"
-            app:wv_selectedMonth="10"/>
+            android:layout_marginTop="16dp"
+            android:text="DatePickerView"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_date" />
 
-        <com.zyyoona7.picker.ex.DayWheelView
-            android:id="@+id/wv_day"
-            android:layout_width="0dp"
+        <com.zyyoona7.picker.DatePickerView
+            android:id="@+id/dpv_default"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:wv_textSize="24sp"
-            app:wv_year="2000"
-            app:wv_month="10"
-            app:wv_selectedDay="21"/>
-    </LinearLayout>
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_datePickerView" />
 
-    <com.zyyoona7.picker.DatePickerView
-        android:layout_width="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ll_date"
-        android:layout_marginTop="16dp"/>
+        <com.zyyoona7.picker.DatePickerView
+            android:id="@+id/dpv_custom_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dpv_default" />
 
-</android.support.constraint.ConstraintLayout>
+        <com.zyyoona7.picker.DatePickerView
+            android:id="@+id/dpv_custom_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dpv_custom_1" />
+
+        <com.zyyoona7.picker.DatePickerView
+            android:id="@+id/dpv_custom_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dpv_custom_2" />
+    </android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>
