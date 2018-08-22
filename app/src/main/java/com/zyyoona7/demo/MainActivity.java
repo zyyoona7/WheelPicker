@@ -17,7 +17,6 @@ import com.zyyoona7.demo.utils.ParseHelper;
 import com.zyyoona7.wheel.WheelView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -61,11 +60,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        AppCompatButton goPickerBtn=findViewById(R.id.btn_go_picker_view);
-        goPickerBtn.setOnClickListener(new View.OnClickListener() {
+        AppCompatButton goDatePickerBtn=findViewById(R.id.btn_go_date_picker_view);
+        goDatePickerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this,Main3Activity.class);
+                startActivity(intent);
+            }
+        });
+
+        AppCompatButton goOptionsPickerBtn=findViewById(R.id.btn_go_options_picker_view);
+        goOptionsPickerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,Main4Activity.class);
                 startActivity(intent);
             }
         });

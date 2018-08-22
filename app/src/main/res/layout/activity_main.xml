@@ -15,15 +15,25 @@
         android:paddingStart="10dp">
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_go_picker_view"
+            android:id="@+id/btn_go_date_picker_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="跳转 PickerView"
+            android:text="跳转 DatePickerView"
+            android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_go_options_picker_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="跳转 OptionsPickerView"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_go_date_picker_view" />
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_go_custom_attrs"
             android:layout_width="0dp"
@@ -32,7 +42,7 @@
             android:text="跳转自定义属性展示页"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_go_picker_view" />
+            app:layout_constraintTop_toBottomOf="@id/btn_go_options_picker_view" />
 
         <com.zyyoona7.wheel.WheelView
             android:id="@+id/wheelview"
