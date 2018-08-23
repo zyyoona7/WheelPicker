@@ -404,6 +404,7 @@ public class WheelView<T> extends View implements Runnable {
             case TEXT_ALIGN_RIGHT:
                 mStartX = (int) (getWidth() - getPaddingRight() - mTextBoundaryMargin);
                 break;
+            case TEXT_ALIGN_CENTER:
             default:
                 mStartX = getWidth() / 2;
                 break;
@@ -462,31 +463,17 @@ public class WheelView<T> extends View implements Runnable {
             }
         }
 
-        if (mOnWheelChangedListener != null) {
-            mOnWheelChangedListener.onWheelScroll(mScrollOffsetY);
-        }
-
-        //item改变回调
-        int oldPosition = mCurrentScrollPosition;
-        int newPosition = getCurrentPosition();
-        if (oldPosition != newPosition) {
-            //改变了
-            if (mOnWheelChangedListener != null) {
-                mOnWheelChangedListener.onWheelItemChanged(oldPosition, newPosition);
-            }
-            //播放音频
-            playSoundEffect();
-            //更新下标
-            mCurrentScrollPosition = newPosition;
-        }
     }
 
     /**
-     * 播放滚动音效
+     * 绘制选中区域
+     *
+     * @param canvas 画布
      */
-    public void playSoundEffect() {
-        if (mSoundHelper != null && isSoundEffect) {
-            mSoundHelper.playSoundEffect();
+    private void drawSelectedRect(Canvas canvas) {
+        if (isDrawSelectedRect) {
+            mPaint.setColor(mSelectedRectColor);
+            canvas.drawRect(mClipLeft, mSelectedItemTopLimit, mClipRight, mSelectedItemBottomLimit, mPaint);
         }
     }
 
@@ -516,18 +503,6 @@ public class WheelView<T> extends View implements Runnable {
                 canvas.drawLine(wrapStartX, mSelectedItemBottomLimit, wrapStopX, mSelectedItemBottomLimit, mPaint);
             }
             mPaint.setStrokeWidth(originStrokeWidth);
-        }
-    }
-
-    /**
-     * 绘制选中区域
-     *
-     * @param canvas 画布
-     */
-    private void drawSelectedRect(Canvas canvas) {
-        if (isDrawSelectedRect) {
-            mPaint.setColor(mSelectedRectColor);
-            canvas.drawRect(mClipLeft, mSelectedItemTopLimit, mClipRight, mSelectedItemBottomLimit, mPaint);
         }
     }
 
@@ -989,7 +964,41 @@ public class WheelView<T> extends View implements Runnable {
     private void invalidateIfYChanged() {
         if (mScrollOffsetY != mScrolledY) {
             mScrolledY = mScrollOffsetY;
+            //滚动偏移发生变化
+            if (mOnWheelChangedListener != null) {
+                mOnWheelChangedListener.onWheelScroll(mScrollOffsetY);
+            }
+            //观察item变化
+            observeItemChanged();
             invalidate();
+        }
+    }
+
+    /**
+     * 观察item改变
+     */
+    private void observeItemChanged() {
+        //item改变回调
+        int oldPosition = mCurrentScrollPosition;
+        int newPosition = getCurrentPosition();
+        if (oldPosition != newPosition) {
+            //改变了
+            if (mOnWheelChangedListener != null) {
+                mOnWheelChangedListener.onWheelItemChanged(oldPosition, newPosition);
+            }
+            //播放音频
+            playSoundEffect();
+            //更新下标
+            mCurrentScrollPosition = newPosition;
+        }
+    }
+
+    /**
+     * 播放滚动音效
+     */
+    public void playSoundEffect() {
+        if (mSoundHelper != null && isSoundEffect) {
+            mSoundHelper.playSoundEffect();
         }
     }
 
@@ -1667,17 +1676,17 @@ public class WheelView<T> extends View implements Runnable {
             //如果是平滑滚动并且之前的Scroll滚动完成
             mOverScroller.startScroll(0, mScrollOffsetY, 0, itemDistance,
                     smoothDuration > 0 ? smoothDuration : DEFAULT_SCROLL_DURATION);
-            invalidate();
+            invalidateIfYChanged();
             ViewCompat.postOnAnimation(this, this);
 
         } else {
             doScroll(itemDistance);
-            mCurrentScrollPosition = mSelectedItemPosition = position;
+            mSelectedItemPosition = position;
             //选中条目回调
             if (mOnItemSelectedListener != null) {
                 mOnItemSelectedListener.onItemSelected(this, mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
             }
-            invalidate();
+            invalidateIfYChanged();
         }
 
     }
