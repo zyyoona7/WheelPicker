@@ -200,16 +200,22 @@ cityWv.setData(cityData);
 
 ### 更新日志（Update Logs）
 
-- **1.0.1 版本（暂未发布）**
+- **2018/08/23 发布 1.0.1 版本**
     - 规范命名，将方法名和属性名保持一致命名
     - 增加绘制选中区域，设置选中区域颜色
-    - 修复单次滑动 onItemSelected() 可能执行两次的问题
-    - 修改 mCurrentItemPosition 为 mSelectedItemPosition，并同时修改了对应的 getter/setter 方法及属性名
     - 增加 getItemData(int position) 方法：获取指定 position 的数据
     - 增加 getSelectedItemData() 方法：获取当前选中的item数据
     - 增加 setIntegerNeedFormat(String integerFormat) 方法：同时设置 isIntegerNeedFormat=true 和 mIntegerFormat=integerFormat 两个属性
+    - 增加 setResetSelectedPosition(boolean isResetSelectedPosition) 方法：设置当数据变化时，是否重置选中下标到第一个
+    - 修改 mCurrentItemPosition 为 mSelectedItemPosition，并同时修改了对应的 getter/setter 方法及属性名
     - 修改 mSelectedItemColor 为 mSelectedItemTextColor，并同时修改了对应的 getter/setter 方法名
     - 修改 setSelectedItemPosition(int position) 默认不开启平滑滚动
+    - 修复单次滑动 onItemSelected() 可能执行两次的问题
+    - 修复 setSelectedItemPosition() 不开启平滑滚动时，未保存当前选中下标
+    - 修复更新数据时，mSelectedItemPosition 越界的情况
+    - 修复播放音效代码写错位置
+    - 优化滚动监听和选中监听回调次数，回调更加精准，减少不必要的重绘
+    - 优化滚动监听执行位置，onDraw() 方法不再处理任何回调
 
 - **2018/08/20 发布 1.0.0 版本**
     - 泛型设置数据类型
