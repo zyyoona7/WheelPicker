@@ -1,6 +1,7 @@
 # WheelPicker
 
 ### WheelView 简介（Introduction）
+[ ![Download](https://api.bintray.com/packages/zyyoona7/maven/wheelview/images/download.svg) ](https://bintray.com/zyyoona7/maven/wheelview/_latestVersion)
 
 自定义实现 WheelView，滑动流畅、功能齐全、用法简单、高度自定义。
 
@@ -31,7 +32,7 @@
 ### WheelView 使用（Usage）
 #### 1.依赖（dependency）
 ```groovy
-implementation 'com.github.zyyoona7:wheelview:1.0.0'
+implementation 'com.github.zyyoona7:wheelview:1.0.1'
 ```
 
 #### 2.基本用法（Basic Usage）
