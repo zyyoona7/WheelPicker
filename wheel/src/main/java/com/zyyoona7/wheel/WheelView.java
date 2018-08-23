@@ -186,6 +186,8 @@ public class WheelView<T> extends View implements Runnable {
 
     //Y轴滚动偏移
     private int mScrollOffsetY;
+    //Y轴已滚动偏移，控制重绘次数
+    private int mScrolledY = 0;
     //手指最后触摸的位置
     private float mLastTouchY;
     //手指按下时间，根据按下抬起时间差处理点击滚动
@@ -462,20 +464,20 @@ public class WheelView<T> extends View implements Runnable {
 
         if (mOnWheelChangedListener != null) {
             mOnWheelChangedListener.onWheelScroll(mScrollOffsetY);
+        }
 
-            //item改变回调
-            int oldPosition = mCurrentScrollPosition;
-            int newPosition = getCurrentPosition();
-            if (oldPosition != newPosition) {
-                //改变了
-                if (mOnWheelChangedListener != null) {
-                    mOnWheelChangedListener.onWheelItemChanged(oldPosition, newPosition);
-                }
-                //播放音频
-                playSoundEffect();
-                //更新下标
-                mCurrentScrollPosition = newPosition;
+        //item改变回调
+        int oldPosition = mCurrentScrollPosition;
+        int newPosition = getCurrentPosition();
+        if (oldPosition != newPosition) {
+            //改变了
+            if (mOnWheelChangedListener != null) {
+                mOnWheelChangedListener.onWheelItemChanged(oldPosition, newPosition);
             }
+            //播放音频
+            playSoundEffect();
+            //更新下标
+            mCurrentScrollPosition = newPosition;
         }
     }
 
@@ -903,7 +905,7 @@ public class WheelView<T> extends View implements Runnable {
                 //deltaY 上滑为正，下滑为负
                 doScroll((int) -deltaY);
                 mLastTouchY = moveY;
-                invalidate();
+                invalidateIfYChanged();
 
                 break;
             case MotionEvent.ACTION_UP:
@@ -924,13 +926,13 @@ public class WheelView<T> extends View implements Runnable {
                         //手指抬起的位置到中心的距离为滚动差值
                         clickToCenterDistance = (int) (event.getY() - mCenterY);
                     }
-
+                    int scrollRange = clickToCenterDistance +
+                            calculateDistanceToEndPoint((mScrollOffsetY + clickToCenterDistance) % mItemHeight);
                     //平稳滑动
-                    mOverScroller.startScroll(0, mScrollOffsetY, 0, clickToCenterDistance +
-                            calculateDistanceToEndPoint((mScrollOffsetY + clickToCenterDistance) % mItemHeight));
+                    mOverScroller.startScroll(0, mScrollOffsetY, 0, scrollRange);
                 }
 
-                invalidate();
+                invalidateIfYChanged();
                 ViewCompat.postOnAnimation(this, this);
 
                 //回收 VelocityTracker
@@ -982,6 +984,16 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     /**
+     * 当Y轴的偏移值改变时再重绘，减少重回次数
+     */
+    private void invalidateIfYChanged() {
+        if (mScrollOffsetY != mScrolledY) {
+            mScrolledY = mScrollOffsetY;
+            invalidate();
+        }
+    }
+
+    /**
      * 强制滚动完成，直接停止
      */
     public void forceFinishScroll() {
@@ -1025,7 +1037,16 @@ public class WheelView<T> extends View implements Runnable {
         //停止滚动更新当前下标
         if (mOverScroller.isFinished() && !isForceFinishScroll && !isFlingScroll) {
             if (mItemHeight == 0) return;
-            mSelectedItemPosition = getCurrentPosition();
+            //滚动状态停止
+            if (mOnWheelChangedListener != null) {
+                mOnWheelChangedListener.onWheelScrollStateChanged(SCROLL_STATE_IDLE);
+            }
+            int currentItemPosition = getCurrentPosition();
+            //当前选中的Position没变时不回调 onItemSelected()
+            if (currentItemPosition == mSelectedItemPosition) {
+                return;
+            }
+            mSelectedItemPosition = currentItemPosition;
             //停止后重新赋值
             mCurrentScrollPosition = mSelectedItemPosition;
 
@@ -1036,23 +1057,26 @@ public class WheelView<T> extends View implements Runnable {
             //滚动状态回调
             if (mOnWheelChangedListener != null) {
                 mOnWheelChangedListener.onWheelSelected(mSelectedItemPosition);
-                mOnWheelChangedListener.onWheelScrollStateChanged(SCROLL_STATE_IDLE);
             }
         }
 
         if (mOverScroller.computeScrollOffset()) {
-            if (mOnWheelChangedListener != null) {
-                mOnWheelChangedListener.onWheelScrollStateChanged(SCROLL_STATE_SCROLLING);
-            }
+            int oldY = mScrollOffsetY;
             mScrollOffsetY = mOverScroller.getCurrY();
-            invalidate();
+
+            if (oldY != mScrollOffsetY) {
+                if (mOnWheelChangedListener != null) {
+                    mOnWheelChangedListener.onWheelScrollStateChanged(SCROLL_STATE_SCROLLING);
+                }
+            }
+            invalidateIfYChanged();
             ViewCompat.postOnAnimation(this, this);
         } else if (isFlingScroll) {
             //滚动完成后，根据是否为快速滚动处理是否需要调整最终位置
             isFlingScroll = false;
             //快速滚动后需要调整滚动完成后的最终位置，重新启动scroll滑动到中心位置
             mOverScroller.startScroll(0, mScrollOffsetY, 0, calculateDistanceToEndPoint(mScrollOffsetY % mItemHeight));
-            invalidate();
+            invalidateIfYChanged();
             ViewCompat.postOnAnimation(this, this);
         }
     }
@@ -1098,11 +1122,11 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置声音效果资源
      *
-     * @param resId 声音效果资源 越小效果越好 {@link RawRes}
+     * @param rawResId 声音效果资源 越小效果越好 {@link RawRes}
      */
-    public void setSoundEffectResource(@RawRes int resId) {
+    public void setSoundEffectResource(@RawRes int rawResId) {
         if (mSoundHelper != null) {
-            mSoundHelper.load(getContext(), resId);
+            mSoundHelper.load(getContext(), rawResId);
         }
     }
 
@@ -1264,10 +1288,10 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置是否自动调整字体大小，以显示完全
      *
-     * @param autoFitTextSize 是否自动调整字体大小
+     * @param isAutoFitTextSize 是否自动调整字体大小
      */
-    public void setAutoFitTextSize(boolean autoFitTextSize) {
-        isAutoFitTextSize = autoFitTextSize;
+    public void setAutoFitTextSize(boolean isAutoFitTextSize) {
+        this.isAutoFitTextSize = isAutoFitTextSize;
         invalidate();
     }
 
@@ -1649,6 +1673,10 @@ public class WheelView<T> extends View implements Runnable {
         } else {
             doScroll(itemDistance);
             mCurrentScrollPosition = mSelectedItemPosition = position;
+            //选中条目回调
+            if (mOnItemSelectedListener != null) {
+                mOnItemSelectedListener.onItemSelected(this, mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
+            }
             invalidate();
         }
 
@@ -1660,7 +1688,7 @@ public class WheelView<T> extends View implements Runnable {
      * @param position 下标
      * @return 是否在数据列表范围内
      */
-    private boolean isPositionInRange(int position) {
+    public boolean isPositionInRange(int position) {
         return position >= 0 && position < mDataList.size();
     }
 
