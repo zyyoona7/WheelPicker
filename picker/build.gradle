@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 // JitPack Maven
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 27
@@ -30,4 +31,19 @@ dependencies {
     compileOnly fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly 'com.android.support:appcompat-v7:27.1.1'
     api project(':wheel')
+}
+
+publish {
+    //bintray.com 用户名/组织名 user/org name
+    userOrg = 'zyyoona7'
+    //JCenter上显示的路径 path
+    groupId = 'com.github.zyyoona7'
+    //项目名称 project name
+    artifactId = 'pickerview'
+    //版本号 version code
+    publishVersion = '1.0.0'
+    //项目描述 description
+    desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
+    //项目网址链接 link
+    website = 'https://github.com/zyyoona7/WheelPicker'
 }

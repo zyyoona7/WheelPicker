@@ -83,7 +83,6 @@ public class MonthWheelView extends WheelView<Integer> {
      * @param selectedMonth  选中的月
      * @param isSmoothScroll 是否平滑滚动
      * @param smoothDuration 平滑滚动持续时间
-     * @return 设置的月是否在数据范围之内
      */
     public void setSelectedMonth(int selectedMonth, boolean isSmoothScroll, int smoothDuration) {
         if (selectedMonth >= 1 && selectedMonth <= 12) {
