@@ -2,10 +2,17 @@ package com.zyyoona7.demo;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatSeekBar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.zyyoona7.picker.DatePickerView;
@@ -14,7 +21,6 @@ import com.zyyoona7.picker.ex.MonthWheelView;
 import com.zyyoona7.picker.ex.YearWheelView;
 import com.zyyoona7.wheel.WheelView;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Main3Activity extends AppCompatActivity {
@@ -83,8 +89,9 @@ public class Main3Activity extends AppCompatActivity {
         DayWheelView dayWv2 = customDpv2.getDayWv();
         monthWv2.setIntegerNeedFormat("%02d");
         dayWv2.setIntegerNeedFormat("%02d");
+        customDpv2.setResetSelectedPosition(true);
 
-        DatePickerView customDpv3 = findViewById(R.id.dpv_custom_3);
+        final DatePickerView customDpv3 = findViewById(R.id.dpv_custom_3);
         customDpv3.setTextSize(24, true);
         customDpv3.setShowLabel(false);
         customDpv3.setTextBoundaryMargin(16, true);
@@ -107,7 +114,60 @@ public class Main3Activity extends AppCompatActivity {
             @Override
             public void onDateSelected(DatePickerView datePickerView, int year, int month, int day, @Nullable Date date) {
                 //                Toast.makeText(Main3Activity.this,"选中的日期："+date.toString(),Toast.LENGTH_SHORT).show();
-                Toast.makeText(Main3Activity.this,"选中的日期："+year+"-"+month+"-"+day,Toast.LENGTH_SHORT).show();
+                Toast.makeText(Main3Activity.this, "选中的日期：" + year + "-" + month + "-" + day, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        final AppCompatCheckBox smoothCb = findViewById(R.id.cb_smooth);
+        final AppCompatSeekBar smoothDurationSb = findViewById(R.id.sb_smooth_duration);
+        smoothDurationSb.setMax(3000);
+        smoothDurationSb.setProgress(250);
+        final AppCompatEditText yearEt = findViewById(R.id.et_year);
+        AppCompatButton setYearBtn = findViewById(R.id.btn_set_year);
+        final AppCompatEditText monthEt = findViewById(R.id.et_month);
+        AppCompatButton setMonthBtn = findViewById(R.id.btn_set_month);
+        final AppCompatEditText dayEt = findViewById(R.id.et_day);
+        AppCompatButton setDayBtn = findViewById(R.id.btn_set_day);
+
+        setYearBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String year = yearEt.getText().toString();
+                if (!TextUtils.isEmpty(year)) {
+                    customDpv3.setSelectedYear(Integer.parseInt(year), smoothCb.isChecked(), smoothDurationSb.getProgress());
+                }
+            }
+        });
+
+        setMonthBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String month = monthEt.getText().toString();
+                if (!TextUtils.isEmpty(month)) {
+                    customDpv3.setSelectedMonth(Integer.parseInt(month), smoothCb.isChecked(), smoothDurationSb.getProgress());
+                }
+            }
+        });
+
+
+
+        final NestedScrollView nestedScrollView=findViewById(R.id.nsv_main3);
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                Log.d(TAG, "onScrollChange: scrollY="+scrollY);
+            }
+        });
+
+        setDayBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                String day = dayEt.getText().toString();
+//                if (!TextUtils.isEmpty(day)) {
+//                    customDpv3.setSelectedDay(Integer.parseInt(day), smoothCb.isChecked(), smoothDurationSb.getProgress());
+//                }
+
+                nestedScrollView.setScrollY(10);
             }
         });
     }

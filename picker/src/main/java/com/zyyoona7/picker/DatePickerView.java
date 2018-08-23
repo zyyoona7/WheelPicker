@@ -230,6 +230,15 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
     }
 
     /**
+     * 获取选中的年份
+     *
+     * @return 选中的年份
+     */
+    public int getSelectedYear() {
+        return mYearWv.getSelectedYear();
+    }
+
+    /**
      * 设置选中的年份
      *
      * @param year 年
@@ -256,9 +265,16 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
      * @param smoothDuration 平滑滚动持续时间
      */
     public void setSelectedYear(int year, boolean isSmoothScroll, int smoothDuration) {
-        if (mYearWv.setSelectedYear(year, isSmoothScroll, smoothDuration)) {
-            mDayWv.setYear(year);
-        }
+        mYearWv.setSelectedYear(year, isSmoothScroll, smoothDuration);
+    }
+
+    /**
+     * 获取选中的月份
+     *
+     * @return 选中的月份
+     */
+    public int getSelectedMonth() {
+        return mMonthWv.getSelectedMonth();
     }
 
     /**
@@ -288,9 +304,16 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
      * @param smoothDuration 平滑滚动持续时间
      */
     public void setSelectedMonth(int month, boolean isSmoothScroll, int smoothDuration) {
-        if (mMonthWv.setSelectedMonth(month, isSmoothScroll, smoothDuration)) {
-            mDayWv.setMonth(month);
-        }
+        mMonthWv.setSelectedMonth(month, isSmoothScroll, smoothDuration);
+    }
+
+    /**
+     * 获取选中的日
+     *
+     * @return 选中的日
+     */
+    public int getSelectedDay() {
+        return mDayWv.getSelectedDay();
     }
 
     /**
@@ -324,6 +347,26 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
     }
 
     /**
+     * 获取选中的日期
+     *
+     * @return 选中的日期 格式 2018-08-22
+     */
+    public String getSelectedDate() {
+        return getSelectedYear() + "-" + getSelectedMonth() + "-" + getSelectedDay();
+    }
+
+    /**
+     * 设置当数据变化时，是否重置选中下标到第一个
+     *
+     * @param isResetSelectedPosition 当数据变化时,是否重置选中下标到第一个
+     */
+    public void setResetSelectedPosition(boolean isResetSelectedPosition) {
+        mYearWv.setResetSelectedPosition(isResetSelectedPosition);
+        mMonthWv.setResetSelectedPosition(isResetSelectedPosition);
+        mDayWv.setResetSelectedPosition(isResetSelectedPosition);
+    }
+
+    /**
      * 设置设置WheelView 可见item数
      *
      * @param visibleItems 可见item数
@@ -332,6 +375,17 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
         mYearWv.setVisibleItems(visibleItems);
         mMonthWv.setVisibleItems(visibleItems);
         mDayWv.setVisibleItems(visibleItems);
+    }
+
+    /**
+     * 设置是否自动调整字体大小，以显示完全
+     *
+     * @param isAutoFitTextSize 是否自动调整字体大小
+     */
+    public void setAutoFitTextSize(boolean isAutoFitTextSize) {
+        mYearWv.setAutoFitTextSize(isAutoFitTextSize);
+        mMonthWv.setAutoFitTextSize(isAutoFitTextSize);
+        mDayWv.setAutoFitTextSize(isAutoFitTextSize);
     }
 
     /**
@@ -416,17 +470,6 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
         mYearWv.setSelectedItemTextColor(textColor);
         mMonthWv.setSelectedItemTextColor(textColor);
         mDayWv.setSelectedItemTextColor(textColor);
-    }
-
-    /**
-     * 设置WheelView 是否开启弯曲效果
-     *
-     * @param isCurved 是否开启
-     */
-    public void setCurved(boolean isCurved) {
-        mYearWv.setCurved(isCurved);
-        mMonthWv.setCurved(isCurved);
-        mDayWv.setCurved(isCurved);
     }
 
     /**
@@ -601,6 +644,54 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
     }
 
     /**
+     * 设置WheelView 是否开启弯曲效果
+     *
+     * @param isCurved 是否开启
+     */
+    public void setCurved(boolean isCurved) {
+        mYearWv.setCurved(isCurved);
+        mMonthWv.setCurved(isCurved);
+        mDayWv.setCurved(isCurved);
+    }
+
+    /**
+     * 设置弯曲（3D）效果左右圆弧效果方向
+     *
+     * @param curvedArcDirection 左右圆弧效果方向
+     *                           {@link WheelView#CURVED_ARC_DIRECTION_LEFT}
+     *                           {@link WheelView#CURVED_ARC_DIRECTION_CENTER}
+     *                           {@link WheelView#CURVED_ARC_DIRECTION_RIGHT}
+     */
+    public void setCurvedArcDirection(@WheelView.CurvedArcDirection int curvedArcDirection) {
+        mYearWv.setCurvedArcDirection(curvedArcDirection);
+        mMonthWv.setCurvedArcDirection(curvedArcDirection);
+        mDayWv.setCurvedArcDirection(curvedArcDirection);
+    }
+
+    /**
+     * 设置弯曲（3D）效果左右圆弧偏移效果方向系数
+     *
+     * @param curvedArcDirectionFactor 左右圆弧偏移效果方向系数
+     *                                 range 0.0-1.0 越大越明显
+     */
+    public void setCurvedArcDirectionFactor(@FloatRange(from = 0.0f, to = 1.0f) float curvedArcDirectionFactor) {
+        mYearWv.setCurvedArcDirectionFactor(curvedArcDirectionFactor);
+        mMonthWv.setCurvedArcDirectionFactor(curvedArcDirectionFactor);
+        mDayWv.setCurvedArcDirectionFactor(curvedArcDirectionFactor);
+    }
+
+    /**
+     * 设置选中条目折射偏移比例
+     *
+     * @param curvedRefractRatio 折射偏移比例 range 0.0-1.0
+     */
+    public void setCurvedRefractRatio(@FloatRange(from = 0.0f, to = 1.0f) float curvedRefractRatio) {
+        mYearWv.setCurvedRefractRatio(curvedRefractRatio);
+        mMonthWv.setCurvedRefractRatio(curvedRefractRatio);
+        mDayWv.setCurvedRefractRatio(curvedRefractRatio);
+    }
+
+    /**
      * 获取日期回调监听器
      *
      * @return
@@ -684,6 +775,6 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
          * @param day            选中的天
          * @param date           选中的日期
          */
-        void onDateSelected(DatePickerView datePickerView, int year, int month, int day,@Nullable Date date);
+        void onDateSelected(DatePickerView datePickerView, int year, int month, int day, @Nullable Date date);
     }
 }

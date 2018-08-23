@@ -85,12 +85,9 @@ public class MonthWheelView extends WheelView<Integer> {
      * @param smoothDuration 平滑滚动持续时间
      * @return 设置的月是否在数据范围之内
      */
-    public boolean setSelectedMonth(int selectedMonth, boolean isSmoothScroll, int smoothDuration) {
+    public void setSelectedMonth(int selectedMonth, boolean isSmoothScroll, int smoothDuration) {
         if (selectedMonth >= 1 && selectedMonth <= 12) {
             updateSelectedMonth(selectedMonth, isSmoothScroll, smoothDuration);
-            return true;
-        } else {
-            return false;
         }
     }
 

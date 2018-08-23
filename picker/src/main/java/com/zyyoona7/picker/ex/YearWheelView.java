@@ -104,12 +104,9 @@ public class YearWheelView extends WheelView<Integer> {
      * @param smoothDuration 平滑滚动持续时间
      * @return 设置选中的年份是否在数据范围内
      */
-    public boolean setSelectedYear(int selectedYear, boolean isSmoothScroll, int smoothDuration) {
+    public void setSelectedYear(int selectedYear, boolean isSmoothScroll, int smoothDuration) {
         if (selectedYear >= mStartYear && selectedYear <= mEndYear) {
             updateSelectedYear(selectedYear, isSmoothScroll, smoothDuration);
-            return true;
-        } else {
-            return false;
         }
     }
 

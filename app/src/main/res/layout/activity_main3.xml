@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context="com.zyyoona7.demo.Main3Activity">
+    tools:context="com.zyyoona7.demo.Main3Activity"
+    android:id="@+id/nsv_main3">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -96,5 +97,95 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dpv_custom_2" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/cb_smooth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="平滑滚动"
+            app:layout_constraintTop_toBottomOf="@id/dpv_custom_3" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/sb_smooth_duration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/cb_smooth"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cb_smooth"
+            app:layout_constraintTop_toTopOf="@id/cb_smooth" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/et_year"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cb_smooth"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.3" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_year"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="设置年份"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/et_year"
+            app:layout_constraintStart_toStartOf="@id/et_year"
+            app:layout_constraintTop_toBottomOf="@id/et_year" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/et_month"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cb_smooth"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.3" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_month"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="设置月份"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/et_month"
+            app:layout_constraintStart_toStartOf="@id/et_month"
+            app:layout_constraintTop_toBottomOf="@id/et_month" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/et_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cb_smooth"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.3" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="设置日"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/et_day"
+            app:layout_constraintStart_toStartOf="@id/et_day"
+            app:layout_constraintTop_toBottomOf="@id/et_day" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>
