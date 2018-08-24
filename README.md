@@ -65,7 +65,7 @@
 #### 1.依赖（dependency）
 
 ```groovy
-implementation 'com.github.zyyoona7:wheelview:1.0.1'
+    implementation 'com.github.zyyoona7:wheelview:1.0.1'
 ```
 
 #### 2.基本用法（Basic Usage）
@@ -194,10 +194,10 @@ public class CityEntity implements IWheelEntity, Serializable {
 
 MainActivity WheelView 相关代码：
 ```java 
-WheelView<CityEntity> cityWv=findViewById(R.id.wv_city);
-//解析城市列表
-List<CityEntity> cityData= ParseHelper.parseTwoLevelCityList(this);
-cityWv.setData(cityData);
+    WheelView<CityEntity> cityWv=findViewById(R.id.wv_city);
+    //解析城市列表
+    List<CityEntity> cityData= ParseHelper.parseTwoLevelCityList(this);
+    cityWv.setData(cityData);
 ```
 然后，效果图是这样的~
 
@@ -232,7 +232,7 @@ cityWv.setData(cityData);
 #### PickerView Usage
 
 ```groovy
-implementation 'com.github.zyyoona7:pickerview:1.0.0'
+    implementation 'com.github.zyyoona7:pickerview:1.0.0'
 ```
 
 #### DatePickerView Usage
@@ -279,7 +279,7 @@ implementation 'com.github.zyyoona7:pickerview:1.0.0'
     YearWheelView yearWv3 = customDpv3.getYearWv();
     MonthWheelView monthWv3 = customDpv3.getMonthWv();
     DayWheelView dayWv3 = customDpv3.getDayWv();
-    //注意：setIntegerNeedFormat(String integerFormat)方法 integerFormat 中必须包含并且只能包含   一个格式说明符（format specifier）
+    //注意：setIntegerNeedFormat(String integerFormat)方法 integerFormat 中必须包含并且只能包含一个格式说明符（format specifier）
     //更多请查看该方法参数说明
     yearWv3.setIntegerNeedFormat("%d年");
     monthWv3.setIntegerNeedFormat("%d月");
@@ -324,7 +324,7 @@ implementation 'com.github.zyyoona7:pickerview:1.0.0'
     threeLinkageOpv.setOnOptionsSelectedListener(new OptionsPickerView.OnOptionsSelectedListener<CityEntity>() {
         @Override
         public void onOptionsSelected(int opt1Pos, @Nullable CityEntity opt1Data, int opt2Pos,
-                                          @Nullable CityEntity opt2Data, int opt3Pos, @Nullable CityEntity opt3Data) {
+                                      @Nullable CityEntity opt2Data, int opt3Pos, @Nullable CityEntity opt3Data) {
             if (opt1Data == null || opt2Data == null || opt3Data == null) {
                 return;
             }
