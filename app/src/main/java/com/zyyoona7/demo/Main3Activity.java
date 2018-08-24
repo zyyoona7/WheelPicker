@@ -67,6 +67,18 @@ public class Main3Activity extends AppCompatActivity {
         defaultDpv.setTextSize(24, true);
         defaultDpv.setLabelTextSize(20);
 
+        DatePickerView yearMonthDpv=findViewById(R.id.dpv_year_month);
+        yearMonthDpv.setTextSize(24,true);
+        yearMonthDpv.hideDayItem();
+        defaultDpv.setLabelTextSize(20);
+
+        yearMonthDpv.setOnDateSelectedListener(new DatePickerView.OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(DatePickerView datePickerView, int year, int month, int day, @Nullable Date date) {
+                Toast.makeText(Main3Activity.this,"选中："+year+"-"+month,Toast.LENGTH_SHORT).show();
+            }
+        });
+
         DatePickerView customDpv1 = findViewById(R.id.dpv_custom_1);
         customDpv1.setTextSize(24, true);
         customDpv1.setShowLabel(false);

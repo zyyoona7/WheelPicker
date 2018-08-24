@@ -72,13 +72,22 @@
             app:layout_constraintTop_toBottomOf="@id/tv_datePickerView" />
 
         <com.zyyoona7.picker.DatePickerView
-            android:id="@+id/dpv_custom_1"
+            android:id="@+id/dpv_year_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dpv_default" />
+
+        <com.zyyoona7.picker.DatePickerView
+            android:id="@+id/dpv_custom_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dpv_year_month" />
 
         <com.zyyoona7.picker.DatePickerView
             android:id="@+id/dpv_custom_2"
