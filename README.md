@@ -1,14 +1,16 @@
-# WheelPicker
+![](https://github.com/zyyoona7/WheelPicker/blob/master/perview/banner.png)
+
 ![](https://img.shields.io/badge/platform-android-brightgreen.svg)
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
 [![](https://img.shields.io/badge/pickerview-1.0.0-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
 [![](https://img.shields.io/badge/wheelview-1.0.1-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
 [![](https://img.shields.io/github/license/zyyoona7/WheelPicker.svg)](https://github.com/zyyoona7/WheelPicker#license)
-### WheelView 简介（Introduction）
+### 简介（Introduction）
 
-自定义实现 WheelView，滑动流畅、功能齐全、用法简单、高度自定义。
+自定义 View 实现滑动流畅、功能齐全、用法简单、高度自定义的 WheelView，并在 WheelView 基础之上封装了常用的日期选择器（包括年、月、日 WheelView）、选项选择器。
 
-### WheelView 特性（Features）
+### 特性（Features）
+#### 1. WheelView Features
 
 - 如丝般顺滑的滚动效果，无论快速滚动还是缓慢滚动
 - 灵活数据设置，通过泛型设置数据类型，灵活、安全
@@ -22,7 +24,19 @@
 - 支持设置显示条目、设置字体大小、设置字体、设置行间距等常规操作
 - 更多自定义操作尽在其中
 
-### WheelView 效果图（Preview）
+#### 2. DatePickerView Features
+
+- 支持年月日，年月，月日的日期选择
+- 支持格式化数据，可以为 item 显示指定格式化的数据
+- 拥有 WheelView 特性，可单独设置每个 WheelView 的效果
+
+#### 3. OptionsPickerView Features
+
+- 支持联动包括二级联动和三级联动，设置数据时把控严格，避免滚动时数据异常
+
+### 效果图（Preview）
+
+#### WheelView Preview
 
 ![WheelView 1](https://github.com/zyyoona7/WheelPicker/blob/master/perview/wheel_view_1.gif)
 ①  ②
@@ -32,8 +46,24 @@
 ③  ④
 ![WheelView 4](https://github.com/zyyoona7/WheelPicker/blob/master/perview/wheel_view_4.gif)
 
-### WheelView 使用（Usage）
+#### DatePickerView Preview
+
+![DatePickerView_1](https://github.com/zyyoona7/WheelPicker/blob/master/perview/date_picker_view_1.gif)
+①  ②
+![DatePickerView_2](https://github.com/zyyoona7/WheelPicker/blob/master/perview/date_picker_view_2.gif)
+
+#### OptionsPickerView Preview
+
+![OptionsPickerView_1](https://github.com/zyyoona7/WheelPicker/blob/master/perview/options_picker_view_1.gif)
+①  ②
+![OptionsPickerView_2](https://github.com/zyyoona7/WheelPicker/blob/master/perview/options_picker_view_2.gif)
+
+### 使用（Usage）
+
+#### WheelView Usage
+
 #### 1.依赖（dependency）
+
 ```groovy
 implementation 'com.github.zyyoona7:wheelview:1.0.1'
 ```
@@ -199,9 +229,49 @@ cityWv.setData(cityData);
 ```
 如果条件都不满足的话会默认执行 toString() 方法，所以理论上也可以在实体的 toString() 方法返回你想展示的字段，但是**不推荐**，毕竟 toString() 方法以我个人的习惯都是输出 CityEntity 那种的信息~你也可能输出别的信息。
 
+#### PickerView Usage
+
+```groovy
+implementation 'com.github.zyyoona7:pickerview:1.0.0'
+```
+
+#### DatePickerView Usage
+
+在布局文件中：
+```xml
+    <com.zyyoona7.picker.DatePickerView
+        android:id="@+id/dpv_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_datePickerView" />
+```
+
+代码中：
+```java
+    DatePickerView defaultDpv = findViewById(R.id.dpv_default);
+    defaultDpv.setTextSize(24, true);
+    defaultDpv.setLabelTextSize(20);
+    
+    //选中回调
+    defaultDpv.setOnDateSelectedListener(new DatePickerView.OnDateSelectedListener() {
+        @Override
+        public void onDateSelected(DatePickerView datePickerView, int year, int month, int day, @Nullable Date date) {
+            Toast.makeText(Main3Activity.this, "选中的日期：" + year + "-" + month + "-" + day, Toast.LENGTH_SHORT).show();
+        }
+    });
+```
+> 问：我想要每一项都加入年怎么写？
+
+> 答：简单。
+
 更多信息请阅读 [Wiki](https://github.com/zyyoona7/WheelPicker/wiki)
 
 ### 更新日志（Update Logs）
+
+#### WheelView Update Logs
 
 - **2018/08/23 发布 1.0.1 版本**
     - 规范命名，将方法名和属性名保持一致命名
@@ -225,6 +295,12 @@ cityWv.setData(cityData);
     - 滚动音效，3D 效果等
     - 增加自动调整字体大小以使得长文字显示完全（需手动开启）
     - 丰富的监听器
+    
+#### PickerView Update Logs
+
+- **2018/08/24 发布 1.0.0 版本**
+    - YearWheelView、MonthWheelView、DayWheelView 封装
+    - 日期选择器、选项选择器
 
 ### 感谢（Thanks）
 [**WheelPicker**](https://github.com/AigeStudio/WheelPicker)<br>
