@@ -263,11 +263,78 @@ implementation 'com.github.zyyoona7:pickerview:1.0.0'
         }
     });
 ```
-> 问：我想要每一项都加入年怎么写？
+> 问：我想要每一项都加入年字怎么写？
 
 > 答：简单。
 
-更多信息请阅读 [Wiki](https://github.com/zyyoona7/WheelPicker/wiki)
+**定制格式**
+
+我们需要先把自带显示年、月、日的 TextView 隐藏，然后设置格式化：
+
+```java
+    //隐藏年月日
+    customDpv3.setShowLabel(false);    
+
+    //获取年月日 WheelView
+    YearWheelView yearWv3 = customDpv3.getYearWv();
+    MonthWheelView monthWv3 = customDpv3.getMonthWv();
+    DayWheelView dayWv3 = customDpv3.getDayWv();
+    //注意：setIntegerNeedFormat(String integerFormat)方法 integerFormat 中必须包含并且只能包含   一个格式说明符（format specifier）
+    //更多请查看该方法参数说明
+    yearWv3.setIntegerNeedFormat("%d年");
+    monthWv3.setIntegerNeedFormat("%d月");
+    dayWv3.setIntegerNeedFormat("%02d日");
+```
+
+没错就是这么简单，而且回调内容依旧不变~更多操作请查看 [Main3Activity](https://github.com/zyyoona7/WheelPicker/blob/master/app/src/main/java/com/zyyoona7/demo/Main3Activity.java)
+
+#### OptionsPickerView
+
+布局文件中：
+
+```xml
+    <com.zyyoona7.picker.OptionsPickerView
+        android:id="@+id/opv_three_linkage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/opv_two_linkage"
+        android:background="#DCDCDC"/>
+```
+
+代码中：
+
+```java
+    final OptionsPickerView<CityEntity> threeLinkageOpv = findViewById(R.id.opv_three_linkage);
+    //设置数据
+    threeLinkageOpv.setLinkageData(p3List, c3List, d3List);
+    //定制样式
+    threeLinkageOpv.setVisibleItems(7);
+    threeLinkageOpv.setResetSelectedPosition(true);
+    threeLinkageOpv.setDrawSelectedRect(true);
+    threeLinkageOpv.setSelectedRectColor(Color.parseColor("#D3D3D3"));
+    threeLinkageOpv.setNormalItemTextColor(Color.parseColor("#808080"));
+    threeLinkageOpv.setTextSize(22f,true);
+    threeLinkageOpv.setSoundEffect(true);
+    threeLinkageOpv.setSoundEffectResource(R.raw.button_choose);
+
+    //设置选中回调
+    threeLinkageOpv.setOnOptionsSelectedListener(new OptionsPickerView.OnOptionsSelectedListener<CityEntity>() {
+        @Override
+        public void onOptionsSelected(int opt1Pos, @Nullable CityEntity opt1Data, int opt2Pos,
+                                          @Nullable CityEntity opt2Data, int opt3Pos, @Nullable CityEntity opt3Data) {
+            if (opt1Data == null || opt2Data == null || opt3Data == null) {
+                return;
+            }
+            Log.d(TAG, "onOptionsSelected: three Linkage op1Pos=" + opt1Pos + ",op1Data=" + opt1Data.getName() + ",op2Pos=" + opt2Pos
+                        + ",op2Data=" + opt2Data.getName() + ",op3Pos=" + opt3Pos + ",op3Data=" + opt3Data.getName());
+        }
+    });
+```
+
+更多请查看 [Main4Activity](https://github.com/zyyoona7/WheelPicker/blob/master/app/src/main/java/com/zyyoona7/demo/Main4Activity.java)
 
 ### 更新日志（Update Logs）
 
