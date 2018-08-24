@@ -1,7 +1,11 @@
 # WheelPicker
-
+![](https://img.shields.io/badge/platform-android-brightgreen.svg)
+[![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
+[![](https://img.shields.io/badge/pickerview-1.0.0-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
+[![](https://img.shields.io/badge/wheelview-1.0.1-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
+[![](https://img.shields.io/github/license/zyyoona7/WheelPicker.svg)](https://github.com/zyyoona7/WheelPicker#license)
 ### WheelView 简介（Introduction）
-[ ![Download](https://api.bintray.com/packages/zyyoona7/maven/wheelview/images/download.svg) ](https://bintray.com/zyyoona7/maven/wheelview/_latestVersion)
+(https://bintray.com/zyyoona7/maven/wheelview/_latestVersion)
 
 自定义实现 WheelView，滑动流畅、功能齐全、用法简单、高度自定义。
 
