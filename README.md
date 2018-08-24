@@ -5,7 +5,6 @@
 [![](https://img.shields.io/badge/wheelview-1.0.1-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
 [![](https://img.shields.io/github/license/zyyoona7/WheelPicker.svg)](https://github.com/zyyoona7/WheelPicker#license)
 ### WheelView 简介（Introduction）
-(https://bintray.com/zyyoona7/maven/wheelview/_latestVersion)
 
 自定义实现 WheelView，滑动流畅、功能齐全、用法简单、高度自定义。
 
