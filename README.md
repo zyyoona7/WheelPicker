@@ -340,6 +340,9 @@ MainActivity WheelView 相关代码：
 
 #### WheelView Update Logs
 
+- **2018/08/29 发布 1.0.2 版本**
+    - 修复 setSelectedItemPosition() 方法没有执行 onWheelSelected() 问题
+
 - **2018/08/23 发布 1.0.1 版本**
     - 规范命名，将方法名和属性名保持一致命名
     - 增加绘制选中区域，设置选中区域颜色
@@ -365,6 +368,9 @@ MainActivity WheelView 相关代码：
     
 #### PickerView Update Logs
 
+- **2.18/08/29 发布 1.0.1 版本**
+    - 同步 WheelView 版本
+   
 - **2018/08/24 发布 1.0.0 版本**
     - YearWheelView、MonthWheelView、DayWheelView 封装
     - 日期选择器、选项选择器
