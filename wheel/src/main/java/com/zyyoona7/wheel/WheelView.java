@@ -1686,6 +1686,10 @@ public class WheelView<T> extends View implements Runnable {
             if (mOnItemSelectedListener != null) {
                 mOnItemSelectedListener.onItemSelected(this, mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
             }
+
+            if (mOnWheelChangedListener != null) {
+                mOnWheelChangedListener.onWheelSelected(mSelectedItemPosition);
+            }
             invalidateIfYChanged();
         }
 

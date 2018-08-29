@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.zyyoona7.demo.entities.CityEntity;
 import com.zyyoona7.demo.utils.ParseHelper;
@@ -57,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Main2Activity.class);
                 startActivity(intent);
+//                int width=getResources().getDisplayMetrics().widthPixels;
+//                float density=getResources().getDisplayMetrics().density;
+//                int sp24Px= (int) WheelView.sp2px(24);
+//                float p1080=2.625f;
+//                float p768=2.0f;
+//                Toast.makeText(MainActivity.this,"px="+sp24Px+",width="+width+",ratio="+sp24Px*1.0f/width+",density="+density,Toast.LENGTH_LONG).show();
             }
         });
 
