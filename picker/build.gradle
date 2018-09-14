@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.2"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -23,6 +23,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        lintOptions {
+            abortOnError false
+        }
     }
 
 }
@@ -30,7 +34,7 @@ android {
 dependencies {
     compileOnly fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly 'com.android.support:appcompat-v7:27.1.1'
-    api project(':wheel')
+    api 'com.github.zyyoona7:wheelview:1.0.2'
 }
 
 publish {
@@ -41,7 +45,7 @@ publish {
     //项目名称 project name
     artifactId = 'pickerview'
     //版本号 version code
-    publishVersion = '1.0.1'
+    publishVersion = '1.0.2'
     //项目描述 description
     desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
     //项目网址链接 link
