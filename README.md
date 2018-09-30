@@ -231,8 +231,18 @@ MainActivity WheelView 相关代码：
 
 #### PickerView Usage
 
+root build.gradle 添加
 ```groovy
-    implementation 'com.github.zyyoona7:pickerview:1.0.2'
+allprojects {
+    repositories {
+        maven { url "https://dl.bintray.com/zyyoona7/maven/" }
+
+    }
+}
+```
+
+```groovy
+implementation 'com.github.zyyoona7:pickerview:1.0.2'
 ```
 
 #### DatePickerView Usage
