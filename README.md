@@ -2,8 +2,8 @@
 
 ![](https://img.shields.io/badge/platform-android-brightgreen.svg)
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
-[![](https://img.shields.io/badge/pickerview-1.0.2-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
-[![](https://img.shields.io/badge/wheelview-1.0.2-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
+[![](https://img.shields.io/badge/pickerview-1.0.4-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
+[![](https://img.shields.io/badge/wheelview-1.0.4-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
 [![](https://img.shields.io/github/license/zyyoona7/WheelPicker.svg)](https://github.com/zyyoona7/WheelPicker#license)
 ### 简介（Introduction）
 
@@ -65,7 +65,7 @@
 #### 1.依赖（dependency）
 
 ```groovy
-    implementation 'com.github.zyyoona7:wheelview:1.0.2'
+    implementation 'com.github.zyyoona7:wheelview:1.0.4'
 ```
 
 #### 2.基本用法（Basic Usage）
@@ -231,18 +231,8 @@ MainActivity WheelView 相关代码：
 
 #### PickerView Usage
 
-root build.gradle 添加
 ```groovy
-    allprojects {
-        repositories {
-            maven { url "https://dl.bintray.com/zyyoona7/maven/" }
-
-        }
-    }
-```
-
-```groovy
-    implementation 'com.github.zyyoona7:pickerview:1.0.2'
+    implementation 'com.github.zyyoona7:pickerview:1.0.4'
 ```
 
 #### DatePickerView Usage
@@ -349,7 +339,9 @@ root build.gradle 添加
 ### 更新日志（Update Logs）
 
 #### WheelView Update Logs
-
+- **2018/10/10 发布 1.0.4 版本**
+    - 在编写布局时可以实时预览
+    
 - **2018/08/29 发布 1.0.2 版本**
     - 修复 setSelectedItemPosition() 方法没有执行 onWheelSelected() 问题
 
@@ -377,15 +369,18 @@ root build.gradle 添加
     - 丰富的监听器
     
 #### PickerView Update Logs
-- **18/09/14 发布 1.0.2 版本**
-    -  修复 pickerview 引入失败问题
+- **18/10/10 发布 1.0.4 版本**
+    - 同步 wheelview 版本，pickerview 终于可以正常导入，只有 1.0.4 版本可用
     
-- **18/08/29 发布 1.0.1 版本**
-    - 同步 WheelView 版本
+- ~~**18/09/14 发布 1.0.2 版本**~~
+    -  ~~修复 pickerview 引入失败问题~~
+    
+- ~~**18/08/29 发布 1.0.1 版本**~~
+    - ~~同步 WheelView 版本~~
    
-- **2018/08/24 发布 1.0.0 版本**
-    - YearWheelView、MonthWheelView、DayWheelView 封装
-    - 日期选择器、选项选择器
+- ~~**2018/08/24 发布 1.0.0 版本**~~
+    - ~~YearWheelView、MonthWheelView、DayWheelView 封装~~
+    - ~~日期选择器、选项选择器~~
 
 ### 感谢（Thanks）
 [**WheelPicker**](https://github.com/AigeStudio/WheelPicker)<br>
