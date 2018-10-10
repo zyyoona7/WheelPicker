@@ -289,8 +289,10 @@ public class WheelView<T> extends View implements Runnable {
         mDrawRect = new Rect();
         mCamera = new Camera();
         mMatrix = new Matrix();
-        mSoundHelper = SoundHelper.obtain();
-        initDefaultVolume(context);
+        if (!isInEditMode()) {
+            mSoundHelper = SoundHelper.obtain();
+            initDefaultVolume(context);
+        }
         calculateTextSize();
         updateTextAlign();
     }
@@ -356,8 +358,6 @@ public class WheelView<T> extends View implements Runnable {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
         //Line Space算在了mItemHeight中
         int height;
         if (isCurved) {

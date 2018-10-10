@@ -103,6 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="平滑滚动"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sc_turn_on_cyclic" />
 
         <android.support.v7.widget.AppCompatSeekBar
@@ -246,6 +247,7 @@
             android:layout_marginTop="10dp"
             android:text="弯曲（3D）效果"
             android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_set_line_spacing" />
 
         <android.support.v7.widget.SwitchCompat
@@ -324,6 +326,7 @@
             android:layout_marginTop="10dp"
             android:text="分割线"
             android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_set_curved_factor" />
 
         <android.support.v7.widget.SwitchCompat
