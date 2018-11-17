@@ -232,7 +232,7 @@ MainActivity WheelView 相关代码：
 #### PickerView Usage
 
 ```groovy
-    implementation 'com.github.zyyoona7:pickerview:1.0.4'
+    implementation 'com.github.zyyoona7:pickerview:1.0.5'
 ```
 
 #### DatePickerView Usage
@@ -369,6 +369,9 @@ MainActivity WheelView 相关代码：
     - 丰富的监听器
     
 #### PickerView Update Logs
+- **18/11/17 发布 1.0.5 版本**
+    - 修复 YearWheelView 中设置年份范围时不包括结束年的问题
+    
 - **18/10/10 发布 1.0.4 版本**
     - 同步 wheelview 版本，pickerview 终于可以正常导入，只有 1.0.4 版本可用
     
