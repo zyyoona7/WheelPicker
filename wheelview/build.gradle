@@ -30,11 +30,13 @@ dependencies {
 version = "1.0.4"
 //JCenter上显示的路径 path
 group = "com.github.zyyoona7"
+//项目名称 project name
+androidArtifact { // 2
+    artifactId = "wheelview"
+}
 publish {
     //bintray.com 用户名/组织名 user/org name
     userOrg = 'zyyoona7'
-    //项目名称 project name
-    artifactId = 'wheelview'
     //项目描述 description
     desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
     //项目网址链接 link

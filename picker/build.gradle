@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 5
-        versionName "1.0.4"
+        versionCode 6
+        versionName "1.0.5"
 
     }
 
@@ -40,9 +40,13 @@ dependencies {
 }
 
 //版本号 version code
-version = "1.0.4"
+version = "1.0.5"
 //JCenter上显示的路径 path
 group = "com.github.zyyoona7"
+//项目名称 project name
+androidArtifact { // 2
+    artifactId = "pickerview"
+}
 publish {
     //bintray.com 用户名/组织名 user/org name
     userOrg = 'zyyoona7'
