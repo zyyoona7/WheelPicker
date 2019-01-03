@@ -29,7 +29,7 @@ public class Main2Activity extends AppCompatActivity {
         }
         wheelView.setData(list);
 
-        AppCompatButton showDataBtn=findViewById(R.id.btn_showSelectedData);
+        final AppCompatButton showDataBtn=findViewById(R.id.btn_showSelectedData);
         showDataBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +99,28 @@ public class Main2Activity extends AppCompatActivity {
             public void onItemSelected(WheelView<Integer> wheelView, Integer data, int position) {
                 currentItemPositionTv.setText(getString(R.string.currentItemPositionValue,position+""));
                 currentItemDataTv.setText(getString(R.string.currentItemDataValue,wheelView.getSelectedItemData()+""));
+            }
+        });
+
+        wheelView.setOnWheelChangedListener(new WheelView.OnWheelChangedListener() {
+            @Override
+            public void onWheelScroll(int scrollOffsetY) {
+
+            }
+
+            @Override
+            public void onWheelItemChanged(int oldPosition, int newPosition) {
+
+            }
+
+            @Override
+            public void onWheelSelected(int position) {
+
+            }
+
+            @Override
+            public void onWheelScrollStateChanged(int state) {
+                showDataBtn.setEnabled(state==WheelView.SCROLL_STATE_IDLE);
             }
         });
     }
