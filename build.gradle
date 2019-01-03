@@ -10,7 +10,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0-beta04'
+        classpath 'com.android.tools.build:gradle:3.3.0-rc03'
         //bintray release插件
         classpath "guru.stefma.bintrayrelease:bintrayrelease:1.1.1"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'

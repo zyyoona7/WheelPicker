@@ -13,6 +13,13 @@
         android:orientation="vertical"
         android:paddingBottom="50dp">
 
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="显示选中的值"
+            android:id="@+id/btn_showSelectedData"/>
+
         <com.zyyoona7.wheel.WheelView
             android:id="@+id/wheelview"
             android:layout_width="wrap_content"
@@ -105,6 +112,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_currentItemPosition"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_currentItemData"
             android:textSize="16sp"
             android:layout_marginTop="10dp"/>
         <android.support.v7.widget.AppCompatTextView

@@ -2,7 +2,10 @@ package com.zyyoona7.demo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
+import android.view.View;
+import android.widget.Toast;
 
 
 import com.zyyoona7.wheel.WheelView;
@@ -25,6 +28,14 @@ public class Main2Activity extends AppCompatActivity {
             list.add(i);
         }
         wheelView.setData(list);
+
+        AppCompatButton showDataBtn=findViewById(R.id.btn_showSelectedData);
+        showDataBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Main2Activity.this,"选中的值为："+wheelView.getSelectedItemData(),Toast.LENGTH_SHORT).show();
+            }
+        });
 
         AppCompatTextView textSizeTv=findViewById(R.id.tv_text_size);
         textSizeTv.setText(getString(R.string.textSizeValue,wheelView.getTextSize()+""));
@@ -52,6 +63,8 @@ public class Main2Activity extends AppCompatActivity {
         visibleItemsTv.setText(getString(R.string.visibleItemsValue,wheelView.getVisibleItems()+""));
         final AppCompatTextView currentItemPositionTv=findViewById(R.id.tv_currentItemPosition);
         currentItemPositionTv.setText(getString(R.string.currentItemPositionValue,wheelView.getSelectedItemPosition()+""));
+        final AppCompatTextView currentItemDataTv=findViewById(R.id.tv_currentItemData);
+        currentItemDataTv.setText(getString(R.string.currentItemDataValue,wheelView.getSelectedItemData()+""));
         AppCompatTextView showDividerTv=findViewById(R.id.tv_showDivider);
         showDividerTv.setText(getString(R.string.showDividerValue,wheelView.isShowDivider()+""));
         AppCompatTextView dividerTypeTv=findViewById(R.id.tv_dividerType);
@@ -85,6 +98,7 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onItemSelected(WheelView<Integer> wheelView, Integer data, int position) {
                 currentItemPositionTv.setText(getString(R.string.currentItemPositionValue,position+""));
+                currentItemDataTv.setText(getString(R.string.currentItemDataValue,wheelView.getSelectedItemData()+""));
             }
         });
     }

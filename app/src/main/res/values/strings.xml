@@ -12,6 +12,7 @@
 
     <string name="visibleItemsValue">可见item数为：%s</string>
     <string name="currentItemPositionValue">当前选中下标为：%s</string>
+    <string name="currentItemDataValue">当前选中值为：%s</string>
     <string name="cyclicValue">是否循环滚动：%s</string>
 
     <string name="showDividerValue">是否显示分割线：%s</string>
