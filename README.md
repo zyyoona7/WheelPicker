@@ -2,8 +2,8 @@
 
 ![](https://img.shields.io/badge/platform-android-brightgreen.svg)
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
-[![](https://img.shields.io/badge/pickerview-1.0.4-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
-[![](https://img.shields.io/badge/wheelview-1.0.4-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
+[![](https://img.shields.io/badge/pickerview-1.0.6-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
+[![](https://img.shields.io/badge/wheelview-1.0.5-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
 [![](https://img.shields.io/github/license/zyyoona7/WheelPicker.svg)](https://github.com/zyyoona7/WheelPicker#license)
 ### 简介（Introduction）
 
@@ -65,7 +65,7 @@
 #### 1.依赖（dependency）
 
 ```groovy
-    implementation 'com.github.zyyoona7:wheelview:1.0.4'
+    implementation 'com.github.zyyoona7:wheelview:1.0.5'
 ```
 
 #### 2.基本用法（Basic Usage）
@@ -232,7 +232,7 @@ MainActivity WheelView 相关代码：
 #### PickerView Usage
 
 ```groovy
-    implementation 'com.github.zyyoona7:pickerview:1.0.5'
+    implementation 'com.github.zyyoona7:pickerview:1.0.6'
 ```
 
 #### DatePickerView Usage
@@ -339,6 +339,9 @@ MainActivity WheelView 相关代码：
 ### 更新日志（Update Logs）
 
 #### WheelView Update Logs
+- **2019/02/22 发布 1.0.5 版本**
+    - 修复 [#5](https://github.com/zyyoona7/WheelPicker/issues/5)、[#7](https://github.com/zyyoona7/WheelPicker/issues/7)
+
 - **2018/10/10 发布 1.0.4 版本**
     - 在编写布局时可以实时预览
     
@@ -369,16 +372,19 @@ MainActivity WheelView 相关代码：
     - 丰富的监听器
     
 #### PickerView Update Logs
-- **18/11/17 发布 1.0.5 版本**
+- **2019/02/22 发布 1.0.6 版本**
+    - 同步 wheelview 版本
+    
+- **2018/11/17 发布 1.0.5 版本**
     - 修复 YearWheelView 中设置年份范围时不包括结束年的问题
     
-- **18/10/10 发布 1.0.4 版本**
+- **2018/10/10 发布 1.0.4 版本**
     - 同步 wheelview 版本，pickerview 终于可以正常导入，只有 1.0.4 版本可用
     
-- ~~**18/09/14 发布 1.0.2 版本**~~
+- ~~**2018/09/14 发布 1.0.2 版本**~~
     -  ~~修复 pickerview 引入失败问题~~
     
-- ~~**18/08/29 发布 1.0.1 版本**~~
+- ~~**2018/08/29 发布 1.0.1 版本**~~
     - ~~同步 WheelView 版本~~
    
 - ~~**2018/08/24 发布 1.0.0 版本**~~
