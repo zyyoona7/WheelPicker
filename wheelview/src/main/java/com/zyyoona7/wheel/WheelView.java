@@ -24,12 +24,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.widget.OverScroller;
+import android.widget.Scroller;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -177,7 +178,7 @@ public class WheelView<T> extends View implements Runnable {
     private VelocityTracker mVelocityTracker;
     private int mMaxFlingVelocity;
     private int mMinFlingVelocity;
-    private OverScroller mOverScroller;
+    private Scroller mScroller;
 
     //最小滚动距离，上边界
     private int mMinScrollY;
@@ -285,7 +286,7 @@ public class WheelView<T> extends View implements Runnable {
         ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
         mMaxFlingVelocity = viewConfiguration.getScaledMaximumFlingVelocity();
         mMinFlingVelocity = viewConfiguration.getScaledMinimumFlingVelocity();
-        mOverScroller = new OverScroller(context);
+        mScroller = new Scroller(context);
         mDrawRect = new Rect();
         mCamera = new Camera();
         mMatrix = new Matrix();
@@ -857,9 +858,9 @@ public class WheelView<T> extends View implements Runnable {
                     getParent().requestDisallowInterceptTouchEvent(true);
                 }
                 //如果未滚动完成，强制滚动完成
-                if (!mOverScroller.isFinished()) {
+                if (!mScroller.isFinished()) {
                     //强制滚动完成
-                    mOverScroller.forceFinished(true);
+                    mScroller.forceFinished(true);
                     isForceFinishScroll = true;
                 }
                 mLastTouchY = event.getY();
@@ -890,9 +891,9 @@ public class WheelView<T> extends View implements Runnable {
                 float velocityY = mVelocityTracker.getYVelocity();
                 if (Math.abs(velocityY) > mMinFlingVelocity) {
                     //快速滑动
-                    mOverScroller.forceFinished(true);
+                    mScroller.forceFinished(true);
                     isFlingScroll = true;
-                    mOverScroller.fling(0, mScrollOffsetY, 0, (int) -velocityY, 0, 0,
+                    mScroller.fling(0, mScrollOffsetY, 0, (int) -velocityY, 0, 0,
                             mMinScrollY, mMaxScrollY);
                 } else {
                     int clickToCenterDistance = 0;
@@ -903,8 +904,15 @@ public class WheelView<T> extends View implements Runnable {
                     }
                     int scrollRange = clickToCenterDistance +
                             calculateDistanceToEndPoint((mScrollOffsetY + clickToCenterDistance) % mItemHeight);
-                    //平稳滑动
-                    mOverScroller.startScroll(0, mScrollOffsetY, 0, scrollRange);
+                    //大于最小值滚动值
+                    boolean isInMinRange=scrollRange<0 && mScrollOffsetY+scrollRange>=mMinScrollY;
+                    //小于最大滚动值
+                    boolean isInMaxRange=scrollRange>0 && mScrollOffsetY+scrollRange<=mMaxScrollY;
+                    if (isInMinRange||isInMaxRange){
+                        //在滚动范围之内再修正位置
+                        //平稳滑动
+                        mScroller.startScroll(0, mScrollOffsetY, 0, scrollRange);
+                    }
                 }
 
                 invalidateIfYChanged();
@@ -1006,8 +1014,8 @@ public class WheelView<T> extends View implements Runnable {
      * 强制滚动完成，直接停止
      */
     public void forceFinishScroll() {
-        if (!mOverScroller.isFinished()) {
-            mOverScroller.forceFinished(true);
+        if (!mScroller.isFinished()) {
+            mScroller.forceFinished(true);
         }
     }
 
@@ -1015,8 +1023,8 @@ public class WheelView<T> extends View implements Runnable {
      * 强制滚动完成，并且直接滚动到最终位置
      */
     public void abortFinishScroll() {
-        if (!mOverScroller.isFinished()) {
-            mOverScroller.abortAnimation();
+        if (!mScroller.isFinished()) {
+            mScroller.abortAnimation();
         }
     }
 
@@ -1044,7 +1052,7 @@ public class WheelView<T> extends View implements Runnable {
     @Override
     public void run() {
         //停止滚动更新当前下标
-        if (mOverScroller.isFinished() && !isForceFinishScroll && !isFlingScroll) {
+        if (mScroller.isFinished() && !isForceFinishScroll && !isFlingScroll) {
             if (mItemHeight == 0) return;
             //滚动状态停止
             if (mOnWheelChangedListener != null) {
@@ -1069,9 +1077,9 @@ public class WheelView<T> extends View implements Runnable {
             }
         }
 
-        if (mOverScroller.computeScrollOffset()) {
+        if (mScroller.computeScrollOffset()) {
             int oldY = mScrollOffsetY;
-            mScrollOffsetY = mOverScroller.getCurrY();
+            mScrollOffsetY = mScroller.getCurrY();
 
             if (oldY != mScrollOffsetY) {
                 if (mOnWheelChangedListener != null) {
@@ -1084,7 +1092,7 @@ public class WheelView<T> extends View implements Runnable {
             //滚动完成后，根据是否为快速滚动处理是否需要调整最终位置
             isFlingScroll = false;
             //快速滚动后需要调整滚动完成后的最终位置，重新启动scroll滑动到中心位置
-            mOverScroller.startScroll(0, mScrollOffsetY, 0, calculateDistanceToEndPoint(mScrollOffsetY % mItemHeight));
+            mScroller.startScroll(0, mScrollOffsetY, 0, calculateDistanceToEndPoint(mScrollOffsetY % mItemHeight));
             invalidateIfYChanged();
             ViewCompat.postOnAnimation(this, this);
         }
@@ -1674,7 +1682,7 @@ public class WheelView<T> extends View implements Runnable {
 
         if (isSmoothScroll) {
             //如果是平滑滚动并且之前的Scroll滚动完成
-            mOverScroller.startScroll(0, mScrollOffsetY, 0, itemDistance,
+            mScroller.startScroll(0, mScrollOffsetY, 0, itemDistance,
                     smoothDuration > 0 ? smoothDuration : DEFAULT_SCROLL_DURATION);
             invalidateIfYChanged();
             ViewCompat.postOnAnimation(this, this);
