@@ -11,6 +11,8 @@ import android.support.v7.widget.AppCompatSeekBar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.zyyoona7.demo.entities.CityEntity;
 import com.zyyoona7.demo.utils.ParseHelper;
@@ -182,6 +184,25 @@ public class Main4Activity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(opt3Index)) {
                     threeLinkageOpv.setOpt3SelectedPosition(Integer.parseInt(opt3Index), smoothCb.isChecked(), smoothDurationSb.getProgress());
                 }
+            }
+        });
+
+        Button dialogBtn=findViewById(R.id.btn_dialog);
+        dialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CityPickerDialogFragment.newInstance()
+                        .setOnSelectedListener(new OptionsPickerView.OnOptionsSelectedListener<CityEntity>() {
+                            @Override
+                            public void onOptionsSelected(int opt1Pos, @Nullable CityEntity opt1Data,
+                                                          int opt2Pos, @Nullable CityEntity opt2Data,
+                                                          int opt3Pos, @Nullable CityEntity opt3Data) {
+                                Toast.makeText(Main4Activity.this,
+                                        opt1Data.getWheelText()+","+opt2Data.getWheelText()+","+opt3Data.getWheelText(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .show(getSupportFragmentManager());
             }
         });
     }

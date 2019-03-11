@@ -12,13 +12,23 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
+        <Button
+            android:id="@+id/btn_dialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="城市选择框"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.zyyoona7.picker.OptionsPickerView
             android:id="@+id/opv_first"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/btn_dialog" />
 
         <com.zyyoona7.picker.OptionsPickerView
             android:id="@+id/opv_second"
@@ -43,10 +53,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:background="#DCDCDC"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/opv_two_linkage"
-            android:background="#DCDCDC"/>
+            app:layout_constraintTop_toBottomOf="@id/opv_two_linkage" />
 
         <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/cb_smooth"
@@ -61,8 +71,8 @@
             android:id="@+id/sb_smooth_duration"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             app:layout_constraintBottom_toBottomOf="@id/cb_smooth"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/cb_smooth"

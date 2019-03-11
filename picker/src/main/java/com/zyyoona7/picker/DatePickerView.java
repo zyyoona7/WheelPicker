@@ -30,7 +30,7 @@ import java.util.Locale;
  * @version v1.0.0
  * @since 2018/8/21.
  */
-public class DatePickerView extends LinearLayout implements WheelView.OnItemSelectedListener<Integer> {
+public class DatePickerView extends LinearLayout implements WheelView.OnItemSelectedListener<Integer>, WheelView.OnWheelChangedListener {
 
     private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-M-d", Locale.getDefault());
     private YearWheelView mYearWv;
@@ -41,6 +41,7 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
     private AppCompatTextView mDayTv;
 
     private OnDateSelectedListener mOnDateSelectedListener;
+    private OnPickerScrollStateChangedListener mOnPickerScrollStateChangedListener;
 
     public DatePickerView(Context context) {
         this(context, null);
@@ -60,6 +61,10 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
         mYearWv.setOnItemSelectedListener(this);
         mMonthWv.setOnItemSelectedListener(this);
         mDayWv.setOnItemSelectedListener(this);
+
+        mYearWv.setOnWheelChangedListener(this);
+        mMonthWv.setOnWheelChangedListener(this);
+        mDayWv.setOnWheelChangedListener(this);
 
         mYearTv = findViewById(R.id.tv_year);
         mMonthTv = findViewById(R.id.tv_month);
@@ -710,6 +715,14 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
     }
 
     /**
+     * 设置滚动状态变化监听
+     * @param listener 滚动状态变化监听器
+     */
+    public void setOnPickerScrollStateChangedListener(OnPickerScrollStateChangedListener listener){
+        mOnPickerScrollStateChangedListener=listener;
+    }
+
+    /**
      * 获取年份 WheelView
      *
      * @return 年份 WheelView
@@ -761,6 +774,28 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
      */
     public AppCompatTextView getDayTv() {
         return mDayTv;
+    }
+
+    @Override
+    public void onWheelScroll(int scrollOffsetY) {
+
+    }
+
+    @Override
+    public void onWheelItemChanged(int oldPosition, int newPosition) {
+
+    }
+
+    @Override
+    public void onWheelSelected(int position) {
+
+    }
+
+    @Override
+    public void onWheelScrollStateChanged(int state) {
+        if (mOnPickerScrollStateChangedListener != null) {
+            mOnPickerScrollStateChangedListener.onScrollStateChanged(state);
+        }
     }
 
     /**
