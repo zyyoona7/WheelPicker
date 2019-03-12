@@ -232,7 +232,7 @@ MainActivity WheelView 相关代码：
 #### PickerView Usage
 
 ```groovy
-    implementation 'com.github.zyyoona7:pickerview:1.0.6'
+    implementation 'com.github.zyyoona7:pickerview:1.0.7'
 ```
 
 #### DatePickerView Usage
