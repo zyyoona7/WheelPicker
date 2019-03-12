@@ -40,7 +40,7 @@ dependencies {
 }
 
 //版本号 version code
-version = "1.0.6"
+version = "1.0.7"
 //JCenter上显示的路径 path
 group = "com.github.zyyoona7"
 //项目名称 project name
