@@ -2,7 +2,7 @@
 
 ![](https://img.shields.io/badge/platform-android-brightgreen.svg)
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
-[![](https://img.shields.io/badge/pickerview-1.0.6-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
+[![](https://img.shields.io/badge/pickerview-1.0.7-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
 [![](https://img.shields.io/badge/wheelview-1.0.5-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
 [![](https://img.shields.io/github/license/zyyoona7/WheelPicker.svg)](https://github.com/zyyoona7/WheelPicker#license)
 ### 简介（Introduction）
@@ -372,6 +372,9 @@ MainActivity WheelView 相关代码：
     - 丰富的监听器
     
 #### PickerView Update Logs
+- **2019/03/12 发布 1.0.7 版本**
+    - 增加滚动状态监听
+    
 - **2019/02/22 发布 1.0.6 版本**
     - 同步 wheelview 版本
     
