@@ -382,6 +382,7 @@ public class WheelView<T> extends View implements Runnable {
         mDrawRect.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
         mCenterX = mDrawRect.centerX();
         mCenterY = mDrawRect.centerY();
+        // TODO: 2019-05-23 通过增加上下限制可以实现扩大选中条目区域
         mSelectedItemTopLimit = mCenterY - mItemHeight / 2;
         mSelectedItemBottomLimit = mCenterY + mItemHeight / 2;
         mClipLeft = getPaddingLeft();
@@ -572,6 +573,7 @@ public class WheelView<T> extends View implements Runnable {
      */
     private void clipAndDraw2DText(Canvas canvas, String text, int clipTop, int clipBottom,
                                    int item2CenterOffsetY, int centerToBaselineY) {
+        // TODO: 2019-05-23 增加和3d效果一样的字体大小缩放
         canvas.save();
         canvas.clipRect(mClipLeft, clipTop, mClipRight, clipBottom);
         canvas.drawText(text, 0, text.length(), mStartX, mCenterY + item2CenterOffsetY - centerToBaselineY, mPaint);

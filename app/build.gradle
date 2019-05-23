@@ -26,8 +26,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "com.google.code.gson:gson:2.8.5"
-//    implementation project(':picker')
-    implementation 'com.github.zyyoona7:pickerview:1.0.7'
+    implementation project(':picker')
+//    implementation 'com.github.zyyoona7:pickerview:1.0.7'
     implementation 'com.github.zyyoona7:EasyDialog:1.1.4'
 
 }
