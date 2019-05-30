@@ -320,9 +320,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        AppCompatButton monoBtn=findViewById(R.id.btn_typeface_mono);
         AppCompatButton mediumBtn=findViewById(R.id.btn_typeface_medium);
         AppCompatButton regularBtn=findViewById(R.id.btn_typeface_regular);
         AppCompatButton lightBtn=findViewById(R.id.btn_typeface_light);
+        monoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wheelView.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/Digital_7_Mono.ttf"));
+            }
+        });
         mediumBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

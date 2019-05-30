@@ -422,14 +422,24 @@
             app:layout_constraintTop_toBottomOf="@id/btn_set_divider_padding" />
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_typeface_mono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Mono"
+            app:layout_constraintEnd_toStartOf="@id/btn_typeface_medium"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_set_typeface" />
+
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_typeface_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="medium"
             app:layout_constraintEnd_toStartOf="@id/btn_typeface_regular"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_typeface_mono"
             app:layout_constraintTop_toBottomOf="@id/tv_set_typeface" />
 
         <android.support.v7.widget.AppCompatButton
