@@ -10,9 +10,9 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="50dp"
+        android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        android:paddingStart="10dp">
+        android:paddingBottom="50dp">
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_go_date_picker_view"
@@ -24,6 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_go_options_picker_view"
             android:layout_width="0dp"
@@ -34,6 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_go_date_picker_view" />
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_go_custom_attrs"
             android:layout_width="0dp"
@@ -110,8 +112,8 @@
             android:id="@+id/sb_smooth_duration"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             app:layout_constraintBottom_toBottomOf="@id/cb_smooth"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/cb_smooth"
@@ -160,8 +162,8 @@
             android:id="@+id/btn_set_align"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:text="设置对齐"
             app:layout_constraintBottom_toBottomOf="@id/rg_align"
             app:layout_constraintStart_toEndOf="@id/rg_align"
@@ -294,8 +296,8 @@
             android:id="@+id/btn_set_curved_arc_direction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:text="设置弯曲（3D）圆弧偏移效果"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -367,8 +369,8 @@
             android:id="@+id/btn_set_divider_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:text="设置分割线类型"
             app:layout_constraintBottom_toBottomOf="@id/rg_divider_type"
             app:layout_constraintStart_toEndOf="@id/rg_divider_type"
@@ -410,6 +412,44 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_set_divider_padding" />
 
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_set_typeface"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="设置字体"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_set_divider_padding" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_typeface_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="medium"
+            app:layout_constraintEnd_toStartOf="@id/btn_typeface_regular"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_set_typeface" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_typeface_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="regular"
+            app:layout_constraintStart_toEndOf="@id/btn_typeface_medium"
+            app:layout_constraintEnd_toStartOf="@id/btn_typeface_light"
+            app:layout_constraintTop_toBottomOf="@id/tv_set_typeface" />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_typeface_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="light"
+            app:layout_constraintStart_toEndOf="@id/btn_typeface_regular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_set_typeface" />
         <com.zyyoona7.wheel.WheelView
             android:id="@+id/wv_city"
             android:layout_width="wrap_content"
@@ -417,29 +457,28 @@
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_set_divider_padding"
+            app:layout_constraintTop_toBottomOf="@id/btn_typeface_medium"
 
-            app:wv_textSize="24sp"
-            app:wv_textAlign="center"
-            app:wv_textBoundaryMargin="10dp"
-            app:wv_lineSpacing="10dp"
-            app:wv_visibleItems="6"
-            app:wv_selectedItemPosition="4"
             app:wv_curved="true"
-            app:wv_normalItemTextColor="@color/colorPrimaryDark"
-            app:wv_selectedItemTextColor="@color/colorPrimary"
-            app:wv_cyclic="true"
-            app:wv_showDivider="true"
-            app:wv_dividerColor="#e0f2f1"
-            app:wv_dividerHeight="0.5dp"
-            app:wv_dividerType="fill"
-            app:wv_dividerPaddingForWrap="10dp"
             app:wv_curvedArcDirection="left"
             app:wv_curvedArcDirectionFactor="0.5"
             app:wv_curvedRefractRatio="0.8"
-
+            app:wv_cyclic="true"
+            app:wv_dividerColor="#e0f2f1"
+            app:wv_dividerHeight="0.5dp"
+            app:wv_dividerPaddingForWrap="10dp"
+            app:wv_dividerType="fill"
             app:wv_drawSelectedRect="true"
-            app:wv_selectedRectColor="#aebfbe"/>
+            app:wv_lineSpacing="10dp"
+            app:wv_normalItemTextColor="@color/colorPrimaryDark"
+            app:wv_selectedItemPosition="4"
+            app:wv_selectedItemTextColor="@color/colorPrimary"
+            app:wv_selectedRectColor="#aebfbe"
+            app:wv_showDivider="true"
+            app:wv_textAlign="center"
+            app:wv_textBoundaryMargin="10dp"
+            app:wv_textSize="24sp"
+            app:wv_visibleItems="6" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v4.widget.NestedScrollView>

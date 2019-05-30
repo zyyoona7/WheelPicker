@@ -1,5 +1,6 @@
 package com.zyyoona7.demo;
 
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
@@ -123,5 +124,6 @@ public class Main2Activity extends AppCompatActivity {
                 showDataBtn.setEnabled(state==WheelView.SCROLL_STATE_IDLE);
             }
         });
+        wheelView.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/pingfang_medium.ttf"));
     }
 }

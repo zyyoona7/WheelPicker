@@ -1,6 +1,7 @@
 package com.zyyoona7.demo;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -316,6 +317,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 wheelView.setDividerPaddingForWrap(paddingSb.getProgress());
+            }
+        });
+
+        AppCompatButton mediumBtn=findViewById(R.id.btn_typeface_medium);
+        AppCompatButton regularBtn=findViewById(R.id.btn_typeface_regular);
+        AppCompatButton lightBtn=findViewById(R.id.btn_typeface_light);
+        mediumBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wheelView.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/pingfang_medium.ttf"));
+            }
+        });
+        regularBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wheelView.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/pingfang_regular.ttf"));
+            }
+        });
+        lightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wheelView.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/pingfang_light.ttf"));
             }
         });
 
