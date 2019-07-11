@@ -339,6 +339,13 @@ MainActivity WheelView 相关代码：
 ### 更新日志（Update Logs）
 
 #### WheelView Update Logs
+
+- **2019/07/11 发布 1.0.6 版本**
+  - 修复 [#18](https://github.com/zyyoona7/WheelPicker/issues/18) 的问题
+  - 增加 [#6](https://github.com/zyyoona7/WheelPicker/issues/6) 新功能，在非 3D 的情况下也可以设置选中字体和非选中字体的大小，通过 setRefractRatio() 方法设置，并且标记  ```wv_curvedRefractRatio``` 属性和 setCurvedRefractRatio() 过时，会在新版本删除这两个方法
+  - 增加扩大选中区域的间距，通过 ``` wv_dividerOffset``` 属性设置偏移，原理是扩大分割线和选中区域的上下偏移距离来实现看起来的间距扩大效果，并未真正的修改行间距
+  - 增加 [#12](https://github.com/zyyoona7/WheelPicker/issues/12) 新功能，可以设置选中条目字体加粗，其他条目不会加粗操作，通过 setTypeface(typeface,true) 方法设置，详细信息请看方法注释
+
 - **2019/02/22 发布 1.0.5 版本**
     - 修复 [#5](https://github.com/zyyoona7/WheelPicker/issues/5)、[#7](https://github.com/zyyoona7/WheelPicker/issues/7)
 
@@ -372,24 +379,29 @@ MainActivity WheelView 相关代码：
     - 丰富的监听器
     
 #### PickerView Update Logs
+
+- **2019/07/11 发布 1.0.8 版本**
+  - 调整包结构，将所有 pickerview 的监听器放入 listener 包中
+  - 重构 DatePickerView 代码，新增 BaseDatePickerView 可以更加灵活的定制 DatePickerView 的样式，只需要继承 BaseDatePickerView 并实现抽象方法即可（详情请看 Demo 中的 [CustomDatePickerView](https://github.com/zyyoona7/WheelPicker/blob/master/app/src/main/java/com/zyyoona7/demo/CustomDatePickerView.java)）
+  - 调整 OnDateSelectedListener 中 onDateSelected() 方法的第一个参数类型，由原来的 DatePickerView 改成 BaseDatePickerVIew
 - **2019/03/12 发布 1.0.7 版本**
     - 增加滚动状态监听
-    
+
 - **2019/02/22 发布 1.0.6 版本**
     - 同步 wheelview 版本
-    
+
 - **2018/11/17 发布 1.0.5 版本**
     - 修复 YearWheelView 中设置年份范围时不包括结束年的问题
-    
+
 - **2018/10/10 发布 1.0.4 版本**
     - 同步 wheelview 版本，pickerview 终于可以正常导入，只有 1.0.4 版本可用
-    
+
 - ~~**2018/09/14 发布 1.0.2 版本**~~
     -  ~~修复 pickerview 引入失败问题~~
-    
+
 - ~~**2018/08/29 发布 1.0.1 版本**~~
     - ~~同步 WheelView 版本~~
-   
+
 - ~~**2018/08/24 发布 1.0.0 版本**~~
     - ~~YearWheelView、MonthWheelView、DayWheelView 封装~~
     - ~~日期选择器、选项选择器~~
