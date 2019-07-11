@@ -2,12 +2,16 @@
 
 ![](https://img.shields.io/badge/platform-android-brightgreen.svg)
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
-[![](https://img.shields.io/badge/pickerview-1.0.7-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
-[![](https://img.shields.io/badge/wheelview-1.0.5-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
+[![](https://img.shields.io/badge/pickerview-1.0.8-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
+[![](https://img.shields.io/badge/wheelview-1.0.6-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
 [![](https://img.shields.io/github/license/zyyoona7/WheelPicker.svg)](https://github.com/zyyoona7/WheelPicker#license)
 ### 简介（Introduction）
 
 自定义 View 实现滑动流畅、功能齐全、用法简单、高度自定义的 WheelView，并在 WheelView 基础之上封装了常用的日期选择器（包括年、月、日 WheelView）、选项选择器。
+
+### 版本说明
+
+2019/07/11 发布了 pickerview 1.0.8 版本和 wheelview 1.0.6 版本，其中 pickerview 对包结构有所调整，升级时请先阅读[更新日志](https://github.com/zyyoona7/WheelPicker#pickerview-update-logs)，wheelview 也增加了一些[新功能](https://github.com/zyyoona7/WheelPicker#wheelview-update-logs)，欢迎大家尝鲜~感谢大家反馈的问题，如有新问题也请及时提 issue。
 
 ### 特性（Features）
 #### 1. WheelView Features
@@ -65,7 +69,7 @@
 #### 1.依赖（dependency）
 
 ```groovy
-    implementation 'com.github.zyyoona7:wheelview:1.0.5'
+    implementation 'com.github.zyyoona7:wheelview:1.0.6'
 ```
 
 #### 2.基本用法（Basic Usage）
@@ -232,7 +236,7 @@ MainActivity WheelView 相关代码：
 #### PickerView Usage
 
 ```groovy
-    implementation 'com.github.zyyoona7:pickerview:1.0.7'
+    implementation 'com.github.zyyoona7:pickerview:1.0.8'
 ```
 
 #### DatePickerView Usage
