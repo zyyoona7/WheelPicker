@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: "guru.stefma.bintrayrelease"
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 28
@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 6
-        versionName "1.0.5"
+        versionCode 7
+        versionName "1.0.6"
 
     }
 
@@ -23,20 +23,18 @@ android {
 
 dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
-    api 'com.android.support:appcompat-v7:28.0.0'
+    compileOnly 'com.android.support:appcompat-v7:28.0.0'
 }
 
-//版本号 version code
-version = "1.0.5"
-//JCenter上显示的路径 path
-group = "com.github.zyyoona7"
-//项目名称 project name
-androidArtifact { // 2
-    artifactId = "wheelview"
-}
 publish {
     //bintray.com 用户名/组织名 user/org name
     userOrg = 'zyyoona7'
+    //JCenter上显示的路径 path
+    groupId = 'com.github.zyyoona7'
+    //项目名称 project name
+    artifactId = 'wheelview'
+    //版本号 version code
+    publishVersion = '1.0.6'
     //项目描述 description
     desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
     //项目网址链接 link

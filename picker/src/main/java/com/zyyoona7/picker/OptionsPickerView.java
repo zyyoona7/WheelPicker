@@ -13,7 +13,8 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-
+import com.zyyoona7.picker.listener.OnOptionsSelectedListener;
+import com.zyyoona7.picker.listener.OnPickerScrollStateChangedListener;
 import com.zyyoona7.wheel.WheelView;
 
 import java.util.List;
@@ -634,10 +635,20 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
      *
      * @param curvedRefractRatio 折射偏移比例 range 0.0-1.0
      */
+    @Deprecated
     public void setCurvedRefractRatio(@FloatRange(from = 0.0f, to = 1.0f) float curvedRefractRatio) {
-        mOptionsWv1.setCurvedRefractRatio(curvedRefractRatio);
-        mOptionsWv2.setCurvedRefractRatio(curvedRefractRatio);
-        mOptionsWv3.setCurvedRefractRatio(curvedRefractRatio);
+        setRefractRatio(curvedRefractRatio);
+    }
+
+    /**
+     * 设置选中条目折射偏移比例
+     *
+     * @param curvedRefractRatio 折射偏移比例 range 0.0-1.0
+     */
+    public void setRefractRatio(@FloatRange(from = 0.0f, to = 1.0f) float curvedRefractRatio) {
+        mOptionsWv1.setRefractRatio(curvedRefractRatio);
+        mOptionsWv2.setRefractRatio(curvedRefractRatio);
+        mOptionsWv3.setRefractRatio(curvedRefractRatio);
     }
 
     /**
@@ -660,10 +671,11 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
 
     /**
      * 设置滚动状态变化监听
+     *
      * @param listener 滚动状态变化监听器
      */
-    public void setOnPickerScrollStateChangedListener(OnPickerScrollStateChangedListener listener){
-        mOnPickerScrollStateChangedListener=listener;
+    public void setOnPickerScrollStateChangedListener(OnPickerScrollStateChangedListener listener) {
+        mOnPickerScrollStateChangedListener = listener;
     }
 
     /**
@@ -872,26 +884,5 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
         if (mOnPickerScrollStateChangedListener != null) {
             mOnPickerScrollStateChangedListener.onScrollStateChanged(state);
         }
-    }
-
-    /**
-     * 选项选中回调
-     *
-     * @param <T> 泛型
-     */
-    public interface OnOptionsSelectedListener<T> {
-
-        /**
-         * 选项选中回调
-         *
-         * @param opt1Pos  选项1WheelView 选中的下标
-         * @param opt1Data 选项1WheelView 选中的下标对应的数据（普通用法第一项无数据返回null）
-         * @param opt2Pos  选项2WheelView 选中的下标
-         * @param opt2Data 选项2WheelView 选中的下标对应的数据（普通用法第二项无数据返回null）
-         * @param opt3Pos  选项3WheelView 选中的下标（两级联动返回 -1）
-         * @param opt3Data 选项3WheelView 选中的下标对应的数据（普通用法第三项无数据或者两级联动返回null）
-         */
-        void onOptionsSelected(int opt1Pos, @Nullable T opt1Data, int opt2Pos,
-                               @Nullable T opt2Data, int opt3Pos, @Nullable T opt3Data);
     }
 }

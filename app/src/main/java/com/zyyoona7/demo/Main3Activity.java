@@ -3,7 +3,6 @@ package com.zyyoona7.demo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -16,9 +15,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.zyyoona7.picker.DatePickerView;
+import com.zyyoona7.picker.base.BaseDatePickerView;
 import com.zyyoona7.picker.ex.DayWheelView;
 import com.zyyoona7.picker.ex.MonthWheelView;
 import com.zyyoona7.picker.ex.YearWheelView;
+import com.zyyoona7.picker.listener.OnDateSelectedListener;
 import com.zyyoona7.wheel.WheelView;
 
 import java.util.Date;
@@ -66,16 +67,18 @@ public class Main3Activity extends AppCompatActivity {
         DatePickerView defaultDpv = findViewById(R.id.dpv_default);
         defaultDpv.setTextSize(24, true);
         defaultDpv.setLabelTextSize(20);
+        defaultDpv.setCurved(false);
+        defaultDpv.setVisibleItems(3);
 
-        DatePickerView yearMonthDpv=findViewById(R.id.dpv_year_month);
-        yearMonthDpv.setTextSize(24,true);
+        DatePickerView yearMonthDpv = findViewById(R.id.dpv_year_month);
+        yearMonthDpv.setTextSize(24, true);
         yearMonthDpv.hideDayItem();
         defaultDpv.setLabelTextSize(20);
 
-        yearMonthDpv.setOnDateSelectedListener(new DatePickerView.OnDateSelectedListener() {
+        yearMonthDpv.setOnDateSelectedListener(new OnDateSelectedListener() {
             @Override
-            public void onDateSelected(DatePickerView datePickerView, int year, int month, int day, @Nullable Date date) {
-                Toast.makeText(Main3Activity.this,"选中："+year+"-"+month,Toast.LENGTH_SHORT).show();
+            public void onDateSelected(BaseDatePickerView datePickerView, int year, int month, int day, @Nullable Date date) {
+                Toast.makeText(Main3Activity.this, "选中：" + year + "-" + month, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -122,9 +125,10 @@ public class Main3Activity extends AppCompatActivity {
         dayWv3.setCurvedArcDirection(WheelView.CURVED_ARC_DIRECTION_RIGHT);
         dayWv3.setCurvedArcDirectionFactor(0.65f);
 
-        customDpv3.setOnDateSelectedListener(new DatePickerView.OnDateSelectedListener() {
+        customDpv3.setOnDateSelectedListener(new OnDateSelectedListener() {
             @Override
-            public void onDateSelected(DatePickerView datePickerView, int year, int month, int day, @Nullable Date date) {
+            public void onDateSelected(BaseDatePickerView datePickerView, int year,
+                                       int month, int day, @Nullable Date date) {
                 //                Toast.makeText(Main3Activity.this,"选中的日期："+date.toString(),Toast.LENGTH_SHORT).show();
                 Toast.makeText(Main3Activity.this, "选中的日期：" + year + "-" + month + "-" + day, Toast.LENGTH_SHORT).show();
             }
@@ -162,12 +166,11 @@ public class Main3Activity extends AppCompatActivity {
         });
 
 
-
-        final NestedScrollView nestedScrollView=findViewById(R.id.nsv_main3);
+        final NestedScrollView nestedScrollView = findViewById(R.id.nsv_main3);
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                Log.d(TAG, "onScrollChange: scrollY="+scrollY);
+                Log.d(TAG, "onScrollChange: scrollY=" + scrollY);
             }
         });
 

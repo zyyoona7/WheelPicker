@@ -10,18 +10,9 @@ import android.support.annotation.RawRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.widget.LinearLayout;
 
-import com.zyyoona7.picker.ex.DayWheelView;
-import com.zyyoona7.picker.ex.MonthWheelView;
-import com.zyyoona7.picker.ex.YearWheelView;
+import com.zyyoona7.picker.base.BaseDatePickerView;
 import com.zyyoona7.wheel.WheelView;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * 日期 选择View
@@ -30,18 +21,11 @@ import java.util.Locale;
  * @version v1.0.0
  * @since 2018/8/21.
  */
-public class DatePickerView extends LinearLayout implements WheelView.OnItemSelectedListener<Integer>, WheelView.OnWheelChangedListener {
+public class DatePickerView extends BaseDatePickerView {
 
-    private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-M-d", Locale.getDefault());
-    private YearWheelView mYearWv;
-    private MonthWheelView mMonthWv;
-    private DayWheelView mDayWv;
     private AppCompatTextView mYearTv;
     private AppCompatTextView mMonthTv;
     private AppCompatTextView mDayTv;
-
-    private OnDateSelectedListener mOnDateSelectedListener;
-    private OnPickerScrollStateChangedListener mOnPickerScrollStateChangedListener;
 
     public DatePickerView(Context context) {
         this(context, null);
@@ -53,18 +37,11 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
 
     public DatePickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        LayoutInflater.from(context).inflate(R.layout.layout_date_picker_view, this);
+    }
 
-        mYearWv = findViewById(R.id.wv_year);
-        mMonthWv = findViewById(R.id.wv_month);
-        mDayWv = findViewById(R.id.wv_day);
-        mYearWv.setOnItemSelectedListener(this);
-        mMonthWv.setOnItemSelectedListener(this);
-        mDayWv.setOnItemSelectedListener(this);
-
-        mYearWv.setOnWheelChangedListener(this);
-        mMonthWv.setOnWheelChangedListener(this);
-        mDayWv.setOnWheelChangedListener(this);
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
 
         mYearTv = findViewById(R.id.tv_year);
         mMonthTv = findViewById(R.id.tv_month);
@@ -72,31 +49,23 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
     }
 
     @Override
-    public void onItemSelected(WheelView<Integer> wheelView, Integer data, int position) {
-        if (wheelView.getId() == R.id.wv_year) {
-            //年份选中
-            mDayWv.setYear(data);
-        } else if (wheelView.getId() == R.id.wv_month) {
-            //月份选中
-            mDayWv.setMonth(data);
-        }
+    protected int getDatePickerViewLayoutId() {
+        return R.layout.layout_date_picker_view;
+    }
 
-        int year = mYearWv.getSelectedYear();
-        int month = mMonthWv.getSelectedMonth();
-        int day = mDayWv.getSelectedDay();
-        String date = year + "-" + month + "-" + day;
-        if (mOnDateSelectedListener != null) {
-            try {
-                Date formatDate = null;
-                //全部显示的时候才会返回转换后的日期
-                if (mYearWv.getVisibility() == VISIBLE && mMonthWv.getVisibility() == VISIBLE && mDayWv.getVisibility() == VISIBLE) {
-                    formatDate = SDF.parse(date);
-                }
-                mOnDateSelectedListener.onDateSelected(this, year, month, day, formatDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+    @Override
+    protected int getYearWheelViewId() {
+        return R.id.wv_year;
+    }
+
+    @Override
+    protected int getMonthWheelViewId() {
+        return R.id.wv_month;
+    }
+
+    @Override
+    protected int getDayWheelViewId() {
+        return R.id.wv_day;
     }
 
     /**
@@ -690,63 +659,20 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
      *
      * @param curvedRefractRatio 折射偏移比例 range 0.0-1.0
      */
+    @Deprecated
     public void setCurvedRefractRatio(@FloatRange(from = 0.0f, to = 1.0f) float curvedRefractRatio) {
-        mYearWv.setCurvedRefractRatio(curvedRefractRatio);
-        mMonthWv.setCurvedRefractRatio(curvedRefractRatio);
-        mDayWv.setCurvedRefractRatio(curvedRefractRatio);
+        setRefractRatio(curvedRefractRatio);
     }
 
     /**
-     * 获取日期回调监听器
+     * 设置选中条目折射偏移比例
      *
-     * @return 日期回调监听器
+     * @param curvedRefractRatio 折射偏移比例 range 0.0-1.0
      */
-    public OnDateSelectedListener getOnDateSelectedListener() {
-        return mOnDateSelectedListener;
-    }
-
-    /**
-     * 设置日期回调监听器
-     *
-     * @param onDateSelectedListener 日期回调监听器
-     */
-    public void setOnDateSelectedListener(OnDateSelectedListener onDateSelectedListener) {
-        mOnDateSelectedListener = onDateSelectedListener;
-    }
-
-    /**
-     * 设置滚动状态变化监听
-     * @param listener 滚动状态变化监听器
-     */
-    public void setOnPickerScrollStateChangedListener(OnPickerScrollStateChangedListener listener){
-        mOnPickerScrollStateChangedListener=listener;
-    }
-
-    /**
-     * 获取年份 WheelView
-     *
-     * @return 年份 WheelView
-     */
-    public YearWheelView getYearWv() {
-        return mYearWv;
-    }
-
-    /**
-     * 获取月份 WheelView
-     *
-     * @return 月份 WheelView
-     */
-    public MonthWheelView getMonthWv() {
-        return mMonthWv;
-    }
-
-    /**
-     * 获取日 WheelView
-     *
-     * @return 日 WheelView
-     */
-    public DayWheelView getDayWv() {
-        return mDayWv;
+    public void setRefractRatio(@FloatRange(from = 0.0f, to = 1.0f) float curvedRefractRatio) {
+        mYearWv.setRefractRatio(curvedRefractRatio);
+        mMonthWv.setRefractRatio(curvedRefractRatio);
+        mDayWv.setRefractRatio(curvedRefractRatio);
     }
 
     /**
@@ -776,40 +702,4 @@ public class DatePickerView extends LinearLayout implements WheelView.OnItemSele
         return mDayTv;
     }
 
-    @Override
-    public void onWheelScroll(int scrollOffsetY) {
-
-    }
-
-    @Override
-    public void onWheelItemChanged(int oldPosition, int newPosition) {
-
-    }
-
-    @Override
-    public void onWheelSelected(int position) {
-
-    }
-
-    @Override
-    public void onWheelScrollStateChanged(int state) {
-        if (mOnPickerScrollStateChangedListener != null) {
-            mOnPickerScrollStateChangedListener.onScrollStateChanged(state);
-        }
-    }
-
-    /**
-     * 日期选中监听器
-     */
-    public interface OnDateSelectedListener {
-
-        /**
-         * @param datePickerView DatePickerView
-         * @param year           选中的年份
-         * @param month          选中的月份
-         * @param day            选中的天
-         * @param date           选中的日期
-         */
-        void onDateSelected(DatePickerView datePickerView, int year, int month, int day, @Nullable Date date);
-    }
 }

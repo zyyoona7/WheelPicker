@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.zyyoona7.demo.entities.CityEntity;
 import com.zyyoona7.demo.utils.ParseHelper;
 import com.zyyoona7.picker.OptionsPickerView;
+import com.zyyoona7.picker.listener.OnOptionsSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,7 @@ public class Main4Activity extends AppCompatActivity {
         opv1.setData(list1, null, list3);
         opv1.setTextSize(18,true);
 //        opv1.setLinkageData(linkageList1, linkageList2);
-        opv1.setOnOptionsSelectedListener(new OptionsPickerView.OnOptionsSelectedListener<String>() {
+        opv1.setOnOptionsSelectedListener(new OnOptionsSelectedListener<String>() {
             @Override
             public void onOptionsSelected(int opt1Pos, @Nullable String opt1Data, int opt2Pos,
                                           @Nullable String opt2Data, int opt3Pos, @Nullable String opt3Data) {
@@ -86,7 +87,7 @@ public class Main4Activity extends AppCompatActivity {
         opv2.setData(list1, list2, list3);
         opv2.setTextSize(18,true);
 //        opv2.setLinkageData(linkageList1,linkageList2,linkageList3);
-        opv2.setOnOptionsSelectedListener(new OptionsPickerView.OnOptionsSelectedListener<String>() {
+        opv2.setOnOptionsSelectedListener(new OnOptionsSelectedListener<String>() {
             @Override
             public void onOptionsSelected(int opt1Pos, @Nullable String opt1Data, int opt2Pos,
                                           @Nullable String opt2Data, int opt3Pos, @Nullable String opt3Data) {
@@ -107,7 +108,7 @@ public class Main4Activity extends AppCompatActivity {
         towLinkageOpv.setShowDivider(true);
         towLinkageOpv.setCurvedRefractRatio(0.95f);
 
-        towLinkageOpv.setOnOptionsSelectedListener(new OptionsPickerView.OnOptionsSelectedListener<CityEntity>() {
+        towLinkageOpv.setOnOptionsSelectedListener(new OnOptionsSelectedListener<CityEntity>() {
             @Override
             public void onOptionsSelected(int opt1Pos, @Nullable CityEntity opt1Data, int opt2Pos,
                                           @Nullable CityEntity opt2Data, int opt3Pos, @Nullable CityEntity opt3Data) {
@@ -134,7 +135,7 @@ public class Main4Activity extends AppCompatActivity {
         threeLinkageOpv.setSoundEffect(true);
         threeLinkageOpv.setSoundEffectResource(R.raw.button_choose);
 
-        threeLinkageOpv.setOnOptionsSelectedListener(new OptionsPickerView.OnOptionsSelectedListener<CityEntity>() {
+        threeLinkageOpv.setOnOptionsSelectedListener(new OnOptionsSelectedListener<CityEntity>() {
             @Override
             public void onOptionsSelected(int opt1Pos, @Nullable CityEntity opt1Data, int opt2Pos,
                                           @Nullable CityEntity opt2Data, int opt3Pos, @Nullable CityEntity opt3Data) {
@@ -192,7 +193,7 @@ public class Main4Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CityPickerDialogFragment.newInstance()
-                        .setOnSelectedListener(new OptionsPickerView.OnOptionsSelectedListener<CityEntity>() {
+                        .setOnSelectedListener(new OnOptionsSelectedListener<CityEntity>() {
                             @Override
                             public void onOptionsSelected(int opt1Pos, @Nullable CityEntity opt1Data,
                                                           int opt2Pos, @Nullable CityEntity opt2Data,

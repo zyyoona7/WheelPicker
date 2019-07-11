@@ -48,7 +48,7 @@
             app:wv_dividerPaddingForWrap="10dp"
             app:wv_curvedArcDirection="left"
             app:wv_curvedArcDirectionFactor="0.5"
-            app:wv_curvedRefractRatio="0.8"
+            app:wv_refractRatio="0.8"
 
             app:wv_drawSelectedRect="true"
             app:wv_selectedRectColor="#aebfbe"/>

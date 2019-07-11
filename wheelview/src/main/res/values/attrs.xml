@@ -56,12 +56,16 @@
         </attr>
         <!--弯曲（3D）效果左右圆弧偏移效果方向系数 偏移系数-->
         <attr name="wv_curvedArcDirectionFactor" format="float"/>
-        <!--弯曲（3D）效果选中后折射的偏移 与字体大小的比值，1为不偏移 越小偏移越明显-->
+        <!--选中后折射的偏移(弯曲（3D）效果和普通效果都适用) 与字体大小的比值，1为不偏移 越小偏移越明显-->
+        <attr name="wv_refractRatio" format="float"/>
+        <!-- Deprecated 已过时 请使用 wv_refractRatio -->
         <attr name="wv_curvedRefractRatio" format="float"/>
 
         <!--是否绘制选中区域-->
         <attr name="wv_drawSelectedRect" format="boolean"/>
         <!--选中区域颜色-->
         <attr name="wv_selectedRectColor" format="color"/>
+        <!--选中区域/分割线上下偏移，通过移动分割线上下限制的位置来实现扩大/缩小显示区域-->
+        <attr name="wv_dividerOffset" format="dimension"/>
     </declare-styleable>
 </resources>

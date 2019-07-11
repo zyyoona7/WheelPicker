@@ -93,7 +93,7 @@ public class Main2Activity extends AppCompatActivity {
         AppCompatTextView curvedArcDirectionBiasTv=findViewById(R.id.tv_curvedAlignBias);
         curvedArcDirectionBiasTv.setText(getString(R.string.curvedArcDirectionBiasValue,wheelView.getCurvedArcDirectionFactor()+""));
         AppCompatTextView curvedRefractXTv=findViewById(R.id.tv_curvedRefractRatio);
-        curvedRefractXTv.setText(getString(R.string.curvedRefractXValue,wheelView.getCurvedRefractRatio()+""));
+        curvedRefractXTv.setText(getString(R.string.curvedRefractXValue,wheelView.getRefractRatio()+""));
 
         wheelView.setOnItemSelectedListener(new WheelView.OnItemSelectedListener<Integer>() {
             @Override

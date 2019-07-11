@@ -11,7 +11,8 @@ import android.widget.Button;
 import com.zyyoona7.demo.entities.CityEntity;
 import com.zyyoona7.demo.utils.ParseHelper;
 import com.zyyoona7.dialog.impl.EasyDialog;
-import com.zyyoona7.picker.OnPickerScrollStateChangedListener;
+import com.zyyoona7.picker.listener.OnOptionsSelectedListener;
+import com.zyyoona7.picker.listener.OnPickerScrollStateChangedListener;
 import com.zyyoona7.picker.OptionsPickerView;
 import com.zyyoona7.wheel.WheelView;
 
@@ -21,7 +22,7 @@ import java.util.List;
 public class CityPickerDialogFragment extends EasyDialog {
 
     private OptionsPickerView<CityEntity> mOptionsPickerView;
-    private OptionsPickerView.OnOptionsSelectedListener<CityEntity> mOptionsSelectedListener;
+    private OnOptionsSelectedListener<CityEntity> mOptionsSelectedListener;
 
     public static CityPickerDialogFragment newInstance() {
 
@@ -66,7 +67,7 @@ public class CityPickerDialogFragment extends EasyDialog {
             }
         });
 
-        mOptionsPickerView.setOnOptionsSelectedListener(new OptionsPickerView.OnOptionsSelectedListener<CityEntity>() {
+        mOptionsPickerView.setOnOptionsSelectedListener(new OnOptionsSelectedListener<CityEntity>() {
             @Override
             public void onOptionsSelected(int opt1Pos, @Nullable CityEntity opt1Data, int opt2Pos,
                                           @Nullable CityEntity opt2Data, int opt3Pos, @Nullable CityEntity opt3Data) {
@@ -92,7 +93,7 @@ public class CityPickerDialogFragment extends EasyDialog {
         mOptionsPickerView.setLinkageData(p3List, c3List, d3List);
     }
 
-    public CityPickerDialogFragment setOnSelectedListener(OptionsPickerView.OnOptionsSelectedListener<CityEntity> listener){
+    public CityPickerDialogFragment setOnSelectedListener(OnOptionsSelectedListener<CityEntity> listener){
         this.mOptionsSelectedListener=listener;
         return this;
     }

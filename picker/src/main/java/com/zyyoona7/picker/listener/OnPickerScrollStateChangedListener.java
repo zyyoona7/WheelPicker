@@ -1,4 +1,4 @@
-package com.zyyoona7.picker;
+package com.zyyoona7.picker.listener;
 
 public interface OnPickerScrollStateChangedListener {
 

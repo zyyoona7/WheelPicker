@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.zyyoona7.demo.entities.CityEntity;
 import com.zyyoona7.demo.utils.ParseHelper;
@@ -68,20 +67,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        AppCompatButton goDatePickerBtn=findViewById(R.id.btn_go_date_picker_view);
+        AppCompatButton goDatePickerBtn = findViewById(R.id.btn_go_date_picker_view);
         goDatePickerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,Main3Activity.class);
+                Intent intent = new Intent(MainActivity.this, Main3Activity.class);
                 startActivity(intent);
             }
         });
 
-        AppCompatButton goOptionsPickerBtn=findViewById(R.id.btn_go_options_picker_view);
+        AppCompatButton goOptionsPickerBtn = findViewById(R.id.btn_go_options_picker_view);
         goOptionsPickerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,Main4Activity.class);
+                Intent intent = new Intent(MainActivity.this, Main4Activity.class);
                 startActivity(intent);
             }
         });
@@ -320,39 +319,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        AppCompatButton monoBtn=findViewById(R.id.btn_typeface_mono);
-        AppCompatButton mediumBtn=findViewById(R.id.btn_typeface_medium);
-        AppCompatButton regularBtn=findViewById(R.id.btn_typeface_regular);
-        AppCompatButton lightBtn=findViewById(R.id.btn_typeface_light);
+        AppCompatButton monoBtn = findViewById(R.id.btn_typeface_mono);
+        AppCompatButton mediumBtn = findViewById(R.id.btn_typeface_medium);
+        AppCompatButton regularBtn = findViewById(R.id.btn_typeface_regular);
+        AppCompatButton lightBtn = findViewById(R.id.btn_typeface_light);
+        final AppCompatCheckBox boldCb = findViewById(R.id.cb_is_bold);
         monoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wheelView.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/Digital_7_Mono.ttf"));
+                wheelView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Digital_7_Mono.ttf"), boldCb.isChecked());
             }
         });
         mediumBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wheelView.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/pingfang_medium.ttf"));
+                wheelView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/pingfang_medium.ttf"), boldCb.isChecked());
             }
         });
         regularBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wheelView.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/pingfang_regular.ttf"));
+                wheelView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/pingfang_regular.ttf"), boldCb.isChecked());
             }
         });
         lightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wheelView.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/pingfang_light.ttf"));
+                wheelView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/pingfang_light.ttf"), boldCb.isChecked());
             }
         });
 
 
-        WheelView<CityEntity> cityWv=findViewById(R.id.wv_city);
+        WheelView<CityEntity> cityWv = findViewById(R.id.wv_city);
         //解析城市列表
-        List<CityEntity> cityData= ParseHelper.parseTwoLevelCityList(this);
+        List<CityEntity> cityData = ParseHelper.parseTwoLevelCityList(this);
         cityWv.setData(cityData);
     }
 }
