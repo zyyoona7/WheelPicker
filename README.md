@@ -349,6 +349,7 @@ MainActivity WheelView 相关代码：
   - 增加 [#6](https://github.com/zyyoona7/WheelPicker/issues/6) 新功能，在非 3D 的情况下也可以设置选中字体和非选中字体的大小，通过 setRefractRatio() 方法设置，并且标记  ```wv_curvedRefractRatio``` 属性和 setCurvedRefractRatio() 过时，会在新版本删除这两个方法
   - 增加扩大选中区域的间距，通过 ``` wv_dividerOffset``` 属性设置偏移，原理是扩大分割线和选中区域的上下偏移距离来实现看起来的间距扩大效果，并未真正的修改行间距
   - 增加 [#12](https://github.com/zyyoona7/WheelPicker/issues/12) 新功能，可以设置选中条目字体加粗，其他条目不会加粗操作，通过 setTypeface(typeface,true) 方法设置，详细信息请看方法注释
+  - 支持禁止滑动，只需设置 setEnabled(false) 将不处理 onTouchEvent() 事件
 
 - **2019/02/22 发布 1.0.5 版本**
     - 修复 [#5](https://github.com/zyyoona7/WheelPicker/issues/5)、[#7](https://github.com/zyyoona7/WheelPicker/issues/7)
