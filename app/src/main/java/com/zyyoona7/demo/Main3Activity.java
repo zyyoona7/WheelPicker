@@ -69,6 +69,7 @@ public class Main3Activity extends AppCompatActivity {
         defaultDpv.setLabelTextSize(20);
         defaultDpv.setCurved(false);
         defaultDpv.setVisibleItems(3);
+        defaultDpv.setSelectedMonth(2);
 
         DatePickerView yearMonthDpv = findViewById(R.id.dpv_year_month);
         yearMonthDpv.setTextSize(24, true);

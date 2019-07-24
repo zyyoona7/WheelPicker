@@ -908,7 +908,8 @@ public class WheelView<T> extends View implements Runnable {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!isEnabled()) {
+        //屏蔽如果未设置数据时，触摸导致运算数据不正确的崩溃 issue #20
+        if (!isEnabled() || mDataList.isEmpty()) {
             return super.onTouchEvent(event);
         }
         initVelocityTracker();
