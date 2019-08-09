@@ -410,6 +410,9 @@ MainActivity WheelView 相关代码：
 - ~~**2018/08/24 发布 1.0.0 版本**~~
     - ~~YearWheelView、MonthWheelView、DayWheelView 封装~~
     - ~~日期选择器、选项选择器~~
+    
+### 交流群
+![qrcode](https://github.com/zyyoona7/WheelPicker/blob/master/perview/QQ_qrcode.png)
 
 ### 感谢（Thanks）
 [**WheelPicker**](https://github.com/AigeStudio/WheelPicker)<br>
