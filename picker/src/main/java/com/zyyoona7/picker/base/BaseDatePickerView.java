@@ -21,7 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public abstract class BaseDatePickerView extends FrameLayout implements WheelView.OnItemSelectedListener<Integer>, WheelView.OnWheelChangedListener {
+public abstract class BaseDatePickerView extends FrameLayout implements WheelView.OnItemSelectedListener<Integer>,
+        WheelView.OnWheelChangedListener {
 
     private final SimpleDateFormat mYmdSdf;
     private final SimpleDateFormat mYmSdf;
@@ -54,15 +55,15 @@ public abstract class BaseDatePickerView extends FrameLayout implements WheelVie
         super.onFinishInflate();
 
         int yearId=getYearWheelViewId();
-        if (!isNoId(yearId)) {
+        if (hasViewId(yearId)) {
             mYearWv = findViewById(yearId);
         }
         int monthId=getMonthWheelViewId();
-        if (!isNoId(monthId)) {
+        if (hasViewId(monthId)) {
             mMonthWv = findViewById(monthId);
         }
         int dayId=getDayWheelViewId();
-        if (!isNoId(dayId)) {
+        if (hasViewId(dayId)) {
             mDayWv = findViewById(dayId);
         }
         if (mYearWv != null) {
@@ -179,8 +180,8 @@ public abstract class BaseDatePickerView extends FrameLayout implements WheelVie
                 && mMonthWv != null && mMonthWv.getVisibility() == VISIBLE;
     }
 
-    private boolean isNoId(@IdRes int idRes){
-        return idRes==0 || idRes==NO_ID;
+    private boolean hasViewId(@IdRes int idRes){
+        return idRes != 0 && idRes != NO_ID;
     }
 
     /**
