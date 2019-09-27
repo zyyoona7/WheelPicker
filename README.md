@@ -344,6 +344,10 @@ MainActivity WheelView 相关代码：
 
 #### WheelView Update Logs
 
+- **2019/09/27 发布 1.0.7 版本**
+  - 修复数据为空时，触摸 WheelView 导致崩溃问题
+  - 增加 `onWheelScroll()` 等同监听器的方法供子类使用
+
 - **2019/07/11 发布 1.0.6 版本**
   - 修复 [#18](https://github.com/zyyoona7/WheelPicker/issues/18) 的问题
   - 增加 [#6](https://github.com/zyyoona7/WheelPicker/issues/6) 新功能，在非 3D 的情况下也可以设置选中字体和非选中字体的大小，通过 setRefractRatio() 方法设置，并且标记  ```wv_curvedRefractRatio``` 属性和 setCurvedRefractRatio() 过时，会在新版本删除这两个方法
@@ -384,6 +388,9 @@ MainActivity WheelView 相关代码：
     - 丰富的监听器
     
 #### PickerView Update Logs
+
+- **2019/09/27 发布 1.0.9 版本**
+  - DatePickerView 增加最大选择日期和最小选择日期设置，超出此范围会自动选中最大或最小日期，方便选择生日等最大日期不能超过当天的场景
 
 - **2019/07/11 发布 1.0.8 版本**
   - 调整包结构，将所有 pickerview 的监听器放入 listener 包中
