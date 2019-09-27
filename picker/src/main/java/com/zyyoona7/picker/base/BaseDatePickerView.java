@@ -18,6 +18,7 @@ import com.zyyoona7.wheel.WheelView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -54,15 +55,15 @@ public abstract class BaseDatePickerView extends FrameLayout implements WheelVie
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        int yearId=getYearWheelViewId();
+        int yearId = getYearWheelViewId();
         if (hasViewId(yearId)) {
             mYearWv = findViewById(yearId);
         }
-        int monthId=getMonthWheelViewId();
+        int monthId = getMonthWheelViewId();
         if (hasViewId(monthId)) {
             mMonthWv = findViewById(monthId);
         }
-        int dayId=getDayWheelViewId();
+        int dayId = getDayWheelViewId();
         if (hasViewId(dayId)) {
             mDayWv = findViewById(dayId);
         }
@@ -73,10 +74,16 @@ public abstract class BaseDatePickerView extends FrameLayout implements WheelVie
         if (mMonthWv != null) {
             mMonthWv.setOnItemSelectedListener(this);
             mMonthWv.setOnWheelChangedListener(this);
+            if (mYearWv != null) {
+                mMonthWv.setCurrentSelectedYear(mYearWv.getSelectedYear());
+            }
         }
         if (mDayWv != null) {
             mDayWv.setOnItemSelectedListener(this);
             mDayWv.setOnWheelChangedListener(this);
+            if (mYearWv != null && mMonthWv != null) {
+                mDayWv.setYearAndMonth(mYearWv.getSelectedYear(), mMonthWv.getSelectedMonth());
+            }
         }
     }
 
@@ -118,6 +125,9 @@ public abstract class BaseDatePickerView extends FrameLayout implements WheelVie
             //年份选中
             if (mDayWv != null) {
                 mDayWv.setYear(data);
+            }
+            if (mMonthWv != null) {
+                mMonthWv.setCurrentSelectedYear(data);
             }
         } else if (wheelView.getId() == getMonthWheelViewId()) {
             //月份选中
@@ -180,7 +190,7 @@ public abstract class BaseDatePickerView extends FrameLayout implements WheelVie
                 && mMonthWv != null && mMonthWv.getVisibility() == VISIBLE;
     }
 
-    private boolean hasViewId(@IdRes int idRes){
+    private boolean hasViewId(@IdRes int idRes) {
         return idRes != 0 && idRes != NO_ID;
     }
 
@@ -228,5 +238,67 @@ public abstract class BaseDatePickerView extends FrameLayout implements WheelVie
      */
     public void setOnPickerScrollStateChangedListener(OnPickerScrollStateChangedListener listener) {
         mOnPickerScrollStateChangedListener = listener;
+    }
+
+    /**
+     * 设置最大选择的日期 日期大于此日期则会选中到此日期
+     *
+     * @param calendar Calendar
+     */
+    public void setMaxDate(@NonNull Calendar calendar) {
+        setMaxDate(calendar.getTime());
+    }
+
+    /**
+     * 设置最大选择的日期 日期大于此日期则会选中到此日期
+     *
+     * @param date 日期
+     */
+    public void setMaxDate(@NonNull Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int maxYear = calendar.get(Calendar.YEAR);
+        int maxMonth = calendar.get(Calendar.MONTH) + 1;
+        int maxDay = calendar.get(Calendar.DAY_OF_MONTH);
+        if (mYearWv != null) {
+            mYearWv.setMaxYear(maxYear);
+        }
+        if (mMonthWv != null) {
+            mMonthWv.setMaxYearAndMonth(maxYear, maxMonth);
+        }
+        if (mDayWv != null) {
+            mDayWv.setMaxYearMonthAndDay(maxYear, maxMonth, maxDay);
+        }
+    }
+
+    /**
+     * 设置最小选择的日期 日期小于此日期则会选中到此日期
+     *
+     * @param calendar Calendar
+     */
+    public void setMinDate(@NonNull Calendar calendar) {
+        setMinDate(calendar.getTime());
+    }
+
+    /**
+     * 设置最小选择的日期 日期小于此日期则会选中到此日期
+     *
+     * @param date 日期
+     */
+    public void setMinDate(@NonNull Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int minYear = calendar.get(Calendar.YEAR);
+        int minMonth = calendar.get(Calendar.MONTH) + 1;
+        int minDay = calendar.get(Calendar.DAY_OF_MONTH);
+        if (mYearWv != null) {
+            mYearWv.setMinYear(minYear);
+        }
+        if (mMonthWv != null) {
+            mMonthWv.setMinYearAndMonth(minYear, minMonth);
+        }
+        if (mDayWv != null) {
+            mDayWv.setMinYearMonthAndDay(minYear, minMonth, minDay);
+        }
     }
 }

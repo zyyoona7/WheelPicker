@@ -2,6 +2,7 @@ package com.zyyoona7.picker.ex;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
@@ -20,6 +21,12 @@ import java.util.List;
  * @since 2018/8/20.
  */
 public class MonthWheelView extends WheelView<Integer> {
+
+    private int mCurrentSelectedYear = -1;
+    private int mMaxYear = -1;
+    private int mMinYear = -1;
+    private int mMaxMonth = -1;
+    private int mMinMonth = -1;
 
     public MonthWheelView(Context context) {
         this(context, null);
@@ -48,6 +55,39 @@ public class MonthWheelView extends WheelView<Integer> {
             list.add(i);
         }
         super.setData(list);
+    }
+
+    public int getCurrentSelectedYear() {
+        return mCurrentSelectedYear;
+    }
+
+    public void setCurrentSelectedYear(@IntRange(from = 0) int currentSelectedYear) {
+        mCurrentSelectedYear = currentSelectedYear;
+        checkCurrentSelected(getSelectedItemData());
+    }
+
+    public void setMaxYearAndMonth(@IntRange(from = 0) int maxYear,
+                                   @IntRange(from = 1, to = 12) int maxMonth) {
+        mMaxYear = maxYear;
+        mMaxMonth = maxMonth;
+        checkCurrentSelected(getSelectedItemData());
+    }
+
+    public void setMaxMonth(@IntRange(from = 1, to = 12) int maxMonth) {
+        mMaxMonth = maxMonth;
+        checkCurrentSelected(getSelectedItemData());
+    }
+
+    public void setMinYearAndMonth(@IntRange(from = 0) int minYear,
+                                   @IntRange(from = 1, to = 12) int minMonth) {
+        mMinYear = minYear;
+        mMinMonth = minMonth;
+        checkCurrentSelected(getSelectedItemData());
+    }
+
+    public void setMinMonth(@IntRange(from = 1, to = 12) int minMonth) {
+        mMinMonth = minMonth;
+        checkCurrentSelected(getSelectedItemData());
     }
 
     /**
@@ -87,7 +127,13 @@ public class MonthWheelView extends WheelView<Integer> {
      */
     public void setSelectedMonth(int selectedMonth, boolean isSmoothScroll, int smoothDuration) {
         if (selectedMonth >= 1 && selectedMonth <= 12) {
-            updateSelectedMonth(selectedMonth, isSmoothScroll, smoothDuration);
+            int shouldSelected = selectedMonth;
+            if (isMoreThanMaxMonth(selectedMonth)) {
+                shouldSelected = mMaxMonth;
+            } else if (isLessThanMinMonth(selectedMonth)) {
+                shouldSelected = mMinMonth;
+            }
+            updateSelectedMonth(shouldSelected, isSmoothScroll, smoothDuration);
         }
     }
 
@@ -105,5 +151,38 @@ public class MonthWheelView extends WheelView<Integer> {
     @Override
     public void setData(List<Integer> dataList) {
         throw new UnsupportedOperationException("You can not invoke setData method in " + MonthWheelView.class.getSimpleName() + ".");
+    }
+
+    @Override
+    protected void onItemSelected(Integer data, int position) {
+        checkCurrentSelected(data);
+    }
+
+    private void checkCurrentSelected(int data) {
+        if (isMoreThanMaxMonth(data)) {
+            setSelectedMonth(mMaxMonth);
+        } else if (isLessThanMinMonth(data)) {
+            setSelectedMonth(mMinMonth);
+        }
+    }
+
+    private boolean isMoreThanMaxMonth(int data) {
+        return isCurrentMaxYear() && data > mMaxMonth
+                && mMaxMonth > 0;
+    }
+
+    private boolean isLessThanMinMonth(int data) {
+        return isCurrentMinYear() && data < mMinMonth
+                && mMinMonth > 0;
+    }
+
+    private boolean isCurrentMaxYear() {
+        return (mMaxYear > 0 && mCurrentSelectedYear == mMaxYear)
+                || (mCurrentSelectedYear < 0 && mMaxYear < 0 && mMinYear < 0);
+    }
+
+    private boolean isCurrentMinYear() {
+        return (mCurrentSelectedYear == mMinYear && mMinYear > 0)
+                || (mCurrentSelectedYear < 0 && mMaxYear < 0 && mMinYear < 0);
     }
 }

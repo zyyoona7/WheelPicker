@@ -2,6 +2,7 @@ package com.zyyoona7.picker.ex;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
@@ -23,6 +24,8 @@ public class YearWheelView extends WheelView<Integer> {
 
     private int mStartYear;
     private int mEndYear;
+    private int mMaxYear = -1;
+    private int mMinYear = -1;
 
     public YearWheelView(Context context) {
         this(context, null);
@@ -54,6 +57,47 @@ public class YearWheelView extends WheelView<Integer> {
         mStartYear = start;
         mEndYear = end;
         updateYear();
+        updateMaxAndMinYear();
+    }
+
+    /**
+     * 最大选中年份 年份大于这个数字会选中到 maxYear
+     *
+     * @param maxYear 最大年份
+     */
+    public void setMaxYear(@IntRange(from = 0) int maxYear) {
+        if (maxYear > mEndYear) {
+            mMaxYear = mEndYear;
+            return;
+        }
+        mMaxYear = maxYear;
+        checkCurrentSelected(getSelectedItemData());
+    }
+
+    /**
+     * 最小选中年份 年份低于这个数字会选中到 minYear
+     *
+     * @param minYear 最小年份
+     */
+    public void setMinYear(@IntRange(from = 0) int minYear) {
+        if (minYear < mStartYear) {
+            mMinYear = mStartYear;
+            return;
+        }
+        mMinYear = minYear;
+        checkCurrentSelected(getSelectedItemData());
+    }
+
+    private void updateMaxAndMinYear() {
+        if (mMaxYear > mEndYear) {
+            mMaxYear = mEndYear;
+        }
+        if (mMinYear < mStartYear) {
+            mMinYear = mStartYear;
+        }
+        if (mMaxYear < mMinYear) {
+            mMaxYear = mMinYear;
+        }
     }
 
     /**
@@ -105,7 +149,13 @@ public class YearWheelView extends WheelView<Integer> {
      */
     public void setSelectedYear(int selectedYear, boolean isSmoothScroll, int smoothDuration) {
         if (selectedYear >= mStartYear && selectedYear <= mEndYear) {
-            updateSelectedYear(selectedYear, isSmoothScroll, smoothDuration);
+            int shouldSelected = selectedYear;
+            if (isMoreThanMaxYear(selectedYear)) {
+                shouldSelected = mMaxYear;
+            } else if (isLessThanMinYear(selectedYear)) {
+                shouldSelected = mMinYear;
+            }
+            updateSelectedYear(shouldSelected, isSmoothScroll, smoothDuration);
         }
     }
 
@@ -123,5 +173,26 @@ public class YearWheelView extends WheelView<Integer> {
     @Override
     public void setData(List<Integer> dataList) {
         throw new UnsupportedOperationException("You can not invoke setData method in " + YearWheelView.class.getSimpleName() + ".");
+    }
+
+    @Override
+    protected void onItemSelected(Integer data, int position) {
+        checkCurrentSelected(data);
+    }
+
+    private void checkCurrentSelected(int data) {
+        if (isMoreThanMaxYear(data)) {
+            setSelectedYear(mMaxYear);
+        } else if (isLessThanMinYear(data)) {
+            setSelectedYear(mMinYear);
+        }
+    }
+
+    private boolean isMoreThanMaxYear(int data) {
+        return data > mMaxYear && mMaxYear > 0;
+    }
+
+    private boolean isLessThanMinYear(int data) {
+        return data < mMinYear && mMinYear > 0;
     }
 }

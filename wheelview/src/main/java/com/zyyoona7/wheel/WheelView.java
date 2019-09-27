@@ -1,5 +1,6 @@
 package com.zyyoona7.wheel;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -448,9 +449,9 @@ public class WheelView<T> extends View implements Runnable {
         drawDivider(canvas);
 
         //滚动了多少个item，滚动的Y值高度除去每行Item的高度
-        int scrolledItem = mScrollOffsetY / mItemHeight;
+        int scrolledItem = mScrollOffsetY / dividedItemHeight();
         //没有滚动完一个item时的偏移值，平滑滑动
-        int scrolledOffset = mScrollOffsetY % mItemHeight;
+        int scrolledOffset = mScrollOffsetY % dividedItemHeight();
         //向上取整
         int halfItem = (mVisibleItems + 1) / 2;
         //计算的最小index
@@ -535,7 +536,7 @@ public class WheelView<T> extends View implements Runnable {
         }
 
         //index 的 item 距离中间项的偏移
-        int item2CenterOffsetY = (index - mScrollOffsetY / mItemHeight) * mItemHeight - scrolledOffset;
+        int item2CenterOffsetY = (index - mScrollOffsetY / dividedItemHeight()) * mItemHeight - scrolledOffset;
         //记录初始测量的字体起始X
         int startX = mStartX;
         //重新测量字体宽度和基线偏移
@@ -695,7 +696,7 @@ public class WheelView<T> extends View implements Runnable {
         // 滚轮的半径
         final int radius = (getHeight() - getPaddingTop() - getPaddingBottom()) / 2;
         //index 的 item 距离中间项的偏移
-        int item2CenterOffsetY = (index - mScrollOffsetY / mItemHeight) * mItemHeight - scrolledOffset;
+        int item2CenterOffsetY = (index - mScrollOffsetY / dividedItemHeight()) * mItemHeight - scrolledOffset;
 
         // 当滑动的角度和y轴垂直时（此时文字已经显示为一条线），不绘制文字
         if (Math.abs(item2CenterOffsetY) > radius * Math.PI / 2) return;
@@ -906,6 +907,7 @@ public class WheelView<T> extends View implements Runnable {
         return item.toString();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         //屏蔽如果未设置数据时，触摸导致运算数据不正确的崩溃 issue #20
@@ -940,6 +942,7 @@ public class WheelView<T> extends View implements Runnable {
                 if (mOnWheelChangedListener != null) {
                     mOnWheelChangedListener.onWheelScrollStateChanged(SCROLL_STATE_DRAGGING);
                 }
+                onWheelScrollStateChanged(SCROLL_STATE_DRAGGING);
                 if (Math.abs(deltaY) < 1) {
                     break;
                 }
@@ -968,7 +971,7 @@ public class WheelView<T> extends View implements Runnable {
                         clickToCenterDistance = (int) (event.getY() - mCenterY);
                     }
                     int scrollRange = clickToCenterDistance +
-                            calculateDistanceToEndPoint((mScrollOffsetY + clickToCenterDistance) % mItemHeight);
+                            calculateDistanceToEndPoint((mScrollOffsetY + clickToCenterDistance) % dividedItemHeight());
                     //大于最小值滚动值
                     boolean isInMinRange = scrollRange < 0 && mScrollOffsetY + scrollRange >= mMinScrollY;
                     //小于最大滚动值
@@ -982,7 +985,6 @@ public class WheelView<T> extends View implements Runnable {
 
                 invalidateIfYChanged();
                 ViewCompat.postOnAnimation(this, this);
-
                 //回收 VelocityTracker
                 recycleVelocityTracker();
                 break;
@@ -1041,6 +1043,7 @@ public class WheelView<T> extends View implements Runnable {
             if (mOnWheelChangedListener != null) {
                 mOnWheelChangedListener.onWheelScroll(mScrollOffsetY);
             }
+            onWheelScroll(mScrollOffsetY);
             //观察item变化
             observeItemChanged();
             invalidate();
@@ -1059,6 +1062,7 @@ public class WheelView<T> extends View implements Runnable {
             if (mOnWheelChangedListener != null) {
                 mOnWheelChangedListener.onWheelItemChanged(oldPosition, newPosition);
             }
+            onWheelItemChanged(oldPosition, newPosition);
             //播放音频
             playSoundEffect();
             //更新下标
@@ -1123,6 +1127,7 @@ public class WheelView<T> extends View implements Runnable {
             if (mOnWheelChangedListener != null) {
                 mOnWheelChangedListener.onWheelScrollStateChanged(SCROLL_STATE_IDLE);
             }
+            onWheelScrollStateChanged(SCROLL_STATE_IDLE);
             int currentItemPosition = getCurrentPosition();
             //当前选中的Position没变时不回调 onItemSelected()
             if (currentItemPosition == mSelectedItemPosition) {
@@ -1136,10 +1141,12 @@ public class WheelView<T> extends View implements Runnable {
             if (mOnItemSelectedListener != null) {
                 mOnItemSelectedListener.onItemSelected(this, mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
             }
+            onItemSelected(mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
             //滚动状态回调
             if (mOnWheelChangedListener != null) {
                 mOnWheelChangedListener.onWheelSelected(mSelectedItemPosition);
             }
+            onWheelSelected(mSelectedItemPosition);
         }
 
         if (mScroller.computeScrollOffset()) {
@@ -1150,6 +1157,7 @@ public class WheelView<T> extends View implements Runnable {
                 if (mOnWheelChangedListener != null) {
                     mOnWheelChangedListener.onWheelScrollStateChanged(SCROLL_STATE_SCROLLING);
                 }
+                onWheelScrollStateChanged(SCROLL_STATE_SCROLLING);
             }
             invalidateIfYChanged();
             ViewCompat.postOnAnimation(this, this);
@@ -1157,7 +1165,7 @@ public class WheelView<T> extends View implements Runnable {
             //滚动完成后，根据是否为快速滚动处理是否需要调整最终位置
             isFlingScroll = false;
             //快速滚动后需要调整滚动完成后的最终位置，重新启动scroll滑动到中心位置
-            mScroller.startScroll(0, mScrollOffsetY, 0, calculateDistanceToEndPoint(mScrollOffsetY % mItemHeight));
+            mScroller.startScroll(0, mScrollOffsetY, 0, calculateDistanceToEndPoint(mScrollOffsetY % dividedItemHeight()));
             invalidateIfYChanged();
             ViewCompat.postOnAnimation(this, this);
         }
@@ -1166,14 +1174,17 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 根据偏移计算当前位置下标
      *
-     * @return 偏移量对应的当前下标
+     * @return 偏移量对应的当前下标 if dataList is empty return -1
      */
     private int getCurrentPosition() {
+        if (mDataList.isEmpty()) {
+            return -1;
+        }
         int itemPosition;
         if (mScrollOffsetY < 0) {
-            itemPosition = (mScrollOffsetY - mItemHeight / 2) / mItemHeight;
+            itemPosition = (mScrollOffsetY - mItemHeight / 2) / dividedItemHeight();
         } else {
-            itemPosition = (mScrollOffsetY + mItemHeight / 2) / mItemHeight;
+            itemPosition = (mScrollOffsetY + mItemHeight / 2) / dividedItemHeight();
         }
         int currentPosition = itemPosition % mDataList.size();
         if (currentPosition < 0) {
@@ -1181,6 +1192,15 @@ public class WheelView<T> extends View implements Runnable {
         }
 
         return currentPosition;
+    }
+
+    /**
+     * mItemHeight 为被除数时避免为0
+     *
+     * @return 被除数不为0
+     */
+    private int dividedItemHeight() {
+        return mItemHeight > 0 ? mItemHeight : 1;
     }
 
     /**
@@ -1787,10 +1807,11 @@ public class WheelView<T> extends View implements Runnable {
             if (mOnItemSelectedListener != null) {
                 mOnItemSelectedListener.onItemSelected(this, mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
             }
-
+            onItemSelected(mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
             if (mOnWheelChangedListener != null) {
                 mOnWheelChangedListener.onWheelSelected(mSelectedItemPosition);
             }
+            onWheelSelected(mSelectedItemPosition);
             invalidateIfYChanged();
         }
 
@@ -2183,6 +2204,64 @@ public class WheelView<T> extends View implements Runnable {
     public void setOnWheelChangedListener(OnWheelChangedListener onWheelChangedListener) {
         mOnWheelChangedListener = onWheelChangedListener;
     }
+
+    /*
+      --------- 滚动变化方法同监听器方法（适用于子类） ------
+     */
+
+    /**
+     * WheelView 滚动
+     *
+     * @param scrollOffsetY 滚动偏移
+     */
+    protected void onWheelScroll(int scrollOffsetY) {
+
+    }
+
+    /**
+     * WheelView 条目变化
+     *
+     * @param oldPosition 旧的下标
+     * @param newPosition 新下标
+     */
+    protected void onWheelItemChanged(int oldPosition, int newPosition) {
+
+    }
+
+    /**
+     * WheelView 选中
+     *
+     * @param position 选中的下标
+     */
+    protected void onWheelSelected(int position) {
+
+    }
+
+    /**
+     * WheelView 滚动状态
+     *
+     * @param state 滚动状态
+     *              {@link WheelView#SCROLL_STATE_IDLE}
+     *              {@link WheelView#SCROLL_STATE_DRAGGING}
+     *              {@link WheelView#SCROLL_STATE_SCROLLING}
+     */
+    protected void onWheelScrollStateChanged(int state) {
+
+    }
+
+    /**
+     * 条目选中回调
+     *
+     * @param data     选中的数据
+     * @param position 选中的下标
+     */
+    protected void onItemSelected(T data, int position) {
+
+    }
+
+    /*
+      --------- 滚动变化方法同监听器方法（适用于子类） ------
+     */
 
     /**
      * dp转换px

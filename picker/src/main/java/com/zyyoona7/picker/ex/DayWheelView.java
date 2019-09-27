@@ -2,6 +2,7 @@ package com.zyyoona7.picker.ex;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
@@ -25,6 +26,12 @@ public class DayWheelView extends WheelView<Integer> {
 
     private int mYear;
     private int mMonth;
+    private int mMaxYear = -1;
+    private int mMinYear = -1;
+    private int mMaxMonth = -1;
+    private int mMinMonth = -1;
+    private int mMaxDay = -1;
+    private int mMinDay = -1;
     private Calendar mCalendar;
 
     public DayWheelView(Context context) {
@@ -97,6 +104,24 @@ public class DayWheelView extends WheelView<Integer> {
         return mMonth;
     }
 
+    public void setMaxYearMonthAndDay(@IntRange(from = 0) int maxYear,
+                                      @IntRange(from = 1, to = 12) int maxMonth,
+                                      @IntRange(from = 1, to = 31) int maxDay) {
+        mMaxYear = maxYear;
+        mMaxMonth = maxMonth;
+        mMaxDay = maxDay;
+        checkCurrentSelected(getSelectedItemData());
+    }
+
+    public void setMinYearMonthAndDay(@IntRange(from = 0) int minYear,
+                                      @IntRange(from = 1, to = 12) int minMonth,
+                                      @IntRange(from = 1, to = 31) int minDay) {
+        mMinYear = minYear;
+        mMinMonth = minMonth;
+        mMinDay = minDay;
+        checkCurrentSelected(getSelectedItemData());
+    }
+
     /**
      * 更新数据
      */
@@ -116,6 +141,7 @@ public class DayWheelView extends WheelView<Integer> {
             DAYS.put(days, data);
         }
         super.setData(data);
+        checkCurrentSelected(getSelectedItemData());
     }
 
     /**
@@ -156,7 +182,13 @@ public class DayWheelView extends WheelView<Integer> {
     public void setSelectedDay(int selectedDay, boolean isSmoothScroll, int smoothDuration) {
         int days = mCalendar.get(Calendar.DATE);
         if (selectedDay >= 1 && selectedDay <= days) {
-            updateSelectedDay(selectedDay, isSmoothScroll, smoothDuration);
+            int shouldSelected = selectedDay;
+            if (isMoreThanMaxDay(selectedDay)) {
+                shouldSelected = mMaxDay;
+            } else if (isLessThanMinDay(selectedDay)) {
+                shouldSelected = mMinDay;
+            }
+            updateSelectedDay(shouldSelected, isSmoothScroll, smoothDuration);
         }
     }
 
@@ -174,5 +206,48 @@ public class DayWheelView extends WheelView<Integer> {
     @Override
     public void setData(List<Integer> dataList) {
         throw new UnsupportedOperationException("You can not invoke setData method in " + DayWheelView.class.getSimpleName() + ".");
+    }
+
+    @Override
+    protected void onItemSelected(Integer data, int position) {
+        checkCurrentSelected(data);
+    }
+
+    private void checkCurrentSelected(int data) {
+        if (isMoreThanMaxDay(data)) {
+            setSelectedDay(mMaxDay);
+        } else if (isLessThanMinDay(data)) {
+            setSelectedDay(mMinDay);
+        }
+    }
+
+    private boolean isMoreThanMaxDay(int data) {
+        return isCurrentMaxYear() && isCurrentMaxMonth()
+                && data > mMaxDay && mMaxDay > 0;
+    }
+
+    private boolean isLessThanMinDay(int data) {
+        return isCurrentMinYear() && isCurrentMinMonth()
+                && data < mMinDay && mMinDay > 0;
+    }
+
+    private boolean isCurrentMaxYear() {
+        return (mMaxYear > 0 && mYear == mMaxYear)
+                || (mYear < 0 && mMaxYear < 0 && mMinYear < 0);
+    }
+
+    private boolean isCurrentMinYear() {
+        return (mYear == mMinYear && mMinYear > 0)
+                || (mYear < 0 && mMaxYear < 0 && mMinYear < 0);
+    }
+
+    private boolean isCurrentMaxMonth() {
+        return (mMaxMonth > 0 && mMonth == mMaxMonth)
+                || (mMonth < 0 && mMaxMonth < 0 && mMinMonth < 0);
+    }
+
+    private boolean isCurrentMinMonth() {
+        return (mMonth == mMinMonth && mMinMonth > 0)
+                || (mMonth < 0 && mMaxMonth < 0 && mMinMonth < 0);
     }
 }

@@ -22,6 +22,7 @@ import com.zyyoona7.picker.ex.YearWheelView;
 import com.zyyoona7.picker.listener.OnDateSelectedListener;
 import com.zyyoona7.wheel.WheelView;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Main3Activity extends AppCompatActivity {
@@ -70,6 +71,16 @@ public class Main3Activity extends AppCompatActivity {
         defaultDpv.setCurved(false);
         defaultDpv.setVisibleItems(3);
         defaultDpv.setSelectedMonth(2);
+        //设置最大选择日期
+        Calendar maxCalendar = Calendar.getInstance();
+        maxCalendar.set(Calendar.YEAR, 2018);
+        defaultDpv.setMaxDate(maxCalendar);
+        //设置最小选择日期
+        Calendar minCalendar = Calendar.getInstance();
+        minCalendar.set(Calendar.YEAR, 2000);
+        minCalendar.set(Calendar.MONTH, 5);
+        minCalendar.set(Calendar.DAY_OF_MONTH, 15);
+        defaultDpv.setMinDate(minCalendar);
 
         DatePickerView yearMonthDpv = findViewById(R.id.dpv_year_month);
         yearMonthDpv.setTextSize(24, true);
