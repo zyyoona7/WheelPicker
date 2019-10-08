@@ -1,6 +1,6 @@
 package com.zyyoona7.picker.listener;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * 选项选中回调

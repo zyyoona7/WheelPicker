@@ -2,13 +2,13 @@ package com.zyyoona7.picker;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.FloatRange;
-import android.support.annotation.Nullable;
-import android.support.annotation.RawRes;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatTextView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.FloatRange;
+import androidx.annotation.Nullable;
+import androidx.annotation.RawRes;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
 import com.zyyoona7.picker.base.BaseDatePickerView;

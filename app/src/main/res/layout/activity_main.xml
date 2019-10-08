@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,14 +7,14 @@
     android:fillViewport="true"
     tools:context=".MainActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:paddingBottom="50dp">
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_go_date_picker_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_go_options_picker_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_go_date_picker_view" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_go_custom_attrs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
             app:wv_showDivider="true"
             app:wv_textSize="24sp" />
 
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/sc_turn_on_sound"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/wheelview" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_set_sound_effect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sc_turn_on_sound" />
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/sb_sound_effect"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_set_sound_effect" />
 
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/sc_turn_on_cyclic"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_set_sound_effect" />
 
-        <android.support.v7.widget.AppCompatCheckBox
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/cb_smooth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sc_turn_on_cyclic" />
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/sb_smooth_duration"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
             app:layout_constraintStart_toEndOf="@id/cb_smooth"
             app:layout_constraintTop_toTopOf="@id/cb_smooth" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_random"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -138,27 +138,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_random">
 
-            <android.support.v7.widget.AppCompatRadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="左对齐" />
 
-            <android.support.v7.widget.AppCompatRadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="居中" />
 
-            <android.support.v7.widget.AppCompatRadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="右对齐" />
         </RadioGroup>
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_set_align"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -169,7 +169,7 @@
             app:layout_constraintStart_toEndOf="@id/rg_align"
             app:layout_constraintTop_toTopOf="@id/rg_align" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_set_text_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_set_align" />
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/sb_text_size"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -188,7 +188,7 @@
             app:layout_constraintTop_toTopOf="@id/btn_set_text_size" />
 
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_set_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -197,7 +197,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_set_text_size" />
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/sb_margin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -206,7 +206,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_set_margin" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_set_visible_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -215,7 +215,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_set_margin" />
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/sb_visible_item"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -224,7 +224,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_set_visible_item" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_set_line_spacing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -233,7 +233,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_set_visible_item" />
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/sb_line_spacing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -242,7 +242,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_set_line_spacing" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_curved_guide_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -252,7 +252,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_set_line_spacing" />
 
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/sc_turn_on_curved"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -272,27 +272,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sc_turn_on_curved">
 
-            <android.support.v7.widget.AppCompatRadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb_curved_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="左偏移" />
 
-            <android.support.v7.widget.AppCompatRadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb_curved_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="不偏移" />
 
-            <android.support.v7.widget.AppCompatRadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb_curved_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="右偏移" />
         </RadioGroup>
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_set_curved_arc_direction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -303,7 +303,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rg_curved_arc_direction" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_set_curved_factor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -312,7 +312,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_set_curved_arc_direction" />
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/sb_curved_factor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -321,7 +321,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_set_curved_factor" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_divider_guide_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -331,7 +331,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_set_curved_factor" />
 
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/sc_turn_on_divider"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -350,14 +350,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sc_turn_on_divider">
 
-            <android.support.v7.widget.AppCompatRadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb_divider_fill"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="FILL" />
 
-            <android.support.v7.widget.AppCompatRadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb_divider_wrap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -365,7 +365,7 @@
 
         </RadioGroup>
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_set_divider_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -376,7 +376,7 @@
             app:layout_constraintStart_toEndOf="@id/rg_divider_type"
             app:layout_constraintTop_toTopOf="@id/rg_divider_type" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_set_divider_height"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -385,7 +385,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_set_divider_type" />
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/sb_divider_height"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -394,7 +394,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_set_divider_height" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_set_divider_padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -403,7 +403,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sb_divider_height" />
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/sb_divider_padding"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -412,7 +412,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_set_divider_padding" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_set_typeface"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -421,7 +421,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_set_divider_padding" />
 
-        <android.support.v7.widget.AppCompatCheckBox
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/cb_is_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -430,7 +430,7 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_set_typeface"
             app:layout_constraintStart_toEndOf="@id/tv_set_typeface"/>
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_typeface_mono"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -441,7 +441,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_set_typeface" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_typeface_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -451,7 +451,7 @@
             app:layout_constraintStart_toEndOf="@id/btn_typeface_mono"
             app:layout_constraintTop_toBottomOf="@id/tv_set_typeface" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_typeface_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -460,7 +460,7 @@
             app:layout_constraintStart_toEndOf="@id/btn_typeface_medium"
             app:layout_constraintEnd_toStartOf="@id/btn_typeface_light"
             app:layout_constraintTop_toBottomOf="@id/tv_set_typeface" />
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_typeface_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -498,6 +498,6 @@
             app:wv_textBoundaryMargin="10dp"
             app:wv_textSize="24sp"
             app:wv_visibleItems="6" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

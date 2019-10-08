@@ -2,14 +2,13 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 8
-        versionName "1.0.7"
-
+        targetSdkVersion 29
+        versionCode 20
+        versionName "2.0.0"
     }
 
     buildTypes {
@@ -23,7 +22,7 @@ android {
 
 dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
-    compileOnly 'com.android.support:appcompat-v7:28.0.0'
+    compileOnly 'androidx.appcompat:appcompat:1.1.0'
 }
 
 publish {
@@ -34,7 +33,7 @@ publish {
     //项目名称 project name
     artifactId = 'wheelview'
     //版本号 version code
-    publishVersion = '1.0.7'
+    publishVersion = '2.0.0'
     //项目描述 description
     desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
     //项目网址链接 link
