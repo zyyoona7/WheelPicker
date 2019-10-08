@@ -589,32 +589,32 @@ public class DatePickerView extends BaseDatePickerView {
     /**
      * 设置WheelView 是否绘制选中区域
      *
-     * @param isDrawSelectedRect 是否绘制选中区域
+     * @param hasCurtain 是否绘制选中区域
      */
-    public void setDrawSelectedRect(boolean isDrawSelectedRect) {
-        mYearWv.setDrawSelectedRect(isDrawSelectedRect);
-        mMonthWv.setDrawSelectedRect(isDrawSelectedRect);
-        mDayWv.setDrawSelectedRect(isDrawSelectedRect);
+    public void setHasCurtain(boolean hasCurtain) {
+        mYearWv.setHasCurtain(hasCurtain);
+        mMonthWv.setHasCurtain(hasCurtain);
+        mDayWv.setHasCurtain(hasCurtain);
     }
 
     /**
      * 设置WheelView 选中区域颜色
      *
-     * @param selectedRectColorRes 颜色资源
+     * @param curtainColorRes 颜色资源
      */
-    public void setSelectedRectColorRes(@ColorRes int selectedRectColorRes) {
-        setSelectedRectColor(ContextCompat.getColor(getContext(), selectedRectColorRes));
+    public void setCurtainColorRes(@ColorRes int curtainColorRes) {
+        setCurtainColor(ContextCompat.getColor(getContext(), curtainColorRes));
     }
 
     /**
      * 设置WheelView 选中区域颜色
      *
-     * @param selectedRectColor 颜色值
+     * @param curtainColor 颜色值
      */
-    public void setSelectedRectColor(@ColorInt int selectedRectColor) {
-        mYearWv.setSelectedRectColor(selectedRectColor);
-        mMonthWv.setSelectedRectColor(selectedRectColor);
-        mDayWv.setSelectedRectColor(selectedRectColor);
+    public void setCurtainColor(@ColorInt int curtainColor) {
+        mYearWv.setCurtainColor(curtainColor);
+        mMonthWv.setCurtainColor(curtainColor);
+        mDayWv.setCurtainColor(curtainColor);
     }
 
     /**

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 29
@@ -29,5 +31,10 @@ dependencies {
     implementation project(':picker')
 //    implementation 'com.github.zyyoona7:pickerview:1.0.9'
     implementation 'com.github.zyyoona7:EasyDialog:1.1.4'
+    compile "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+}
+repositories {
+    mavenCentral()
 }

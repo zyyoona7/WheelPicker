@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import com.zyyoona7.picker.listener.OnOptionsSelectedListener;
 import com.zyyoona7.picker.listener.OnPickerScrollStateChangedListener;
 import com.zyyoona7.wheel.WheelView;
+import com.zyyoona7.wheel.formatter.ItemTextFormatter;
 
 import java.util.List;
 
@@ -565,32 +566,32 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
     /**
      * 设置是否绘制选中区域
      *
-     * @param isDrawSelectedRect 是否绘制选中区域
+     * @param hasCurtain 是否绘制选中区域
      */
-    public void setDrawSelectedRect(boolean isDrawSelectedRect) {
-        mOptionsWv1.setDrawSelectedRect(isDrawSelectedRect);
-        mOptionsWv2.setDrawSelectedRect(isDrawSelectedRect);
-        mOptionsWv3.setDrawSelectedRect(isDrawSelectedRect);
+    public void setHasCurtain(boolean hasCurtain) {
+        mOptionsWv1.setHasCurtain(hasCurtain);
+        mOptionsWv2.setHasCurtain(hasCurtain);
+        mOptionsWv3.setHasCurtain(hasCurtain);
     }
 
     /**
      * 设置选中区域颜色
      *
-     * @param selectedRectColorRes 选中区域颜色资源 {@link ColorRes}
+     * @param curtainColorRes 选中区域颜色资源 {@link ColorRes}
      */
-    public void setSelectedRectColorRes(@ColorRes int selectedRectColorRes) {
-        setSelectedRectColor(ContextCompat.getColor(getContext(), selectedRectColorRes));
+    public void setCurtainColorRes(@ColorRes int curtainColorRes) {
+        setCurtainColor(ContextCompat.getColor(getContext(), curtainColorRes));
     }
 
     /**
      * 设置选中区域颜色
      *
-     * @param selectedRectColor 选中区域颜色 {@link ColorInt}
+     * @param curtainColor 选中区域颜色 {@link ColorInt}
      */
-    public void setSelectedRectColor(@ColorInt int selectedRectColor) {
-        mOptionsWv1.setSelectedRectColor(selectedRectColor);
-        mOptionsWv2.setSelectedRectColor(selectedRectColor);
-        mOptionsWv3.setSelectedRectColor(selectedRectColor);
+    public void setCurtainColor(@ColorInt int curtainColor) {
+        mOptionsWv1.setCurtainColor(curtainColor);
+        mOptionsWv2.setCurtainColor(curtainColor);
+        mOptionsWv3.setCurtainColor(curtainColor);
     }
 
     /**
@@ -649,6 +650,12 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
         mOptionsWv1.setRefractRatio(curvedRefractRatio);
         mOptionsWv2.setRefractRatio(curvedRefractRatio);
         mOptionsWv3.setRefractRatio(curvedRefractRatio);
+    }
+
+    public void setItemTextFormatter(ItemTextFormatter formatter){
+        mOptionsWv1.setItemTextFormatter(formatter);
+        mOptionsWv2.setItemTextFormatter(formatter);
+        mOptionsWv3.setItemTextFormatter(formatter);
     }
 
     /**

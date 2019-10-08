@@ -21,6 +21,7 @@ import com.zyyoona7.picker.ex.MonthWheelView;
 import com.zyyoona7.picker.ex.YearWheelView;
 import com.zyyoona7.picker.listener.OnDateSelectedListener;
 import com.zyyoona7.wheel.WheelView;
+import com.zyyoona7.wheel.formatter.IntegerItemTextFormatter;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -100,8 +101,8 @@ public class Main3Activity extends AppCompatActivity {
         customDpv1.getYearWv().setTextBoundaryMargin(16, true);
         customDpv1.getMonthWv().setTextBoundaryMargin(16, true);
         customDpv1.getDayWv().setTextBoundaryMargin(16, true);
-        customDpv1.setDrawSelectedRect(true);
-        customDpv1.setSelectedRectColor(Color.parseColor("#F5F5F5"));
+        customDpv1.setHasCurtain(true);
+        customDpv1.setCurtainColor(Color.parseColor("#F5F5F5"));
 
         DatePickerView customDpv2 = findViewById(R.id.dpv_custom_2);
         customDpv2.setTextSize(24, true);
@@ -114,8 +115,10 @@ public class Main3Activity extends AppCompatActivity {
         YearWheelView yearWv2 = customDpv2.getYearWv();
         MonthWheelView monthWv2 = customDpv2.getMonthWv();
         DayWheelView dayWv2 = customDpv2.getDayWv();
-        monthWv2.setIntegerNeedFormat("%02d");
-        dayWv2.setIntegerNeedFormat("%02d");
+//        monthWv2.setIntegerNeedFormat("%02d");
+        monthWv2.setItemTextFormatter(new IntegerItemTextFormatter());
+//        dayWv2.setIntegerNeedFormat("%02d");
+        dayWv2.setItemTextFormatter(new IntegerItemTextFormatter());
         customDpv2.setResetSelectedPosition(true);
 
         final DatePickerView customDpv3 = findViewById(R.id.dpv_custom_3);
@@ -129,9 +132,9 @@ public class Main3Activity extends AppCompatActivity {
         YearWheelView yearWv3 = customDpv3.getYearWv();
         MonthWheelView monthWv3 = customDpv3.getMonthWv();
         DayWheelView dayWv3 = customDpv3.getDayWv();
-        yearWv3.setIntegerNeedFormat("%d年");
-        monthWv3.setIntegerNeedFormat("%d月");
-        dayWv3.setIntegerNeedFormat("%02d日");
+        yearWv3.setItemTextFormatter(new IntegerItemTextFormatter("%d年"));
+        monthWv3.setItemTextFormatter(new IntegerItemTextFormatter("%d月"));
+        dayWv3.setItemTextFormatter(new IntegerItemTextFormatter("%02d日"));
         yearWv3.setCurvedArcDirection(WheelView.CURVED_ARC_DIRECTION_LEFT);
         yearWv3.setCurvedArcDirectionFactor(0.65f);
         dayWv3.setCurvedArcDirection(WheelView.CURVED_ARC_DIRECTION_RIGHT);

@@ -12,8 +12,14 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.media.AudioManager;
-import android.media.SoundPool;
-import android.os.Build;
+import android.util.AttributeSet;
+import android.util.TypedValue;
+import android.view.MotionEvent;
+import android.view.VelocityTracker;
+import android.view.View;
+import android.view.ViewConfiguration;
+import android.widget.Scroller;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.FloatRange;
@@ -23,29 +29,20 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
-import android.text.TextUtils;
-import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.MotionEvent;
-import android.view.VelocityTracker;
-import android.view.View;
-import android.view.ViewConfiguration;
-import android.widget.Scroller;
+
+import com.zyyoona7.wheel.formatter.ItemTextFormatter;
+import com.zyyoona7.wheel.sound.SoundHelper;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author zyyoona7
- * @version v1.0.1
  * @since 2018/8/7.
  */
 public class WheelView<T> extends View implements Runnable {
-
-    private static final String TAG = "WheelView";
 
     private static final float DEFAULT_LINE_SPACING = dp2px(2f);
     private static final float DEFAULT_TEXT_SIZE = sp2px(15f);
@@ -56,7 +53,6 @@ public class WheelView<T> extends View implements Runnable {
     private static final int DEFAULT_VISIBLE_ITEM = 5;
     private static final int DEFAULT_SCROLL_DURATION = 250;
     private static final long DEFAULT_CLICK_CONFIRM = 120;
-    private static final String DEFAULT_INTEGER_FORMAT = "%02d";
     //默认折射比值，通过字体大小来实现折射视觉差
     private static final float DEFAULT_REFRACT_RATIO = 1f;
 
@@ -124,9 +120,9 @@ public class WheelView<T> extends View implements Runnable {
     private float mDividerOffset;
 
     //是否绘制选中区域
-    private boolean isDrawSelectedRect;
+    private boolean hasCurtain;
     //选中区域颜色
-    private int mSelectedRectColor;
+    private int mCurtainColor;
 
     //文字起始X
     private int mStartX;
@@ -146,10 +142,6 @@ public class WheelView<T> extends View implements Runnable {
     private Rect mDrawRect;
     //字体外边距，目的是留有边距
     private float mTextBoundaryMargin;
-    //数据为Integer类型时，是否需要格式转换
-    private boolean isIntegerNeedFormat;
-    //数据为Integer类型时，转换格式，默认转换为两位数
-    private String mIntegerFormat;
 
     //3D效果
     private Camera mCamera;
@@ -164,10 +156,6 @@ public class WheelView<T> extends View implements Runnable {
     //选中后折射的偏移 与字体大小的比值，1为不偏移 越小偏移越明显
     //(普通效果和3d效果都适用)
     private float mRefractRatio;
-
-    //数据列表
-    @NonNull
-    private List<T> mDataList = new ArrayList<>(1);
     //数据变化时，是否重置选中下标到第一个位置
     private boolean isResetSelectedPosition = false;
 
@@ -214,6 +202,8 @@ public class WheelView<T> extends View implements Runnable {
     //是否开启音频效果
     private boolean isSoundEffect = false;
 
+    private final DefaultDataDelegate<T> mDataDelegate = new DefaultDataDelegate<>();
+
     public WheelView(Context context) {
         this(context, null);
     }
@@ -244,11 +234,6 @@ public class WheelView<T> extends View implements Runnable {
         mTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalItemTextColor, DEFAULT_NORMAL_TEXT_COLOR);
         mSelectedItemTextColor = typedArray.getColor(R.styleable.WheelView_wv_selectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR);
         mLineSpacing = typedArray.getDimension(R.styleable.WheelView_wv_lineSpacing, DEFAULT_LINE_SPACING);
-        isIntegerNeedFormat = typedArray.getBoolean(R.styleable.WheelView_wv_integerNeedFormat, false);
-        mIntegerFormat = typedArray.getString(R.styleable.WheelView_wv_integerFormat);
-        if (TextUtils.isEmpty(mIntegerFormat)) {
-            mIntegerFormat = DEFAULT_INTEGER_FORMAT;
-        }
 
         mVisibleItems = typedArray.getInt(R.styleable.WheelView_wv_visibleItems, DEFAULT_VISIBLE_ITEM);
         //跳转可见item为奇数
@@ -266,8 +251,8 @@ public class WheelView<T> extends View implements Runnable {
 
         mDividerOffset = typedArray.getDimensionPixelOffset(R.styleable.WheelView_wv_dividerOffset, 0);
 
-        isDrawSelectedRect = typedArray.getBoolean(R.styleable.WheelView_wv_drawSelectedRect, false);
-        mSelectedRectColor = typedArray.getColor(R.styleable.WheelView_wv_selectedRectColor, Color.TRANSPARENT);
+        hasCurtain = typedArray.getBoolean(R.styleable.WheelView_wv_hasCurtain, false);
+        mCurtainColor = typedArray.getColor(R.styleable.WheelView_wv_curtainColor, Color.TRANSPARENT);
 
         isCurved = typedArray.getBoolean(R.styleable.WheelView_wv_curved, true);
         mCurvedArcDirection = typedArray.getInt(R.styleable.WheelView_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER);
@@ -298,10 +283,6 @@ public class WheelView<T> extends View implements Runnable {
         mDrawRect = new Rect();
         mCamera = new Camera();
         mMatrix = new Matrix();
-        if (!isInEditMode()) {
-            mSoundHelper = SoundHelper.obtain();
-            initDefaultVolume(context);
-        }
         calculateTextSize();
         updateTextAlign();
     }
@@ -312,6 +293,14 @@ public class WheelView<T> extends View implements Runnable {
         if (mSoundHelper != null) {
             mSoundHelper.release();
         }
+    }
+
+    private void initSoundHelper() {
+        if (mSoundHelper != null) {
+            return;
+        }
+        mSoundHelper = SoundHelper.obtain();
+        initDefaultVolume(getContext());
     }
 
     /**
@@ -338,8 +327,8 @@ public class WheelView<T> extends View implements Runnable {
      */
     private void calculateTextSize() {
         mPaint.setTextSize(mTextSize);
-        for (int i = 0; i < mDataList.size(); i++) {
-            int textWidth = (int) mPaint.measureText(getDataText(mDataList.get(i)));
+        for (int i = 0; i < mDataDelegate.getItemCount(); i++) {
+            int textWidth = (int) mPaint.measureText(mDataDelegate.getItemText(mDataDelegate.getItem(i)));
             mMaxTextWidth = Math.max(textWidth, mMaxTextWidth);
         }
 
@@ -436,7 +425,7 @@ public class WheelView<T> extends View implements Runnable {
     private void calculateLimitY() {
         mMinScrollY = isCyclic ? Integer.MIN_VALUE : 0;
         //下边界 (dataSize - 1 - mInitPosition) * mItemHeight
-        mMaxScrollY = isCyclic ? Integer.MAX_VALUE : (mDataList.size() - 1) * mItemHeight;
+        mMaxScrollY = isCyclic ? Integer.MAX_VALUE : (mDataDelegate.getItemCount() - 1) * mItemHeight;
     }
 
     @Override
@@ -444,7 +433,7 @@ public class WheelView<T> extends View implements Runnable {
         super.onDraw(canvas);
 
         //绘制选中区域
-        drawSelectedRect(canvas);
+        drawCurtainRect(canvas);
         //绘制分割线
         drawDivider(canvas);
 
@@ -486,9 +475,9 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @param canvas 画布
      */
-    private void drawSelectedRect(Canvas canvas) {
-        if (isDrawSelectedRect) {
-            mPaint.setColor(mSelectedRectColor);
+    private void drawCurtainRect(Canvas canvas) {
+        if (hasCurtain) {
+            mPaint.setColor(mCurtainColor);
             canvas.drawRect(mClipLeft, mSelectedItemTopLimit, mClipRight, mSelectedItemBottomLimit, mPaint);
         }
     }
@@ -530,13 +519,14 @@ public class WheelView<T> extends View implements Runnable {
      * @param scrolledOffset 滚动偏移
      */
     private void drawItem(Canvas canvas, int index, int scrolledOffset) {
-        String text = getDataByIndex(index);
+        String text = mDataDelegate.getItemTextByIndex(index);
         if (text == null) {
             return;
         }
 
+        int scrolledItem = mScrollOffsetY / dividedItemHeight();
         //index 的 item 距离中间项的偏移
-        int item2CenterOffsetY = (index - mScrollOffsetY / dividedItemHeight()) * mItemHeight - scrolledOffset;
+        int item2CenterOffsetY = (index - scrolledItem) * mItemHeight - scrolledOffset;
         //记录初始测量的字体起始X
         int startX = mStartX;
         //重新测量字体宽度和基线偏移
@@ -689,14 +679,15 @@ public class WheelView<T> extends View implements Runnable {
      * @param scrolledOffset 滚动偏移
      */
     private void draw3DItem(Canvas canvas, int index, int scrolledOffset) {
-        String text = getDataByIndex(index);
+        String text = mDataDelegate.getItemTextByIndex(index);
         if (text == null) {
             return;
         }
         // 滚轮的半径
         final int radius = (getHeight() - getPaddingTop() - getPaddingBottom()) / 2;
+        int scrolledItem = mScrollOffsetY / dividedItemHeight();
         //index 的 item 距离中间项的偏移
-        int item2CenterOffsetY = (index - mScrollOffsetY / dividedItemHeight()) * mItemHeight - scrolledOffset;
+        int item2CenterOffsetY = (index - scrolledItem) * mItemHeight - scrolledOffset;
 
         // 当滑动的角度和y轴垂直时（此时文字已经显示为一条线），不绘制文字
         if (Math.abs(item2CenterOffsetY) > radius * Math.PI / 2) return;
@@ -859,59 +850,11 @@ public class WheelView<T> extends View implements Runnable {
         }
     }
 
-    /**
-     * 根据下标获取到内容
-     *
-     * @param index 下标
-     * @return 绘制的文字内容
-     */
-    private String getDataByIndex(int index) {
-        int dataSize = mDataList.size();
-        if (dataSize == 0) {
-            return null;
-        }
-
-        String itemText = null;
-        if (isCyclic) {
-            int i = index % dataSize;
-            if (i < 0) {
-                i += dataSize;
-            }
-            itemText = getDataText(mDataList.get(i));
-        } else {
-            if (index >= 0 && index < dataSize) {
-                itemText = getDataText(mDataList.get(index));
-            }
-        }
-        return itemText;
-    }
-
-    /**
-     * 获取item text
-     *
-     * @param item item数据
-     * @return 文本内容
-     */
-    protected String getDataText(T item) {
-        if (item == null) {
-            return "";
-        } else if (item instanceof IWheelEntity) {
-            return ((IWheelEntity) item).getWheelText();
-        } else if (item instanceof Integer) {
-            //如果为整形则最少保留两位数.
-            return isIntegerNeedFormat ? String.format(Locale.getDefault(), mIntegerFormat, item)
-                    : String.valueOf(item);
-        } else if (item instanceof String) {
-            return (String) item;
-        }
-        return item.toString();
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         //屏蔽如果未设置数据时，触摸导致运算数据不正确的崩溃 issue #20
-        if (!isEnabled() || mDataList.isEmpty()) {
+        if (!isEnabled() || mDataDelegate.getItemCount() == 0) {
             return super.onTouchEvent(event);
         }
         initVelocityTracker();
@@ -1139,9 +1082,9 @@ public class WheelView<T> extends View implements Runnable {
 
             //停止滚动，选中条目回调
             if (mOnItemSelectedListener != null) {
-                mOnItemSelectedListener.onItemSelected(this, mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
+                mOnItemSelectedListener.onItemSelected(this, mDataDelegate.getItem(mSelectedItemPosition), mSelectedItemPosition);
             }
-            onItemSelected(mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
+            onItemSelected(mDataDelegate.getItem(mSelectedItemPosition), mSelectedItemPosition);
             //滚动状态回调
             if (mOnWheelChangedListener != null) {
                 mOnWheelChangedListener.onWheelSelected(mSelectedItemPosition);
@@ -1177,7 +1120,7 @@ public class WheelView<T> extends View implements Runnable {
      * @return 偏移量对应的当前下标 if dataList is empty return -1
      */
     private int getCurrentPosition() {
-        if (mDataList.isEmpty()) {
+        if (mDataDelegate.getItemCount() == 0) {
             return -1;
         }
         int itemPosition;
@@ -1186,9 +1129,9 @@ public class WheelView<T> extends View implements Runnable {
         } else {
             itemPosition = (mScrollOffsetY + mItemHeight / 2) / dividedItemHeight();
         }
-        int currentPosition = itemPosition % mDataList.size();
+        int currentPosition = itemPosition % mDataDelegate.getItemCount();
         if (currentPosition < 0) {
-            currentPosition += mDataList.size();
+            currentPosition += mDataDelegate.getItemCount();
         }
 
         return currentPosition;
@@ -1227,6 +1170,7 @@ public class WheelView<T> extends View implements Runnable {
      * @param rawResId 声音效果资源 越小效果越好 {@link RawRes}
      */
     public void setSoundEffectResource(@RawRes int rawResId) {
+        initSoundHelper();
         if (mSoundHelper != null) {
             mSoundHelper.load(getContext(), rawResId);
         }
@@ -1247,6 +1191,7 @@ public class WheelView<T> extends View implements Runnable {
      * @param playVolume 播放音量 range 0.0-1.0
      */
     public void setPlayVolume(@FloatRange(from = 0.0, to = 1.0) float playVolume) {
+        initSoundHelper();
         if (mSoundHelper != null) {
             mSoundHelper.setPlayVolume(playVolume);
         }
@@ -1261,11 +1206,11 @@ public class WheelView<T> extends View implements Runnable {
     @Nullable
     public T getItemData(int position) {
         if (isPositionInRange(position)) {
-            return mDataList.get(position);
-        } else if (mDataList.size() > 0 && position >= mDataList.size()) {
-            return mDataList.get(mDataList.size() - 1);
-        } else if (mDataList.size() > 0 && position < 0) {
-            return mDataList.get(0);
+            return mDataDelegate.getItem(position);
+        } else if (mDataDelegate.getItemCount() > 0 && position >= mDataDelegate.getItemCount()) {
+            return mDataDelegate.getItem(mDataDelegate.getItemCount() - 1);
+        } else if (mDataDelegate.getItemCount() > 0 && position < 0) {
+            return mDataDelegate.getItem(0);
         }
         return null;
     }
@@ -1279,13 +1224,8 @@ public class WheelView<T> extends View implements Runnable {
         return getItemData(mSelectedItemPosition);
     }
 
-    /**
-     * 获取数据列表
-     *
-     * @return 数据列表
-     */
     public List<T> getData() {
-        return mDataList;
+        return mDataDelegate.getData();
     }
 
     /**
@@ -1297,11 +1237,11 @@ public class WheelView<T> extends View implements Runnable {
         if (dataList == null) {
             return;
         }
-        mDataList = dataList;
-        if (!isResetSelectedPosition && mDataList.size() > 0) {
+        mDataDelegate.setData(dataList);
+        if (!isResetSelectedPosition && mDataDelegate.getItemCount() > 0) {
             //不重置选中下标
-            if (mSelectedItemPosition >= mDataList.size()) {
-                mSelectedItemPosition = mDataList.size() - 1;
+            if (mSelectedItemPosition >= mDataDelegate.getItemCount()) {
+                mSelectedItemPosition = mDataDelegate.getItemCount() - 1;
                 //重置滚动下标
                 mCurrentScrollPosition = mSelectedItemPosition;
             }
@@ -1614,67 +1554,12 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     /**
-     * 获取数据为Integer类型时是否需要转换
+     * 设置格式转换器
      *
-     * @return isIntegerNeedFormat
+     * @param itemTextFormatter wheelView item 显示文字的转换器
      */
-    public boolean isIntegerNeedFormat() {
-        return isIntegerNeedFormat;
-    }
-
-    /**
-     * 设置数据为Integer类型时是否需要转换
-     *
-     * @param isIntegerNeedFormat 数据为Integer类型时是否需要转换
-     */
-    public void setIntegerNeedFormat(boolean isIntegerNeedFormat) {
-        if (this.isIntegerNeedFormat == isIntegerNeedFormat) {
-            return;
-        }
-        this.isIntegerNeedFormat = isIntegerNeedFormat;
-        calculateTextSize();
-        requestLayout();
-        invalidate();
-    }
-
-    /**
-     * 同时设置 isIntegerNeedFormat=true 和 mIntegerFormat=integerFormat
-     *
-     * @param integerFormat 注意：integerFormat 中必须包含并且只能包含一个格式说明符（format specifier）
-     *                      格式说明符请参照 http://java2s.com/Tutorials/Java/Data_Format/Java_Format_Specifier.htm
-     *                      <p>
-     *                      如果有多个格式说明符会抛出 java.util.MissingFormatArgumentException: Format specifier '%s'(多出来的说明符)
-     */
-    public void setIntegerNeedFormat(String integerFormat) {
-        isIntegerNeedFormat = true;
-        mIntegerFormat = integerFormat;
-        calculateTextSize();
-        requestLayout();
-        invalidate();
-    }
-
-    /**
-     * 获取Integer类型转换格式
-     *
-     * @return integerFormat
-     */
-    public String getIntegerFormat() {
-        return mIntegerFormat;
-    }
-
-    /**
-     * 设置Integer类型转换格式
-     *
-     * @param integerFormat 注意：integerFormat 中必须包含并且只能包含一个格式说明符（format specifier）
-     *                      格式说明符请参照 http://java2s.com/Tutorials/Java/Data_Format/Java_Format_Specifier.htm
-     *                      <p>
-     *                      如果有多个格式说明符会抛出 java.util.MissingFormatArgumentException: Format specifier '%s'(多出来的说明符)
-     */
-    public void setIntegerFormat(String integerFormat) {
-        if (TextUtils.isEmpty(integerFormat) || integerFormat.equals(mIntegerFormat)) {
-            return;
-        }
-        mIntegerFormat = integerFormat;
+    public void setItemTextFormatter(ItemTextFormatter itemTextFormatter) {
+        mDataDelegate.setItemTextFormatter(itemTextFormatter);
         calculateTextSize();
         requestLayout();
         invalidate();
@@ -1733,6 +1618,7 @@ public class WheelView<T> extends View implements Runnable {
             return;
         }
         this.isCyclic = isCyclic;
+        mDataDelegate.setCyclic(isCyclic);
 
         forceFinishScroll();
         calculateLimitY();
@@ -1805,9 +1691,9 @@ public class WheelView<T> extends View implements Runnable {
             mSelectedItemPosition = position;
             //选中条目回调
             if (mOnItemSelectedListener != null) {
-                mOnItemSelectedListener.onItemSelected(this, mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
+                mOnItemSelectedListener.onItemSelected(this, mDataDelegate.getItem(mSelectedItemPosition), mSelectedItemPosition);
             }
-            onItemSelected(mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
+            onItemSelected(mDataDelegate.getItem(mSelectedItemPosition), mSelectedItemPosition);
             if (mOnWheelChangedListener != null) {
                 mOnWheelChangedListener.onWheelSelected(mSelectedItemPosition);
             }
@@ -1828,7 +1714,7 @@ public class WheelView<T> extends View implements Runnable {
      * @return 是否在数据列表范围内
      */
     public boolean isPositionInRange(int position) {
-        return position >= 0 && position < mDataList.size();
+        return position >= 0 && position < mDataDelegate.getItemCount();
     }
 
     /**
@@ -2009,8 +1895,8 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @return 是否绘制选中区域
      */
-    public boolean isDrawSelectedRect() {
-        return isDrawSelectedRect;
+    public boolean isHasCurtain() {
+        return hasCurtain;
     }
 
     /**
@@ -2018,8 +1904,8 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @param isDrawSelectedRect 是否绘制选中区域
      */
-    public void setDrawSelectedRect(boolean isDrawSelectedRect) {
-        this.isDrawSelectedRect = isDrawSelectedRect;
+    public void setHasCurtain(boolean isDrawSelectedRect) {
+        this.hasCurtain = isDrawSelectedRect;
         invalidate();
     }
 
@@ -2028,8 +1914,8 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @return 选中区域颜色 ColorInt
      */
-    public int getSelectedRectColor() {
-        return mSelectedRectColor;
+    public int getCurtainColor() {
+        return mCurtainColor;
     }
 
     /**
@@ -2038,16 +1924,16 @@ public class WheelView<T> extends View implements Runnable {
      * @param selectedRectColorRes 选中区域颜色 {@link ColorRes}
      */
     public void setSelectedRectColorRes(@ColorRes int selectedRectColorRes) {
-        setSelectedRectColor(ContextCompat.getColor(getContext(), selectedRectColorRes));
+        setCurtainColor(ContextCompat.getColor(getContext(), selectedRectColorRes));
     }
 
     /**
      * 设置选中区域颜色
      *
-     * @param selectedRectColor 选中区域颜色 {@link ColorInt}
+     * @param curtainColor 选中区域颜色 {@link ColorInt}
      */
-    public void setSelectedRectColor(@ColorInt int selectedRectColor) {
-        mSelectedRectColor = selectedRectColor;
+    public void setCurtainColor(@ColorInt int curtainColor) {
+        mCurtainColor = curtainColor;
         invalidate();
     }
 
@@ -2371,80 +2257,79 @@ public class WheelView<T> extends View implements Runnable {
         void onWheelScrollStateChanged(int state);
     }
 
-    /**
-     * SoundPool 辅助类
-     */
-    private static class SoundHelper {
+    private static class DefaultDataDelegate<V> {
 
-        private SoundPool mSoundPool;
-        private int mSoundId;
-        private float mPlayVolume;
+        private final List<V> mDataList = new ArrayList<>();
+        private ItemTextFormatter mItemTextFormatter;
+        private boolean isCyclic;
 
-        @SuppressWarnings("deprecation")
-        private SoundHelper() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mSoundPool = new SoundPool.Builder().build();
+        int getItemCount() {
+            return mDataList.size();
+        }
+
+        V getItem(int position) {
+            return mDataList.get(position);
+        }
+
+        /**
+         * 获取展示的文字
+         *
+         * @param item item
+         * @return 展示的文字
+         */
+        @NonNull
+        String getItemText(V item) {
+            return mItemTextFormatter == null ? (item == null ? "" : item.toString())
+                    : mItemTextFormatter.formatText(item);
+        }
+
+        /**
+         * 根据下标获取到内容
+         *
+         * @param index 下标
+         * @return 绘制的文字内容
+         */
+        @Nullable
+        String getItemTextByIndex(int index) {
+            int dataSize = getItemCount();
+            if (dataSize == 0) {
+                return null;
+            }
+
+            String itemText = null;
+            if (isCyclic) {
+                int i = index % dataSize;
+                if (i < 0) {
+                    i += dataSize;
+                }
+                itemText = getItemText(getItem(i));
             } else {
-                mSoundPool = new SoundPool(1, AudioManager.STREAM_SYSTEM, 1);
+                if (index >= 0 && index < dataSize) {
+                    itemText = getItemText(getItem(index));
+                }
             }
+            return itemText;
         }
 
-        /**
-         * 初始化 SoundHelper
-         *
-         * @return SoundHelper 对象
-         */
-        static SoundHelper obtain() {
-            return new SoundHelper();
+        void setCyclic(boolean cyclic) {
+            isCyclic = cyclic;
         }
 
-        /**
-         * 加载音频资源
-         *
-         * @param context 上下文
-         * @param resId   音频资源 {@link RawRes}
-         */
-        void load(Context context, @RawRes int resId) {
-            if (mSoundPool != null) {
-                mSoundId = mSoundPool.load(context, resId, 1);
+        void setData(List<V> dataList) {
+            mDataList.clear();
+            if (dataList == null) {
+                return;
             }
+            mDataList.addAll(dataList);
         }
 
-        /**
-         * 设置音量
-         *
-         * @param playVolume 音频播放音量 range 0.0-1.0
-         */
-        void setPlayVolume(@FloatRange(from = 0.0, to = 1.0) float playVolume) {
-            this.mPlayVolume = playVolume;
+        @NonNull
+        List<V> getData() {
+            return mDataList;
         }
 
-        /**
-         * 获取音量
-         *
-         * @return 音频播放音量 range 0.0-1.0
-         */
-        float getPlayVolume() {
-            return mPlayVolume;
-        }
-
-        /**
-         * 播放声音效果
-         */
-        void playSoundEffect() {
-            if (mSoundPool != null && mSoundId != 0) {
-                mSoundPool.play(mSoundId, mPlayVolume, mPlayVolume, 1, 0, 1);
-            }
-        }
-
-        /**
-         * 释放SoundPool
-         */
-        void release() {
-            if (mSoundPool != null) {
-                mSoundPool.release();
-                mSoundPool = null;
-            }
+        void setItemTextFormatter(ItemTextFormatter itemTextFormatter) {
+            mItemTextFormatter = itemTextFormatter;
         }
     }
 }

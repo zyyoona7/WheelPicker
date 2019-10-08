@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.novoda.bintray-release'
 
 android {
@@ -36,6 +38,7 @@ dependencies {
     compileOnly fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly 'androidx.appcompat:appcompat:1.1.0'
     api project(path: ':wheelview')
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 publish {

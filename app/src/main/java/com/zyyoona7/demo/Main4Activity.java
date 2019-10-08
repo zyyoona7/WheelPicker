@@ -2,6 +2,8 @@ package com.zyyoona7.demo;
 
 import android.graphics.Color;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -18,6 +20,7 @@ import com.zyyoona7.demo.entities.CityEntity;
 import com.zyyoona7.demo.utils.ParseHelper;
 import com.zyyoona7.picker.OptionsPickerView;
 import com.zyyoona7.picker.listener.OnOptionsSelectedListener;
+import com.zyyoona7.wheel.formatter.ItemTextFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +74,6 @@ public class Main4Activity extends AppCompatActivity {
         OptionsPickerView<String> opv1 = findViewById(R.id.opv_first);
         opv1.setData(list1, null, list3);
         opv1.setTextSize(18,true);
-//        opv1.setLinkageData(linkageList1, linkageList2);
         opv1.setOnOptionsSelectedListener(new OnOptionsSelectedListener<String>() {
             @Override
             public void onOptionsSelected(int opt1Pos, @Nullable String opt1Data, int opt2Pos,
@@ -86,7 +88,6 @@ public class Main4Activity extends AppCompatActivity {
         OptionsPickerView<String> opv2 = findViewById(R.id.opv_second);
         opv2.setData(list1, list2, list3);
         opv2.setTextSize(18,true);
-//        opv2.setLinkageData(linkageList1,linkageList2,linkageList3);
         opv2.setOnOptionsSelectedListener(new OnOptionsSelectedListener<String>() {
             @Override
             public void onOptionsSelected(int opt1Pos, @Nullable String opt1Data, int opt2Pos,
@@ -103,10 +104,20 @@ public class Main4Activity extends AppCompatActivity {
         List<List<CityEntity>> c2List = new ArrayList<>(1);
         ParseHelper.initTwoLevelCityList(this, p2List, c2List);
         OptionsPickerView<CityEntity> towLinkageOpv = findViewById(R.id.opv_two_linkage);
+        towLinkageOpv.setItemTextFormatter(new ItemTextFormatter() {
+            @NonNull
+            @Override
+            public String formatText(Object item) {
+                if (item instanceof CityEntity) {
+                   return  ((CityEntity) item).getName();
+                }
+                return "";
+            }
+        });
         towLinkageOpv.setLinkageData(p2List, c2List);
         towLinkageOpv.setTextSize(24f,true);
         towLinkageOpv.setShowDivider(true);
-        towLinkageOpv.setCurvedRefractRatio(0.95f);
+        towLinkageOpv.setRefractRatio(0.95f);
 
         towLinkageOpv.setOnOptionsSelectedListener(new OnOptionsSelectedListener<CityEntity>() {
             @Override
@@ -125,11 +136,21 @@ public class Main4Activity extends AppCompatActivity {
         List<List<List<CityEntity>>> d3List = new ArrayList<>(1);
         ParseHelper.initThreeLevelCityList(this, p3List, c3List, d3List);
         final OptionsPickerView<CityEntity> threeLinkageOpv = findViewById(R.id.opv_three_linkage);
+        threeLinkageOpv.setItemTextFormatter(new ItemTextFormatter() {
+            @NonNull
+            @Override
+            public String formatText(Object item) {
+                if (item instanceof CityEntity) {
+                    return  ((CityEntity) item).getName();
+                }
+                return "";
+            }
+        });
         threeLinkageOpv.setLinkageData(p3List, c3List, d3List);
         threeLinkageOpv.setVisibleItems(7);
         threeLinkageOpv.setResetSelectedPosition(true);
-        threeLinkageOpv.setDrawSelectedRect(true);
-        threeLinkageOpv.setSelectedRectColor(Color.parseColor("#D3D3D3"));
+        threeLinkageOpv.setHasCurtain(true);
+        threeLinkageOpv.setCurtainColor(Color.parseColor("#D3D3D3"));
         threeLinkageOpv.setNormalItemTextColor(Color.parseColor("#808080"));
         threeLinkageOpv.setTextSize(22f,true);
         threeLinkageOpv.setSoundEffect(true);
@@ -199,7 +220,7 @@ public class Main4Activity extends AppCompatActivity {
                                                           int opt2Pos, @Nullable CityEntity opt2Data,
                                                           int opt3Pos, @Nullable CityEntity opt3Data) {
                                 Toast.makeText(Main4Activity.this,
-                                        opt1Data.getWheelText()+","+opt2Data.getWheelText()+","+opt3Data.getWheelText(),
+                                        opt1Data.getName()+","+opt2Data.getName()+","+opt3Data.getName(),
                                         Toast.LENGTH_SHORT).show();
                             }
                         })

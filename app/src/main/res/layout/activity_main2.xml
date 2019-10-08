@@ -28,13 +28,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:background="#e0f2f1"
-
             app:wv_textSize="20sp"
             app:wv_textAlign="left"
             app:wv_textBoundaryMargin="10dp"
             app:wv_lineSpacing="10dp"
-            app:wv_integerNeedFormat="true"
-            app:wv_integerFormat="%03d"
             app:wv_visibleItems="6"
             app:wv_selectedItemPosition="4"
             app:wv_curved="true"

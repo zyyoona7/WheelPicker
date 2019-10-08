@@ -56,10 +56,10 @@ public class Main2Activity extends AppCompatActivity {
         selectedItemTextColorTv.setText(getString(R.string.selectedItemTextColorValue,"#"+Integer.toHexString(wheelView.getSelectedItemTextColor()).toUpperCase()));
         AppCompatTextView lineSpaceTv=findViewById(R.id.tv_lineSpace);
         lineSpaceTv.setText(getString(R.string.lineSpaceValue,wheelView.getLineSpacing()+""));
-        AppCompatTextView integerNeedFormatTv=findViewById(R.id.tv_integerNeedFormat);
-        integerNeedFormatTv.setText(getString(R.string.integerNeedFormatValue,wheelView.isIntegerNeedFormat()+""));
-        AppCompatTextView integerFormatTv=findViewById(R.id.tv_integerFormat);
-        integerFormatTv.setText(getString(R.string.integerFormatValue,wheelView.getIntegerFormat()));
+//        AppCompatTextView integerNeedFormatTv=findViewById(R.id.tv_integerNeedFormat);
+//        integerNeedFormatTv.setText(getString(R.string.integerNeedFormatValue,wheelView.isIntegerNeedFormat()+""));
+//        AppCompatTextView integerFormatTv=findViewById(R.id.tv_integerFormat);
+//        integerFormatTv.setText(getString(R.string.integerFormatValue,wheelView.getIntegerFormat()));
         AppCompatTextView visibleItemsTv=findViewById(R.id.tv_visibleItems);
         visibleItemsTv.setText(getString(R.string.visibleItemsValue,wheelView.getVisibleItems()+""));
         final AppCompatTextView currentItemPositionTv=findViewById(R.id.tv_currentItemPosition);

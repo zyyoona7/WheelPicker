@@ -1,12 +1,12 @@
 package com.zyyoona7.demo.entities;
 
-import com.zyyoona7.wheel.IWheelEntity;
+import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CityEntity implements IWheelEntity, Serializable {
+public class CityEntity implements Serializable {
 
     //国家
     public static final String LEVEL_COUNTRY = "country";
@@ -72,6 +72,7 @@ public class CityEntity implements IWheelEntity, Serializable {
         this.districts = districts;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "CityEntity{" +
@@ -82,14 +83,5 @@ public class CityEntity implements IWheelEntity, Serializable {
                 ", level='" + level + '\'' +
                 ", districts=" + districts +
                 '}';
-    }
-
-    /**
-     * 重点：重写此方法，返回 WheelView 显示的文字
-     * @return
-     */
-    @Override
-    public String getWheelText() {
-        return name == null ? "" : name;
     }
 }
