@@ -249,7 +249,7 @@ public class WheelView<T> extends View implements Runnable {
         mDividerColor = typedArray.getColor(R.styleable.WheelView_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR);
         mDividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelView_wv_dividerPaddingForWrap, DEFAULT_TEXT_BOUNDARY_MARGIN);
 
-        mDividerOffset = typedArray.getDimensionPixelOffset(R.styleable.WheelView_wv_dividerOffset, 0);
+        mDividerOffset = typedArray.getDimensionPixelOffset(R.styleable.WheelView_wv_dividerOffsetY, 0);
 
         hasCurtain = typedArray.getBoolean(R.styleable.WheelView_wv_hasCurtain, false);
         mCurtainColor = typedArray.getColor(R.styleable.WheelView_wv_curtainColor, Color.TRANSPARENT);
@@ -1256,7 +1256,6 @@ public class WheelView<T> extends View implements Runnable {
         //重置滚动偏移
         mScrollOffsetY = mSelectedItemPosition * mItemHeight;
         requestLayout();
-        invalidate();
     }
 
     /**
@@ -1315,7 +1314,6 @@ public class WheelView<T> extends View implements Runnable {
         //字体大小变化，偏移距离也变化了
         mScrollOffsetY = mSelectedItemPosition * mItemHeight;
         requestLayout();
-        invalidate();
     }
 
     /**
@@ -1388,7 +1386,6 @@ public class WheelView<T> extends View implements Runnable {
         mScrollOffsetY = mSelectedItemPosition * mItemHeight;
         calculateLimitY();
         requestLayout();
-        invalidate();
     }
 
     /**
@@ -1514,7 +1511,6 @@ public class WheelView<T> extends View implements Runnable {
             return;
         }
         requestLayout();
-        invalidate();
     }
 
     /**
@@ -1550,7 +1546,6 @@ public class WheelView<T> extends View implements Runnable {
         mScrollOffsetY = 0;
         calculateTextSize();
         requestLayout();
-        invalidate();
     }
 
     /**
@@ -1562,7 +1557,6 @@ public class WheelView<T> extends View implements Runnable {
         mDataDelegate.setItemTextFormatter(itemTextFormatter);
         calculateTextSize();
         requestLayout();
-        invalidate();
     }
 
     /**
@@ -1586,7 +1580,6 @@ public class WheelView<T> extends View implements Runnable {
         mVisibleItems = adjustVisibleItems(visibleItems);
         mScrollOffsetY = 0;
         requestLayout();
-        invalidate();
     }
 
     /**
@@ -1685,7 +1678,6 @@ public class WheelView<T> extends View implements Runnable {
                     smoothDuration > 0 ? smoothDuration : DEFAULT_SCROLL_DURATION);
             invalidateIfYChanged();
             ViewCompat.postOnAnimation(this, this);
-
         } else {
             doScroll(itemDistance);
             mSelectedItemPosition = position;
@@ -1895,17 +1887,17 @@ public class WheelView<T> extends View implements Runnable {
      *
      * @return 是否绘制选中区域
      */
-    public boolean isHasCurtain() {
+    public boolean hasCurtain() {
         return hasCurtain;
     }
 
     /**
      * 设置是否绘制选中区域
      *
-     * @param isDrawSelectedRect 是否绘制选中区域
+     * @param hasCurtain 是否绘制选中区域
      */
-    public void setHasCurtain(boolean isDrawSelectedRect) {
-        this.hasCurtain = isDrawSelectedRect;
+    public void setHasCurtain(boolean hasCurtain) {
+        this.hasCurtain = hasCurtain;
         invalidate();
     }
 
@@ -1958,7 +1950,6 @@ public class WheelView<T> extends View implements Runnable {
         this.isCurved = isCurved;
         calculateTextSize();
         requestLayout();
-        invalidate();
     }
 
     /**

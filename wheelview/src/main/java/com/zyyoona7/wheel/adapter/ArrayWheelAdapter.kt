@@ -2,10 +2,18 @@ package com.zyyoona7.wheel.adapter
 
 import com.zyyoona7.wheel.formatter.ItemTextFormatter
 
-open class BaseWheelAdapter<T> : WheelAdapter<T> {
+open class ArrayWheelAdapter<T> @JvmOverloads constructor(data: List<T>? = null)
+    : WheelAdapter<T> {
     private val dataList: MutableList<T> = mutableListOf()
     var itemTextFormatter: ItemTextFormatter? = null
-    var isCyclic: Boolean = false
+    var formatterBlock:((Any?)->String)?=null
+    internal var isCyclic: Boolean = false
+
+    init {
+        data?.let {
+            setData(it)
+        }
+    }
 
     override fun getItemCount(): Int {
         return dataList.size
@@ -15,8 +23,9 @@ open class BaseWheelAdapter<T> : WheelAdapter<T> {
         return if (position in 0 until dataList.size) dataList[position] else null
     }
 
-    override fun getItemText(item: T?): String {
-        return itemTextFormatter?.formatText(item) ?: (item?.toString()?:"")
+    override fun getItemText(item: Any?): String {
+        return itemTextFormatter?.formatText(item)
+                ?: (formatterBlock?.invoke(item)?:(item?.toString() ?: ""))
     }
 
     override fun getItemTextByIndex(index: Int): String {
@@ -42,6 +51,10 @@ open class BaseWheelAdapter<T> : WheelAdapter<T> {
     fun setData(data: List<T>) {
         dataList.clear()
         dataList.addAll(data)
+    }
+
+    fun getData():List<T>{
+        return dataList
     }
 
     fun addData(item: T) {

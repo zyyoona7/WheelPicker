@@ -17,11 +17,12 @@ public class SoundHelper {
     private int mSoundId;
     private float mPlayVolume;
 
+    @SuppressWarnings("deprecation")
     private SoundHelper() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mSoundPool = new SoundPool.Builder().build();
         } else {
-            mSoundPool = new SoundPool(1, AudioManager.STREAM_SYSTEM, 1);
+            mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
         }
     }
 

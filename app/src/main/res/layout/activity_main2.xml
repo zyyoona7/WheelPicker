@@ -47,8 +47,8 @@
             app:wv_curvedArcDirectionFactor="0.5"
             app:wv_refractRatio="0.8"
 
-            app:wv_drawSelectedRect="true"
-            app:wv_selectedRectColor="#aebfbe"/>
+            app:wv_hasCurtain="true"
+            app:wv_curtainColor="#aebfbe"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
