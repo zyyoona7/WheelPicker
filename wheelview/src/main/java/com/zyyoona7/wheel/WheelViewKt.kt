@@ -20,6 +20,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
 import com.zyyoona7.wheel.formatter.ItemTextFormatter
+import com.zyyoona7.wheel.listener.OnItemPositionChangedListener
+import com.zyyoona7.wheel.listener.OnItemSelectedListener
+import com.zyyoona7.wheel.listener.OnScrollChangedListener
 import com.zyyoona7.wheel.sound.SoundHelper
 import kotlin.math.*
 
@@ -329,6 +332,16 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 initDefaultVolume()
             }
         }
+    /*
+      ---------- 监听器 -----------
+     */
+    private var itemSelectedListener: OnItemSelectedListener? = null
+    private var scrollChangedListener: OnScrollChangedListener? = null
+    private var itemPositionChangedListener: OnItemPositionChangedListener? = null
+    /*
+      ---------- 监听器 ----------
+     */
+
 
     companion object {
         private const val TAG = "WheelView"
@@ -747,7 +760,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             clipAndDrawNormalText(canvas, text, selectedItemBottomLimit, clipBottom,
                     item2CenterOffsetY, centerToBaselineY)
             paint.textSize = textSize
-            //mIsBoldForSelectedItem==true 恢复字体
+            //isBoldForSelectedItem==true 恢复字体
             resetTypefaceIfBoldForSelectedItem()
         } else if (item2CenterOffsetY < 0 && item2CenterOffsetY > -itemHeight) {
             //绘制与上边界交汇的条目
@@ -759,12 +772,12 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             //缩小字体，实现折射效果
             val textSize = paint.textSize
             paint.textSize = textSize * refractRatio
-            //mIsBoldForSelectedItem==true 改变字体
+            //isBoldForSelectedItem==true 改变字体
             changeTypefaceIfBoldForSelectedItem()
             clipAndDrawNormalText(canvas, text, clipTop, selectedItemTopLimit,
                     item2CenterOffsetY, centerToBaselineY)
             paint.textSize = textSize
-            //mIsBoldForSelectedItem==true 恢复字体
+            //isBoldForSelectedItem==true 恢复字体
             resetTypefaceIfBoldForSelectedItem()
         } else {
             //绘制其他条目
@@ -772,7 +785,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             //缩小字体，实现折射效果
             val textSize = paint.textSize
             paint.textSize = textSize * refractRatio
-            //mIsBoldForSelectedItem==true 改变字体
+            //isBoldForSelectedItem==true 改变字体
             changeTypefaceIfBoldForSelectedItem()
             clipAndDrawNormalText(canvas, text, clipTop, clipBottom,
                     item2CenterOffsetY, centerToBaselineY)
@@ -861,14 +874,14 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             //缩小字体，实现折射效果
             val textSize = paint.textSize
             paint.textSize = textSize * refractRatio
-            //mIsBoldForSelectedItem==true 改变字体
+            //isBoldForSelectedItem==true 改变字体
             changeTypefaceIfBoldForSelectedItem()
             //字体变化，重新计算距离基线偏移
             val reCenterToBaselineY = recalculateCenterToBaselineY()
             clipAndDrawCurvedText(canvas, text, selectedItemBottomLimit, clipBottom,
                     rotateX, translateY, translateZ, reCenterToBaselineY)
             paint.textSize = textSize
-            //mIsBoldForSelectedItem==true 恢复字体
+            //isBoldForSelectedItem==true 恢复字体
             resetTypefaceIfBoldForSelectedItem()
         } else if (item2CenterOffsetY < 0 && item2CenterOffsetY > -itemHeight) {
             //绘制与上边界交汇的条目
@@ -883,14 +896,14 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             //缩小字体，实现折射效果
             val textSize = paint.textSize
             paint.textSize = textSize * refractRatio
-            //mIsBoldForSelectedItem==true 改变字体
+            //isBoldForSelectedItem==true 改变字体
             changeTypefaceIfBoldForSelectedItem()
             //字体变化，重新计算距离基线偏移
             val reCenterToBaselineY = recalculateCenterToBaselineY()
             clipAndDrawCurvedText(canvas, text, clipTop, selectedItemTopLimit,
                     rotateX, translateY, translateZ, reCenterToBaselineY)
             paint.setTextSize(textSize)
-            //mIsBoldForSelectedItem==true 恢复字体
+            //isBoldForSelectedItem==true 恢复字体
             resetTypefaceIfBoldForSelectedItem()
         } else {
             //绘制其他条目
@@ -900,14 +913,14 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             //缩小字体，实现折射效果
             val textSize = paint.textSize
             paint.textSize = textSize * refractRatio
-            //mIsBoldForSelectedItem==true 改变字体
+            //isBoldForSelectedItem==true 改变字体
             changeTypefaceIfBoldForSelectedItem()
             //字体变化，重新计算距离基线偏移
             val reCenterToBaselineY = recalculateCenterToBaselineY()
             clipAndDrawCurvedText(canvas, text, clipTop, clipBottom,
                     rotateX, translateY, translateZ, reCenterToBaselineY)
             paint.textSize = textSize
-            //mIsBoldForSelectedItem==true 恢复字体
+            //isBoldForSelectedItem==true 恢复字体
             resetTypefaceIfBoldForSelectedItem()
         }
 
@@ -1085,10 +1098,10 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 val moveY = event.y
                 val deltaY = moveY - lastTouchY
 
-//                if (mOnWheelChangedListener != null) {
-//                    mOnWheelChangedListener.onWheelScrollStateChanged(SCROLL_STATE_DRAGGING)
-//                }
-//                onWheelScrollStateChanged(SCROLL_STATE_DRAGGING)
+                //回调
+                onWheelScrollStateChanged(SCROLL_STATE_DRAGGING)
+                scrollChangedListener?.onScrollStateChanged(this, SCROLL_STATE_DRAGGING)
+
                 if (abs(deltaY) < 1) {
                     return false
                 }
@@ -1169,10 +1182,10 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         if (scroller.isFinished() && !isForceFinishScroll && !isFlingScroll) {
             if (itemHeight == 0) return
             //滚动状态停止
-//            if (mOnWheelChangedListener != null) {
-//                mOnWheelChangedListener.onWheelScrollStateChanged(SCROLL_STATE_IDLE)
-//            }
-//            onWheelScrollStateChanged(SCROLL_STATE_IDLE)
+            //回调
+            onWheelScrollStateChanged(SCROLL_STATE_IDLE)
+            scrollChangedListener?.onScrollStateChanged(this, SCROLL_STATE_IDLE)
+
             val currentItemPosition = getCurrentPosition()
             //当前选中的Position没变时不回调 onItemSelected()
             if (currentItemPosition == selectedItemPosition) {
@@ -1183,16 +1196,8 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             currentScrollPosition = selectedItemPosition
 
             //停止滚动，选中条目回调
-//            if (mOnItemSelectedListener != null) {
-//                mOnItemSelectedListener.onItemSelected(this,
-//                        wheelAdapter.getItem(selectedItemPosition), selectedItemPosition)
-//            }
-//            onItemSelected(wheelAdapter.getItem(selectedItemPosition), selectedItemPosition)
-            //滚动状态回调
-//            if (mOnWheelChangedListener != null) {
-//                mOnWheelChangedListener.onWheelSelected(selectedItemPosition)
-//            }
-//            onWheelSelected(selectedItemPosition)
+            onItemSelected(selectedItemPosition)
+            itemSelectedListener?.onItemSelected(this, selectedItemPosition)
         }
 
         if (scroller.computeScrollOffset()) {
@@ -1200,10 +1205,8 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             scrollOffsetY = scroller.currY
 
             if (oldY != scrollOffsetY) {
-//                if (mOnWheelChangedListener != null) {
-//                    mOnWheelChangedListener.onWheelScrollStateChanged(SCROLL_STATE_SCROLLING)
-//                }
-//                onWheelScrollStateChanged(SCROLL_STATE_SCROLLING)
+                onWheelScrollStateChanged(SCROLL_STATE_SCROLLING)
+                scrollChangedListener?.onScrollStateChanged(this, SCROLL_STATE_SCROLLING)
             }
             invalidateIfYChanged()
             ViewCompat.postOnAnimation(this, this)
@@ -1242,10 +1245,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         if (scrollOffsetY != scrolledY) {
             scrolledY = scrollOffsetY
             //滚动偏移发生变化
-//            if (mOnWheelChangedListener != null) {
-//                mOnWheelChangedListener.onWheelScroll(mScrollOffsetY)
-//            }
-//            onWheelScroll(mScrollOffsetY)
+            //回调
+            onWheelScrollChanged(scrollOffsetY)
+            scrollChangedListener?.onScrollChanged(this, scrollOffsetY)
             //观察item变化
             observeItemChanged()
             invalidate()
@@ -1260,11 +1262,11 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         val oldPosition = currentScrollPosition
         val newPosition = getCurrentPosition()
         if (oldPosition != newPosition) {
-            //改变了
-//            if (mOnWheelChangedListener != null) {
-//                mOnWheelChangedListener.onWheelItemChanged(oldPosition, newPosition)
-//            }
-//            onWheelItemChanged(oldPosition, newPosition)
+            //下标改变了
+            //回调
+            onItemChanged(oldPosition, newPosition)
+            itemPositionChangedListener?.onItemChanged(this, oldPosition, newPosition)
+
             //播放音频
             playScrollSoundEffect()
             //更新下标
@@ -1562,15 +1564,8 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             selectedItemPosition = position
             wheelAdapter?.let {
                 //选中条目回调
-//                if (mOnItemSelectedListener != null) {
-//                    mOnItemSelectedListener.onItemSelected(this, it.getItem(selectedItemPosition),
-//                            selectedItemPosition)
-//                }
-//                onItemSelected(it.getItem(selectedItemPosition), selectedItemPosition)
-//                if (mOnWheelChangedListener != null) {
-//                    mOnWheelChangedListener.onWheelSelected(selectedItemPosition)
-//                }
-//                onWheelSelected(selectedItemPosition)
+                onItemSelected(selectedItemPosition)
+                itemSelectedListener?.onItemSelected(this, selectedItemPosition)
             }
             invalidateIfYChanged()
         }
@@ -1637,6 +1632,46 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
 
     /*
       ---------- 属性设置 ----------
+     */
+
+    /*
+      ---------- 一些回调方法 ----------
+     */
+    protected open fun onWheelScrollChanged(scrollOffsetY: Int) {
+
+    }
+
+    protected open fun onWheelScrollStateChanged(@ScrollState state: Int) {
+
+    }
+
+    protected open fun onItemSelected(position: Int) {
+
+    }
+
+    protected open fun onItemChanged(oldPosition: Int, newPosition: Int) {
+
+    }
+
+    /*
+      ---------- 一些回调方法 ----------
+     */
+    /*
+      ---------- 设置回调 ----------
+     */
+    fun setOnItemSelectedListener(itemSelectedListener: OnItemSelectedListener?) {
+        this.itemSelectedListener = itemSelectedListener
+    }
+
+    fun setOnItemPositionChangedListener(itemPositionChangedListener: OnItemPositionChangedListener?) {
+        this.itemPositionChangedListener = itemPositionChangedListener
+    }
+
+    fun setOnScrollChangedListener(scrollChangedListener: OnScrollChangedListener?) {
+        this.scrollChangedListener = scrollChangedListener
+    }
+    /*
+      ---------- 设置回调 ----------
      */
 
     /*
