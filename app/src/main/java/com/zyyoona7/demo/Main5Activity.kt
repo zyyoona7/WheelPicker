@@ -1,6 +1,7 @@
 package com.zyyoona7.demo
 
 import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import android.widget.SeekBar
 import com.flask.colorpicker.ColorPickerView
@@ -80,6 +81,14 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
             binding.wheelview.dividerType = when (checkedId) {
                 R.id.rb_divider_fill -> WheelViewKt.DIVIDER_TYPE_FILL
                 else -> WheelViewKt.DIVIDER_TYPE_WRAP
+            }
+        }
+
+        binding.rgDividerCap.setOnCheckedChangeListener { _, checkedId ->
+            binding.wheelview.dividerCap = when (checkedId) {
+                R.id.rb_divider_cap_square -> Paint.Cap.SQUARE
+                R.id.rb_divider_cap_butt -> Paint.Cap.BUTT
+                else -> Paint.Cap.ROUND
             }
         }
 
@@ -213,6 +222,11 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.sbDividerPadding.progress = wheelView.dividerPaddingForWrap.toInt()
         binding.sbDividerOffset.max = 30
         binding.sbDividerOffset.progress = wheelView.dividerOffsetY.toInt()
+        when (binding.wheelview.dividerCap) {
+            Paint.Cap.SQUARE -> binding.rbDividerCapSquare.isChecked = true
+            Paint.Cap.BUTT -> binding.rbDividerCapButt.isChecked = true
+            else -> binding.rbDividerCapRound.isChecked = true
+        }
 
         binding.btnFontMedium.typeface = typefaceMedium()
         binding.btnFontRegular.typeface = typefaceRegular()

@@ -100,8 +100,8 @@
                     android:id="@+id/btn_selected"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="随机选中下标"
                     android:background="@color/colorBgBtnNormal"
+                    android:text="随机选中下标"
                     app:layout_constraintTop_toBottomOf="@id/sb_selected_duration" />
 
                 <TextView
@@ -286,8 +286,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Medium"
                     android:background="@color/colorBgBtnNormal"
+                    android:text="Medium"
                     app:layout_constraintEnd_toStartOf="@id/btn_font_regular"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintStart_toStartOf="parent"
@@ -297,8 +297,8 @@
                     android:id="@+id/btn_font_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Regular"
                     android:background="@color/colorBgBtnNormal"
+                    android:text="Regular"
                     app:layout_constraintBottom_toBottomOf="@id/btn_font_medium"
                     app:layout_constraintEnd_toStartOf="@id/btn_font_light"
                     app:layout_constraintHorizontal_chainStyle="spread"
@@ -309,8 +309,8 @@
                     android:id="@+id/btn_font_light"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Light"
                     android:background="@color/colorBgBtnNormal"
+                    android:text="Light"
                     app:layout_constraintBottom_toBottomOf="@id/btn_font_medium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_chainStyle="spread"
@@ -482,13 +482,52 @@
                 </RadioGroup>
 
                 <TextView
+                    android:id="@+id/tv_divider_cap_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="设置分割线两端形状"
+                    android:textAppearance="@style/TitleAppearance"
+                    app:layout_constraintTop_toBottomOf="@id/rg_divider_type" />
+
+                <RadioGroup
+                    android:id="@+id/rg_divider_cap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/tv_divider_cap_title">
+
+                    <RadioButton
+                        android:id="@+id/rb_divider_cap_round"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="圆头" />
+
+                    <RadioButton
+                        android:id="@+id/rb_divider_cap_square"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="方头" />
+
+                    <RadioButton
+                        android:id="@+id/rb_divider_cap_butt"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="BUTT头" />
+                </RadioGroup>
+
+                <TextView
                     android:id="@+id/tv_divider_padding_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="设置分割线自适应字体最大宽度后内边距"
                     android:textAppearance="@style/TitleAppearance"
-                    app:layout_constraintTop_toBottomOf="@id/rg_divider_type" />
+                    app:layout_constraintTop_toBottomOf="@id/rg_divider_cap" />
 
                 <SeekBar
                     android:id="@+id/sb_divider_padding"
