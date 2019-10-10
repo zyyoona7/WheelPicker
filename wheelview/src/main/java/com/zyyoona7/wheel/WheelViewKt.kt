@@ -163,7 +163,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 return
             }
             field = adjustVisibleItems(value)
-            scrollOffsetY = 0
+            calculateScrollOffsetY()
             requestLayout()
         }
     //每个item之间的空间，行间距
@@ -173,8 +173,8 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 return
             }
             field = value
-            scrollOffsetY = 0
             calculateItemHeight()
+            calculateScrollOffsetY()
             requestLayout()
         }
     //是否循环滚动
@@ -636,6 +636,13 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             //下边界 (dataSize - 1 - mInitPosition) * mItemHeight
             maxScrollY = if (isCyclic) Integer.MAX_VALUE else (it.getItemCount() - 1) * itemHeight
         } ?: logAdapterNull()
+    }
+
+    /**
+     * 根据当前的选中下标和[itemHeight]重新计算偏移
+     */
+    private fun calculateScrollOffsetY() {
+        scrollOffsetY = selectedItemPosition * itemHeight
     }
 
     /**
@@ -1470,8 +1477,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         calculateTextSizeAndItemHeight()
         calculateDrawStart()
         calculateLimitY()
-        //重置滚动偏移
-        scrollOffsetY = selectedItemPosition * itemHeight
+        calculateScrollOffsetY()
         requestLayout()
     }
 
@@ -1484,8 +1490,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
     private fun notifyCyclicChanged() {
         forceFinishScroll()
         calculateLimitY()
-        //重置滚动偏移
-        scrollOffsetY = selectedItemPosition * itemHeight
+        calculateScrollOffsetY()
         invalidate()
     }
 
