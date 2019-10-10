@@ -316,9 +316,9 @@ public class WheelView<T> extends View implements Runnable {
             //获取系统媒体最大音量
             int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
             //设置播放音量
-            mSoundHelper.setPlayVolume(currentVolume * 1.0f / maxVolume);
+            mSoundHelper.setSoundPlayVolume(currentVolume * 1.0f / maxVolume);
         } else {
-            mSoundHelper.setPlayVolume(0.3f);
+            mSoundHelper.setSoundPlayVolume(0.3f);
         }
     }
 
@@ -1182,7 +1182,7 @@ public class WheelView<T> extends View implements Runnable {
      * @return 播放音量 range 0.0-1.0
      */
     public float getPlayVolume() {
-        return mSoundHelper == null ? 0 : mSoundHelper.getPlayVolume();
+        return mSoundHelper == null ? 0 : mSoundHelper.getSoundPlayVolume();
     }
 
     /**
@@ -1193,7 +1193,7 @@ public class WheelView<T> extends View implements Runnable {
     public void setPlayVolume(@FloatRange(from = 0.0, to = 1.0) float playVolume) {
         initSoundHelper();
         if (mSoundHelper != null) {
-            mSoundHelper.setPlayVolume(playVolume);
+            mSoundHelper.setSoundPlayVolume(playVolume);
         }
     }
 

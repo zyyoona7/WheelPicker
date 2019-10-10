@@ -105,13 +105,46 @@
                     app:layout_constraintTop_toBottomOf="@id/sb_selected_duration" />
 
                 <TextView
+                    android:id="@+id/tv_selected_range_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="设置滚动范围限制"
+                    android:textAppearance="@style/TitleAppearance"
+                    app:layout_constraintTop_toBottomOf="@id/btn_selected" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/sc_can_over_range_scroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="设置在有滚动范围限制时是否可以超出范围滚动"
+                    app:layout_constraintTop_toBottomOf="@id/tv_selected_range_title" />
+
+                <com.jaygoo.widget.RangeSeekBar
+                    android:id="@+id/rsb_selected_range"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/sc_can_over_range_scroll"
+                    app:rsb_gravity="center"
+                    app:rsb_indicator_padding_bottom="3dp"
+                    app:rsb_indicator_padding_left="3dp"
+                    app:rsb_indicator_padding_right="3dp"
+                    app:rsb_indicator_padding_top="3dp"
+                    app:rsb_indicator_show_mode="showWhenTouch"
+                    app:rsb_min_interval="1"
+                    app:rsb_mode="range"
+                    android:layout_marginTop="10dp"
+                    app:rsb_progress_color="@color/colorAccent" />
+
+                <TextView
                     android:id="@+id/tv_sound_div"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="滚动音效相关"
                     android:textAppearance="@style/DivTitleAppearance"
-                    app:layout_constraintTop_toBottomOf="@id/btn_selected" />
+                    app:layout_constraintTop_toBottomOf="@id/rsb_selected_range" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/sc_sound"

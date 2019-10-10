@@ -38,6 +38,7 @@ dependencies {
     implementation "androidx.core:core-ktx:1.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.github.QuadFlask:colorpicker:0.0.13'
+    implementation 'com.github.Jay-Goo:RangeSeekBar:3.0.0'
 
 }
 repositories {

@@ -23,7 +23,7 @@ class SoundHelper private constructor() {
     /**
      * 音频播放音量 range 0.0-1.0
      */
-    var playVolume: Float = 0f
+    var soundPlayVolume: Float = 0f
         set(value) {
             field = min(1f, max(value, 0f))
         }
@@ -56,7 +56,7 @@ class SoundHelper private constructor() {
      */
     fun playSoundEffect() {
         if (mSoundId != 0) {
-            mSoundPool.play(mSoundId, playVolume, playVolume, 1, 0, 1f)
+            mSoundPool.play(mSoundId, soundPlayVolume, soundPlayVolume, 1, 0, 1f)
         }
     }
 

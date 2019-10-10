@@ -13,10 +13,8 @@ import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
 import android.widget.Scroller
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
-import androidx.annotation.IntDef
-import androidx.annotation.RawRes
+import androidx.annotation.*
+import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
@@ -354,10 +352,24 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
     var isSoundEffect = false
         set(value) {
             field = value
-            if (soundHelper.playVolume == 0f) {
+            if (soundHelper.soundPlayVolume == 0f) {
                 initDefaultVolume()
             }
         }
+    /*
+      ---------- 选中范围限制 ----------
+     */
+    private var maxSelectedPosition: Int = -1
+    private var minSelectedPosition: Int = -1
+    //有滚动限制并且不是循环滚动时 超出限制范围是否可以继续滚动
+    var canOverRangeScroll: Boolean = true
+        set(value) {
+            field = value
+            calculateLimitY()
+        }
+    /*
+      ---------- 选中范围限制 ----------
+     */
     /*
       ---------- 监听器 -----------
      */
@@ -527,9 +539,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             //获取系统媒体最大音量
             val maxVolume = it.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
             //设置播放音量
-            soundHelper.playVolume = currentVolume * 1.0f / maxVolume
+            soundHelper.soundPlayVolume = currentVolume * 1.0f / maxVolume
         } ?: kotlin.run {
-            soundHelper.playVolume = 0.3f
+            soundHelper.soundPlayVolume = 0.3f
         }
     }
 
@@ -632,10 +644,33 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
      */
     private fun calculateLimitY() {
         wheelAdapter?.let {
-            minScrollY = if (isCyclic) Integer.MIN_VALUE else 0
-            //下边界 (dataSize - 1 - mInitPosition) * mItemHeight
-            maxScrollY = if (isCyclic) Integer.MAX_VALUE else (it.getItemCount() - 1) * itemHeight
+            minScrollY = if (isCyclic) Integer.MIN_VALUE else minScrollPosition(it) * itemHeight
+            //下边界 (dataSize - 1) * mItemHeight
+            maxScrollY = if (isCyclic) Integer.MAX_VALUE else maxScrollPosition(it) * itemHeight
         } ?: logAdapterNull()
+        Log.d(TAG, "calculateLimitY minScrollY=${minScrollY},maxScrollY=${maxScrollY}")
+    }
+
+    /**
+     * 获取最大滚动下标
+     */
+    private fun maxScrollPosition(adapter: ArrayWheelAdapter<*>): Int {
+        return if (maxSelectedPosition >= 0 && maxSelectedPosition < adapter.getItemCount()
+                && !canOverRangeScroll) {
+            maxSelectedPosition
+        } else {
+            adapter.getItemCount() - 1
+        }
+    }
+
+    private fun minScrollPosition(adapter: ArrayWheelAdapter<*>): Int {
+        return if (minSelectedPosition in 0 until maxSelectedPosition
+                && maxSelectedPosition < adapter.getItemCount()
+                && !canOverRangeScroll) {
+            minSelectedPosition
+        } else {
+            0
+        }
     }
 
     /**
@@ -1236,6 +1271,10 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
 
             wheelAdapter?.let {
                 it.selectedItemPosition = selectedItemPosition
+                //检查当前选中的范围是否合法
+                if (!checkSelectedPositionInRange(it)) {
+                    return@let
+                }
                 //停止滚动，选中条目回调
                 onItemSelected(it, selectedItemPosition)
                 itemSelectedListener?.onItemSelected(this, it, selectedItemPosition)
@@ -1279,6 +1318,8 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 scrollOffsetY = maxScrollY
             }
         }
+
+        Log.d(TAG, "min scroll=${minScrollY},max scroll=${maxScrollY}")
     }
 
     /**
@@ -1324,6 +1365,26 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         if (isSoundEffect) {
             soundHelper.playSoundEffect()
         }
+    }
+
+    /**
+     * 检查是否选中的下标在限制的下标范围内
+     */
+    private fun checkSelectedPositionInRange(adapter: ArrayWheelAdapter<*>): Boolean {
+        if (maxSelectedPosition == -1 && minSelectedPosition == -1) {
+            return true
+        }
+        if (minSelectedPosition >= 0
+                && selectedItemPosition < minSelectedPosition) {
+            setSelectedPosition(minSelectedPosition)
+            return false
+        }
+        if (maxSelectedPosition < adapter.getItemCount()
+                && selectedItemPosition > maxSelectedPosition) {
+            setSelectedPosition(maxSelectedPosition)
+            return false
+        }
+        return true
     }
 
     /**
@@ -1606,6 +1667,13 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
     @JvmOverloads
     fun setSelectedPosition(position: Int, isSmoothScroll: Boolean = false,
                             smoothDuration: Int = DEFAULT_SCROLL_DURATION) {
+        //adapter null or position not in range return
+        wheelAdapter?.let {
+            if (position !in 0 until it.getItemCount()) {
+                return
+            }
+        } ?: return
+
         //item之间差值
         val itemDistance = calculateItemDistance(position)
         if (itemDistance == 0) {
@@ -1620,7 +1688,6 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                     if (smoothDuration > 0) smoothDuration else DEFAULT_SCROLL_DURATION)
             invalidateIfYChanged()
             ViewCompat.postOnAnimation(this, this)
-
         } else {
             doScroll(itemDistance)
             selectedItemPosition = position
@@ -1643,15 +1710,34 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         return selectedItemPosition
     }
 
-    fun getPlayVolume(): Float {
-        return soundHelper.playVolume
+    /**
+     * 设置选中范围 限制最小 最大选中下标
+     */
+    fun setSelectedRange(@IntRange(from = 0) min: Int, @IntRange(from = 0) max: Int) {
+        if (max < min) {
+            return
+        }
+        minSelectedPosition = max(0, min)
+        maxSelectedPosition = wheelAdapter?.let {
+            if (max >= it.getItemCount()) it.getItemCount() - 1 else max
+        } ?: max
+        if (selectedItemPosition < minSelectedPosition) {
+            setSelectedPosition(min)
+        } else if (selectedItemPosition > maxSelectedPosition) {
+            setSelectedPosition(max)
+        }
+        calculateLimitY()
+    }
+
+    fun getSoundVolume(): Float {
+        return soundHelper.soundPlayVolume
     }
 
     /**
      * 设置滚动音效音量
      */
-    fun setPlayVolume(playVolume: Float) {
-        soundHelper.playVolume = min(1f, max(0f, playVolume))
+    fun setSoundVolume(playVolume: Float) {
+        soundHelper.soundPlayVolume = min(1f, max(0f, playVolume))
     }
 
     /**

@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.SeekBar
 import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
+import com.jaygoo.widget.OnRangeChangedListener
+import com.jaygoo.widget.RangeSeekBar
 import com.zyyoona7.demo.activity.BaseActivity
 import com.zyyoona7.demo.databinding.ActivityMain5Binding
 import com.zyyoona7.demo.utils.typefaceLight
@@ -59,6 +61,10 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
 
         binding.scShowDivider.setOnCheckedChangeListener { _, isChecked ->
             binding.wheelview.isShowDivider = isChecked
+        }
+
+        binding.scCanOverRangeScroll.setOnCheckedChangeListener { _, isChecked ->
+            binding.wheelview.canOverRangeScroll=isChecked
         }
 
         binding.rgAlign.setOnCheckedChangeListener { _, checkedId ->
@@ -138,6 +144,20 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.btnFontLight.setOnClickListener {
             binding.wheelview.setTypeface(typefaceLight(), binding.cbBoldSelected.isChecked)
         }
+
+        binding.rsbSelectedRange.setOnRangeChangedListener(object :OnRangeChangedListener{
+            override fun onStartTrackingTouch(view: RangeSeekBar?, isLeft: Boolean) {
+            }
+
+            override fun onRangeChanged(view: RangeSeekBar?, leftValue: Float,
+                                        rightValue: Float, isFromUser: Boolean) {
+                binding.wheelview.setSelectedRange(leftValue.toInt(),rightValue.toInt())
+            }
+
+            override fun onStopTrackingTouch(view: RangeSeekBar?, isLeft: Boolean) {
+            }
+
+        })
     }
 
     private fun initWheelData() {
@@ -177,7 +197,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
 
         binding.scSound.isChecked = wheelView.isSoundEffect
         binding.sbSoundVolume.max = 100
-        binding.sbSoundVolume.progress = (wheelView.getPlayVolume() * 100).toInt()
+        binding.sbSoundVolume.progress = (wheelView.getSoundVolume() * 100).toInt()
 
         binding.scHasCurtain.isChecked = wheelView.hasCurtain
         binding.btnCurtainColor.setBackgroundColor(wheelView.curtainColor)
@@ -232,6 +252,11 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.btnFontRegular.typeface = typefaceRegular()
         binding.btnFontLight.typeface = typefaceLight()
 
+        binding.rsbSelectedRange.setRange(0f,
+                (wheelView.getAdapter()?.getItemCount()?.minus(1)?:0).toFloat())
+        binding.rsbSelectedRange.setProgress(0f,binding.rsbSelectedRange.maxProgress)
+
+        binding.scCanOverRangeScroll.isChecked=wheelView.canOverRangeScroll
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -247,7 +272,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         when (seekBar.id) {
             R.id.sb_visible_items -> binding.wheelview.visibleItems = progress
             R.id.sb_line_spacing -> binding.wheelview.lineSpacing = progress.toFloat()
-            R.id.sb_sound_volume -> binding.wheelview.setPlayVolume(progress / 100f)
+            R.id.sb_sound_volume -> binding.wheelview.setSoundVolume(progress / 100f)
             R.id.sb_text_size -> binding.wheelview.textSize = progress.toFloat()
             R.id.sb_text_boundary_margin -> binding.wheelview.textBoundaryMargin = progress.toFloat()
             R.id.sb_curved_arc_factor -> binding.wheelview.curvedArcDirectionFactor = progress / 100f
