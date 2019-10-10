@@ -30,7 +30,7 @@ import androidx.annotation.RawRes;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 
-import com.zyyoona7.wheel.formatter.ItemTextFormatter;
+import com.zyyoona7.wheel.formatter.TextFormatter;
 import com.zyyoona7.wheel.sound.SoundHelper;
 
 import java.lang.annotation.Retention;
@@ -299,7 +299,7 @@ public class WheelView<T> extends View implements Runnable {
         if (mSoundHelper != null) {
             return;
         }
-        mSoundHelper = SoundHelper.obtain();
+        mSoundHelper = SoundHelper.Companion.obtain();
         initDefaultVolume(getContext());
     }
 
@@ -1551,10 +1551,10 @@ public class WheelView<T> extends View implements Runnable {
     /**
      * 设置格式转换器
      *
-     * @param itemTextFormatter wheelView item 显示文字的转换器
+     * @param textFormatter wheelView item 显示文字的转换器
      */
-    public void setItemTextFormatter(ItemTextFormatter itemTextFormatter) {
-        mDataDelegate.setItemTextFormatter(itemTextFormatter);
+    public void setItemTextFormatter(TextFormatter textFormatter) {
+        mDataDelegate.setTextFormatter(textFormatter);
         calculateTextSize();
         requestLayout();
     }
@@ -2251,7 +2251,7 @@ public class WheelView<T> extends View implements Runnable {
     private static class DefaultDataDelegate<V> {
 
         private final List<V> mDataList = new ArrayList<>();
-        private ItemTextFormatter mItemTextFormatter;
+        private TextFormatter mTextFormatter;
         private boolean isCyclic;
 
         int getItemCount() {
@@ -2270,8 +2270,8 @@ public class WheelView<T> extends View implements Runnable {
          */
         @NonNull
         String getItemText(V item) {
-            return mItemTextFormatter == null ? (item == null ? "" : item.toString())
-                    : mItemTextFormatter.formatText(item);
+            return mTextFormatter == null ? (item == null ? "" : item.toString())
+                    : mTextFormatter.formatText(item);
         }
 
         /**
@@ -2319,8 +2319,8 @@ public class WheelView<T> extends View implements Runnable {
             return mDataList;
         }
 
-        void setItemTextFormatter(ItemTextFormatter itemTextFormatter) {
-            mItemTextFormatter = itemTextFormatter;
+        void setTextFormatter(TextFormatter textFormatter) {
+            mTextFormatter = textFormatter;
         }
     }
 }

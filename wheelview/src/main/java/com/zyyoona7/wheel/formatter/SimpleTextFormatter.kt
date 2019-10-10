@@ -2,22 +2,26 @@ package com.zyyoona7.wheel.formatter
 
 import java.util.*
 
-open class SimpleItemTextFormatter<T>(private val format: String,
-                                      private val clazz: Class<T>)
-    : ItemTextFormatter {
+/**
+ * 通用的[TextFormatter]
+ *
+ * 如果自定义的实体类需要别的属性则直接重新 [text] 方法即可
+ */
+open class SimpleTextFormatter<T>
+@JvmOverloads constructor(private val format: String = "%s")
+    : TextFormatter {
 
     @Suppress("UNCHECKED_CAST")
     override fun formatText(item: Any?): String {
-        return item?.let {
-            if (it.javaClass.isAssignableFrom(clazz)) {
-                String.format(Locale.getDefault(), format, text(item as T))
-            } else {
-                ""
-            }
+        return item?.let { data ->
+            val value = data as? T
+            value?.let {
+                String.format(Locale.getDefault(), format, text(it))
+            } ?: ""
         } ?: ""
     }
 
-    protected open fun text(item:T):String{
-        return item.toString()
+    protected open fun text(item: T): Any {
+        return item as Any
     }
 }

@@ -16,10 +16,11 @@ import android.widget.Scroller
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.IntDef
+import androidx.annotation.RawRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
-import com.zyyoona7.wheel.formatter.ItemTextFormatter
+import com.zyyoona7.wheel.formatter.TextFormatter
 import com.zyyoona7.wheel.listener.OnItemPositionChangedListener
 import com.zyyoona7.wheel.listener.OnItemSelectedListener
 import com.zyyoona7.wheel.listener.OnScrollChangedListener
@@ -28,7 +29,7 @@ import kotlin.math.*
 
 open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
                                                  defStyleAttr: Int = 0)
-    : View(context, attrs, defStyleAttr), Runnable {
+    : View(context, attrs, defStyleAttr), Runnable, ArrayWheelAdapter.OnFinishScrollCallback {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     //每个item的高度
@@ -57,7 +58,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
     private val cameraForCurved = Camera()
     private val matrixForCurved = Matrix()
 
-    private lateinit var scroller: Scroller
+    private val scroller: Scroller = Scroller(context)
     private var velocityTracker: VelocityTracker? = null
     private var maxFlingVelocity: Int = 0
     private var minFlingVelocity: Int = 0
@@ -84,6 +85,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
 
     //当前滚动经过的下标
     private var currentScrollPosition: Int = 0
+    //当前滚动状态
+    @ScrollState
+    private var currentScrollState: Int = SCROLL_STATE_IDLE
 
     //属性
     //当前选中的下标
@@ -94,7 +98,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
     //字体大小
     var textSize: Float = 0f
         set(value) {
-            if (value == field) {
+            if (value == field || value <= 0f) {
                 return
             }
             field = value
@@ -108,7 +112,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     //文字对齐方式
     @TextAlign
-    var textAlign: Int = 0
+    var textAlign: Int = TEXT_ALIGN_CENTER
         set(@TextAlign value) {
             if (value == field) {
                 return
@@ -193,6 +197,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 return
             }
             field = value
+            if (dividerOffsetY > 0) {
+                calculateTopAndBottomLimit()
+            }
             invalidate()
         }
     //分割线的颜色
@@ -202,7 +209,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 return
             }
             field = value
-            invalidate()
+            if (isShowDivider) {
+                invalidate()
+            }
         }
     //分割线高度
     var dividerHeight: Float = 0f
@@ -211,7 +220,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 return
             }
             field = value
-            invalidate()
+            if (isShowDivider) {
+                invalidate()
+            }
         }
     //分割线填充类型
     var dividerType: Int = 0
@@ -220,7 +231,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 return
             }
             field = value
-            invalidate()
+            if (isShowDivider) {
+                invalidate()
+            }
         }
     //分割线类型为DIVIDER_TYPE_WRAP时 分割线左右两端距离文字的间距
     var dividerPaddingForWrap: Float = 0f
@@ -229,7 +242,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 return
             }
             field = value
-            invalidate()
+            if (isShowDivider) {
+                invalidate()
+            }
         }
     //分割线两端形状，默认圆头
     var dividerCap: Paint.Cap = Paint.Cap.ROUND
@@ -238,7 +253,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 return
             }
             field = value
-            invalidate()
+            if (isShowDivider) {
+                invalidate()
+            }
         }
     //分割线和选中区域垂直方向的偏移，实现扩大选中区域
     var dividerOffsetY: Float = 0f
@@ -247,7 +264,10 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 return
             }
             field = value
-            invalidate()
+            if (isShowDivider) {
+                calculateTopAndBottomLimit()
+                invalidate()
+            }
         }
     /*
       ---------- 分割线相关 ----------
@@ -272,7 +292,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 return
             }
             field = value
-            invalidate()
+            if (hasCurtain) {
+                invalidate()
+            }
         }
     /*
       ---------- 选中区域蒙层相关 ----------
@@ -298,7 +320,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 return
             }
             field = value
-            invalidate()
+            if (isCurved) {
+                invalidate()
+            }
         }
     //弯曲（3D）效果左右圆弧偏移效果系数 0-1之间 越大越明显
     var curvedArcDirectionFactor: Float = 0f
@@ -307,7 +331,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 return
             }
             field = min(1f, max(0f, value))
-            invalidate()
+            if (isCurved) {
+                invalidate()
+            }
         }
     //选中后折射的偏移 与字体大小的比值，1为不偏移 越小偏移越明显
     //(普通效果和3d效果都适用)
@@ -352,7 +378,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         private const val DEFAULT_NORMAL_TEXT_COLOR = Color.DKGRAY
         private const val DEFAULT_SELECTED_TEXT_COLOR = Color.BLACK
         private const val DEFAULT_VISIBLE_ITEM = 5
-        private const val DEFAULT_SCROLL_DURATION = 250
+        const val DEFAULT_SCROLL_DURATION = 250
         private const val DEFAULT_CLICK_CONFIRM: Long = 120
         //默认折射比值，通过字体大小来实现折射视觉差
         private const val DEFAULT_REFRACT_RATIO = 1f
@@ -404,10 +430,10 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     init {
+        initValue(context)
         attrs?.let {
             initAttrsAndDefault(context, it)
         }
-        initValue(context)
     }
 
     override fun onDetachedFromWindow() {
@@ -531,8 +557,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         drawRect.set(paddingLeft, paddingTop, width - paddingRight, height - paddingBottom)
         centerX = drawRect.centerX()
         centerY = drawRect.centerY()
-        selectedItemTopLimit = (centerY.toFloat() - (itemHeight / 2).toFloat() - dividerOffsetY).toInt()
-        selectedItemBottomLimit = (centerY.toFloat() + (itemHeight / 2).toFloat() + dividerOffsetY).toInt()
+        calculateTopAndBottomLimit()
         clipLeft = paddingLeft
         clipTop = paddingTop
         clipRight = width - paddingRight
@@ -547,6 +572,13 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         if (itemDistance > 0) {
             doScroll(itemDistance)
         }
+    }
+
+    private fun calculateTopAndBottomLimit() {
+        selectedItemTopLimit = (centerY.toFloat() - (itemHeight / 2).toFloat()
+                - dividerOffsetY).toInt()
+        selectedItemBottomLimit = (centerY.toFloat() + (itemHeight / 2).toFloat()
+                + dividerOffsetY).toInt()
     }
 
     /**
@@ -564,7 +596,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         wheelAdapter?.let {
             paint.textSize = textSize
             for (i in 0 until it.getItemCount()) {
-                val textWidth = paint.measureText(it.getItemText(it.getItem(i))).toInt()
+                val textWidth = paint.measureText(it.getItemText(it.getItemData(i))).toInt()
                 maxTextWidth = max(textWidth, maxTextWidth)
             }
         } ?: logAdapterNull()
@@ -1099,6 +1131,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 val deltaY = moveY - lastTouchY
 
                 //回调
+                currentScrollState = SCROLL_STATE_DRAGGING
                 onWheelScrollStateChanged(SCROLL_STATE_DRAGGING)
                 scrollChangedListener?.onScrollStateChanged(this, SCROLL_STATE_DRAGGING)
 
@@ -1114,7 +1147,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                 //手指抬起
                 isForceFinishScroll = false
                 velocityTracker?.computeCurrentVelocity(1000, maxFlingVelocity.toFloat())
-                val velocityY = velocityTracker?.yVelocity ?: minFlingVelocity * 1f
+                val velocityY: Int = velocityTracker?.yVelocity?.toInt() ?: minFlingVelocity
                 if (abs(velocityY) > minFlingVelocity) {
                     //快速滑动
                     scroller.forceFinished(true)
@@ -1161,8 +1194,6 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
     private fun initVelocityTracker() {
         if (velocityTracker == null) {
             velocityTracker = VelocityTracker.obtain()
-        } else {
-            velocityTracker?.clear()
         }
     }
 
@@ -1179,10 +1210,11 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
      */
     override fun run() {
         //停止滚动更新当前下标
-        if (scroller.isFinished() && !isForceFinishScroll && !isFlingScroll) {
+        if (scroller.isFinished && !isForceFinishScroll && !isFlingScroll) {
             if (itemHeight == 0) return
             //滚动状态停止
             //回调
+            currentScrollState = SCROLL_STATE_IDLE
             onWheelScrollStateChanged(SCROLL_STATE_IDLE)
             scrollChangedListener?.onScrollStateChanged(this, SCROLL_STATE_IDLE)
 
@@ -1195,9 +1227,12 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             //停止后重新赋值
             currentScrollPosition = selectedItemPosition
 
-            //停止滚动，选中条目回调
-            onItemSelected(selectedItemPosition)
-            itemSelectedListener?.onItemSelected(this, selectedItemPosition)
+            wheelAdapter?.let {
+                it.selectedItemPosition = selectedItemPosition
+                //停止滚动，选中条目回调
+                onItemSelected(it, selectedItemPosition)
+                itemSelectedListener?.onItemSelected(this, it, selectedItemPosition)
+            }
         }
 
         if (scroller.computeScrollOffset()) {
@@ -1205,6 +1240,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             scrollOffsetY = scroller.currY
 
             if (oldY != scrollOffsetY) {
+                currentScrollState = SCROLL_STATE_SCROLLING
                 onWheelScrollStateChanged(SCROLL_STATE_SCROLLING)
                 scrollChangedListener?.onScrollStateChanged(this, SCROLL_STATE_SCROLLING)
             }
@@ -1362,8 +1398,15 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
+    /**
+     * ArrayWheelAdapter 中触发停止滚动回调
+     */
+    override fun onFinishScroll() {
+        forceFinishScroll()
+    }
+
     @JvmOverloads
-    fun <T> setData(data: List<T>, formatter: ItemTextFormatter? = null) {
+    fun <T> setData(data: List<T>, formatter: TextFormatter? = null) {
         setAdapter(ArrayWheelAdapter(data), formatter)
     }
 
@@ -1372,11 +1415,13 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     @JvmOverloads
-    fun setAdapter(adapter: ArrayWheelAdapter<*>, formatter: ItemTextFormatter? = null) {
+    fun setAdapter(adapter: ArrayWheelAdapter<*>, formatter: TextFormatter? = null) {
         wheelAdapter = adapter
         wheelAdapter?.let {
-            it.itemTextFormatter = formatter
+            it.textFormatter = formatter
             it.isCyclic = this.isCyclic
+            it.selectedItemPosition = selectedItemPosition
+            it.finishScrollCallback = this
             checkResetPosition()
             notifyDataSetChanged()
         }
@@ -1387,14 +1432,16 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         wheelAdapter?.let {
             it.formatterBlock = formatterBlock
             it.isCyclic = this.isCyclic
+            it.selectedItemPosition = selectedItemPosition
+            it.finishScrollCallback = this
             checkResetPosition()
             notifyDataSetChanged()
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getAdapter(): ArrayWheelAdapter<T>? {
-        return wheelAdapter as ArrayWheelAdapter<T>?
+    fun getAdapter(): ArrayWheelAdapter<*>? {
+        return wheelAdapter
     }
 
     private fun checkResetPosition() {
@@ -1405,11 +1452,13 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
                     selectedItemPosition = it.getItemCount() - 1
                     //重置滚动下标
                     currentScrollPosition = selectedItemPosition
+                    it.selectedItemPosition = selectedItemPosition
                 }
             } else {
                 //重置选中下标和滚动下标
                 selectedItemPosition = 0
                 currentScrollPosition = selectedItemPosition
+                it.selectedItemPosition = selectedItemPosition
             }
         } ?: logAdapterNull()
     }
@@ -1417,6 +1466,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
     fun notifyDataSetChanged() {
         //强制滚动完成
         forceFinishScroll()
+        calculateTopAndBottomLimit()
         calculateTextSizeAndItemHeight()
         calculateDrawStart()
         calculateLimitY()
@@ -1454,7 +1504,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
      */
     @JvmOverloads
     fun setTypeface(typeface: Typeface, isBoldForSelectedItem: Boolean = false) {
-        if (typeface == paint.typeface) {
+        if (typeface == paint.typeface && isBoldForSelectedItem == this.isBoldForSelectedItem) {
             return
         }
         this.isBoldForSelectedItem = isBoldForSelectedItem
@@ -1494,6 +1544,13 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
      */
     fun setTextBoundaryMargin(textBoundaryMargin: Float, isDp: Boolean) {
         this.textBoundaryMargin = if (isDp) dp2px(textBoundaryMargin) else textBoundaryMargin
+    }
+
+    /**
+     * 获取是否设置了选中条目字体加粗
+     */
+    fun isBoldForSelectedItem(): Boolean {
+        return isBoldForSelectedItem
     }
 
     /**
@@ -1563,9 +1620,10 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             doScroll(itemDistance)
             selectedItemPosition = position
             wheelAdapter?.let {
+                it.selectedItemPosition = selectedItemPosition
                 //选中条目回调
-                onItemSelected(selectedItemPosition)
-                itemSelectedListener?.onItemSelected(this, selectedItemPosition)
+                onItemSelected(it, selectedItemPosition)
+                itemSelectedListener?.onItemSelected(this, it, selectedItemPosition)
             }
             invalidateIfYChanged()
         }
@@ -1575,59 +1633,27 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
      * 获取选中下标
      */
     fun getSelectedPosition(): Int {
-        return selectedItemPosition
-    }
-
-    /**
-     * 获取选中下标 如果WheelView正在滚动，则直接停止并滚动到终点
-     */
-    fun getSelectedPositionByAbort(): Int {
-        abortFinishScroll()
-        return selectedItemPosition
-    }
-
-    /**
-     * 获取选中下标 如果WheelView正在滚动，则直接停止
-     */
-    fun getSelectedPositionByForce(): Int {
+        //如果正在滚动，停止滚动
         forceFinishScroll()
         return selectedItemPosition
     }
 
-    /**
-     * 根据下标获取选中条目数据
-     */
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getItem(position: Int): T? {
-        return wheelAdapter?.let {
-            it.getItem(position) as? T
-        }
+    fun getPlayVolume(): Float {
+        return soundHelper.playVolume
     }
 
     /**
-     * 获取选中条目
+     * 设置滚动音效音量
      */
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getSelectedItem(): T? {
-        return wheelAdapter?.let {
-            it.getItem(selectedItemPosition) as? T
-        }
+    fun setPlayVolume(playVolume: Float) {
+        soundHelper.playVolume = min(1f, max(0f, playVolume))
     }
 
     /**
-     * 获取选中条目 如果WheelView正在滚动，则直接停止并滚动到终点
+     * 设置音效资源
      */
-    fun <T> getSelectedItemByAbort(): T? {
-        abortFinishScroll()
-        return getSelectedItem()
-    }
-
-    /**
-     * 获取选中条目  如果WheelView正在滚动，则直接停止
-     */
-    fun <T> getSelectedItemByForce(): T? {
-        forceFinishScroll()
-        return getSelectedItem()
+    fun setSoundResource(@RawRes soundRes: Int) {
+        soundHelper.load(context, soundRes)
     }
 
     /*
@@ -1645,7 +1671,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
 
     }
 
-    protected open fun onItemSelected(position: Int) {
+    protected open fun onItemSelected(adapter: ArrayWheelAdapter<*>, position: Int) {
 
     }
 
@@ -1686,7 +1712,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
      */
     @IntDef(TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, TEXT_ALIGN_RIGHT)
     @Retention(AnnotationRetention.SOURCE)
-    annotation class TextAlign
+    internal annotation class TextAlign
 
     /**
      * 自定义左右圆弧效果方向注解
@@ -1696,7 +1722,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
      */
     @IntDef(CURVED_ARC_DIRECTION_LEFT, CURVED_ARC_DIRECTION_CENTER, CURVED_ARC_DIRECTION_RIGHT)
     @Retention(AnnotationRetention.SOURCE)
-    annotation class CurvedArcDirection
+    internal annotation class CurvedArcDirection
 
     /**
      * 自定义分割线类型注解
@@ -1706,14 +1732,14 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
      */
     @IntDef(DIVIDER_TYPE_FILL, DIVIDER_TYPE_WRAP)
     @Retention(AnnotationRetention.SOURCE)
-    annotation class DividerType
+    internal annotation class DividerType
 
     /**
      * 自定义滚动状态注解
      */
     @IntDef(SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SCROLLING)
     @Retention(AnnotationRetention.SOURCE)
-    annotation class ScrollState
+    internal annotation class ScrollState
 
     /*
       ---------- 一些注解 ----------
