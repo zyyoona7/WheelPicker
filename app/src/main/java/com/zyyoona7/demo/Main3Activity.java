@@ -21,7 +21,7 @@ import com.zyyoona7.picker.ex.MonthWheelView;
 import com.zyyoona7.picker.ex.YearWheelView;
 import com.zyyoona7.picker.listener.OnDateSelectedListener;
 import com.zyyoona7.wheel.WheelView;
-import com.zyyoona7.wheel.formatter.IntegerItemTextFormatter;
+import com.zyyoona7.wheel.formatter.IntTextFormatter;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -116,9 +116,9 @@ public class Main3Activity extends AppCompatActivity {
         MonthWheelView monthWv2 = customDpv2.getMonthWv();
         DayWheelView dayWv2 = customDpv2.getDayWv();
 //        monthWv2.setIntegerNeedFormat("%02d");
-        monthWv2.setItemTextFormatter(new IntegerItemTextFormatter());
+        monthWv2.setItemTextFormatter(new IntTextFormatter());
 //        dayWv2.setIntegerNeedFormat("%02d");
-        dayWv2.setItemTextFormatter(new IntegerItemTextFormatter());
+        dayWv2.setItemTextFormatter(new IntTextFormatter());
         customDpv2.setResetSelectedPosition(true);
 
         final DatePickerView customDpv3 = findViewById(R.id.dpv_custom_3);
@@ -132,9 +132,9 @@ public class Main3Activity extends AppCompatActivity {
         YearWheelView yearWv3 = customDpv3.getYearWv();
         MonthWheelView monthWv3 = customDpv3.getMonthWv();
         DayWheelView dayWv3 = customDpv3.getDayWv();
-        yearWv3.setItemTextFormatter(new IntegerItemTextFormatter("%d年"));
-        monthWv3.setItemTextFormatter(new IntegerItemTextFormatter("%d月"));
-        dayWv3.setItemTextFormatter(new IntegerItemTextFormatter("%02d日"));
+        yearWv3.setItemTextFormatter(new IntTextFormatter("%d年"));
+        monthWv3.setItemTextFormatter(new IntTextFormatter("%d月"));
+        dayWv3.setItemTextFormatter(new IntTextFormatter("%02d日"));
         yearWv3.setCurvedArcDirection(WheelView.CURVED_ARC_DIRECTION_LEFT);
         yearWv3.setCurvedArcDirectionFactor(0.65f);
         dayWv3.setCurvedArcDirection(WheelView.CURVED_ARC_DIRECTION_RIGHT);

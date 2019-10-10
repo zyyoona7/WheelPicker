@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import com.zyyoona7.picker.listener.OnOptionsSelectedListener;
 import com.zyyoona7.picker.listener.OnPickerScrollStateChangedListener;
 import com.zyyoona7.wheel.WheelView;
-import com.zyyoona7.wheel.formatter.ItemTextFormatter;
+import com.zyyoona7.wheel.formatter.TextFormatter;
 
 import java.util.List;
 
@@ -652,7 +652,7 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
         mOptionsWv3.setRefractRatio(curvedRefractRatio);
     }
 
-    public void setItemTextFormatter(ItemTextFormatter formatter){
+    public void setItemTextFormatter(TextFormatter formatter){
         mOptionsWv1.setItemTextFormatter(formatter);
         mOptionsWv2.setItemTextFormatter(formatter);
         mOptionsWv3.setItemTextFormatter(formatter);

@@ -15,7 +15,7 @@ import com.zyyoona7.picker.listener.OnOptionsSelectedListener;
 import com.zyyoona7.picker.listener.OnPickerScrollStateChangedListener;
 import com.zyyoona7.picker.OptionsPickerView;
 import com.zyyoona7.wheel.WheelView;
-import com.zyyoona7.wheel.formatter.ItemTextFormatter;
+import com.zyyoona7.wheel.formatter.TextFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +91,7 @@ public class CityPickerDialogFragment extends EasyDialog {
         List<List<CityEntity>> c3List = new ArrayList<>(1);
         List<List<List<CityEntity>>> d3List = new ArrayList<>(1);
         ParseHelper.initThreeLevelCityList(getActivity(), p3List, c3List, d3List);
-        mOptionsPickerView.setItemTextFormatter(new ItemTextFormatter() {
+        mOptionsPickerView.setItemTextFormatter(new TextFormatter() {
             @NonNull
             @Override
             public String formatText(Object item) {

@@ -20,7 +20,7 @@ import com.zyyoona7.demo.entities.CityEntity;
 import com.zyyoona7.demo.utils.ParseHelper;
 import com.zyyoona7.picker.OptionsPickerView;
 import com.zyyoona7.picker.listener.OnOptionsSelectedListener;
-import com.zyyoona7.wheel.formatter.ItemTextFormatter;
+import com.zyyoona7.wheel.formatter.TextFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +104,7 @@ public class Main4Activity extends AppCompatActivity {
         List<List<CityEntity>> c2List = new ArrayList<>(1);
         ParseHelper.initTwoLevelCityList(this, p2List, c2List);
         OptionsPickerView<CityEntity> towLinkageOpv = findViewById(R.id.opv_two_linkage);
-        towLinkageOpv.setItemTextFormatter(new ItemTextFormatter() {
+        towLinkageOpv.setItemTextFormatter(new TextFormatter() {
             @NonNull
             @Override
             public String formatText(Object item) {
@@ -136,7 +136,7 @@ public class Main4Activity extends AppCompatActivity {
         List<List<List<CityEntity>>> d3List = new ArrayList<>(1);
         ParseHelper.initThreeLevelCityList(this, p3List, c3List, d3List);
         final OptionsPickerView<CityEntity> threeLinkageOpv = findViewById(R.id.opv_three_linkage);
-        threeLinkageOpv.setItemTextFormatter(new ItemTextFormatter() {
+        threeLinkageOpv.setItemTextFormatter(new TextFormatter() {
             @NonNull
             @Override
             public String formatText(Object item) {
