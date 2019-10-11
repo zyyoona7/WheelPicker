@@ -81,12 +81,46 @@
                     app:layout_constraintTop_toBottomOf="@id/sb_line_spacing" />
 
                 <CheckBox
+                    android:id="@+id/cb_selected_random"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="是否随机选中"
+                    app:layout_constraintTop_toBottomOf="@id/tv_selected_div" />
+
+                <TextView
+                    android:id="@+id/tv_selected_position_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="设置选中下标"
+                    android:textAppearance="@style/TitleAppearance"
+                    app:layout_constraintTop_toBottomOf="@id/cb_selected_random" />
+
+                <com.zjun.widget.RuleView
+                    android:id="@+id/br_selected_position"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_selected_position_title"
+                    />
+
+                <CheckBox
                     android:id="@+id/cb_selected_smooth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="是否平滑滚动"
-                    app:layout_constraintTop_toBottomOf="@id/tv_selected_div" />
+                    app:layout_constraintTop_toBottomOf="@id/br_selected_position" />
+
+                <TextView
+                    android:id="@+id/tv_selected_duration_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="设置平滑滚动持续时间"
+                    android:textAppearance="@style/TitleAppearance"
+                    app:layout_constraintTop_toBottomOf="@id/cb_selected_smooth" />
 
                 <SeekBar
                     android:id="@+id/sb_selected_duration"
@@ -94,14 +128,14 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/cb_selected_smooth" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_selected_duration_title" />
 
                 <Button
                     android:id="@+id/btn_selected"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorBgBtnNormal"
-                    android:text="随机选中下标"
+                    android:text="选中下标"
                     app:layout_constraintTop_toBottomOf="@id/sb_selected_duration" />
 
                 <TextView
@@ -125,6 +159,7 @@
                     android:id="@+id/rsb_selected_range"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintTop_toBottomOf="@id/sc_can_over_range_scroll"
                     app:rsb_gravity="center"
                     app:rsb_indicator_padding_bottom="3dp"
@@ -134,7 +169,6 @@
                     app:rsb_indicator_show_mode="showWhenTouch"
                     app:rsb_min_interval="1"
                     app:rsb_mode="range"
-                    android:layout_marginTop="10dp"
                     app:rsb_progress_color="@color/colorAccent" />
 
                 <TextView

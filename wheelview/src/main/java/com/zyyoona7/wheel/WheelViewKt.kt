@@ -1674,8 +1674,10 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         } ?: return
 
+        val shouldPosition = checkPositionInRange(position)
+
         //item之间差值
-        val itemDistance = calculateItemDistance(position)
+        val itemDistance = calculateItemDistance(shouldPosition)
         if (itemDistance == 0) {
             return
         }
@@ -1690,7 +1692,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             ViewCompat.postOnAnimation(this, this)
         } else {
             doScroll(itemDistance)
-            selectedItemPosition = position
+            selectedItemPosition = shouldPosition
             wheelAdapter?.let {
                 it.selectedItemPosition = selectedItemPosition
                 //选中条目回调
@@ -1699,6 +1701,27 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             }
             invalidateIfYChanged()
         }
+    }
+
+    /**
+     * 检查position是否在限制范围内
+     */
+    private fun checkPositionInRange(position: Int): Int {
+        if (maxSelectedPosition == -1 && minSelectedPosition == -1) {
+            return position
+        }
+        if (minSelectedPosition >= 0
+                && position < minSelectedPosition) {
+            return minSelectedPosition
+        }
+        return wheelAdapter?.let {
+            if (maxSelectedPosition < it.getItemCount()
+                    && position > maxSelectedPosition) {
+                maxSelectedPosition
+            } else {
+                position
+            }
+        } ?: position
     }
 
     /**

@@ -20,6 +20,7 @@ import kotlin.random.Random
 
 
 class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarChangeListener {
+
     override fun initLayoutId(): Int {
         return R.layout.activity_main5
     }
@@ -64,7 +65,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         }
 
         binding.scCanOverRangeScroll.setOnCheckedChangeListener { _, isChecked ->
-            binding.wheelview.canOverRangeScroll=isChecked
+            binding.wheelview.canOverRangeScroll = isChecked
         }
 
         binding.rgAlign.setOnCheckedChangeListener { _, checkedId ->
@@ -98,11 +99,18 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
             }
         }
 
+
         binding.btnSelected.setOnClickListener {
-            binding.wheelview.setSelectedPosition(
-                    Random.nextInt(0, binding.wheelview.getAdapter()?.getItemCount() ?: 0),
-                    binding.cbSelectedSmooth.isChecked,
-                    binding.sbSelectedDuration.progress)
+            if (binding.cbSelectedRandom.isChecked) {
+                binding.wheelview.setSelectedPosition(
+                        Random.nextInt(0, binding.wheelview.getAdapter()?.getItemCount() ?: 0),
+                        binding.cbSelectedSmooth.isChecked,
+                        binding.sbSelectedDuration.progress)
+            } else {
+                binding.wheelview.setSelectedPosition(binding.brSelectedPosition.currentValue.toInt(),
+                        binding.cbSelectedSmooth.isChecked,
+                        binding.sbSelectedDuration.progress)
+            }
         }
 
         binding.btnCurtainColor.setOnClickListener {
@@ -145,13 +153,13 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
             binding.wheelview.setTypeface(typefaceLight(), binding.cbBoldSelected.isChecked)
         }
 
-        binding.rsbSelectedRange.setOnRangeChangedListener(object :OnRangeChangedListener{
+        binding.rsbSelectedRange.setOnRangeChangedListener(object : OnRangeChangedListener {
             override fun onStartTrackingTouch(view: RangeSeekBar?, isLeft: Boolean) {
             }
 
             override fun onRangeChanged(view: RangeSeekBar?, leftValue: Float,
                                         rightValue: Float, isFromUser: Boolean) {
-                binding.wheelview.setSelectedRange(leftValue.toInt(),rightValue.toInt())
+                binding.wheelview.setSelectedRange(leftValue.toInt(), rightValue.toInt())
             }
 
             override fun onStopTrackingTouch(view: RangeSeekBar?, isLeft: Boolean) {
@@ -252,11 +260,15 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.btnFontRegular.typeface = typefaceRegular()
         binding.btnFontLight.typeface = typefaceLight()
 
+        val maxValue=wheelView.getAdapter()?.getItemCount()?.minus(1) ?: 0
         binding.rsbSelectedRange.setRange(0f,
-                (wheelView.getAdapter()?.getItemCount()?.minus(1)?:0).toFloat())
-        binding.rsbSelectedRange.setProgress(0f,binding.rsbSelectedRange.maxProgress)
+                maxValue.toFloat())
+        binding.rsbSelectedRange.setProgress(0f, binding.rsbSelectedRange.maxProgress)
 
-        binding.scCanOverRangeScroll.isChecked=wheelView.canOverRangeScroll
+        binding.scCanOverRangeScroll.isChecked = wheelView.canOverRangeScroll
+
+        binding.brSelectedPosition.setValue(0f,maxValue.toFloat(),0f,1f,5)
+
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {
