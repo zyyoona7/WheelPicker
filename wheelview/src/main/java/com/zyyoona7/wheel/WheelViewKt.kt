@@ -25,7 +25,8 @@ import com.zyyoona7.wheel.listener.OnScrollChangedListener
 import com.zyyoona7.wheel.sound.SoundHelper
 import kotlin.math.*
 
-open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
+open class WheelViewKt @JvmOverloads constructor(context: Context,
+                                                 attrs: AttributeSet? = null,
                                                  defStyleAttr: Int = 0)
     : View(context, attrs, defStyleAttr), Runnable, ArrayWheelAdapter.OnFinishScrollCallback {
 
@@ -89,7 +90,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
 
     //属性
     //当前选中的下标
-    private var selectedItemPosition: Int = 0
+    private var selectedPosition: Int = 0
     /*
       ---------- 文字相关 ----------
      */
@@ -460,42 +461,45 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
      * @param attrs   attrs
      */
     private fun initAttrsAndDefault(context: Context, attrs: AttributeSet) {
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelView)
-        textSize = typedArray.getDimension(R.styleable.WheelView_wv_textSize, DEFAULT_TEXT_SIZE)
-        isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelView_wv_autoFitTextSize, false)
-        textAlign = typedArray.getInt(R.styleable.WheelView_wv_textAlign, TEXT_ALIGN_CENTER)
-        textBoundaryMargin = typedArray.getDimension(R.styleable.WheelView_wv_textBoundaryMargin,
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelViewKt)
+        textSize = typedArray.getDimension(R.styleable.WheelViewKt_wv_textSize, DEFAULT_TEXT_SIZE)
+        isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelViewKt_wv_autoFitTextSize, false)
+        textAlign = typedArray.getInt(R.styleable.WheelViewKt_wv_textAlign, TEXT_ALIGN_CENTER)
+        textBoundaryMargin = typedArray.getDimension(R.styleable.WheelViewKt_wv_textBoundaryMargin,
                 DEFAULT_TEXT_BOUNDARY_MARGIN)
-        normalItemTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalItemTextColor, DEFAULT_NORMAL_TEXT_COLOR)
-        selectedItemTextColor = typedArray.getColor(R.styleable.WheelView_wv_selectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR)
-        lineSpacing = typedArray.getDimension(R.styleable.WheelView_wv_lineSpacing, DEFAULT_LINE_SPACING)
+        normalItemTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_normalItemTextColor, DEFAULT_NORMAL_TEXT_COLOR)
+        selectedItemTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_selectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR)
+        lineSpacing = typedArray.getDimension(R.styleable.WheelViewKt_wv_lineSpacing, DEFAULT_LINE_SPACING)
 
-        visibleItems = typedArray.getInt(R.styleable.WheelView_wv_visibleItems, DEFAULT_VISIBLE_ITEM)
+        visibleItems = typedArray.getInt(R.styleable.WheelViewKt_wv_visibleItems, DEFAULT_VISIBLE_ITEM)
         //跳转可见item为奇数
         visibleItems = adjustVisibleItems(visibleItems)
-        selectedItemPosition = typedArray.getInt(R.styleable.WheelView_wv_selectedItemPosition, 0)
+        selectedPosition = typedArray.getInt(R.styleable.WheelViewKt_wv_selectedPosition, 0)
+        maxSelectedPosition=typedArray.getInt(R.styleable.WheelViewKt_wv_maxSelectedPosition,-1)
+        minSelectedPosition=typedArray.getInt(R.styleable.WheelViewKt_wv_minSelectedPosition,-1)
+        selectedPosition = checkPositionInSelectedRange(selectedPosition)
         //初始化滚动下标
-        currentScrollPosition = selectedItemPosition
-        isCyclic = typedArray.getBoolean(R.styleable.WheelView_wv_cyclic, false)
+        currentScrollPosition = selectedPosition
+        isCyclic = typedArray.getBoolean(R.styleable.WheelViewKt_wv_cyclic, false)
 
-        isShowDivider = typedArray.getBoolean(R.styleable.WheelView_wv_showDivider, false)
-        dividerType = typedArray.getInt(R.styleable.WheelView_wv_dividerType, DIVIDER_TYPE_FILL)
-        dividerHeight = typedArray.getDimension(R.styleable.WheelView_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT)
-        dividerColor = typedArray.getColor(R.styleable.WheelView_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR)
-        dividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelView_wv_dividerPaddingForWrap, DEFAULT_TEXT_BOUNDARY_MARGIN)
+        isShowDivider = typedArray.getBoolean(R.styleable.WheelViewKt_wv_showDivider, false)
+        dividerType = typedArray.getInt(R.styleable.WheelViewKt_wv_dividerType, DIVIDER_TYPE_FILL)
+        dividerHeight = typedArray.getDimension(R.styleable.WheelViewKt_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT)
+        dividerColor = typedArray.getColor(R.styleable.WheelViewKt_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR)
+        dividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelViewKt_wv_dividerPaddingForWrap, DEFAULT_TEXT_BOUNDARY_MARGIN)
 
-        dividerOffsetY = typedArray.getDimensionPixelOffset(R.styleable.WheelView_wv_dividerOffsetY, 0).toFloat()
+        dividerOffsetY = typedArray.getDimensionPixelOffset(R.styleable.WheelViewKt_wv_dividerOffsetY, 0).toFloat()
 
-        hasCurtain = typedArray.getBoolean(R.styleable.WheelView_wv_hasCurtain, false)
-        curtainColor = typedArray.getColor(R.styleable.WheelView_wv_curtainColor, Color.TRANSPARENT)
+        hasCurtain = typedArray.getBoolean(R.styleable.WheelViewKt_wv_hasCurtain, false)
+        curtainColor = typedArray.getColor(R.styleable.WheelViewKt_wv_curtainColor, Color.TRANSPARENT)
 
-        isCurved = typedArray.getBoolean(R.styleable.WheelView_wv_curved, true)
-        curvedArcDirection = typedArray.getInt(R.styleable.WheelView_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER)
-        curvedArcDirectionFactor = typedArray.getFloat(R.styleable.WheelView_wv_curvedArcDirectionFactor, DEFAULT_CURVED_FACTOR)
+        isCurved = typedArray.getBoolean(R.styleable.WheelViewKt_wv_curved, true)
+        curvedArcDirection = typedArray.getInt(R.styleable.WheelViewKt_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER)
+        curvedArcDirectionFactor = typedArray.getFloat(R.styleable.WheelViewKt_wv_curvedArcDirectionFactor, DEFAULT_CURVED_FACTOR)
         //折射偏移默认值
         //Deprecated 将在新版中移除
-        val curvedRefractRatio = typedArray.getFloat(R.styleable.WheelView_wv_curvedRefractRatio, 0.9f)
-        refractRatio = typedArray.getFloat(R.styleable.WheelView_wv_refractRatio, DEFAULT_REFRACT_RATIO)
+        val curvedRefractRatio = typedArray.getFloat(R.styleable.WheelViewKt_wv_curvedRefractRatio, 0.9f)
+        refractRatio = typedArray.getFloat(R.styleable.WheelViewKt_wv_refractRatio, DEFAULT_REFRACT_RATIO)
         refractRatio = if (isCurved) min(curvedRefractRatio, refractRatio) else refractRatio
         if (refractRatio > 1f) {
             refractRatio = 1.0f
@@ -580,7 +584,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         calculateLimitY()
 
         //如果初始化时有选中的下标，则计算选中位置的距离
-        val itemDistance = calculateItemDistance(selectedItemPosition)
+        val itemDistance = calculateItemDistance(selectedPosition)
         if (itemDistance > 0) {
             doScroll(itemDistance)
         }
@@ -677,7 +681,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
      * 根据当前的选中下标和[itemHeight]重新计算偏移
      */
     private fun calculateScrollOffsetY() {
-        scrollOffsetY = selectedItemPosition * itemHeight
+        scrollOffsetY = selectedPosition * itemHeight
     }
 
     /**
@@ -1262,22 +1266,22 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
 
             val currentItemPosition = getCurrentPosition()
             //当前选中的Position没变时不回调 onItemSelected()
-            if (currentItemPosition == selectedItemPosition) {
+            if (currentItemPosition == selectedPosition) {
                 return
             }
-            selectedItemPosition = currentItemPosition
+            selectedPosition = currentItemPosition
             //停止后重新赋值
-            currentScrollPosition = selectedItemPosition
+            currentScrollPosition = selectedPosition
 
             wheelAdapter?.let {
-                it.selectedItemPosition = selectedItemPosition
+                it.selectedItemPosition = selectedPosition
                 //检查当前选中的范围是否合法
                 if (!checkSelectedPositionInRange(it)) {
                     return@let
                 }
                 //停止滚动，选中条目回调
-                onItemSelected(it, selectedItemPosition)
-                itemSelectedListener?.onItemSelected(this, it, selectedItemPosition)
+                onItemSelected(it, selectedPosition)
+                itemSelectedListener?.onItemSelected(this, it, selectedPosition)
             }
         }
 
@@ -1371,16 +1375,14 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
      * 检查是否选中的下标在限制的下标范围内
      */
     private fun checkSelectedPositionInRange(adapter: ArrayWheelAdapter<*>): Boolean {
-        if (maxSelectedPosition == -1 && minSelectedPosition == -1) {
+        if (isSelectedRangeInvalidate()) {
             return true
         }
-        if (minSelectedPosition >= 0
-                && selectedItemPosition < minSelectedPosition) {
+        if (isLessThanMinSelected(selectedPosition)) {
             setSelectedPosition(minSelectedPosition)
             return false
         }
-        if (maxSelectedPosition < adapter.getItemCount()
-                && selectedItemPosition > maxSelectedPosition) {
+        if (isMoreThanMaxSelected(selectedPosition, adapter)) {
             setSelectedPosition(maxSelectedPosition)
             return false
         }
@@ -1488,7 +1490,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         wheelAdapter?.let {
             it.textFormatter = formatter
             it.isCyclic = this.isCyclic
-            it.selectedItemPosition = selectedItemPosition
+            it.selectedItemPosition = selectedPosition
             it.finishScrollCallback = this
             checkResetPosition()
             notifyDataSetChanged()
@@ -1500,7 +1502,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         wheelAdapter?.let {
             it.formatterBlock = formatterBlock
             it.isCyclic = this.isCyclic
-            it.selectedItemPosition = selectedItemPosition
+            it.selectedItemPosition = selectedPosition
             it.finishScrollCallback = this
             checkResetPosition()
             notifyDataSetChanged()
@@ -1516,17 +1518,17 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         wheelAdapter?.let {
             if (!isResetSelectedPosition && it.getItemCount() > 0) {
                 //不重置选中下标
-                if (selectedItemPosition >= it.getItemCount()) {
-                    selectedItemPosition = it.getItemCount() - 1
+                if (selectedPosition >= it.getItemCount()) {
+                    selectedPosition = it.getItemCount() - 1
                     //重置滚动下标
-                    currentScrollPosition = selectedItemPosition
-                    it.selectedItemPosition = selectedItemPosition
+                    currentScrollPosition = selectedPosition
+                    it.selectedItemPosition = selectedPosition
                 }
             } else {
                 //重置选中下标和滚动下标
-                selectedItemPosition = 0
-                currentScrollPosition = selectedItemPosition
-                it.selectedItemPosition = selectedItemPosition
+                selectedPosition = 0
+                currentScrollPosition = selectedPosition
+                it.selectedItemPosition = selectedPosition
             }
         } ?: logAdapterNull()
     }
@@ -1674,7 +1676,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         } ?: return
 
-        val shouldPosition = checkPositionInRange(position)
+        val shouldPosition = checkPositionInSelectedRange(position)
 
         //item之间差值
         val itemDistance = calculateItemDistance(shouldPosition)
@@ -1692,12 +1694,12 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
             ViewCompat.postOnAnimation(this, this)
         } else {
             doScroll(itemDistance)
-            selectedItemPosition = shouldPosition
+            selectedPosition = shouldPosition
             wheelAdapter?.let {
-                it.selectedItemPosition = selectedItemPosition
+                it.selectedItemPosition = selectedPosition
                 //选中条目回调
-                onItemSelected(it, selectedItemPosition)
-                itemSelectedListener?.onItemSelected(this, it, selectedItemPosition)
+                onItemSelected(it, selectedPosition)
+                itemSelectedListener?.onItemSelected(this, it, selectedPosition)
             }
             invalidateIfYChanged()
         }
@@ -1706,17 +1708,15 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
     /**
      * 检查position是否在限制范围内
      */
-    private fun checkPositionInRange(position: Int): Int {
-        if (maxSelectedPosition == -1 && minSelectedPosition == -1) {
+    private fun checkPositionInSelectedRange(position: Int): Int {
+        if (isSelectedRangeInvalidate()) {
             return position
         }
-        if (minSelectedPosition >= 0
-                && position < minSelectedPosition) {
+        if (isLessThanMinSelected(position)) {
             return minSelectedPosition
         }
         return wheelAdapter?.let {
-            if (maxSelectedPosition < it.getItemCount()
-                    && position > maxSelectedPosition) {
+            if (isMoreThanMaxSelected(position, it)) {
                 maxSelectedPosition
             } else {
                 position
@@ -1725,12 +1725,35 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     /**
+     * 选中范围是否无效
+     */
+    private fun isSelectedRangeInvalidate(): Boolean {
+        return maxSelectedPosition < 0 && minSelectedPosition < 0
+    }
+
+    /**
+     * 当前[position]小于最小选中下标
+     */
+    private fun isLessThanMinSelected(position: Int): Boolean {
+        return minSelectedPosition >= 0
+                && position < minSelectedPosition
+    }
+
+    /**
+     * 当前[position]大于最大选中下标
+     */
+    private fun isMoreThanMaxSelected(position: Int, adapter: ArrayWheelAdapter<*>): Boolean {
+        return maxSelectedPosition < adapter.getItemCount()
+                && position > maxSelectedPosition
+    }
+
+    /**
      * 获取选中下标
      */
     fun getSelectedPosition(): Int {
         //如果正在滚动，停止滚动
         forceFinishScroll()
-        return selectedItemPosition
+        return selectedPosition
     }
 
     /**
@@ -1744,9 +1767,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context, attrs: Attrib
         maxSelectedPosition = wheelAdapter?.let {
             if (max >= it.getItemCount()) it.getItemCount() - 1 else max
         } ?: max
-        if (selectedItemPosition < minSelectedPosition) {
+        if (selectedPosition < minSelectedPosition) {
             setSelectedPosition(min)
-        } else if (selectedItemPosition > maxSelectedPosition) {
+        } else if (selectedPosition > maxSelectedPosition) {
             setSelectedPosition(max)
         }
         calculateLimitY()

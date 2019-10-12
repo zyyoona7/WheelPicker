@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="WheelView">
+    <declare-styleable name="WheelViewKt">
         <!--文字大小-->
         <attr name="wv_textSize" format="dimension"/>
         <!--是否自适应文字大小以完全显示过长的文字-->
@@ -23,7 +23,11 @@
         <!--可见item数-->
         <attr name="wv_visibleItems" format="integer"/>
         <!--当前选中下标-->
-        <attr name="wv_selectedItemPosition" format="integer"/>
+        <attr name="wv_selectedPosition" format="integer"/>
+        <!--最大选中下标-->
+        <attr name="wv_maxSelectedPosition" format="integer"/>
+        <!--最小选中下标-->
+        <attr name="wv_minSelectedPosition" format="integer"/>
         <!--是否循环滚动-->
         <attr name="wv_cyclic" format="boolean"/>
 

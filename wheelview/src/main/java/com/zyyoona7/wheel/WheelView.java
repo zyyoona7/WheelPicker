@@ -225,42 +225,42 @@ public class WheelView<T> extends View implements Runnable {
      * @param attrs   attrs
      */
     private void initAttrsAndDefault(Context context, AttributeSet attrs) {
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelView);
-        mTextSize = typedArray.getDimension(R.styleable.WheelView_wv_textSize, DEFAULT_TEXT_SIZE);
-        isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelView_wv_autoFitTextSize, false);
-        mTextAlign = typedArray.getInt(R.styleable.WheelView_wv_textAlign, TEXT_ALIGN_CENTER);
-        mTextBoundaryMargin = typedArray.getDimension(R.styleable.WheelView_wv_textBoundaryMargin,
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelViewKt);
+        mTextSize = typedArray.getDimension(R.styleable.WheelViewKt_wv_textSize, DEFAULT_TEXT_SIZE);
+        isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelViewKt_wv_autoFitTextSize, false);
+        mTextAlign = typedArray.getInt(R.styleable.WheelViewKt_wv_textAlign, TEXT_ALIGN_CENTER);
+        mTextBoundaryMargin = typedArray.getDimension(R.styleable.WheelViewKt_wv_textBoundaryMargin,
                 DEFAULT_TEXT_BOUNDARY_MARGIN);
-        mTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalItemTextColor, DEFAULT_NORMAL_TEXT_COLOR);
-        mSelectedItemTextColor = typedArray.getColor(R.styleable.WheelView_wv_selectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR);
-        mLineSpacing = typedArray.getDimension(R.styleable.WheelView_wv_lineSpacing, DEFAULT_LINE_SPACING);
+        mTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_normalItemTextColor, DEFAULT_NORMAL_TEXT_COLOR);
+        mSelectedItemTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_selectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR);
+        mLineSpacing = typedArray.getDimension(R.styleable.WheelViewKt_wv_lineSpacing, DEFAULT_LINE_SPACING);
 
-        mVisibleItems = typedArray.getInt(R.styleable.WheelView_wv_visibleItems, DEFAULT_VISIBLE_ITEM);
+        mVisibleItems = typedArray.getInt(R.styleable.WheelViewKt_wv_visibleItems, DEFAULT_VISIBLE_ITEM);
         //跳转可见item为奇数
         mVisibleItems = adjustVisibleItems(mVisibleItems);
-        mSelectedItemPosition = typedArray.getInt(R.styleable.WheelView_wv_selectedItemPosition, 0);
+        mSelectedItemPosition = typedArray.getInt(R.styleable.WheelViewKt_wv_selectedPosition, 0);
         //初始化滚动下标
         mCurrentScrollPosition = mSelectedItemPosition;
-        isCyclic = typedArray.getBoolean(R.styleable.WheelView_wv_cyclic, false);
+        isCyclic = typedArray.getBoolean(R.styleable.WheelViewKt_wv_cyclic, false);
 
-        isShowDivider = typedArray.getBoolean(R.styleable.WheelView_wv_showDivider, false);
-        mDividerType = typedArray.getInt(R.styleable.WheelView_wv_dividerType, DIVIDER_TYPE_FILL);
-        mDividerSize = typedArray.getDimension(R.styleable.WheelView_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT);
-        mDividerColor = typedArray.getColor(R.styleable.WheelView_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR);
-        mDividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelView_wv_dividerPaddingForWrap, DEFAULT_TEXT_BOUNDARY_MARGIN);
+        isShowDivider = typedArray.getBoolean(R.styleable.WheelViewKt_wv_showDivider, false);
+        mDividerType = typedArray.getInt(R.styleable.WheelViewKt_wv_dividerType, DIVIDER_TYPE_FILL);
+        mDividerSize = typedArray.getDimension(R.styleable.WheelViewKt_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT);
+        mDividerColor = typedArray.getColor(R.styleable.WheelViewKt_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR);
+        mDividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelViewKt_wv_dividerPaddingForWrap, DEFAULT_TEXT_BOUNDARY_MARGIN);
 
-        mDividerOffset = typedArray.getDimensionPixelOffset(R.styleable.WheelView_wv_dividerOffsetY, 0);
+        mDividerOffset = typedArray.getDimensionPixelOffset(R.styleable.WheelViewKt_wv_dividerOffsetY, 0);
 
-        hasCurtain = typedArray.getBoolean(R.styleable.WheelView_wv_hasCurtain, false);
-        mCurtainColor = typedArray.getColor(R.styleable.WheelView_wv_curtainColor, Color.TRANSPARENT);
+        hasCurtain = typedArray.getBoolean(R.styleable.WheelViewKt_wv_hasCurtain, false);
+        mCurtainColor = typedArray.getColor(R.styleable.WheelViewKt_wv_curtainColor, Color.TRANSPARENT);
 
-        isCurved = typedArray.getBoolean(R.styleable.WheelView_wv_curved, true);
-        mCurvedArcDirection = typedArray.getInt(R.styleable.WheelView_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER);
-        mCurvedArcDirectionFactor = typedArray.getFloat(R.styleable.WheelView_wv_curvedArcDirectionFactor, DEFAULT_CURVED_FACTOR);
+        isCurved = typedArray.getBoolean(R.styleable.WheelViewKt_wv_curved, true);
+        mCurvedArcDirection = typedArray.getInt(R.styleable.WheelViewKt_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER);
+        mCurvedArcDirectionFactor = typedArray.getFloat(R.styleable.WheelViewKt_wv_curvedArcDirectionFactor, DEFAULT_CURVED_FACTOR);
         //折射偏移默认值
         //Deprecated 将在新版中移除
-        float curvedRefractRatio = typedArray.getFloat(R.styleable.WheelView_wv_curvedRefractRatio, 0.9f);
-        mRefractRatio = typedArray.getFloat(R.styleable.WheelView_wv_refractRatio, DEFAULT_REFRACT_RATIO);
+        float curvedRefractRatio = typedArray.getFloat(R.styleable.WheelViewKt_wv_curvedRefractRatio, 0.9f);
+        mRefractRatio = typedArray.getFloat(R.styleable.WheelViewKt_wv_refractRatio, DEFAULT_REFRACT_RATIO);
         mRefractRatio = isCurved ? Math.min(curvedRefractRatio, mRefractRatio) : mRefractRatio;
         if (mRefractRatio > 1f) {
             mRefractRatio = 1.0f;
