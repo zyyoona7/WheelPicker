@@ -9,4 +9,5 @@
     <color name="colorWheelView">#8024AC83</color>
     <color name="colorBgBtnText">#00B0FF</color>
     <color name="colorBgBtnNormal">#60AB94</color>
+    <color name="colorBgBtnGray">#9EABAA</color>
 </resources>

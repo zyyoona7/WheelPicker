@@ -38,9 +38,9 @@ public class YearWheelView extends WheelView<Integer> {
     public YearWheelView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.YearWheelView);
-        mStartYear = typedArray.getInt(R.styleable.YearWheelView_wv_startYear, 1900);
-        mEndYear = typedArray.getInt(R.styleable.YearWheelView_wv_endYear, 2100);
-        int selectedYear = typedArray.getInt(R.styleable.YearWheelView_wv_selectedYear, Calendar.getInstance().get(Calendar.YEAR));
+        mStartYear = typedArray.getInt(R.styleable.YearWheelView_wvt_startYear, 1900);
+        mEndYear = typedArray.getInt(R.styleable.YearWheelView_wvt_endYear, 2100);
+        int selectedYear = typedArray.getInt(R.styleable.YearWheelView_wvt_selectedYear, Calendar.getInstance().get(Calendar.YEAR));
         typedArray.recycle();
 
         updateYear();

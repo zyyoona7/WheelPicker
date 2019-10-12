@@ -2,9 +2,9 @@
 <resources>
 
     <declare-styleable name="YearWheelView">
-        <attr name="wv_startYear" format="integer" />
-        <attr name="wv_endYear" format="integer" />
-        <attr name="wv_selectedYear" format="integer" />
+        <attr name="wvt_startYear" format="integer" />
+        <attr name="wvt_endYear" format="integer" />
+        <attr name="wvt_selectedYear" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="MonthWheelView">
@@ -21,5 +21,7 @@
         <attr name="wv_startYear" format="integer" />
         <attr name="wv_endYear" format="integer" />
         <attr name="wv_selectedYear" format="integer" />
+        <attr name="wv_maxSelectedYear" format="integer"/>
+        <attr name="wv_minSelectedYear" format="integer"/>
     </declare-styleable>
 </resources>

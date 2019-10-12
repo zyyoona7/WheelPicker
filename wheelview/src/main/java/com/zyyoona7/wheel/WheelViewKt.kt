@@ -474,12 +474,11 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         visibleItems = typedArray.getInt(R.styleable.WheelViewKt_wv_visibleItems, DEFAULT_VISIBLE_ITEM)
         //跳转可见item为奇数
         visibleItems = adjustVisibleItems(visibleItems)
-        selectedPosition = typedArray.getInt(R.styleable.WheelViewKt_wv_selectedPosition, 0)
-        maxSelectedPosition=typedArray.getInt(R.styleable.WheelViewKt_wv_maxSelectedPosition,-1)
-        minSelectedPosition=typedArray.getInt(R.styleable.WheelViewKt_wv_minSelectedPosition,-1)
-        selectedPosition = checkPositionInSelectedRange(selectedPosition)
-        //初始化滚动下标
-        currentScrollPosition = selectedPosition
+        val selectedPosition = typedArray.getInt(R.styleable.WheelViewKt_wv_selectedPosition, 0)
+        val maxSelectedPosition = typedArray.getInt(R.styleable.WheelViewKt_wv_maxSelectedPosition, -1)
+        val minSelectedPosition = typedArray.getInt(R.styleable.WheelViewKt_wv_minSelectedPosition, -1)
+        initSelectedPositionAndRange(selectedPosition, minSelectedPosition, maxSelectedPosition)
+
         isCyclic = typedArray.getBoolean(R.styleable.WheelViewKt_wv_cyclic, false)
 
         isShowDivider = typedArray.getBoolean(R.styleable.WheelViewKt_wv_showDivider, false)
@@ -507,6 +506,19 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             refractRatio = DEFAULT_REFRACT_RATIO
         }
         typedArray.recycle()
+    }
+
+    /**
+     * 在构造方法中初始化 selectedPosition、minSelectedPosition、maxSelectedPosition
+     */
+    protected fun initSelectedPositionAndRange(selectedPosition: Int,
+                                               minSelectedPosition: Int,
+                                               maxSelectedPosition: Int) {
+        this.minSelectedPosition = minSelectedPosition
+        this.maxSelectedPosition = maxSelectedPosition
+        this.selectedPosition = checkPositionInSelectedRange(selectedPosition)
+        //初始化滚动下标
+        currentScrollPosition = this.selectedPosition
     }
 
     /**
@@ -1375,7 +1387,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      * 检查是否选中的下标在限制的下标范围内
      */
     private fun checkSelectedPositionInRange(adapter: ArrayWheelAdapter<*>): Boolean {
-        if (isSelectedRangeInvalidate()) {
+        if (isSelectedRangeInvalid()) {
             return true
         }
         if (isLessThanMinSelected(selectedPosition)) {
@@ -1507,6 +1519,15 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             checkResetPosition()
             notifyDataSetChanged()
         }
+    }
+
+    /**
+     * 设置 [TextFormatter]
+     */
+    fun setTextFormatter(textFormatter: TextFormatter) {
+        wheelAdapter?.textFormatter = textFormatter
+        checkResetPosition()
+        notifyDataSetChanged()
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -1676,10 +1697,10 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             }
         } ?: return
 
-        val shouldPosition = checkPositionInSelectedRange(position)
+        val realPosition = checkPositionInSelectedRange(position)
 
         //item之间差值
-        val itemDistance = calculateItemDistance(shouldPosition)
+        val itemDistance = calculateItemDistance(realPosition)
         if (itemDistance == 0) {
             return
         }
@@ -1694,7 +1715,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             ViewCompat.postOnAnimation(this, this)
         } else {
             doScroll(itemDistance)
-            selectedPosition = shouldPosition
+            selectedPosition = realPosition
             wheelAdapter?.let {
                 it.selectedItemPosition = selectedPosition
                 //选中条目回调
@@ -1709,7 +1730,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      * 检查position是否在限制范围内
      */
     private fun checkPositionInSelectedRange(position: Int): Int {
-        if (isSelectedRangeInvalidate()) {
+        if (isSelectedRangeInvalid()) {
             return position
         }
         if (isLessThanMinSelected(position)) {
@@ -1727,7 +1748,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
     /**
      * 选中范围是否无效
      */
-    private fun isSelectedRangeInvalidate(): Boolean {
+    private fun isSelectedRangeInvalid(): Boolean {
         return maxSelectedPosition < 0 && minSelectedPosition < 0
     }
 
@@ -1748,20 +1769,12 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
     }
 
     /**
-     * 获取选中下标
-     */
-    fun getSelectedPosition(): Int {
-        //如果正在滚动，停止滚动
-        forceFinishScroll()
-        return selectedPosition
-    }
-
-    /**
      * 设置选中范围 限制最小 最大选中下标
      */
-    fun setSelectedRange(@IntRange(from = 0) min: Int, @IntRange(from = 0) max: Int) {
-        if (max < min) {
-            return
+    @JvmOverloads
+    fun setSelectedRange(@IntRange(from = 0) min: Int = 0, @IntRange(from = 0) max: Int) {
+        require(max < min) {
+            "maxSelectedPosition must be greater than minSelectedPosition in WheelView."
         }
         minSelectedPosition = max(0, min)
         maxSelectedPosition = wheelAdapter?.let {
@@ -1773,6 +1786,29 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             setSelectedPosition(max)
         }
         calculateLimitY()
+    }
+
+    /**
+     * 获取选中下标
+     */
+    fun getSelectedPosition(): Int {
+        //如果正在滚动，停止滚动
+        forceFinishScroll()
+        return selectedPosition
+    }
+
+    /**
+     * 获取选中条目数据
+     */
+    fun <T> getSelectedItem(): T? {
+        return wheelAdapter?.getSelectedItem()
+    }
+
+    /**
+     * 获取数据总条目数
+     */
+    fun getItemCount(): Int {
+        return wheelAdapter?.getItemCount() ?: 0
     }
 
     fun getSoundVolume(): Float {
@@ -1798,7 +1834,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      */
 
     /*
-      ---------- 一些回调方法 ----------
+      ---------- 一些供子类重写的方法 ----------
      */
     protected open fun onWheelScrollChanged(scrollOffsetY: Int) {
 
@@ -1817,7 +1853,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
     }
 
     /*
-      ---------- 一些回调方法 ----------
+      ---------- 一些供子类重写的方法 ----------
      */
     /*
       ---------- 设置回调 ----------
