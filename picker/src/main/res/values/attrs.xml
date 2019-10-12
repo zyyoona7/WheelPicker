@@ -16,4 +16,10 @@
         <attr name="wv_month" format="integer" />
         <attr name="wv_selectedDay" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="WheelYearView">
+        <attr name="wv_startYear" format="integer" />
+        <attr name="wv_endYear" format="integer" />
+        <attr name="wv_selectedYear" format="integer" />
+    </declare-styleable>
 </resources>
