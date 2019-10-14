@@ -182,7 +182,8 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         for (i in 1..monthOfDays) {
             daysList.add(i)
         }
-        binding.wheelview.setData(daysList, IntTextFormatter("%d日"))
+        binding.wheelview.setData(daysList)
+        binding.wheelview.setTextFormatter(IntTextFormatter("%d日"))
         binding.wheelview.setSelectedPosition(currentDay)
     }
 

@@ -17,15 +17,39 @@
                 android:id="@+id/wheel_year"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/wheel_month"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:wv_textSize="18sp"
-                app:wv_startYear="1980"
                 app:wv_endYear="2050"
-                app:wv_selectedYear="2019"
+                app:wv_maxSelectedYear="2019"
                 app:wv_minSelectedYear="2000"
-                app:wv_maxSelectedYear="2019"/>
+                app:wv_selectedYear="2019"
+                app:wv_startYear="1980"
+                app:wv_textSize="18sp" />
+
+            <com.zyyoona7.picker.ex.WheelMonthView
+                android:id="@+id/wheel_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/wheel_year"
+                app:layout_constraintEnd_toStartOf="@id/wheel_day"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/wheel_year"
+                app:layout_constraintTop_toTopOf="@id/wheel_year"
+                app:wv_textSize="18sp" />
+
+            <com.zyyoona7.picker.ex.WheelDayView
+                android:id="@+id/wheel_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/wheel_year"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/wheel_month"
+                app:layout_constraintTop_toTopOf="@id/wheel_year"
+                app:wv_textSize="18sp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>
