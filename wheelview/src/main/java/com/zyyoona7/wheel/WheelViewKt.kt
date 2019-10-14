@@ -380,7 +380,10 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
     /*
       ---------- 监听器 ----------
      */
-
+    //adapter 中的 textFormatter
+    private var textFormatter: TextFormatter? = null
+    //adapter 中的 formatter block
+    private var formatterBlock: ((Any?) -> String)? = null
 
     companion object {
         private const val TAG = "WheelView"
@@ -1487,32 +1490,15 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         forceFinishScroll()
     }
 
-    @JvmOverloads
-    fun <T> setData(data: List<T>, formatter: TextFormatter? = null) {
-        setAdapter(ArrayWheelAdapter(data), formatter)
+    fun <T> setData(data: List<T>) {
+        setAdapter(ArrayWheelAdapter(data))
     }
 
-    fun <T> setData(data: List<T>, formatterBlock: (Any?) -> String) {
-        setAdapter(ArrayWheelAdapter(data), formatterBlock)
-    }
-
-    @JvmOverloads
-    fun setAdapter(adapter: ArrayWheelAdapter<*>, formatter: TextFormatter? = null) {
+    fun setAdapter(adapter: ArrayWheelAdapter<*>) {
         wheelAdapter = adapter
         wheelAdapter?.let {
-            it.textFormatter = formatter
-            it.isCyclic = this.isCyclic
-            it.selectedItemPosition = selectedPosition
-            it.finishScrollCallback = this
-            checkResetPosition()
-            notifyDataSetChanged()
-        }
-    }
-
-    fun setAdapter(adapter: ArrayWheelAdapter<*>, formatterBlock: (Any?) -> String) {
-        wheelAdapter = adapter
-        wheelAdapter?.let {
-            it.formatterBlock = formatterBlock
+            it.textFormatter = this.textFormatter
+            it.formatterBlock = this.formatterBlock
             it.isCyclic = this.isCyclic
             it.selectedItemPosition = selectedPosition
             it.finishScrollCallback = this
@@ -1525,9 +1511,24 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      * 设置 [TextFormatter]
      */
     fun setTextFormatter(textFormatter: TextFormatter) {
-        wheelAdapter?.textFormatter = textFormatter
-        checkResetPosition()
-        notifyDataSetChanged()
+        this.textFormatter = textFormatter
+        wheelAdapter?.let {
+            it.textFormatter = this.textFormatter
+            checkResetPosition()
+            notifyDataSetChanged()
+        }
+    }
+
+    /**
+     * 设置 [TextFormatter]
+     */
+    fun setTextFormatter(formatterBlock: (Any?) -> String) {
+        this.formatterBlock = formatterBlock
+        wheelAdapter?.let {
+            it.formatterBlock = this.formatterBlock
+            checkResetPosition()
+            notifyDataSetChanged()
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -1562,7 +1563,10 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         calculateDrawStart()
         calculateLimitY()
         calculateScrollOffsetY()
+        //to 自己：requestLayout 如果当前 view 的大小不变则不会触发 onDraw() 方法
         requestLayout()
+        //to 自己：不用担心 onDraw() 方法执行两次，因为只有在下一帧绘制的时候才会执行 onDraw()
+        invalidate()
     }
 
     private fun notifyTextAlignChanged() {
