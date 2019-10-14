@@ -38,10 +38,18 @@ class WheelYearView @JvmOverloads constructor(context: Context,
     }
 
     override fun indexOf(item: Int): Int {
-        if (item < startYear) {
+        return if (item in startYear..endYear) {
+            item - startYear
+        } else {
+            -1
+        }
+    }
+
+    override fun getItem(index: Int): Int {
+        if (index !in 0 until getItemCount()) {
             return -1
         }
-        return item - startYear
+        return getAdapter()?.getItem<Int>(index) ?: -1
     }
 
     private fun updateYearData() {
@@ -49,7 +57,7 @@ class WheelYearView @JvmOverloads constructor(context: Context,
         for (i in startYear..endYear) {
             data.add(i)
         }
-        super.setData(data, null as TextFormatter?)
+        setData(data, null as TextFormatter?)
     }
 
     /**

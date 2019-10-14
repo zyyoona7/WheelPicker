@@ -39,7 +39,7 @@ public class MonthWheelView extends WheelView<Integer> {
     public MonthWheelView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MonthWheelView);
-        int selectedMonth = typedArray.getInt(R.styleable.MonthWheelView_wv_selectedMonth,
+        int selectedMonth = typedArray.getInt(R.styleable.MonthWheelView_wvt_selectedMonth,
                 Calendar.getInstance().get(Calendar.MONTH) + 1);
         typedArray.recycle();
         initData();

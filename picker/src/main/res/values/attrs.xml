@@ -8,7 +8,7 @@
     </declare-styleable>
 
     <declare-styleable name="MonthWheelView">
-        <attr name="wv_selectedMonth" format="integer" />
+        <attr name="wvt_selectedMonth" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="DayWheelView">
@@ -23,5 +23,11 @@
         <attr name="wv_selectedYear" format="integer" />
         <attr name="wv_maxSelectedYear" format="integer"/>
         <attr name="wv_minSelectedYear" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="WheelMonthView">
+        <attr name="wv_selectedMonth" format="integer" />
+        <attr name="wv_maxSelectedMonth" format="integer"/>
+        <attr name="wv_minSelectedMonth" format="integer"/>
     </declare-styleable>
 </resources>

@@ -1,6 +1,8 @@
 package com.zyyoona7.picker.ex.interfaces
 
-interface IndexOfAction<in T> {
+interface IndexOfAction<T> {
 
-    fun indexOf(item:T):Int
+    fun indexOf(item: T): Int
+
+    fun getItem(index: Int): T?
 }
