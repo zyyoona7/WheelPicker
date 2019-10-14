@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import com.zyyoona7.picker.R
 import com.zyyoona7.picker.ex.interfaces.IndexOfAction
 import com.zyyoona7.wheel.WheelViewKt
-import com.zyyoona7.wheel.formatter.TextFormatter
 
 class WheelMonthView @JvmOverloads constructor(context: Context,
                                                attrs: AttributeSet? = null,
@@ -52,7 +51,7 @@ class WheelMonthView @JvmOverloads constructor(context: Context,
         for (i in 1..12) {
             data.add(i)
         }
-        setData(data, null as TextFormatter?)
+        setData(data)
     }
 
     @JvmOverloads

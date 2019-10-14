@@ -46,9 +46,9 @@ public class DayWheelView extends WheelView<Integer> {
         super(context, attrs, defStyleAttr);
         mCalendar = Calendar.getInstance();
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DayWheelView);
-        mYear = typedArray.getInt(R.styleable.DayWheelView_wv_year, mCalendar.get(Calendar.YEAR));
-        mMonth = typedArray.getInt(R.styleable.DayWheelView_wv_month, mCalendar.get(Calendar.MONTH) + 1);
-        int selectedDay = typedArray.getInt(R.styleable.DayWheelView_wv_selectedDay, mCalendar.get(Calendar.DATE));
+        mYear = typedArray.getInt(R.styleable.DayWheelView_wvt_year, mCalendar.get(Calendar.YEAR));
+        mMonth = typedArray.getInt(R.styleable.DayWheelView_wvt_month, mCalendar.get(Calendar.MONTH) + 1);
+        int selectedDay = typedArray.getInt(R.styleable.DayWheelView_wvt_selectedDay, mCalendar.get(Calendar.DATE));
         typedArray.recycle();
         updateDay();
         setSelectedDay(selectedDay);

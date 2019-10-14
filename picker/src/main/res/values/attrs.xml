@@ -12,22 +12,29 @@
     </declare-styleable>
 
     <declare-styleable name="DayWheelView">
-        <attr name="wv_year" format="integer" />
-        <attr name="wv_month" format="integer" />
-        <attr name="wv_selectedDay" format="integer" />
+        <attr name="wvt_year" format="integer" />
+        <attr name="wvt_month" format="integer" />
+        <attr name="wvt_selectedDay" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="WheelYearView">
         <attr name="wv_startYear" format="integer" />
         <attr name="wv_endYear" format="integer" />
         <attr name="wv_selectedYear" format="integer" />
-        <attr name="wv_maxSelectedYear" format="integer"/>
-        <attr name="wv_minSelectedYear" format="integer"/>
+        <attr name="wv_maxSelectedYear" format="integer" />
+        <attr name="wv_minSelectedYear" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="WheelMonthView">
         <attr name="wv_selectedMonth" format="integer" />
-        <attr name="wv_maxSelectedMonth" format="integer"/>
-        <attr name="wv_minSelectedMonth" format="integer"/>
+        <attr name="wv_maxSelectedMonth" format="integer" />
+        <attr name="wv_minSelectedMonth" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="WheelDayView">
+        <attr name="wv_year" format="integer" />
+        <attr name="wv_month" format="integer" />
+        <attr name="wv_selectedDay" format="integer" />
+        <attr name="wv_minSelectedDay" format="integer" />
+        <attr name="wv_maxSelectedDay" format="integer" />
     </declare-styleable>
 </resources>

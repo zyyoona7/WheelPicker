@@ -57,7 +57,7 @@ class WheelYearView @JvmOverloads constructor(context: Context,
         for (i in startYear..endYear) {
             data.add(i)
         }
-        setData(data, null as TextFormatter?)
+        setData(data)
     }
 
     /**
