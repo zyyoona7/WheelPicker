@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.SparseArray
 import com.zyyoona7.picker.R
-import com.zyyoona7.picker.ex.interfaces.IndexOfAction
+import com.zyyoona7.picker.interfaces.IndexOfAction
 import com.zyyoona7.wheel.WheelViewKt
 import java.util.*
 import kotlin.math.max

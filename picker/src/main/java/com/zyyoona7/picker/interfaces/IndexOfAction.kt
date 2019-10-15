@@ -1,4 +1,4 @@
-package com.zyyoona7.picker.ex.interfaces
+package com.zyyoona7.picker.interfaces
 
 interface IndexOfAction<T> {
 

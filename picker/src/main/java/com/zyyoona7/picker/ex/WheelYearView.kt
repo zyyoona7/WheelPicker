@@ -3,9 +3,8 @@ package com.zyyoona7.picker.ex
 import android.content.Context
 import android.util.AttributeSet
 import com.zyyoona7.picker.R
-import com.zyyoona7.picker.ex.interfaces.IndexOfAction
+import com.zyyoona7.picker.interfaces.IndexOfAction
 import com.zyyoona7.wheel.WheelViewKt
-import com.zyyoona7.wheel.formatter.TextFormatter
 
 class WheelYearView @JvmOverloads constructor(context: Context,
                                               attrs: AttributeSet? = null,
