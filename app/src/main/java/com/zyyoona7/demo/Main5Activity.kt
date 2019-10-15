@@ -13,8 +13,10 @@ import com.zyyoona7.demo.databinding.ActivityMain5Binding
 import com.zyyoona7.demo.utils.typefaceLight
 import com.zyyoona7.demo.utils.typefaceMedium
 import com.zyyoona7.demo.utils.typefaceRegular
+import com.zyyoona7.demo.utils.vibrateShot
 import com.zyyoona7.wheel.WheelViewKt
 import com.zyyoona7.wheel.formatter.IntTextFormatter
+import com.zyyoona7.wheel.listener.OnItemPositionChangedListener
 import java.util.*
 import kotlin.random.Random
 
@@ -170,6 +172,14 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
             }
 
         })
+
+        binding.wheelview.setOnItemPositionChangedListener(object : OnItemPositionChangedListener {
+            override fun onItemChanged(wheelView: WheelViewKt, oldPosition: Int, newPosition: Int) {
+                if (binding.scVibrate.isChecked) {
+                    vibrateShot(10)
+                }
+            }
+        })
     }
 
     private fun initWheelData() {
@@ -265,14 +275,14 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.btnFontRegular.typeface = typefaceRegular()
         binding.btnFontLight.typeface = typefaceLight()
 
-        val maxValue=wheelView.getAdapter()?.getItemCount()?.minus(1) ?: 0
+        val maxValue = wheelView.getAdapter()?.getItemCount()?.minus(1) ?: 0
         binding.rsbSelectedRange.setRange(0f,
                 maxValue.toFloat())
         binding.rsbSelectedRange.setProgress(0f, binding.rsbSelectedRange.maxProgress)
 
         binding.scCanOverRangeScroll.isChecked = wheelView.canOverRangeScroll
 
-        binding.brSelectedPosition.setValue(0f,maxValue.toFloat(),0f,1f,5)
+        binding.brSelectedPosition.setValue(0f, maxValue.toFloat(), 0f, 1f, 5)
 
     }
 
