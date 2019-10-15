@@ -84,6 +84,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
 
     //当前滚动经过的下标
     private var currentScrollPosition: Int = 0
+    //记录已经执行过 itemPositionChange 的滚动的下标，防止多次执行
+    //position不改变得情况下只执行一次 itemPositionChanged()
+    private var itemChangedPosition = -1
     //当前滚动状态
     @ScrollState
     private var currentScrollState: Int = SCROLL_STATE_IDLE
@@ -1364,7 +1367,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         //item改变回调
         val oldPosition = currentScrollPosition
         val newPosition = getCurrentPosition()
-        if (oldPosition != newPosition) {
+        if (oldPosition != newPosition &&
+                isScrollOffsetYInRange(newPosition)
+                && itemChangedPosition != newPosition) {
             //下标改变了
             //回调
             onItemChanged(oldPosition, newPosition)
@@ -1374,6 +1379,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             playScrollSoundEffect()
             //更新下标
             currentScrollPosition = newPosition
+            itemChangedPosition = newPosition
         }
     }
 
@@ -1453,7 +1459,47 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             logAdapterNull()
             return -1
         }
+    }
 
+    /**
+     * 根据下标计算当前滚动偏移[scrollOffsetY]是否在这个[position]范围内
+     */
+    private fun isScrollOffsetYInRange(position: Int): Boolean {
+        return wheelAdapter?.let {
+            val newScrollY = getShouldScrollOffsetY(position)
+            //item范围中心的1/3表示在范围内
+            val itemRange = itemHeight / 6
+            //每圈 对应的 position 应该滚动的偏移 scrollOffsetY
+            //因为有循环滚动的情况，所以要取余每圈数据的总长度
+            val scrollOffsetYForCircle = scrollOffsetY % (wheelAdapter!!.getItemCount() * itemHeight)
+            scrollOffsetYForCircle in newScrollY - itemRange..newScrollY + itemRange
+        } ?: false
+    }
+
+    /**
+     * 根据当前下标反推应该滚动的偏移  (得到的符号同scrollOffsetY)
+     */
+    private fun getShouldScrollOffsetY(position: Int): Int {
+        return wheelAdapter?.let {
+            if (it.getItemCount() == 0) {
+                return 0
+            }
+            val itemCount = it.getItemCount()
+            val currentPosition = if (scrollOffsetY < 0) {
+                position - itemCount
+            } else {
+                position
+            }
+            val itemPosition = if (abs(currentPosition) < itemCount) {
+                currentPosition % it.getItemCount()
+            } else {
+                currentPosition
+            }
+            itemPosition * itemHeight
+        } ?: kotlin.run {
+            logAdapterNull()
+            0
+        }
     }
 
     /**
@@ -1720,6 +1766,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         } else {
             doScroll(itemDistance)
             selectedPosition = realPosition
+            currentScrollPosition = realPosition
             wheelAdapter?.let {
                 it.selectedItemPosition = selectedPosition
                 //选中条目回调
@@ -1777,7 +1824,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      */
     @JvmOverloads
     fun setSelectedRange(@IntRange(from = 0) min: Int = 0, @IntRange(from = 0) max: Int) {
-        require(max < min) {
+        require(max >= min) {
             "maxSelectedPosition must be greater than minSelectedPosition in WheelView."
         }
         minSelectedPosition = max(0, min)
