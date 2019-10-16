@@ -59,7 +59,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         }
 
         binding.scHasCurtain.setOnCheckedChangeListener { _, isChecked ->
-            binding.wheelview.hasCurtain = isChecked
+            binding.wheelview.isShowCurtain = isChecked
         }
 
         binding.scCurved.setOnCheckedChangeListener { _, isChecked ->
@@ -127,15 +127,15 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         }
 
         binding.btnSelectedColor.setOnClickListener {
-            showColorPicker(binding.wheelview.selectedItemTextColor) {
-                binding.wheelview.selectedItemTextColor = it
+            showColorPicker(binding.wheelview.selectedTextColor) {
+                binding.wheelview.selectedTextColor = it
                 binding.btnSelectedColor.setBackgroundColor(it)
             }
         }
 
         binding.btnNormalColor.setOnClickListener {
-            showColorPicker(binding.wheelview.normalItemTextColor) {
-                binding.wheelview.normalItemTextColor = it
+            showColorPicker(binding.wheelview.normalTextColor) {
+                binding.wheelview.normalTextColor = it
                 binding.btnNormalColor.setBackgroundColor(it)
             }
         }
@@ -222,7 +222,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.sbSoundVolume.max = 100
         binding.sbSoundVolume.progress = (wheelView.getSoundVolume() * 100).toInt()
 
-        binding.scHasCurtain.isChecked = wheelView.hasCurtain
+        binding.scHasCurtain.isChecked = wheelView.isShowCurtain
         binding.btnCurtainColor.setBackgroundColor(wheelView.curtainColor)
 
         binding.sbTextSize.max = 70
@@ -234,8 +234,8 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
             else -> binding.rbAlignCenter.isChecked = true
         }
 
-        binding.btnSelectedColor.setBackgroundColor(wheelView.selectedItemTextColor)
-        binding.btnNormalColor.setBackgroundColor(wheelView.normalItemTextColor)
+        binding.btnSelectedColor.setBackgroundColor(wheelView.selectedTextColor)
+        binding.btnNormalColor.setBackgroundColor(wheelView.normalTextColor)
 
         binding.sbTextBoundaryMargin.max = 150
         binding.sbTextBoundaryMargin.progress = wheelView.textBoundaryMargin.toInt()
