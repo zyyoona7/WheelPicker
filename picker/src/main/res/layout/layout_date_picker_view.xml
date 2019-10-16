@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="horizontal">
 
-    <com.zyyoona7.picker.ex.YearWheelView
+    <com.zyyoona7.picker.ex.WheelYearView
         android:id="@+id/wv_year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         android:text="@string/date_picker_view_year"
         tools:textSize="20sp" />
 
-    <com.zyyoona7.picker.ex.MonthWheelView
+    <com.zyyoona7.picker.ex.WheelMonthView
         android:id="@+id/wv_month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
         android:text="@string/date_picker_view_month"
         tools:textSize="20sp" />
 
-    <com.zyyoona7.picker.ex.DayWheelView
+    <com.zyyoona7.picker.ex.WheelDayView
         android:id="@+id/wv_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,4 +61,4 @@
         android:layout_marginRight="@dimen/date_picker_view_margins"
         android:text="@string/date_picker_view_day"
         tools:textSize="20sp" />
-</LinearLayout>
+</merge>
