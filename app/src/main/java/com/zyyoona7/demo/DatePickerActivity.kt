@@ -23,16 +23,23 @@ class DatePickerActivity : BaseActivity<ActivityDatePickerBinding>() {
         return R.layout.activity_date_picker
     }
 
+    var dateStr="哈喽哈喽哈喽halo"
+
     override fun initVariables(savedInstanceState: Bundle?) {
         binding.wheelYear.setTextFormatter(IntTextFormatter("公元%d年"))
         binding.wheelMonth.setTextFormatter(IntTextFormatter("%d月"))
         binding.wheelDay.setTextFormatter(IntTextFormatter("%d日"))
+
+        binding.wheelview.setData(arrayListOf(dateStr))
     }
 
     override fun initListeners(savedInstanceState: Bundle?) {
         binding.wheelYear.setOnItemSelectedListener(object : OnItemSelectedListener {
             override fun onItemSelected(wheelView: WheelViewKt, adapter: ArrayWheelAdapter<*>, position: Int) {
                 binding.wheelDay.year = adapter.getSelectedItem<Int>() ?: 2019
+
+                dateStr+="哈喽"
+                binding.wheelview.setData(arrayListOf(dateStr))
             }
         })
         binding.wheelMonth.setOnItemSelectedListener(object : OnItemSelectedListener {

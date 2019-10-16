@@ -244,6 +244,18 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelDayView?.isAutoFitTextSize = autoFit
     }
 
+    override fun setMinTextSize(minTextSize: Float) {
+        wheelYearView?.minTextSize=minTextSize
+        wheelMonthView?.minTextSize=minTextSize
+        wheelDayView?.minTextSize=minTextSize
+    }
+
+    override fun setMinTextSize(minTextSize: Float, isSp: Boolean) {
+        wheelYearView?.setMinTextSize(minTextSize,isSp)
+        wheelMonthView?.setMinTextSize(minTextSize,isSp)
+        wheelDayView?.setMinTextSize(minTextSize, isSp)
+    }
+
     override fun setTextAlign(@WheelView.TextAlign textAlign: Int) {
         wheelYearView?.textAlign = textAlign
         wheelMonthView?.textAlign = textAlign

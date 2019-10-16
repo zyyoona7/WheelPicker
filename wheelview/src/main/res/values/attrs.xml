@@ -2,72 +2,72 @@
 <resources>
     <declare-styleable name="WheelViewKt">
         <!--文字大小-->
-        <attr name="wv_textSize" format="dimension"/>
+        <attr name="wv_textSize" format="dimension" />
         <!--是否自适应文字大小以完全显示过长的文字-->
-        <attr name="wv_autoFitTextSize" format="boolean"/>
+        <attr name="wv_autoFitTextSize" format="boolean" />
+        <!--自适应文字大小时最小缩放字体大小-->
+        <attr name="wv_minTextSize" format="dimension" />
         <!--文字对齐方式-->
         <attr name="wv_textAlign" format="enum">
-            <enum name="left" value="0"/>
-            <enum name="center" value="1"/>
-            <enum name="right" value="2"/>
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
         </attr>
         <!--文本距离padding的外边距-->
-        <attr name="wv_textMargins" format="dimension"/>
-        <attr name="wv_textMarginLeft" format="dimension"/>
-        <attr name="wv_textMarginRight" format="dimension"/>
+        <attr name="wv_textMargins" format="dimension" />
+        <attr name="wv_textMarginLeft" format="dimension" />
+        <attr name="wv_textMarginRight" format="dimension" />
         <!--未选中文字颜色-->
-        <attr name="wv_normalTextColor" format="color"/>
+        <attr name="wv_normalTextColor" format="color" />
         <!--被选中的文字颜色-->
-        <attr name="wv_selectedTextColor" format="color"/>
+        <attr name="wv_selectedTextColor" format="color" />
         <!--行间距-->
-        <attr name="wv_lineSpacing" format="dimension"/>
+        <attr name="wv_lineSpacing" format="dimension" />
 
         <!--可见item数-->
-        <attr name="wv_visibleItems" format="integer"/>
+        <attr name="wv_visibleItems" format="integer" />
         <!--当前选中下标-->
-        <attr name="wv_selectedPosition" format="integer"/>
+        <attr name="wv_selectedPosition" format="integer" />
         <!--最大选中下标-->
-        <attr name="wv_maxSelectedPosition" format="integer"/>
+        <attr name="wv_maxSelectedPosition" format="integer" />
         <!--最小选中下标-->
-        <attr name="wv_minSelectedPosition" format="integer"/>
+        <attr name="wv_minSelectedPosition" format="integer" />
         <!--是否循环滚动-->
-        <attr name="wv_cyclic" format="boolean"/>
+        <attr name="wv_cyclic" format="boolean" />
 
         <!--是否显示分割线-->
-        <attr name="wv_showDivider" format="boolean"/>
+        <attr name="wv_showDivider" format="boolean" />
         <!--分割线类型-->
         <attr name="wv_dividerType" format="enum">
-            <enum name="fill" value="0"/>
-            <enum name="wrap" value="1"/>
+            <enum name="fill" value="0" />
+            <enum name="wrap" value="1" />
         </attr>
         <!--分割线颜色-->
-        <attr name="wv_dividerColor" format="color"/>
+        <attr name="wv_dividerColor" format="color" />
         <!--分割线高度-->
-        <attr name="wv_dividerHeight" format="dimension"/>
+        <attr name="wv_dividerHeight" format="dimension" />
         <!--wrap类型下分割线内边距-->
-        <attr name="wv_dividerPadding" format="dimension"/>
+        <attr name="wv_dividerPadding" format="dimension" />
 
 
         <!--是否是弯曲（3D）效果-->
-        <attr name="wv_curved" format="boolean"/>
+        <attr name="wv_curved" format="boolean" />
         <!--弯曲（3D）效果左右圆弧偏移效果方向 可向指定方向偏移-->
         <attr name="wv_curvedArcDirection" format="enum">
-            <enum name="left" value="0"/>
-            <enum name="center" value="1"/>
-            <enum name="right" value="2"/>
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
         </attr>
         <!--弯曲（3D）效果左右圆弧偏移效果方向系数 偏移系数-->
-        <attr name="wv_curvedArcDirectionFactor" format="float"/>
+        <attr name="wv_curvedArcDirectionFactor" format="float" />
         <!--选中后折射的偏移(弯曲（3D）效果和普通效果都适用) 与字体大小的比值，1为不偏移 越小偏移越明显-->
-        <attr name="wv_refractRatio" format="float"/>
-        <!-- Deprecated 已过时 请使用 wv_refractRatio -->
-        <attr name="wv_curvedRefractRatio" format="float"/>
+        <attr name="wv_refractRatio" format="float" />
 
         <!--是否绘制选中区域-->
-        <attr name="wv_isShowCurtain" format="boolean"/>
+        <attr name="wv_isShowCurtain" format="boolean" />
         <!--选中区域颜色-->
-        <attr name="wv_curtainColor" format="color"/>
+        <attr name="wv_curtainColor" format="color" />
         <!--选中区域/分割线上下偏移，通过移动分割线上下限制的位置来实现扩大/缩小显示区域-->
-        <attr name="wv_dividerOffsetY" format="dimension"/>
+        <attr name="wv_dividerOffsetY" format="dimension" />
     </declare-styleable>
 </resources>

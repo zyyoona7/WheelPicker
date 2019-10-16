@@ -7,6 +7,7 @@ import android.graphics.*
 import android.media.AudioManager
 import android.util.AttributeSet
 import android.util.Log
+import android.util.SparseArray
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.VelocityTracker
@@ -116,6 +117,15 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         set(value) {
             field = value
             invalidate()
+        }
+    //缩放后最小字体大小
+    var minTextSize: Float = 0f
+        set(value) {
+            if (value == field) {
+                return
+            }
+            field = value
+            notifyDataSetChanged()
         }
     //文字对齐方式
     @TextAlign
@@ -406,6 +416,10 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
     //adapter 中的 formatter block
     private var formatterBlock: ((Any?) -> String)? = null
 
+    //需设置 isAutoFitTextSize=true
+    //用来保存对应下标下 重新测量过的 textSize
+    private val resizeArray: SparseArray<Float> by lazy { SparseArray<Float>() }
+
     companion object {
         private const val TAG = "WheelView"
         private val DEFAULT_LINE_SPACING = dp2px(2f)
@@ -488,6 +502,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelViewKt)
         textSize = typedArray.getDimension(R.styleable.WheelViewKt_wv_textSize, DEFAULT_TEXT_SIZE)
         isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelViewKt_wv_autoFitTextSize, false)
+        minTextSize = typedArray.getDimension(R.styleable.WheelViewKt_wv_minTextSize, sp2px(6f))
         textAlign = typedArray.getInt(R.styleable.WheelViewKt_wv_textAlign, TEXT_ALIGN_CENTER)
         val textMargins = typedArray.getDimension(R.styleable.WheelViewKt_wv_textMargins,
                 DEFAULT_TEXT_BOUNDARY_MARGIN)
@@ -531,10 +546,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         curvedArcDirection = typedArray.getInt(R.styleable.WheelViewKt_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER)
         curvedArcDirectionFactor = typedArray.getFloat(R.styleable.WheelViewKt_wv_curvedArcDirectionFactor, DEFAULT_CURVED_FACTOR)
         //折射偏移默认值
-        //Deprecated 将在新版中移除
-        val curvedRefractRatio = typedArray.getFloat(R.styleable.WheelViewKt_wv_curvedRefractRatio, 0.9f)
         refractRatio = typedArray.getFloat(R.styleable.WheelViewKt_wv_refractRatio, DEFAULT_REFRACT_RATIO)
-        refractRatio = if (isCurved) min(curvedRefractRatio, refractRatio) else refractRatio
         if (refractRatio > 1f) {
             refractRatio = 1.0f
         } else if (refractRatio < 0f) {
@@ -610,8 +622,64 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             val towardRange = (sin(Math.PI / 48) * height).toInt()
             width += towardRange
         }
-        setMeasuredDimension(resolveSizeAndState(width, widthMeasureSpec, 0),
+
+        val realWidth = resolveSizeAndState(width, widthMeasureSpec, 0)
+        if (width > realWidth) {
+            //测量的宽度比实际宽度要大，重新设置 maxTextWidth
+            maxTextWidth = (realWidth - textMarginLeft - textMarginRight - paddingLeft - paddingRight).toInt()
+        }
+        //根据最大文字宽度，如果设置了自适应字体大小 则重新测量一次每个item对应的文字大小
+        if (isAutoFitTextSize) {
+            remeasureTextSizeForAutoFit()
+        }
+
+        setMeasuredDimension(realWidth,
                 resolveSizeAndState(height, heightMeasureSpec, 0))
+    }
+
+    /**
+     * 如果绘制的文本超过最大文本宽度则按照最大宽度缩放字体大小
+     */
+    private fun remeasureTextSizeForAutoFit() {
+        wheelAdapter?.let {
+            for (i in 0 until it.getItemCount()) {
+                val measureText = it.getItemText(it.getItemData(i))
+                val textWidth = paint.measureText(measureText).toInt()
+                if (textWidth > maxTextWidth) {
+                    val newTextSize = resizeTextSize(measureText, textWidth)
+                    resizeArray.put(i, newTextSize)
+                }
+            }
+            //测量结束 恢复字体大小
+            paint.textSize = textSize
+        }
+    }
+
+    /**
+     * 根据字体最大宽度计算自适应字体大小
+     */
+    private fun resizeTextSize(measureText: String, textWidth: Int): Float {
+        //通过计算得出大概的期望文字大小
+        val hopeTextSize: Float = maxTextWidth * 1f / textWidth * textSize
+        if (hopeTextSize < minTextSize) {
+            return minTextSize
+        }
+        var newTextWidth: Float
+        var finalTextSize = hopeTextSize
+        var isFirstDo = true
+        do {
+            paint.textSize = finalTextSize
+            newTextWidth = paint.measureText(measureText)
+            if (!isFirstDo) {
+                finalTextSize -= 1
+                if (finalTextSize < minTextSize) {
+                    finalTextSize = minTextSize
+                    break
+                }
+            }
+            isFirstDo = false
+        } while (newTextWidth > maxTextWidth)
+        return finalTextSize
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -862,7 +930,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         //记录初始测量的字体起始X
         val startX = this.startX
         //重新测量字体宽度和基线偏移
-        val centerToBaselineY = if (isAutoFitTextSize) remeasureTextSize(text) else centerToBaselineY
+        val centerToBaselineY = getCenterToBaselineY(index)
 
         if (Math.abs(item2CenterOffsetY) <= 0) {
             //绘制选中的条目
@@ -979,7 +1047,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         //记录初始测量的字体起始X
         val startX = this.startX
         //重新测量字体宽度和基线偏移
-        val centerToBaselineY = if (isAutoFitTextSize) remeasureTextSize(text) else centerToBaselineY
+        val centerToBaselineY = getCenterToBaselineY(index)
         if (abs(item2CenterOffsetY) <= 0) {
             //绘制选中的条目
             paint.color = selectedTextColor
@@ -1114,54 +1182,18 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
     }
 
     /**
-     * 重新测量字体大小
-     *
-     * @param contentText 被测量文字内容
-     * @return 文字中心距离baseline的距离
+     * 获取 centerToBaselineY 如果是自适应字体大小则设置自适应的textSize
      */
-    private fun remeasureTextSize(contentText: String): Int {
-        //TODO 经过测试 drawWidth/textWidth*textSize=shouldTextSize
-        // 得到的 shouldTextSize 和目标size相差不多 可以直接从这个数值开始计算，防止循环次数太多
-        // 将重新测量放到 onMeasure 方法中，节省性能
-        var textWidth = paint.measureText(contentText)
-        var drawWidth = width.toFloat()
-        var textMargin = textMarginLeft + textMarginRight
-        //稍微增加了一点文字边距 最大为宽度的1/10
-        if (textMargin > drawWidth / 10f) {
-            drawWidth = drawWidth * 9f / 10f
-            textMargin = drawWidth / 10f
+    private fun getCenterToBaselineY(index: Int): Int {
+        return if (isAutoFitTextSize) {
+            resizeArray.get(index)?.let {
+                paint.textSize = it
+                val fontMetrics = paint.fontMetrics
+                //高度起点也变了
+                (fontMetrics.ascent + (fontMetrics.descent - fontMetrics.ascent) / 2).toInt()
+            } ?: centerToBaselineY
         } else {
-            drawWidth -= textMargin
-        }
-        if (drawWidth <= 0) {
-            return centerToBaselineY
-        }
-        var textSize = textSize
-        while (textWidth > drawWidth) {
-            textSize--
-            if (textSize <= 0) {
-                break
-            }
-            paint.textSize = textSize
-            textWidth = paint.measureText(contentText)
-        }
-        //重新计算文字起始X
-        recalculateStartX(textMargin / 2.0f)
-        //高度起点也变了
-        return recalculateCenterToBaselineY()
-    }
-
-    /**
-     * 重新计算字体起始X
-     *
-     * @param textMargin 文字外边距
-     */
-    private fun recalculateStartX(textMargin: Float) {
-        startX = when (textAlign) {
-            TEXT_ALIGN_LEFT -> textMargin.toInt()
-            TEXT_ALIGN_RIGHT -> (width - textMargin).toInt()
-            TEXT_ALIGN_CENTER -> width / 2
-            else -> width / 2
+            centerToBaselineY
         }
     }
 
@@ -1667,6 +1699,13 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      */
     fun setTextSize(textSize: Float, isSp: Boolean) {
         this.textSize = if (isSp) sp2px(textSize) else textSize
+    }
+
+    /**
+     * 打开自适应字体大小后 设置最小缩放字体大小
+     */
+    fun setMinTextSize(minTextSize: Float, isSp: Boolean) {
+        this.minTextSize = if (isSp) sp2px(minTextSize) else minTextSize
     }
 
     /**

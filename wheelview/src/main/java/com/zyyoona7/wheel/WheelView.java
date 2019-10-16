@@ -259,14 +259,14 @@ public class WheelView<T> extends View implements Runnable {
         mCurvedArcDirectionFactor = typedArray.getFloat(R.styleable.WheelViewKt_wv_curvedArcDirectionFactor, DEFAULT_CURVED_FACTOR);
         //折射偏移默认值
         //Deprecated 将在新版中移除
-        float curvedRefractRatio = typedArray.getFloat(R.styleable.WheelViewKt_wv_curvedRefractRatio, 0.9f);
-        mRefractRatio = typedArray.getFloat(R.styleable.WheelViewKt_wv_refractRatio, DEFAULT_REFRACT_RATIO);
-        mRefractRatio = isCurved ? Math.min(curvedRefractRatio, mRefractRatio) : mRefractRatio;
-        if (mRefractRatio > 1f) {
-            mRefractRatio = 1.0f;
-        } else if (mRefractRatio < 0f) {
-            mRefractRatio = DEFAULT_REFRACT_RATIO;
-        }
+//        float curvedRefractRatio = typedArray.getFloat(R.styleable.WheelViewKt_wv_curvedRefractRatio, 0.9f);
+//        mRefractRatio = typedArray.getFloat(R.styleable.WheelViewKt_wv_refractRatio, DEFAULT_REFRACT_RATIO);
+//        mRefractRatio = isCurved ? Math.min(curvedRefractRatio, mRefractRatio) : mRefractRatio;
+//        if (mRefractRatio > 1f) {
+//            mRefractRatio = 1.0f;
+//        } else if (mRefractRatio < 0f) {
+//            mRefractRatio = DEFAULT_REFRACT_RATIO;
+//        }
         typedArray.recycle();
     }
 

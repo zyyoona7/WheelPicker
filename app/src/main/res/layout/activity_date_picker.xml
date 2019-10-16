@@ -52,12 +52,23 @@
                 app:wv_textSize="18sp" />
 
             <com.zyyoona7.picker.DatePickerView
+                android:id="@+id/date_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/wheel_year" />
+
+            <com.zyyoona7.wheel.WheelViewKt
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/wheelview"
+                app:wv_autoFitTextSize="true"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/date_picker"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

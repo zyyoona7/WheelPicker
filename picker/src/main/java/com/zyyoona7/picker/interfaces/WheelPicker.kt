@@ -32,6 +32,10 @@ interface WheelPicker {
 
     fun setAutoFitTextSize(autoFit: Boolean)
 
+    fun setMinTextSize(minTextSize:Float)
+
+    fun setMinTextSize(minTextSize: Float,isSp: Boolean)
+
     fun setTextAlign(@WheelView.TextAlign textAlign: Int)
 
     fun setNormalTextColor(@ColorInt textColor: Int)

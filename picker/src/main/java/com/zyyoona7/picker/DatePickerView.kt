@@ -173,6 +173,14 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setAutoFitTextSize(autoFit)
     }
 
+    override fun setMinTextSize(minTextSize: Float) {
+        datePickerHelper.setMinTextSize(minTextSize)
+    }
+
+    override fun setMinTextSize(minTextSize: Float, isSp: Boolean) {
+        datePickerHelper.setMinTextSize(minTextSize, isSp)
+    }
+
     override fun setTextAlign(@WheelView.TextAlign textAlign: Int) {
         datePickerHelper.setTextAlign(textAlign)
     }
