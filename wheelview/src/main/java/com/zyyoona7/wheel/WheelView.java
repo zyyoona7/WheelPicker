@@ -231,8 +231,8 @@ public class WheelView<T> extends View implements Runnable {
         mTextAlign = typedArray.getInt(R.styleable.WheelViewKt_wv_textAlign, TEXT_ALIGN_CENTER);
         mTextBoundaryMargin = typedArray.getDimension(R.styleable.WheelViewKt_wv_textBoundaryMargin,
                 DEFAULT_TEXT_BOUNDARY_MARGIN);
-        mTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_normalItemTextColor, DEFAULT_NORMAL_TEXT_COLOR);
-        mSelectedItemTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_selectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR);
+        mTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_normalTextColor, DEFAULT_NORMAL_TEXT_COLOR);
+        mSelectedItemTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_selectedTextColor, DEFAULT_SELECTED_TEXT_COLOR);
         mLineSpacing = typedArray.getDimension(R.styleable.WheelViewKt_wv_lineSpacing, DEFAULT_LINE_SPACING);
 
         mVisibleItems = typedArray.getInt(R.styleable.WheelViewKt_wv_visibleItems, DEFAULT_VISIBLE_ITEM);
@@ -251,7 +251,7 @@ public class WheelView<T> extends View implements Runnable {
 
         mDividerOffset = typedArray.getDimensionPixelOffset(R.styleable.WheelViewKt_wv_dividerOffsetY, 0);
 
-        hasCurtain = typedArray.getBoolean(R.styleable.WheelViewKt_wv_hasCurtain, false);
+        hasCurtain = typedArray.getBoolean(R.styleable.WheelViewKt_wv_isShowCurtain, false);
         mCurtainColor = typedArray.getColor(R.styleable.WheelViewKt_wv_curtainColor, Color.TRANSPARENT);
 
         isCurved = typedArray.getBoolean(R.styleable.WheelViewKt_wv_curved, true);

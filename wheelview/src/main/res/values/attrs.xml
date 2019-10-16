@@ -14,9 +14,9 @@
         <!--文字距离边界的外边距-->
         <attr name="wv_textBoundaryMargin" format="dimension"/>
         <!--未选中文字颜色-->
-        <attr name="wv_normalItemTextColor" format="color"/>
+        <attr name="wv_normalTextColor" format="color"/>
         <!--被选中的文字颜色-->
-        <attr name="wv_selectedItemTextColor" format="color"/>
+        <attr name="wv_selectedTextColor" format="color"/>
         <!--行间距-->
         <attr name="wv_lineSpacing" format="dimension"/>
 
@@ -62,7 +62,7 @@
         <attr name="wv_curvedRefractRatio" format="float"/>
 
         <!--是否绘制选中区域-->
-        <attr name="wv_hasCurtain" format="boolean"/>
+        <attr name="wv_isShowCurtain" format="boolean"/>
         <!--选中区域颜色-->
         <attr name="wv_curtainColor" format="color"/>
         <!--选中区域/分割线上下偏移，通过移动分割线上下限制的位置来实现扩大/缩小显示区域-->

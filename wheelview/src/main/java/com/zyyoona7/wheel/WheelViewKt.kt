@@ -25,6 +25,11 @@ import com.zyyoona7.wheel.listener.OnScrollChangedListener
 import com.zyyoona7.wheel.sound.SoundHelper
 import kotlin.math.*
 
+/**
+ * 滚轮选择控件
+ *
+ * @author zyyoona7
+ */
 open class WheelViewKt @JvmOverloads constructor(context: Context,
                                                  attrs: AttributeSet? = null,
                                                  defStyleAttr: Int = 0)
@@ -123,7 +128,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             notifyTextAlignChanged()
         }
     //未选中item文字颜色
-    var normalItemTextColor: Int = 0
+    var normalTextColor: Int = 0
         set(@ColorInt value) {
             if (value == field) {
                 return
@@ -132,7 +137,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             invalidate()
         }
     //选中item文字颜色
-    var selectedItemTextColor: Int = 0
+    var selectedTextColor: Int = 0
         set(@ColorInt value) {
             if (value == field) {
                 return
@@ -278,7 +283,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
       ---------- 选中区域蒙层相关 ----------
      */
     //是否绘制选中区域
-    var hasCurtain: Boolean = false
+    var isShowCurtain: Boolean = false
         set(value) {
             if (value == field) {
                 return
@@ -294,7 +299,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
                 return
             }
             field = value
-            if (hasCurtain) {
+            if (isShowCurtain) {
                 invalidate()
             }
         }
@@ -347,8 +352,6 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             field = min(1f, max(0f, value))
             invalidate()
         }
-    //数据变化时，是否重置选中下标到第一个位置
-    var isResetSelectedPosition = false
     /*
       ---------- 3D效果相关 ----------
      */
@@ -360,6 +363,8 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
                 initDefaultVolume()
             }
         }
+    //数据变化时，是否重置选中下标到第一个位置
+    var isResetSelectedPosition = false
     /*
       ---------- 选中范围限制 ----------
      */
@@ -473,8 +478,8 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         textAlign = typedArray.getInt(R.styleable.WheelViewKt_wv_textAlign, TEXT_ALIGN_CENTER)
         textBoundaryMargin = typedArray.getDimension(R.styleable.WheelViewKt_wv_textBoundaryMargin,
                 DEFAULT_TEXT_BOUNDARY_MARGIN)
-        normalItemTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_normalItemTextColor, DEFAULT_NORMAL_TEXT_COLOR)
-        selectedItemTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_selectedItemTextColor, DEFAULT_SELECTED_TEXT_COLOR)
+        normalTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_normalTextColor, DEFAULT_NORMAL_TEXT_COLOR)
+        selectedTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_selectedTextColor, DEFAULT_SELECTED_TEXT_COLOR)
         lineSpacing = typedArray.getDimension(R.styleable.WheelViewKt_wv_lineSpacing, DEFAULT_LINE_SPACING)
 
         visibleItems = typedArray.getInt(R.styleable.WheelViewKt_wv_visibleItems, DEFAULT_VISIBLE_ITEM)
@@ -495,7 +500,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
 
         dividerOffsetY = typedArray.getDimensionPixelOffset(R.styleable.WheelViewKt_wv_dividerOffsetY, 0).toFloat()
 
-        hasCurtain = typedArray.getBoolean(R.styleable.WheelViewKt_wv_hasCurtain, false)
+        isShowCurtain = typedArray.getBoolean(R.styleable.WheelViewKt_wv_isShowCurtain, false)
         curtainColor = typedArray.getColor(R.styleable.WheelViewKt_wv_curtainColor, Color.TRANSPARENT)
 
         isCurved = typedArray.getBoolean(R.styleable.WheelViewKt_wv_curved, true)
@@ -770,7 +775,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      * @param canvas 画布
      */
     private fun drawCurtainRect(canvas: Canvas) {
-        if (!hasCurtain) {
+        if (!isShowCurtain) {
             return
         }
         paint.color = curtainColor
@@ -838,16 +843,16 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
 
         if (Math.abs(item2CenterOffsetY) <= 0) {
             //绘制选中的条目
-            paint.color = selectedItemTextColor
+            paint.color = selectedTextColor
             clipAndDrawNormalText(canvas, text, selectedItemTopLimit,
                     selectedItemBottomLimit, item2CenterOffsetY, centerToBaselineY)
         } else if (item2CenterOffsetY in 1 until itemHeight) {
             //绘制与下边界交汇的条目
-            paint.color = selectedItemTextColor
+            paint.color = selectedTextColor
             clipAndDrawNormalText(canvas, text, selectedItemTopLimit,
                     selectedItemBottomLimit, item2CenterOffsetY, centerToBaselineY)
 
-            paint.color = normalItemTextColor
+            paint.color = normalTextColor
             //缩小字体，实现折射效果
             val textSize = paint.textSize
             paint.textSize = textSize * refractRatio
@@ -860,11 +865,11 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             resetTypefaceIfBoldForSelectedItem()
         } else if (item2CenterOffsetY < 0 && item2CenterOffsetY > -itemHeight) {
             //绘制与上边界交汇的条目
-            paint.color = selectedItemTextColor
+            paint.color = selectedTextColor
             clipAndDrawNormalText(canvas, text, selectedItemTopLimit,
                     selectedItemBottomLimit, item2CenterOffsetY, centerToBaselineY)
 
-            paint.color = normalItemTextColor
+            paint.color = normalTextColor
             //缩小字体，实现折射效果
             val textSize = paint.textSize
             paint.textSize = textSize * refractRatio
@@ -877,7 +882,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             resetTypefaceIfBoldForSelectedItem()
         } else {
             //绘制其他条目
-            paint.color = normalItemTextColor
+            paint.color = normalTextColor
             //缩小字体，实现折射效果
             val textSize = paint.textSize
             paint.textSize = textSize * refractRatio
@@ -954,18 +959,18 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         val centerToBaselineY = if (isAutoFitTextSize) remeasureTextSize(text) else centerToBaselineY
         if (abs(item2CenterOffsetY) <= 0) {
             //绘制选中的条目
-            paint.color = selectedItemTextColor
+            paint.color = selectedTextColor
             paint.alpha = 255
             clipAndDrawCurvedText(canvas, text, selectedItemTopLimit, selectedItemBottomLimit,
                     rotateX, translateY, translateZ, centerToBaselineY)
         } else if (item2CenterOffsetY in 1 until itemHeight) {
             //绘制与下边界交汇的条目
-            paint.color = selectedItemTextColor
+            paint.color = selectedTextColor
             paint.alpha = 255
             clipAndDrawCurvedText(canvas, text, selectedItemTopLimit, selectedItemBottomLimit,
                     rotateX, translateY, translateZ, centerToBaselineY)
 
-            paint.color = normalItemTextColor
+            paint.color = normalTextColor
             paint.alpha = alpha
             //缩小字体，实现折射效果
             val textSize = paint.textSize
@@ -981,12 +986,12 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             resetTypefaceIfBoldForSelectedItem()
         } else if (item2CenterOffsetY < 0 && item2CenterOffsetY > -itemHeight) {
             //绘制与上边界交汇的条目
-            paint.color = selectedItemTextColor
+            paint.color = selectedTextColor
             paint.alpha = 255
             clipAndDrawCurvedText(canvas, text, selectedItemTopLimit, selectedItemBottomLimit,
                     rotateX, translateY, translateZ, centerToBaselineY)
 
-            paint.color = normalItemTextColor
+            paint.color = normalTextColor
             paint.alpha = alpha
 
             //缩小字体，实现折射效果
@@ -1003,7 +1008,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             resetTypefaceIfBoldForSelectedItem()
         } else {
             //绘制其他条目
-            paint.color = normalItemTextColor
+            paint.color = normalTextColor
             paint.alpha = alpha
 
             //缩小字体，实现折射效果
@@ -1667,15 +1672,15 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
     /**
      * 设置未选中条目文字颜色
      */
-    fun setNormalItemTextColorRes(@ColorRes normalColorRes: Int) {
-        normalItemTextColor = ContextCompat.getColor(context, normalColorRes)
+    fun setNormalTextColorRes(@ColorRes normalColorRes: Int) {
+        normalTextColor = ContextCompat.getColor(context, normalColorRes)
     }
 
     /**
      * 设置选中条目文字颜色
      */
     fun setSelectedTextColorRes(@ColorRes selectedColorRes: Int) {
-        selectedItemTextColor = ContextCompat.getColor(context, selectedColorRes)
+        selectedTextColor = ContextCompat.getColor(context, selectedColorRes)
     }
 
     /**
