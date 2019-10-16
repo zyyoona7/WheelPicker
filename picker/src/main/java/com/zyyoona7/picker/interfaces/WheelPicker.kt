@@ -42,9 +42,17 @@ interface WheelPicker {
 
     fun setSelectedTextColorRes(@ColorRes textColorRes: Int)
 
-    fun setTextBoundaryMargin(margin: Float)
+    fun setTextMargins(margin: Float)
 
-    fun setTextBoundaryMargin(margin: Float, isDp: Boolean)
+    fun setTextMargins(margin: Float, isDp: Boolean)
+
+    fun setTextMarginLeft(marginLeft:Float)
+
+    fun setTextMarginLeft(marginLeft: Float,isDp: Boolean)
+
+    fun setTextMarginRight(marginRight:Float)
+
+    fun setTextMarginRight(marginRight: Float, isDp: Boolean)
 
     fun setTypeface(typeface: Typeface)
 

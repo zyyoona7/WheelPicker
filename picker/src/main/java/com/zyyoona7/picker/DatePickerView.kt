@@ -34,20 +34,20 @@ class DatePickerView @JvmOverloads constructor(context: Context,
     : LinearLayout(context, attrs, defStyleAttr), DatePicker, WheelPicker {
 
     private val datePickerHelper: DatePickerHelper
-    val yearTextView:TextView
-    val monthTextView:TextView
-    val dayTextView:TextView
+    val yearTextView: TextView
+    val monthTextView: TextView
+    val dayTextView: TextView
 
-    companion object{
-        private const val DEFAULT_TEXT_SIZE=16f
-        private const val DEFAULT_TEXT_COLOR=Color.BLACK
+    companion object {
+        private const val DEFAULT_TEXT_SIZE = 16f
+        private const val DEFAULT_TEXT_COLOR = Color.BLACK
     }
 
     init {
         View.inflate(context, R.layout.layout_date_picker_view, this)
-        yearTextView=findViewById(R.id.tv_year)
-        monthTextView=findViewById(R.id.tv_month)
-        dayTextView=findViewById(R.id.tv_day)
+        yearTextView = findViewById(R.id.tv_year)
+        monthTextView = findViewById(R.id.tv_month)
+        dayTextView = findViewById(R.id.tv_day)
         val wheelYearView = findViewById<WheelYearView>(R.id.wv_year)
         val wheelMonthView = findViewById<WheelMonthView>(R.id.wv_month)
         val wheelDayView = findViewById<WheelDayView>(R.id.wv_day)
@@ -55,26 +55,26 @@ class DatePickerView @JvmOverloads constructor(context: Context,
 
         setLabelTextSize(DEFAULT_TEXT_SIZE)
         setLabelTextColor(DEFAULT_TEXT_COLOR)
-        setTextSize(DEFAULT_TEXT_SIZE,true)
+        setTextSize(DEFAULT_TEXT_SIZE, true)
     }
 
-    fun setShowLabelText(isShow:Boolean){
-        val visibility:Int=if (isShow) View.VISIBLE else View.GONE
-        yearTextView.visibility=visibility
-        monthTextView.visibility=visibility
-        dayTextView.visibility=visibility
+    fun setShowLabelText(isShow: Boolean) {
+        val visibility: Int = if (isShow) View.VISIBLE else View.GONE
+        yearTextView.visibility = visibility
+        monthTextView.visibility = visibility
+        dayTextView.visibility = visibility
     }
 
-    fun setLabelTextColor(@ColorInt textColor: Int){
+    fun setLabelTextColor(@ColorInt textColor: Int) {
         yearTextView.setTextColor(textColor)
         monthTextView.setTextColor(textColor)
         dayTextView.setTextColor(textColor)
     }
 
-    fun setLabelTextSize(textSize: Float){
-        yearTextView.textSize=textSize
-        monthTextView.textSize=textSize
-        dayTextView.textSize=textSize
+    fun setLabelTextSize(textSize: Float) {
+        yearTextView.textSize = textSize
+        monthTextView.textSize = textSize
+        dayTextView.textSize = textSize
     }
 
     override fun setYearTextFormatter(textFormatter: IntTextFormatter) {
@@ -193,12 +193,28 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setSelectedTextColorRes(textColorRes)
     }
 
-    override fun setTextBoundaryMargin(margin: Float) {
-        datePickerHelper.setTextBoundaryMargin(margin)
+    override fun setTextMargins(margin: Float) {
+        datePickerHelper.setTextMargins(margin)
     }
 
-    override fun setTextBoundaryMargin(margin: Float, isDp: Boolean) {
-        datePickerHelper.setTextBoundaryMargin(margin, isDp)
+    override fun setTextMargins(margin: Float, isDp: Boolean) {
+        datePickerHelper.setTextMargins(margin, isDp)
+    }
+
+    override fun setTextMarginLeft(marginLeft: Float) {
+        datePickerHelper.setTextMarginLeft(marginLeft)
+    }
+
+    override fun setTextMarginLeft(marginLeft: Float, isDp: Boolean) {
+        datePickerHelper.setTextMarginLeft(marginLeft, isDp)
+    }
+
+    override fun setTextMarginRight(marginRight: Float) {
+        datePickerHelper.setTextMarginRight(marginRight)
+    }
+
+    override fun setTextMarginRight(marginRight: Float, isDp: Boolean) {
+        datePickerHelper.setTextMarginRight(marginRight, isDp)
     }
 
     override fun setTypeface(typeface: Typeface) {

@@ -145,8 +145,21 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             field = value
             invalidate()
         }
-    //字体外边距，目的是留有边距
-    var textBoundaryMargin: Float = 0f
+    //文本左边距离paddingLeft的空隙，
+    //类似于 paddingLeft 但是 paddingLeft 会影响 divider 和 curtain 绘制的起始位置，
+    //这个属性只会影响 文本绘制时的起始位置
+    var textMarginLeft: Float = 0f
+        set(value) {
+            if (value == field) {
+                return
+            }
+            field = value
+            requestLayout()
+        }
+    //文本右边距离 paddingRight 的空隙，
+    //类似于 paddingRight 但是 paddingRight 会影响 divider 和 curtain 绘制的起始位置，
+    //这个属性只会影响 文本绘制时的起始位置
+    var textMarginRight: Float = 0f
         set(value) {
             if (value == field) {
                 return
@@ -243,7 +256,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             }
         }
     //分割线类型为DIVIDER_TYPE_WRAP时 分割线左右两端距离文字的间距
-    var dividerPaddingForWrap: Float = 0f
+    var dividerPadding: Float = 0f
         set(value) {
             if (value == field) {
                 return
@@ -476,8 +489,19 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         textSize = typedArray.getDimension(R.styleable.WheelViewKt_wv_textSize, DEFAULT_TEXT_SIZE)
         isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelViewKt_wv_autoFitTextSize, false)
         textAlign = typedArray.getInt(R.styleable.WheelViewKt_wv_textAlign, TEXT_ALIGN_CENTER)
-        textBoundaryMargin = typedArray.getDimension(R.styleable.WheelViewKt_wv_textBoundaryMargin,
+        val textMargins = typedArray.getDimension(R.styleable.WheelViewKt_wv_textMargins,
                 DEFAULT_TEXT_BOUNDARY_MARGIN)
+        val textMarginLeft = typedArray.getDimension(R.styleable.WheelViewKt_wv_textMarginLeft,
+                DEFAULT_TEXT_BOUNDARY_MARGIN)
+        val textMarginRight = typedArray.getDimension(R.styleable.WheelViewKt_wv_textMarginRight,
+                DEFAULT_TEXT_BOUNDARY_MARGIN)
+
+        if (textMargins > 0) {
+            setTextMargins(textMargins, false)
+        } else {
+            this.textMarginLeft = textMarginLeft
+            this.textMarginRight = textMarginRight
+        }
         normalTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_normalTextColor, DEFAULT_NORMAL_TEXT_COLOR)
         selectedTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_selectedTextColor, DEFAULT_SELECTED_TEXT_COLOR)
         lineSpacing = typedArray.getDimension(R.styleable.WheelViewKt_wv_lineSpacing, DEFAULT_LINE_SPACING)
@@ -496,7 +520,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         dividerType = typedArray.getInt(R.styleable.WheelViewKt_wv_dividerType, DIVIDER_TYPE_FILL)
         dividerHeight = typedArray.getDimension(R.styleable.WheelViewKt_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT)
         dividerColor = typedArray.getColor(R.styleable.WheelViewKt_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR)
-        dividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelViewKt_wv_dividerPaddingForWrap, DEFAULT_TEXT_BOUNDARY_MARGIN)
+        dividerPadding = typedArray.getDimension(R.styleable.WheelViewKt_wv_dividerPadding, DEFAULT_TEXT_BOUNDARY_MARGIN)
 
         dividerOffsetY = typedArray.getDimensionPixelOffset(R.styleable.WheelViewKt_wv_dividerOffsetY, 0).toFloat()
 
@@ -581,7 +605,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             itemHeight * visibleItems + paddingTop + paddingBottom
         }
         var width = (maxTextWidth.toFloat() + paddingLeft.toFloat()
-                + paddingRight.toFloat() + textBoundaryMargin * 2).toInt()
+                + paddingRight.toFloat() + textMarginLeft + textMarginRight).toInt()
         if (isCurved) {
             val towardRange = (sin(Math.PI / 48) * height).toInt()
             width += towardRange
@@ -655,8 +679,8 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      */
     private fun calculateDrawStart() {
         startX = when (textAlign) {
-            TEXT_ALIGN_LEFT -> (paddingLeft + textBoundaryMargin).toInt()
-            TEXT_ALIGN_RIGHT -> (width.toFloat() - paddingRight.toFloat() - textBoundaryMargin).toInt()
+            TEXT_ALIGN_LEFT -> (paddingLeft + textMarginLeft).toInt()
+            TEXT_ALIGN_RIGHT -> (width.toFloat() - paddingRight.toFloat() - textMarginRight).toInt()
             TEXT_ALIGN_CENTER -> width / 2
             else -> width / 2
         }
@@ -675,7 +699,6 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             //下边界 (dataSize - 1) * mItemHeight
             maxScrollY = if (isCyclic) Integer.MAX_VALUE else maxScrollPosition(it) * itemHeight
         } ?: logAdapterNull()
-        Log.d(TAG, "calculateLimitY minScrollY=${minScrollY},maxScrollY=${maxScrollY}")
     }
 
     /**
@@ -805,9 +828,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
         } else {
             //边界处理 超过边界直接按照DIVIDER_TYPE_FILL类型处理
             val startX = (centerX.toFloat() - (maxTextWidth / 2).toFloat()
-                    - dividerPaddingForWrap).toInt()
+                    - dividerPadding).toInt()
             val stopX = (centerX.toFloat() + (maxTextWidth / 2).toFloat()
-                    + dividerPaddingForWrap).toInt()
+                    + dividerPadding).toInt()
 
             val wrapStartX = if (startX < clipLeft) clipLeft else startX
             val wrapStopX = if (stopX > clipRight) clipRight else stopX
@@ -1003,7 +1026,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             val reCenterToBaselineY = recalculateCenterToBaselineY()
             clipAndDrawCurvedText(canvas, text, clipTop, selectedItemTopLimit,
                     rotateX, translateY, translateZ, reCenterToBaselineY)
-            paint.setTextSize(textSize)
+            paint.textSize = textSize
             //isBoldForSelectedItem==true 恢复字体
             resetTypefaceIfBoldForSelectedItem()
         } else {
@@ -1099,7 +1122,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
     private fun remeasureTextSize(contentText: String): Int {
         var textWidth = paint.measureText(contentText)
         var drawWidth = width.toFloat()
-        var textMargin = textBoundaryMargin * 2
+        var textMargin = textMarginLeft + textMarginRight
         //稍微增加了一点文字边距 最大为宽度的1/10
         if (textMargin > drawWidth / 10f) {
             drawWidth = drawWidth * 9f / 10f
@@ -1684,10 +1707,26 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
     }
 
     /**
-     * 设置文字边界外边距
+     * 设置文本距离左右padding的距离
      */
-    fun setTextBoundaryMargin(textBoundaryMargin: Float, isDp: Boolean) {
-        this.textBoundaryMargin = if (isDp) dp2px(textBoundaryMargin) else textBoundaryMargin
+    fun setTextMargins(textMargins: Float, isDp: Boolean) {
+        val margins = if (isDp) dp2px(textMargins) else textMargins
+        this.textMarginLeft = margins
+        this.textMarginRight = margins
+    }
+
+    /**
+     * 设置文本左边距距离 paddingLeft 的距离
+     */
+    fun setTextMarginLeft(textMarginLeft: Float, isDp: Boolean) {
+        this.textMarginLeft = if (isDp) dp2px(textMarginLeft) else textMarginLeft
+    }
+
+    /**
+     * 设置文本右边距距离 paddingRight 的距离
+     */
+    fun setTextMarginRight(textMarginRight: Float, isDp: Boolean) {
+        this.textMarginRight = if (isDp) dp2px(textMarginRight) else textMarginRight
     }
 
     /**
@@ -1722,7 +1761,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      * 设置分割线类型为 [DIVIDER_TYPE_WRAP] 时，分割线与文字的左右内边距
      */
     fun setDividerPaddingForWrap(dividerPadding: Float, isDp: Boolean) {
-        dividerPaddingForWrap = if (isDp) dp2px(dividerPadding) else dividerPadding
+        this.dividerPadding = if (isDp) dp2px(dividerPadding) else dividerPadding
     }
 
     /**

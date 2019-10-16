@@ -274,16 +274,40 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelDayView?.setSelectedTextColorRes(textColorRes)
     }
 
-    override fun setTextBoundaryMargin(margin: Float) {
-        wheelYearView?.textBoundaryMargin = margin
-        wheelMonthView?.textBoundaryMargin = margin
-        wheelDayView?.textBoundaryMargin = margin
+    override fun setTextMargins(margin: Float) {
+        wheelYearView?.textMarginLeft = margin
+        wheelMonthView?.textMarginLeft = margin
+        wheelDayView?.textMarginLeft = margin
     }
 
-    override fun setTextBoundaryMargin(margin: Float, isDp: Boolean) {
-        wheelYearView?.setTextBoundaryMargin(margin, isDp)
-        wheelMonthView?.setTextBoundaryMargin(margin, isDp)
-        wheelDayView?.setTextBoundaryMargin(margin, isDp)
+    override fun setTextMargins(margin: Float, isDp: Boolean) {
+        wheelYearView?.setTextMargins(margin, isDp)
+        wheelMonthView?.setTextMargins(margin, isDp)
+        wheelDayView?.setTextMargins(margin, isDp)
+    }
+
+    override fun setTextMarginLeft(marginLeft: Float) {
+        wheelYearView?.textMarginLeft=marginLeft
+        wheelMonthView?.textMarginLeft=marginLeft
+        wheelDayView?.textMarginLeft=marginLeft
+    }
+
+    override fun setTextMarginLeft(marginLeft: Float, isDp: Boolean) {
+        wheelYearView?.setTextMarginLeft(marginLeft,isDp)
+        wheelMonthView?.setTextMarginLeft(marginLeft,isDp)
+        wheelDayView?.setTextMarginLeft(marginLeft,isDp)
+    }
+
+    override fun setTextMarginRight(marginRight: Float) {
+        wheelYearView?.textMarginRight=marginRight
+        wheelMonthView?.textMarginRight=marginRight
+        wheelDayView?.textMarginRight=marginRight
+    }
+
+    override fun setTextMarginRight(marginRight: Float, isDp: Boolean) {
+        wheelYearView?.setTextMarginRight(marginRight,isDp)
+        wheelMonthView?.setTextMarginRight(marginRight,isDp)
+        wheelDayView?.setTextMarginRight(marginRight,isDp)
     }
 
     override fun setTypeface(typeface: Typeface) {
@@ -335,9 +359,9 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
     }
 
     override fun setDividerPaddingForWrap(padding: Float) {
-        wheelYearView?.dividerPaddingForWrap = padding
-        wheelMonthView?.dividerPaddingForWrap = padding
-        wheelDayView?.dividerPaddingForWrap = padding
+        wheelYearView?.dividerPadding = padding
+        wheelMonthView?.dividerPadding = padding
+        wheelDayView?.dividerPadding = padding
     }
 
     override fun setDividerPaddingForWrap(padding: Float, isDp: Boolean) {

@@ -229,7 +229,7 @@ public class WheelView<T> extends View implements Runnable {
         mTextSize = typedArray.getDimension(R.styleable.WheelViewKt_wv_textSize, DEFAULT_TEXT_SIZE);
         isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelViewKt_wv_autoFitTextSize, false);
         mTextAlign = typedArray.getInt(R.styleable.WheelViewKt_wv_textAlign, TEXT_ALIGN_CENTER);
-        mTextBoundaryMargin = typedArray.getDimension(R.styleable.WheelViewKt_wv_textBoundaryMargin,
+        mTextBoundaryMargin = typedArray.getDimension(R.styleable.WheelViewKt_wv_textMargins,
                 DEFAULT_TEXT_BOUNDARY_MARGIN);
         mTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_normalTextColor, DEFAULT_NORMAL_TEXT_COLOR);
         mSelectedItemTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_selectedTextColor, DEFAULT_SELECTED_TEXT_COLOR);
@@ -247,7 +247,7 @@ public class WheelView<T> extends View implements Runnable {
         mDividerType = typedArray.getInt(R.styleable.WheelViewKt_wv_dividerType, DIVIDER_TYPE_FILL);
         mDividerSize = typedArray.getDimension(R.styleable.WheelViewKt_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT);
         mDividerColor = typedArray.getColor(R.styleable.WheelViewKt_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR);
-        mDividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelViewKt_wv_dividerPaddingForWrap, DEFAULT_TEXT_BOUNDARY_MARGIN);
+        mDividerPaddingForWrap = typedArray.getDimension(R.styleable.WheelViewKt_wv_dividerPadding, DEFAULT_TEXT_BOUNDARY_MARGIN);
 
         mDividerOffset = typedArray.getDimensionPixelOffset(R.styleable.WheelViewKt_wv_dividerOffsetY, 0);
 

@@ -11,8 +11,10 @@
             <enum name="center" value="1"/>
             <enum name="right" value="2"/>
         </attr>
-        <!--文字距离边界的外边距-->
-        <attr name="wv_textBoundaryMargin" format="dimension"/>
+        <!--文本距离padding的外边距-->
+        <attr name="wv_textMargins" format="dimension"/>
+        <attr name="wv_textMarginLeft" format="dimension"/>
+        <attr name="wv_textMarginRight" format="dimension"/>
         <!--未选中文字颜色-->
         <attr name="wv_normalTextColor" format="color"/>
         <!--被选中的文字颜色-->
@@ -43,7 +45,7 @@
         <!--分割线高度-->
         <attr name="wv_dividerHeight" format="dimension"/>
         <!--wrap类型下分割线内边距-->
-        <attr name="wv_dividerPaddingForWrap" format="dimension"/>
+        <attr name="wv_dividerPadding" format="dimension"/>
 
 
         <!--是否是弯曲（3D）效果-->
