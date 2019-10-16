@@ -1120,6 +1120,9 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      * @return 文字中心距离baseline的距离
      */
     private fun remeasureTextSize(contentText: String): Int {
+        //TODO 经过测试 drawWidth/textWidth*textSize=shouldTextSize
+        // 得到的 shouldTextSize 和目标size相差不多 可以直接从这个数值开始计算，防止循环次数太多
+        // 将重新测量放到 onMeasure 方法中，节省性能
         var textWidth = paint.measureText(contentText)
         var drawWidth = width.toFloat()
         var textMargin = textMarginLeft + textMarginRight
