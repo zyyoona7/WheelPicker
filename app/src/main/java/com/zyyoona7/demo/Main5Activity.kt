@@ -39,6 +39,10 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
             DatePickerActivity.start(this)
         }
 
+        binding.btnLinkagePicker.setOnClickListener {
+            LinkagePickerActivity.start(this)
+        }
+
         binding.sbVisibleItems.setOnSeekBarChangeListener(this)
         binding.sbLineSpacing.setOnSeekBarChangeListener(this)
         binding.sbSoundVolume.setOnSeekBarChangeListener(this)

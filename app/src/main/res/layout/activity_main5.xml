@@ -20,6 +20,13 @@
             android:background="@color/colorBgBtnGray"
             android:text="Date Picker" />
 
+        <Button
+            android:id="@+id/btn_linkage_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBgBtnGray"
+            android:text="Linkage Picker" />
+
         <com.zyyoona7.wheel.WheelViewKt
             android:id="@+id/wheelview"
             android:layout_width="wrap_content"
