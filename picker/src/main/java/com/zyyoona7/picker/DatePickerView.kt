@@ -257,12 +257,12 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setDividerType(dividerType)
     }
 
-    override fun setDividerPaddingForWrap(padding: Float) {
-        datePickerHelper.setDividerPaddingForWrap(padding)
+    override fun setDividerPadding(padding: Float) {
+        datePickerHelper.setDividerPadding(padding)
     }
 
-    override fun setDividerPaddingForWrap(padding: Float, isDp: Boolean) {
-        datePickerHelper.setDividerPaddingForWrap(padding, isDp)
+    override fun setDividerPadding(padding: Float, isDp: Boolean) {
+        datePickerHelper.setDividerPadding(padding, isDp)
     }
 
     override fun setDividerCap(cap: Paint.Cap) {

@@ -81,9 +81,9 @@ interface WheelPicker {
 
     fun setDividerType(@WheelView.DividerType dividerType: Int)
 
-    fun setDividerPaddingForWrap(padding: Float)
+    fun setDividerPadding(padding: Float)
 
-    fun setDividerPaddingForWrap(padding: Float, isDp: Boolean)
+    fun setDividerPadding(padding: Float, isDp: Boolean)
 
     fun setDividerCap(cap: Paint.Cap)
 

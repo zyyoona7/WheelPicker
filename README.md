@@ -297,7 +297,7 @@ MainActivity WheelView 相关代码：
 布局文件中：
 
 ```xml
-    <com.zyyoona7.picker.OptionsPickerView
+    <com.zyyoona7.picker.LinkagePickerView
         android:id="@+id/opv_three_linkage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

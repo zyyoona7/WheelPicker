@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import com.zyyoona7.picker.R
 import com.zyyoona7.picker.interfaces.IndexOfAction
-import com.zyyoona7.wheel.WheelViewKt
+import com.zyyoona7.wheel.WheelView
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
@@ -13,7 +13,7 @@ import kotlin.math.min
 class WheelDayView @JvmOverloads constructor(context: Context,
                                              attrs: AttributeSet? = null,
                                              defStyleAttr: Int = 0)
-    : WheelViewKt(context, attrs, defStyleAttr), IndexOfAction<Int> {
+    : WheelView(context, attrs, defStyleAttr), IndexOfAction<Int> {
 
     var year: Int = -1
         set(value) {

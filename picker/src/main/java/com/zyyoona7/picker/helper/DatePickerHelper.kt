@@ -12,7 +12,6 @@ import com.zyyoona7.picker.interfaces.DatePicker
 import com.zyyoona7.picker.interfaces.WheelPicker
 import com.zyyoona7.picker.listener.OnDateSelectedListener
 import com.zyyoona7.wheel.WheelView
-import com.zyyoona7.wheel.WheelViewKt
 import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
 import com.zyyoona7.wheel.formatter.IntTextFormatter
 import com.zyyoona7.wheel.listener.OnItemSelectedListener
@@ -56,7 +55,7 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelDayView?.setOnScrollChangedListener(this)
     }
 
-    override fun onItemSelected(wheelView: WheelViewKt, adapter: ArrayWheelAdapter<*>, position: Int) {
+    override fun onItemSelected(wheelView: WheelView, adapter: ArrayWheelAdapter<*>, position: Int) {
         val yearId = wheelYearView?.id ?: -1
         val monthId = wheelMonthView?.id ?: -1
         when (wheelView.id) {
@@ -95,11 +94,11 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
                 getSelectedDay(), getSelectedDate())
     }
 
-    override fun onScrollChanged(wheelView: WheelViewKt, scrollOffsetY: Int) {
+    override fun onScrollChanged(wheelView: WheelView, scrollOffsetY: Int) {
         scrollChangedListener?.onScrollChanged(wheelView, scrollOffsetY)
     }
 
-    override fun onScrollStateChanged(wheelView: WheelViewKt, state: Int) {
+    override fun onScrollStateChanged(wheelView: WheelView, state: Int) {
         scrollChangedListener?.onScrollStateChanged(wheelView, state)
     }
 
@@ -290,6 +289,9 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelYearView?.textMarginLeft = margin
         wheelMonthView?.textMarginLeft = margin
         wheelDayView?.textMarginLeft = margin
+        wheelYearView?.textMarginRight=margin
+        wheelMonthView?.textMarginRight=margin
+        wheelDayView?.textMarginRight=margin
     }
 
     override fun setTextMargins(margin: Float, isDp: Boolean) {
@@ -370,16 +372,16 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelDayView?.dividerType = dividerType
     }
 
-    override fun setDividerPaddingForWrap(padding: Float) {
+    override fun setDividerPadding(padding: Float) {
         wheelYearView?.dividerPadding = padding
         wheelMonthView?.dividerPadding = padding
         wheelDayView?.dividerPadding = padding
     }
 
-    override fun setDividerPaddingForWrap(padding: Float, isDp: Boolean) {
-        wheelYearView?.setDividerPaddingForWrap(padding, isDp)
-        wheelMonthView?.setDividerPaddingForWrap(padding, isDp)
-        wheelDayView?.setDividerPaddingForWrap(padding, isDp)
+    override fun setDividerPadding(padding: Float, isDp: Boolean) {
+        wheelYearView?.setDividerPadding(padding, isDp)
+        wheelMonthView?.setDividerPadding(padding, isDp)
+        wheelDayView?.setDividerPadding(padding, isDp)
     }
 
     override fun setDividerCap(cap: Paint.Cap) {

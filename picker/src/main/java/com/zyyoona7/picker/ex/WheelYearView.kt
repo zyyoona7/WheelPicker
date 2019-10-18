@@ -4,12 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import com.zyyoona7.picker.R
 import com.zyyoona7.picker.interfaces.IndexOfAction
-import com.zyyoona7.wheel.WheelViewKt
+import com.zyyoona7.wheel.WheelView
 
 class WheelYearView @JvmOverloads constructor(context: Context,
                                               attrs: AttributeSet? = null,
                                               defStyleAttr: Int = 0)
-    : WheelViewKt(context, attrs, defStyleAttr), IndexOfAction<Int> {
+    : WheelView(context, attrs, defStyleAttr), IndexOfAction<Int> {
 
     private var startYear = 1970
     private var endYear = 2100

@@ -25,9 +25,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorBgBtnGray"
-            android:text="Linkage Picker" />
+            android:text="Linkage Picker"
+            android:layout_marginTop="20dp"/>
 
-        <com.zyyoona7.wheel.WheelViewKt
+        <com.zyyoona7.wheel.WheelView
             android:id="@+id/wheelview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

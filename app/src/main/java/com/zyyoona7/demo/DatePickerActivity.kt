@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.zyyoona7.demo.activity.BaseActivity
 import com.zyyoona7.demo.databinding.ActivityDatePickerBinding
-import com.zyyoona7.wheel.WheelViewKt
+import com.zyyoona7.wheel.WheelView
 import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
 import com.zyyoona7.wheel.formatter.IntTextFormatter
 import com.zyyoona7.wheel.listener.OnItemSelectedListener
@@ -35,7 +35,7 @@ class DatePickerActivity : BaseActivity<ActivityDatePickerBinding>() {
 
     override fun initListeners(savedInstanceState: Bundle?) {
         binding.wheelYear.setOnItemSelectedListener(object : OnItemSelectedListener {
-            override fun onItemSelected(wheelView: WheelViewKt, adapter: ArrayWheelAdapter<*>, position: Int) {
+            override fun onItemSelected(wheelView: WheelView, adapter: ArrayWheelAdapter<*>, position: Int) {
                 binding.wheelDay.year = adapter.getSelectedItem<Int>() ?: 2019
 
                 dateStr+="哈喽"
@@ -43,7 +43,7 @@ class DatePickerActivity : BaseActivity<ActivityDatePickerBinding>() {
             }
         })
         binding.wheelMonth.setOnItemSelectedListener(object : OnItemSelectedListener {
-            override fun onItemSelected(wheelView: WheelViewKt, adapter: ArrayWheelAdapter<*>, position: Int) {
+            override fun onItemSelected(wheelView: WheelView, adapter: ArrayWheelAdapter<*>, position: Int) {
                 binding.wheelDay.month = adapter.getSelectedItem<Int>() ?: 1
             }
         })

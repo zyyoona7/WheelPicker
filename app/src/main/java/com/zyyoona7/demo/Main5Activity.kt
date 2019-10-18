@@ -14,7 +14,7 @@ import com.zyyoona7.demo.utils.typefaceLight
 import com.zyyoona7.demo.utils.typefaceMedium
 import com.zyyoona7.demo.utils.typefaceRegular
 import com.zyyoona7.demo.utils.vibrateShot
-import com.zyyoona7.wheel.WheelViewKt
+import com.zyyoona7.wheel.WheelView
 import com.zyyoona7.wheel.formatter.IntTextFormatter
 import com.zyyoona7.wheel.listener.OnItemPositionChangedListener
 import java.util.*
@@ -80,24 +80,24 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
 
         binding.rgAlign.setOnCheckedChangeListener { _, checkedId ->
             binding.wheelview.textAlign = when (checkedId) {
-                R.id.rb_align_left -> WheelViewKt.TEXT_ALIGN_LEFT
-                R.id.rb_align_right -> WheelViewKt.TEXT_ALIGN_RIGHT
-                else -> WheelViewKt.TEXT_ALIGN_CENTER
+                R.id.rb_align_left -> WheelView.TEXT_ALIGN_LEFT
+                R.id.rb_align_right -> WheelView.TEXT_ALIGN_RIGHT
+                else -> WheelView.TEXT_ALIGN_CENTER
             }
         }
 
         binding.rgDirection.setOnCheckedChangeListener { _, checkedId ->
             binding.wheelview.curvedArcDirection = when (checkedId) {
-                R.id.rb_direction_left -> WheelViewKt.CURVED_ARC_DIRECTION_LEFT
-                R.id.rb_direction_right -> WheelViewKt.CURVED_ARC_DIRECTION_RIGHT
-                else -> WheelViewKt.CURVED_ARC_DIRECTION_CENTER
+                R.id.rb_direction_left -> WheelView.CURVED_ARC_DIRECTION_LEFT
+                R.id.rb_direction_right -> WheelView.CURVED_ARC_DIRECTION_RIGHT
+                else -> WheelView.CURVED_ARC_DIRECTION_CENTER
             }
         }
 
         binding.rgDividerType.setOnCheckedChangeListener { _, checkedId ->
             binding.wheelview.dividerType = when (checkedId) {
-                R.id.rb_divider_fill -> WheelViewKt.DIVIDER_TYPE_FILL
-                else -> WheelViewKt.DIVIDER_TYPE_WRAP
+                R.id.rb_divider_fill -> WheelView.DIVIDER_TYPE_FILL
+                else -> WheelView.DIVIDER_TYPE_WRAP
             }
         }
 
@@ -178,7 +178,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         })
 
         binding.wheelview.setOnItemPositionChangedListener(object : OnItemPositionChangedListener {
-            override fun onItemChanged(wheelView: WheelViewKt, oldPosition: Int, newPosition: Int) {
+            override fun onItemChanged(wheelView: WheelView, oldPosition: Int, newPosition: Int) {
                 if (binding.scVibrate.isChecked) {
                     vibrateShot(10)
                 }
@@ -220,7 +220,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.sbLineSpacing.progress = wheelView.lineSpacing.toInt()
 
         binding.sbSelectedDuration.max = 3000
-        binding.sbSelectedDuration.progress = WheelViewKt.DEFAULT_SCROLL_DURATION
+        binding.sbSelectedDuration.progress = WheelView.DEFAULT_SCROLL_DURATION
 
         binding.scSound.isChecked = wheelView.isSoundEffect
         binding.sbSoundVolume.max = 100
@@ -233,8 +233,8 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.sbTextSize.progress = wheelView.textSize.toInt()
 
         when (wheelView.textAlign) {
-            WheelViewKt.TEXT_ALIGN_LEFT -> binding.rbAlignLeft.isChecked = true
-            WheelViewKt.TEXT_ALIGN_RIGHT -> binding.rbAlignRight.isChecked = true
+            WheelView.TEXT_ALIGN_LEFT -> binding.rbAlignLeft.isChecked = true
+            WheelView.TEXT_ALIGN_RIGHT -> binding.rbAlignRight.isChecked = true
             else -> binding.rbAlignCenter.isChecked = true
         }
 
@@ -248,8 +248,8 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
 
         binding.scCurved.isChecked = wheelView.isCurved
         when (wheelView.curvedArcDirection) {
-            WheelViewKt.CURVED_ARC_DIRECTION_LEFT -> binding.rbDirectionLeft.isChecked = true
-            WheelViewKt.CURVED_ARC_DIRECTION_RIGHT -> binding.rbDirectionRight.isChecked = true
+            WheelView.CURVED_ARC_DIRECTION_LEFT -> binding.rbDirectionLeft.isChecked = true
+            WheelView.CURVED_ARC_DIRECTION_RIGHT -> binding.rbDirectionRight.isChecked = true
             else -> binding.rbDirectionCenter.isChecked = true
         }
         binding.sbCurvedArcFactor.max = 100
@@ -262,7 +262,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.sbDividerHeight.progress = wheelView.dividerHeight.toInt()
         binding.btnDividerColor.setBackgroundColor(wheelView.dividerColor)
         when (wheelView.dividerType) {
-            WheelViewKt.DIVIDER_TYPE_FILL -> binding.rbDividerFill.isChecked = true
+            WheelView.DIVIDER_TYPE_FILL -> binding.rbDividerFill.isChecked = true
             else -> binding.rbDividerWrap.isChecked = true
         }
         binding.sbDividerPadding.max = 60
