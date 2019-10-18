@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="WheelViewKt">
+    <declare-styleable name="WheelView">
         <!--文字大小-->
         <attr name="wv_textSize" format="dimension" />
         <!--是否自适应文字大小以完全显示过长的文字-->

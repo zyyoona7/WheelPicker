@@ -31,9 +31,9 @@ import kotlin.math.*
  *
  * @author zyyoona7
  */
-open class WheelViewKt @JvmOverloads constructor(context: Context,
-                                                 attrs: AttributeSet? = null,
-                                                 defStyleAttr: Int = 0)
+open class WheelView @JvmOverloads constructor(context: Context,
+                                               attrs: AttributeSet? = null,
+                                               defStyleAttr: Int = 0)
     : View(context, attrs, defStyleAttr), Runnable, ArrayWheelAdapter.OnFinishScrollCallback {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -499,16 +499,16 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      * @param attrs   attrs
      */
     private fun initAttrsAndDefault(context: Context, attrs: AttributeSet) {
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelViewKt)
-        textSize = typedArray.getDimension(R.styleable.WheelViewKt_wv_textSize, DEFAULT_TEXT_SIZE)
-        isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelViewKt_wv_autoFitTextSize, false)
-        minTextSize = typedArray.getDimension(R.styleable.WheelViewKt_wv_minTextSize, sp2px(6f))
-        textAlign = typedArray.getInt(R.styleable.WheelViewKt_wv_textAlign, TEXT_ALIGN_CENTER)
-        val textMargins = typedArray.getDimension(R.styleable.WheelViewKt_wv_textMargins,
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelView)
+        textSize = typedArray.getDimension(R.styleable.WheelView_wv_textSize, DEFAULT_TEXT_SIZE)
+        isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelView_wv_autoFitTextSize, false)
+        minTextSize = typedArray.getDimension(R.styleable.WheelView_wv_minTextSize, sp2px(6f))
+        textAlign = typedArray.getInt(R.styleable.WheelView_wv_textAlign, TEXT_ALIGN_CENTER)
+        val textMargins = typedArray.getDimension(R.styleable.WheelView_wv_textMargins,
                 DEFAULT_TEXT_BOUNDARY_MARGIN)
-        val textMarginLeft = typedArray.getDimension(R.styleable.WheelViewKt_wv_textMarginLeft,
+        val textMarginLeft = typedArray.getDimension(R.styleable.WheelView_wv_textMarginLeft,
                 DEFAULT_TEXT_BOUNDARY_MARGIN)
-        val textMarginRight = typedArray.getDimension(R.styleable.WheelViewKt_wv_textMarginRight,
+        val textMarginRight = typedArray.getDimension(R.styleable.WheelView_wv_textMarginRight,
                 DEFAULT_TEXT_BOUNDARY_MARGIN)
 
         if (textMargins > 0) {
@@ -517,36 +517,36 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
             this.textMarginLeft = textMarginLeft
             this.textMarginRight = textMarginRight
         }
-        normalTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_normalTextColor, DEFAULT_NORMAL_TEXT_COLOR)
-        selectedTextColor = typedArray.getColor(R.styleable.WheelViewKt_wv_selectedTextColor, DEFAULT_SELECTED_TEXT_COLOR)
-        lineSpacing = typedArray.getDimension(R.styleable.WheelViewKt_wv_lineSpacing, DEFAULT_LINE_SPACING)
+        normalTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalTextColor, DEFAULT_NORMAL_TEXT_COLOR)
+        selectedTextColor = typedArray.getColor(R.styleable.WheelView_wv_selectedTextColor, DEFAULT_SELECTED_TEXT_COLOR)
+        lineSpacing = typedArray.getDimension(R.styleable.WheelView_wv_lineSpacing, DEFAULT_LINE_SPACING)
 
-        visibleItems = typedArray.getInt(R.styleable.WheelViewKt_wv_visibleItems, DEFAULT_VISIBLE_ITEM)
+        visibleItems = typedArray.getInt(R.styleable.WheelView_wv_visibleItems, DEFAULT_VISIBLE_ITEM)
         //跳转可见item为奇数
         visibleItems = adjustVisibleItems(visibleItems)
-        val selectedPosition = typedArray.getInt(R.styleable.WheelViewKt_wv_selectedPosition, 0)
-        val maxSelectedPosition = typedArray.getInt(R.styleable.WheelViewKt_wv_maxSelectedPosition, -1)
-        val minSelectedPosition = typedArray.getInt(R.styleable.WheelViewKt_wv_minSelectedPosition, -1)
+        val selectedPosition = typedArray.getInt(R.styleable.WheelView_wv_selectedPosition, 0)
+        val maxSelectedPosition = typedArray.getInt(R.styleable.WheelView_wv_maxSelectedPosition, -1)
+        val minSelectedPosition = typedArray.getInt(R.styleable.WheelView_wv_minSelectedPosition, -1)
         initSelectedPositionAndRange(selectedPosition, minSelectedPosition, maxSelectedPosition)
 
-        isCyclic = typedArray.getBoolean(R.styleable.WheelViewKt_wv_cyclic, false)
+        isCyclic = typedArray.getBoolean(R.styleable.WheelView_wv_cyclic, false)
 
-        isShowDivider = typedArray.getBoolean(R.styleable.WheelViewKt_wv_showDivider, false)
-        dividerType = typedArray.getInt(R.styleable.WheelViewKt_wv_dividerType, DIVIDER_TYPE_FILL)
-        dividerHeight = typedArray.getDimension(R.styleable.WheelViewKt_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT)
-        dividerColor = typedArray.getColor(R.styleable.WheelViewKt_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR)
-        dividerPadding = typedArray.getDimension(R.styleable.WheelViewKt_wv_dividerPadding, DEFAULT_TEXT_BOUNDARY_MARGIN)
+        isShowDivider = typedArray.getBoolean(R.styleable.WheelView_wv_showDivider, false)
+        dividerType = typedArray.getInt(R.styleable.WheelView_wv_dividerType, DIVIDER_TYPE_FILL)
+        dividerHeight = typedArray.getDimension(R.styleable.WheelView_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT)
+        dividerColor = typedArray.getColor(R.styleable.WheelView_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR)
+        dividerPadding = typedArray.getDimension(R.styleable.WheelView_wv_dividerPadding, DEFAULT_TEXT_BOUNDARY_MARGIN)
 
-        dividerOffsetY = typedArray.getDimensionPixelOffset(R.styleable.WheelViewKt_wv_dividerOffsetY, 0).toFloat()
+        dividerOffsetY = typedArray.getDimensionPixelOffset(R.styleable.WheelView_wv_dividerOffsetY, 0).toFloat()
 
-        isShowCurtain = typedArray.getBoolean(R.styleable.WheelViewKt_wv_isShowCurtain, false)
-        curtainColor = typedArray.getColor(R.styleable.WheelViewKt_wv_curtainColor, Color.TRANSPARENT)
+        isShowCurtain = typedArray.getBoolean(R.styleable.WheelView_wv_isShowCurtain, false)
+        curtainColor = typedArray.getColor(R.styleable.WheelView_wv_curtainColor, Color.TRANSPARENT)
 
-        isCurved = typedArray.getBoolean(R.styleable.WheelViewKt_wv_curved, true)
-        curvedArcDirection = typedArray.getInt(R.styleable.WheelViewKt_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER)
-        curvedArcDirectionFactor = typedArray.getFloat(R.styleable.WheelViewKt_wv_curvedArcDirectionFactor, DEFAULT_CURVED_FACTOR)
+        isCurved = typedArray.getBoolean(R.styleable.WheelView_wv_curved, true)
+        curvedArcDirection = typedArray.getInt(R.styleable.WheelView_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER)
+        curvedArcDirectionFactor = typedArray.getFloat(R.styleable.WheelView_wv_curvedArcDirectionFactor, DEFAULT_CURVED_FACTOR)
         //折射偏移默认值
-        refractRatio = typedArray.getFloat(R.styleable.WheelViewKt_wv_refractRatio, DEFAULT_REFRACT_RATIO)
+        refractRatio = typedArray.getFloat(R.styleable.WheelView_wv_refractRatio, DEFAULT_REFRACT_RATIO)
         if (refractRatio > 1f) {
             refractRatio = 1.0f
         } else if (refractRatio < 0f) {
@@ -1802,7 +1802,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
     /**
      * 设置分割线类型为 [DIVIDER_TYPE_WRAP] 时，分割线与文字的左右内边距
      */
-    fun setDividerPaddingForWrap(dividerPadding: Float, isDp: Boolean) {
+    fun setDividerPadding(dividerPadding: Float, isDp: Boolean) {
         this.dividerPadding = if (isDp) dp2px(dividerPadding) else dividerPadding
     }
 
@@ -2022,7 +2022,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      */
     @IntDef(TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, TEXT_ALIGN_RIGHT)
     @Retention(AnnotationRetention.SOURCE)
-    internal annotation class TextAlign
+    annotation class TextAlign
 
     /**
      * 自定义左右圆弧效果方向注解
@@ -2032,7 +2032,7 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      */
     @IntDef(CURVED_ARC_DIRECTION_LEFT, CURVED_ARC_DIRECTION_CENTER, CURVED_ARC_DIRECTION_RIGHT)
     @Retention(AnnotationRetention.SOURCE)
-    internal annotation class CurvedArcDirection
+    annotation class CurvedArcDirection
 
     /**
      * 自定义分割线类型注解
@@ -2042,14 +2042,14 @@ open class WheelViewKt @JvmOverloads constructor(context: Context,
      */
     @IntDef(DIVIDER_TYPE_FILL, DIVIDER_TYPE_WRAP)
     @Retention(AnnotationRetention.SOURCE)
-    internal annotation class DividerType
+    annotation class DividerType
 
     /**
      * 自定义滚动状态注解
      */
     @IntDef(SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SCROLLING)
     @Retention(AnnotationRetention.SOURCE)
-    internal annotation class ScrollState
+    annotation class ScrollState
 
     /*
       ---------- 一些注解 ----------
