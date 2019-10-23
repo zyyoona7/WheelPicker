@@ -172,16 +172,16 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.visibleItems = visibleItems
     }
 
-    override fun setLineSpacing(lineSpacing: Float) {
-        wheelView1?.lineSpacing = lineSpacing
-        wheelView2?.lineSpacing = lineSpacing
-        wheelView3?.lineSpacing = lineSpacing
+    override fun setLineSpacing(lineSpacingPx: Int) {
+        wheelView1?.lineSpacing = lineSpacingPx
+        wheelView2?.lineSpacing = lineSpacingPx
+        wheelView3?.lineSpacing = lineSpacingPx
     }
 
-    override fun setLineSpacing(lineSpacing: Float, isDp: Boolean) {
-        wheelView1?.setLineSpacing(lineSpacing, isDp)
-        wheelView2?.setLineSpacing(lineSpacing, isDp)
-        wheelView3?.setLineSpacing(lineSpacing, isDp)
+    override fun setLineSpacing(lineSpacingDp: Float) {
+        wheelView1?.setLineSpacing(lineSpacingDp)
+        wheelView2?.setLineSpacing(lineSpacingDp)
+        wheelView3?.setLineSpacing(lineSpacingDp)
     }
 
     override fun setCyclic(isCyclic: Boolean) {
@@ -190,16 +190,16 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.isCyclic = isCyclic
     }
 
-    override fun setTextSize(textSize: Float) {
-        wheelView1?.textSize = textSize
-        wheelView2?.textSize = textSize
-        wheelView3?.textSize = textSize
+    override fun setTextSize(textSizePx: Int) {
+        wheelView1?.textSize = textSizePx
+        wheelView2?.textSize = textSizePx
+        wheelView3?.textSize = textSizePx
     }
 
-    override fun setTextSize(textSize: Float, isSp: Boolean) {
-        wheelView1?.setTextSize(textSize, isSp)
-        wheelView2?.setTextSize(textSize, isSp)
-        wheelView3?.setTextSize(textSize, isSp)
+    override fun setTextSize(textSizeSp: Float) {
+        wheelView1?.setTextSize(textSizeSp)
+        wheelView2?.setTextSize(textSizeSp)
+        wheelView3?.setTextSize(textSizeSp)
     }
 
     override fun setAutoFitTextSize(autoFit: Boolean) {
@@ -208,16 +208,16 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.isAutoFitTextSize = autoFit
     }
 
-    override fun setMinTextSize(minTextSize: Float) {
-        wheelView1?.minTextSize = minTextSize
-        wheelView2?.minTextSize = minTextSize
-        wheelView3?.minTextSize = minTextSize
+    override fun setMinTextSize(minTextSizePx: Int) {
+        wheelView1?.minTextSize = minTextSizePx
+        wheelView2?.minTextSize = minTextSizePx
+        wheelView3?.minTextSize = minTextSizePx
     }
 
-    override fun setMinTextSize(minTextSize: Float, isSp: Boolean) {
-        wheelView1?.setMinTextSize(minTextSize, isSp)
-        wheelView2?.setMinTextSize(minTextSize, isSp)
-        wheelView3?.setMinTextSize(minTextSize, isSp)
+    override fun setMinTextSize(minTextSizeSp: Float) {
+        wheelView1?.setMinTextSize(minTextSizeSp)
+        wheelView2?.setMinTextSize(minTextSizeSp)
+        wheelView3?.setMinTextSize(minTextSizeSp)
     }
 
     override fun setTextAlign(textAlign: Int) {
@@ -250,43 +250,43 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.setSelectedTextColorRes(textColorRes)
     }
 
-    override fun setTextMargins(margin: Float) {
-        wheelView1?.textPaddingLeft = margin
-        wheelView2?.textPaddingLeft = margin
-        wheelView3?.textPaddingLeft = margin
-        wheelView1?.textPaddingRight = margin
-        wheelView2?.textPaddingRight = margin
-        wheelView3?.textPaddingRight = margin
+    override fun setTextPadding(paddingPx: Int) {
+        wheelView1?.textPaddingLeft = paddingPx
+        wheelView2?.textPaddingLeft = paddingPx
+        wheelView3?.textPaddingLeft = paddingPx
+        wheelView1?.textPaddingRight = paddingPx
+        wheelView2?.textPaddingRight = paddingPx
+        wheelView3?.textPaddingRight = paddingPx
     }
 
-    override fun setTextMargins(margin: Float, isDp: Boolean) {
-        wheelView1?.setTextPadding(margin, isDp)
-        wheelView2?.setTextPadding(margin, isDp)
-        wheelView3?.setTextPadding(margin, isDp)
+    override fun setTextPadding(paddingDp: Float) {
+        wheelView1?.setTextPadding(paddingDp)
+        wheelView2?.setTextPadding(paddingDp)
+        wheelView3?.setTextPadding(paddingDp)
     }
 
-    override fun setTextMarginLeft(marginLeft: Float) {
-        wheelView1?.textPaddingLeft = marginLeft
-        wheelView2?.textPaddingLeft = marginLeft
-        wheelView3?.textPaddingLeft = marginLeft
+    override fun setTextPaddingLeft(textPaddingLeftPx: Int) {
+        wheelView1?.textPaddingLeft = textPaddingLeftPx
+        wheelView2?.textPaddingLeft = textPaddingLeftPx
+        wheelView3?.textPaddingLeft = textPaddingLeftPx
     }
 
-    override fun setTextMarginLeft(marginLeft: Float, isDp: Boolean) {
-        wheelView1?.setTextPaddingLeft(marginLeft, isDp)
-        wheelView2?.setTextPaddingLeft(marginLeft, isDp)
-        wheelView3?.setTextPaddingLeft(marginLeft, isDp)
+    override fun setTextPaddingLeft(textPaddingLeftDp: Float) {
+        wheelView1?.setTextPaddingLeft(textPaddingLeftDp)
+        wheelView2?.setTextPaddingLeft(textPaddingLeftDp)
+        wheelView3?.setTextPaddingLeft(textPaddingLeftDp)
     }
 
-    override fun setTextMarginRight(marginRight: Float) {
-        wheelView1?.textPaddingRight = marginRight
-        wheelView2?.textPaddingRight = marginRight
-        wheelView3?.textPaddingRight = marginRight
+    override fun setTextPaddingRight(textPaddingRightPx: Int) {
+        wheelView1?.textPaddingRight = textPaddingRightPx
+        wheelView2?.textPaddingRight = textPaddingRightPx
+        wheelView3?.textPaddingRight = textPaddingRightPx
     }
 
-    override fun setTextMarginRight(marginRight: Float, isDp: Boolean) {
-        wheelView1?.setTextPaddingRight(marginRight, isDp)
-        wheelView2?.setTextPaddingRight(marginRight, isDp)
-        wheelView3?.setTextPaddingRight(marginRight, isDp)
+    override fun setTextPaddingRight(textPaddingRightDp: Float) {
+        wheelView1?.setTextPaddingRight(textPaddingRightDp)
+        wheelView2?.setTextPaddingRight(textPaddingRightDp)
+        wheelView3?.setTextPaddingRight(textPaddingRightDp)
     }
 
     override fun setTypeface(typeface: Typeface) {
@@ -319,16 +319,16 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.setDividerColorRes(dividerColorRes)
     }
 
-    override fun setDividerHeight(dividerHeight: Float) {
-        wheelView1?.dividerHeight = dividerHeight
-        wheelView2?.dividerHeight = dividerHeight
-        wheelView3?.dividerHeight = dividerHeight
+    override fun setDividerHeight(dividerHeightPx: Int) {
+        wheelView1?.dividerHeight = dividerHeightPx
+        wheelView2?.dividerHeight = dividerHeightPx
+        wheelView3?.dividerHeight = dividerHeightPx
     }
 
-    override fun setDividerHeight(dividerHeight: Float, isDp: Boolean) {
-        wheelView1?.setDividerHeight(dividerHeight, isDp)
-        wheelView2?.setDividerHeight(dividerHeight, isDp)
-        wheelView3?.setDividerHeight(dividerHeight, isDp)
+    override fun setDividerHeight(dividerHeightDp: Float) {
+        wheelView1?.setDividerHeight(dividerHeightDp)
+        wheelView2?.setDividerHeight(dividerHeightDp)
+        wheelView3?.setDividerHeight(dividerHeightDp)
     }
 
     override fun setDividerType(@WheelView.DividerType dividerType: Int) {
@@ -337,16 +337,16 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.dividerType = dividerType
     }
 
-    override fun setDividerPadding(padding: Float) {
-        wheelView1?.dividerPadding = padding
-        wheelView2?.dividerPadding = padding
-        wheelView3?.dividerPadding = padding
+    override fun setDividerPadding(paddingPx: Int) {
+        wheelView1?.dividerPadding = paddingPx
+        wheelView2?.dividerPadding = paddingPx
+        wheelView3?.dividerPadding = paddingPx
     }
 
-    override fun setDividerPadding(padding: Float, isDp: Boolean) {
-        wheelView1?.setDividerPadding(padding, isDp)
-        wheelView2?.setDividerPadding(padding, isDp)
-        wheelView3?.setDividerPadding(padding, isDp)
+    override fun setDividerPadding(paddingDp: Float) {
+        wheelView1?.setDividerPadding(paddingDp)
+        wheelView2?.setDividerPadding(paddingDp)
+        wheelView3?.setDividerPadding(paddingDp)
     }
 
     override fun setDividerCap(cap: Paint.Cap) {
@@ -355,16 +355,16 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.dividerCap = cap
     }
 
-    override fun setDividerOffsetY(offsetY: Float) {
-        wheelView1?.dividerOffsetY = offsetY
-        wheelView2?.dividerOffsetY = offsetY
-        wheelView3?.dividerOffsetY = offsetY
+    override fun setDividerOffsetY(offsetYPx: Int) {
+        wheelView1?.dividerOffsetY = offsetYPx
+        wheelView2?.dividerOffsetY = offsetYPx
+        wheelView3?.dividerOffsetY = offsetYPx
     }
 
-    override fun setDividerOffsetY(offsetY: Float, isDp: Boolean) {
-        wheelView1?.setDividerOffsetY(offsetY, isDp)
-        wheelView2?.setDividerOffsetY(offsetY, isDp)
-        wheelView3?.setDividerOffsetY(offsetY, isDp)
+    override fun setDividerOffsetY(offsetYDp: Float) {
+        wheelView1?.setDividerOffsetY(offsetYDp)
+        wheelView2?.setDividerOffsetY(offsetYDp)
+        wheelView3?.setDividerOffsetY(offsetYDp)
     }
 
     override fun setShowCurtain(showCurtain: Boolean) {
@@ -437,5 +437,101 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView1?.canOverRangeScroll = canOverRange
         wheelView2?.canOverRangeScroll = canOverRange
         wheelView3?.canOverRangeScroll = canOverRange
+    }
+
+    override fun setLeftText(text: CharSequence) {
+        wheelView1?.leftText = text
+        wheelView2?.leftText = text
+        wheelView3?.leftText = text
+    }
+
+    override fun setRightText(text: CharSequence) {
+        wheelView1?.rightText = text
+        wheelView2?.rightText = text
+        wheelView3?.rightText = text
+    }
+
+    override fun setLeftTextSize(textSizePx: Int) {
+        wheelView1?.leftTextSize = textSizePx
+        wheelView2?.leftTextSize = textSizePx
+        wheelView3?.leftTextSize = textSizePx
+    }
+
+    override fun setLeftTextSize(textSizeSp: Float) {
+        wheelView1?.setLeftTextSize(textSizeSp)
+        wheelView2?.setLeftTextSize(textSizeSp)
+        wheelView3?.setLeftTextSize(textSizeSp)
+    }
+
+    override fun setRightTextSize(textSizePx: Int) {
+        wheelView1?.rightTextSize = textSizePx
+        wheelView2?.rightTextSize = textSizePx
+        wheelView3?.rightTextSize = textSizePx
+    }
+
+    override fun setRightTextSize(textSizeSp: Float) {
+        wheelView1?.setRightTextSize(textSizeSp)
+        wheelView2?.setRightTextSize(textSizeSp)
+        wheelView3?.setRightTextSize(textSizeSp)
+    }
+
+    override fun setLeftTextColor(@ColorInt color: Int) {
+        wheelView1?.leftTextColor = color
+        wheelView2?.leftTextColor = color
+        wheelView3?.leftTextColor = color
+    }
+
+    override fun setLeftTextColorRes(@ColorRes colorRes: Int) {
+        wheelView1?.setLeftTextColorRes(colorRes)
+        wheelView2?.setLeftTextColorRes(colorRes)
+        wheelView3?.setLeftTextColorRes(colorRes)
+    }
+
+    override fun setRightTextColor(@ColorInt color: Int) {
+        wheelView1?.rightTextColor = color
+        wheelView2?.rightTextColor = color
+        wheelView3?.rightTextColor = color
+    }
+
+    override fun setRightTextColorRes(@ColorRes colorRes: Int) {
+        wheelView1?.setRightTextColorRes(colorRes)
+        wheelView2?.setRightTextColorRes(colorRes)
+        wheelView3?.setRightTextColorRes(colorRes)
+    }
+
+    override fun setLeftTextMarginRight(marginRightPx: Int) {
+        wheelView1?.leftTextMarginRight = marginRightPx
+        wheelView2?.leftTextMarginRight = marginRightPx
+        wheelView3?.leftTextMarginRight = marginRightPx
+    }
+
+    override fun setLeftTextMarginRight(marginRightDp: Float) {
+        wheelView1?.setLeftTextMarginRight(marginRightDp)
+        wheelView2?.setLeftTextMarginRight(marginRightDp)
+        wheelView3?.setLeftTextMarginRight(marginRightDp)
+    }
+
+    override fun setRightTextMarginLeft(marginLeftPx: Int) {
+        wheelView1?.rightTextMarginLeft = marginLeftPx
+        wheelView2?.rightTextMarginLeft = marginLeftPx
+        wheelView3?.rightTextMarginLeft = marginLeftPx
+    }
+
+    override fun setRightTextMarginLeft(marginLeftDp: Float) {
+        wheelView1?.setRightTextMarginLeft(marginLeftDp)
+        wheelView2?.setRightTextMarginLeft(marginLeftDp)
+        wheelView3?.setRightTextMarginLeft(marginLeftDp)
+    }
+
+    override fun setLeftTextGravity(gravity: Int) {
+        wheelView1?.leftTextGravity = gravity
+        wheelView2?.leftTextGravity = gravity
+        wheelView3?.leftTextGravity = gravity
+    }
+
+    override fun setRightTextGravity(gravity: Int) {
+        wheelView1?.rightTextGravity = gravity
+        wheelView2?.rightTextGravity = gravity
+        wheelView3?.rightTextGravity = gravity
     }
 }

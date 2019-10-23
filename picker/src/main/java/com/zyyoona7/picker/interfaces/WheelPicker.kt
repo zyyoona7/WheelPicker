@@ -16,9 +16,9 @@ interface WheelPicker {
 
     fun setVisibleItems(visibleItems: Int)
 
-    fun setLineSpacing(lineSpacing: Float)
+    fun setLineSpacing(lineSpacingPx: Int)
 
-    fun setLineSpacing(lineSpacing: Float, isDp: Boolean)
+    fun setLineSpacing(lineSpacingDp: Float)
 
     fun setCyclic(isCyclic: Boolean)
 
@@ -26,15 +26,15 @@ interface WheelPicker {
       ---------- WheelView 文字相关设置 ----------
      */
 
-    fun setTextSize(textSize: Float)
+    fun setTextSize(textSizePx: Int)
 
-    fun setTextSize(textSize: Float, isSp: Boolean)
+    fun setTextSize(textSizeSp: Float)
 
     fun setAutoFitTextSize(autoFit: Boolean)
 
-    fun setMinTextSize(minTextSize:Float)
+    fun setMinTextSize(minTextSizePx: Int)
 
-    fun setMinTextSize(minTextSize: Float,isSp: Boolean)
+    fun setMinTextSize(minTextSizeSp: Float)
 
     fun setTextAlign(@WheelView.TextAlign textAlign: Int)
 
@@ -46,17 +46,17 @@ interface WheelPicker {
 
     fun setSelectedTextColorRes(@ColorRes textColorRes: Int)
 
-    fun setTextMargins(margin: Float)
+    fun setTextPadding(paddingPx: Int)
 
-    fun setTextMargins(margin: Float, isDp: Boolean)
+    fun setTextPadding(paddingDp: Float)
 
-    fun setTextMarginLeft(marginLeft:Float)
+    fun setTextPaddingLeft(textPaddingLeftPx: Int)
 
-    fun setTextMarginLeft(marginLeft: Float,isDp: Boolean)
+    fun setTextPaddingLeft(textPaddingLeftDp: Float)
 
-    fun setTextMarginRight(marginRight:Float)
+    fun setTextPaddingRight(textPaddingRightPx: Int)
 
-    fun setTextMarginRight(marginRight: Float, isDp: Boolean)
+    fun setTextPaddingRight(textPaddingRightDp: Float)
 
     fun setTypeface(typeface: Typeface)
 
@@ -75,21 +75,21 @@ interface WheelPicker {
 
     fun setDividerColorRes(@ColorRes dividerColorRes: Int)
 
-    fun setDividerHeight(dividerHeight: Float)
+    fun setDividerHeight(dividerHeightPx: Int)
 
-    fun setDividerHeight(dividerHeight: Float, isDp: Boolean)
+    fun setDividerHeight(dividerHeightDp: Float)
 
     fun setDividerType(@WheelView.DividerType dividerType: Int)
 
-    fun setDividerPadding(padding: Float)
+    fun setDividerPadding(paddingPx: Int)
 
-    fun setDividerPadding(padding: Float, isDp: Boolean)
+    fun setDividerPadding(paddingDp: Float)
 
     fun setDividerCap(cap: Paint.Cap)
 
-    fun setDividerOffsetY(offsetY: Float)
+    fun setDividerOffsetY(offsetYPx: Int)
 
-    fun setDividerOffsetY(offsetY: Float, isDp: Boolean)
+    fun setDividerOffsetY(offsetYDp: Float)
     /*
       ---------- WheelView 分割线相关设置 ----------
      */
@@ -127,4 +127,42 @@ interface WheelPicker {
     fun setResetSelectedPosition(reset: Boolean)
 
     fun setCanOverRangeScroll(canOverRange: Boolean)
+
+    /*
+      ---------- 左右额外的文字相关设置 ----------
+     */
+    fun setLeftText(text: CharSequence)
+
+    fun setRightText(text: CharSequence)
+
+    fun setLeftTextSize(textSizePx: Int)
+
+    fun setLeftTextSize(textSizeSp: Float)
+
+    fun setRightTextSize(textSizePx: Int)
+
+    fun setRightTextSize(textSizeSp: Float)
+
+    fun setLeftTextColor(@ColorInt color: Int)
+
+    fun setLeftTextColorRes(@ColorRes colorRes: Int)
+
+    fun setRightTextColor(@ColorInt color: Int)
+
+    fun setRightTextColorRes(@ColorRes colorRes: Int)
+
+    fun setLeftTextMarginRight(marginRightPx: Int)
+
+    fun setLeftTextMarginRight(marginRightDp: Float)
+
+    fun setRightTextMarginLeft(marginLeftPx: Int)
+
+    fun setRightTextMarginLeft(marginLeftDp: Float)
+
+    fun setLeftTextGravity(gravity: Int)
+
+    fun setRightTextGravity(gravity: Int)
+    /*
+      ---------- 左右额外的文字相关设置 ----------
+     */
 }

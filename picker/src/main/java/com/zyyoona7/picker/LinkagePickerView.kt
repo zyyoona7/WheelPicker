@@ -95,36 +95,36 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setVisibleItems(visibleItems)
     }
 
-    override fun setLineSpacing(lineSpacing: Float) {
-        linkagePickerHelper.setLineSpacing(lineSpacing)
+    override fun setLineSpacing(lineSpacingPx: Int) {
+        linkagePickerHelper.setLineSpacing(lineSpacingPx)
     }
 
-    override fun setLineSpacing(lineSpacing: Float, isDp: Boolean) {
-        linkagePickerHelper.setLineSpacing(lineSpacing, isDp)
+    override fun setLineSpacing(lineSpacingDp: Float) {
+        linkagePickerHelper.setLineSpacing(lineSpacingDp)
     }
 
     override fun setCyclic(isCyclic: Boolean) {
         linkagePickerHelper.setCyclic(isCyclic)
     }
 
-    override fun setTextSize(textSize: Float) {
-        linkagePickerHelper.setTextSize(textSize)
+    override fun setTextSize(textSizePx: Int) {
+        linkagePickerHelper.setTextSize(textSizePx)
     }
 
-    override fun setTextSize(textSize: Float, isSp: Boolean) {
-        linkagePickerHelper.setTextSize(textSize, isSp)
+    override fun setTextSize(textSizeSp: Float) {
+        linkagePickerHelper.setTextSize(textSizeSp)
     }
 
     override fun setAutoFitTextSize(autoFit: Boolean) {
         linkagePickerHelper.setAutoFitTextSize(autoFit)
     }
 
-    override fun setMinTextSize(minTextSize: Float) {
-        linkagePickerHelper.setMinTextSize(minTextSize)
+    override fun setMinTextSize(minTextSizePx: Int) {
+        linkagePickerHelper.setMinTextSize(minTextSizePx)
     }
 
-    override fun setMinTextSize(minTextSize: Float, isSp: Boolean) {
-        linkagePickerHelper.setMinTextSize(minTextSize, isSp)
+    override fun setMinTextSize(minTextSizeSp: Float) {
+        linkagePickerHelper.setMinTextSize(minTextSizeSp)
     }
 
     override fun setTextAlign(@WheelView.TextAlign textAlign: Int) {
@@ -147,28 +147,28 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setSelectedTextColorRes(textColorRes)
     }
 
-    override fun setTextMargins(margin: Float) {
-        linkagePickerHelper.setTextMargins(margin)
+    override fun setTextPadding(paddingPx: Int) {
+        linkagePickerHelper.setTextPadding(paddingPx)
     }
 
-    override fun setTextMargins(margin: Float, isDp: Boolean) {
-        linkagePickerHelper.setTextMargins(margin, isDp)
+    override fun setTextPadding(paddingDp: Float) {
+        linkagePickerHelper.setTextPadding(paddingDp)
     }
 
-    override fun setTextMarginLeft(marginLeft: Float) {
-        linkagePickerHelper.setTextMarginLeft(marginLeft)
+    override fun setTextPaddingLeft(textPaddingLeftPx: Int) {
+        linkagePickerHelper.setTextPaddingLeft(textPaddingLeftPx)
     }
 
-    override fun setTextMarginLeft(marginLeft: Float, isDp: Boolean) {
-        linkagePickerHelper.setTextMarginLeft(marginLeft, isDp)
+    override fun setTextPaddingLeft(textPaddingLeftDp: Float) {
+        linkagePickerHelper.setTextPaddingLeft(textPaddingLeftDp)
     }
 
-    override fun setTextMarginRight(marginRight: Float) {
-        linkagePickerHelper.setTextMarginRight(marginRight)
+    override fun setTextPaddingRight(textPaddingRightPx: Int) {
+        linkagePickerHelper.setTextPaddingRight(textPaddingRightPx)
     }
 
-    override fun setTextMarginRight(marginRight: Float, isDp: Boolean) {
-        linkagePickerHelper.setTextMarginRight(marginRight, isDp)
+    override fun setTextPaddingRight(textPaddingRightDp: Float) {
+        linkagePickerHelper.setTextPaddingRight(textPaddingRightDp)
     }
 
     override fun setTypeface(typeface: Typeface) {
@@ -191,36 +191,36 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setDividerColorRes(dividerColorRes)
     }
 
-    override fun setDividerHeight(dividerHeight: Float) {
-        linkagePickerHelper.setDividerHeight(dividerHeight)
+    override fun setDividerHeight(dividerHeightPx: Int) {
+        linkagePickerHelper.setDividerHeight(dividerHeightPx)
     }
 
-    override fun setDividerHeight(dividerHeight: Float, isDp: Boolean) {
-        linkagePickerHelper.setDividerHeight(dividerHeight, isDp)
+    override fun setDividerHeight(dividerHeightDp: Float) {
+        linkagePickerHelper.setDividerHeight(dividerHeightDp)
     }
 
     override fun setDividerType(@WheelView.DividerType dividerType: Int) {
         linkagePickerHelper.setDividerType(dividerType)
     }
 
-    override fun setDividerPadding(padding: Float) {
-        linkagePickerHelper.setDividerPadding(padding)
+    override fun setDividerPadding(paddingPx: Int) {
+        linkagePickerHelper.setDividerPadding(paddingPx)
     }
 
-    override fun setDividerPadding(padding: Float, isDp: Boolean) {
-        linkagePickerHelper.setDividerPadding(padding, isDp)
+    override fun setDividerPadding(paddingDp: Float) {
+        linkagePickerHelper.setDividerPadding(paddingDp)
     }
 
     override fun setDividerCap(cap: Paint.Cap) {
         linkagePickerHelper.setDividerCap(cap)
     }
 
-    override fun setDividerOffsetY(offsetY: Float) {
-        linkagePickerHelper.setDividerOffsetY(offsetY)
+    override fun setDividerOffsetY(offsetYPx: Int) {
+        linkagePickerHelper.setDividerOffsetY(offsetYPx)
     }
 
-    override fun setDividerOffsetY(offsetY: Float, isDp: Boolean) {
-        linkagePickerHelper.setDividerOffsetY(offsetY, isDp)
+    override fun setDividerOffsetY(offsetYDp: Float) {
+        linkagePickerHelper.setDividerOffsetY(offsetYDp)
     }
 
     override fun setShowCurtain(showCurtain: Boolean) {
@@ -269,5 +269,69 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
 
     override fun setCanOverRangeScroll(canOverRange: Boolean) {
         linkagePickerHelper.setCanOverRangeScroll(canOverRange)
+    }
+
+    override fun setLeftText(text: CharSequence) {
+        linkagePickerHelper.setLeftText(text)
+    }
+
+    override fun setRightText(text: CharSequence) {
+        linkagePickerHelper.setRightText(text)
+    }
+
+    override fun setLeftTextSize(textSizePx: Int) {
+        linkagePickerHelper.setLeftTextSize(textSizePx)
+    }
+
+    override fun setLeftTextSize(textSizeSp: Float) {
+        linkagePickerHelper.setLeftTextSize(textSizeSp)
+    }
+
+    override fun setRightTextSize(textSizePx: Int) {
+        linkagePickerHelper.setRightTextSize(textSizePx)
+    }
+
+    override fun setRightTextSize(textSizeSp: Float) {
+        linkagePickerHelper.setRightTextSize(textSizeSp)
+    }
+
+    override fun setLeftTextColor(@ColorInt color: Int) {
+        linkagePickerHelper.setLeftTextColor(color)
+    }
+
+    override fun setLeftTextColorRes(@ColorRes colorRes: Int) {
+        linkagePickerHelper.setLeftTextColorRes(colorRes)
+    }
+
+    override fun setRightTextColor(@ColorInt color: Int) {
+        linkagePickerHelper.setRightTextColor(color)
+    }
+
+    override fun setRightTextColorRes(@ColorRes colorRes: Int) {
+        linkagePickerHelper.setRightTextColorRes(colorRes)
+    }
+
+    override fun setLeftTextMarginRight(marginRightPx: Int) {
+        linkagePickerHelper.setLeftTextMarginRight(marginRightPx)
+    }
+
+    override fun setLeftTextMarginRight(marginRightDp: Float) {
+        linkagePickerHelper.setLeftTextMarginRight(marginRightDp)
+    }
+
+    override fun setRightTextMarginLeft(marginLeftPx: Int) {
+        linkagePickerHelper.setRightTextMarginLeft(marginLeftPx)
+    }
+
+    override fun setRightTextMarginLeft(marginLeftDp: Float) {
+        linkagePickerHelper.setRightTextMarginLeft(marginLeftDp)
+    }
+
+    override fun setLeftTextGravity(gravity: Int) {
+        linkagePickerHelper.setLeftTextGravity(gravity)
+    }
+
+    override fun setRightTextGravity(gravity: Int) {
+        linkagePickerHelper.setRightTextGravity(gravity)
     }
 }

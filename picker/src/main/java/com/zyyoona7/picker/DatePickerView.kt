@@ -55,7 +55,7 @@ class DatePickerView @JvmOverloads constructor(context: Context,
 
         setLabelTextSize(DEFAULT_TEXT_SIZE)
         setLabelTextColor(DEFAULT_TEXT_COLOR)
-        setTextSize(DEFAULT_TEXT_SIZE, true)
+        setTextSize(DEFAULT_TEXT_SIZE)
     }
 
     fun setShowLabelText(isShow: Boolean) {
@@ -149,36 +149,36 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setVisibleItems(visibleItems)
     }
 
-    override fun setLineSpacing(lineSpacing: Float) {
-        datePickerHelper.setLineSpacing(lineSpacing)
+    override fun setLineSpacing(lineSpacingPx: Int) {
+        datePickerHelper.setLineSpacing(lineSpacingPx)
     }
 
-    override fun setLineSpacing(lineSpacing: Float, isDp: Boolean) {
-        datePickerHelper.setLineSpacing(lineSpacing, isDp)
+    override fun setLineSpacing(lineSpacingDp: Float) {
+        datePickerHelper.setLineSpacing(lineSpacingDp)
     }
 
     override fun setCyclic(isCyclic: Boolean) {
         datePickerHelper.setCyclic(isCyclic)
     }
 
-    override fun setTextSize(textSize: Float) {
-        datePickerHelper.setTextSize(textSize)
+    override fun setTextSize(textSizePx: Int) {
+        datePickerHelper.setTextSize(textSizePx)
     }
 
-    override fun setTextSize(textSize: Float, isSp: Boolean) {
-        datePickerHelper.setTextSize(textSize, isSp)
+    override fun setTextSize(textSizeSp: Float) {
+        datePickerHelper.setTextSize(textSizeSp)
     }
 
     override fun setAutoFitTextSize(autoFit: Boolean) {
         datePickerHelper.setAutoFitTextSize(autoFit)
     }
 
-    override fun setMinTextSize(minTextSize: Float) {
-        datePickerHelper.setMinTextSize(minTextSize)
+    override fun setMinTextSize(minTextSizePx: Int) {
+        datePickerHelper.setMinTextSize(minTextSizePx)
     }
 
-    override fun setMinTextSize(minTextSize: Float, isSp: Boolean) {
-        datePickerHelper.setMinTextSize(minTextSize, isSp)
+    override fun setMinTextSize(minTextSizeSp: Float) {
+        datePickerHelper.setMinTextSize(minTextSizeSp)
     }
 
     override fun setTextAlign(@WheelView.TextAlign textAlign: Int) {
@@ -201,28 +201,28 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setSelectedTextColorRes(textColorRes)
     }
 
-    override fun setTextMargins(margin: Float) {
-        datePickerHelper.setTextMargins(margin)
+    override fun setTextPadding(paddingPx: Int) {
+        datePickerHelper.setTextPadding(paddingPx)
     }
 
-    override fun setTextMargins(margin: Float, isDp: Boolean) {
-        datePickerHelper.setTextMargins(margin, isDp)
+    override fun setTextPadding(paddingDp: Float) {
+        datePickerHelper.setTextPadding(paddingDp)
     }
 
-    override fun setTextMarginLeft(marginLeft: Float) {
-        datePickerHelper.setTextMarginLeft(marginLeft)
+    override fun setTextPaddingLeft(textPaddingLeftPx: Int) {
+        datePickerHelper.setTextPaddingLeft(textPaddingLeftPx)
     }
 
-    override fun setTextMarginLeft(marginLeft: Float, isDp: Boolean) {
-        datePickerHelper.setTextMarginLeft(marginLeft, isDp)
+    override fun setTextPaddingLeft(textPaddingLeftDp: Float) {
+        datePickerHelper.setTextPaddingLeft(textPaddingLeftDp)
     }
 
-    override fun setTextMarginRight(marginRight: Float) {
-        datePickerHelper.setTextMarginRight(marginRight)
+    override fun setTextPaddingRight(textPaddingRightPx: Int) {
+        datePickerHelper.setTextPaddingRight(textPaddingRightPx)
     }
 
-    override fun setTextMarginRight(marginRight: Float, isDp: Boolean) {
-        datePickerHelper.setTextMarginRight(marginRight, isDp)
+    override fun setTextPaddingRight(textPaddingRightDp: Float) {
+        datePickerHelper.setTextPaddingRight(textPaddingRightDp)
     }
 
     override fun setTypeface(typeface: Typeface) {
@@ -245,36 +245,36 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setDividerColorRes(dividerColorRes)
     }
 
-    override fun setDividerHeight(dividerHeight: Float) {
-        datePickerHelper.setDividerHeight(dividerHeight)
+    override fun setDividerHeight(dividerHeightPx: Int) {
+        datePickerHelper.setDividerHeight(dividerHeightPx)
     }
 
-    override fun setDividerHeight(dividerHeight: Float, isDp: Boolean) {
-        datePickerHelper.setDividerHeight(dividerHeight, isDp)
+    override fun setDividerHeight(dividerHeightDp: Float) {
+        datePickerHelper.setDividerHeight(dividerHeightDp)
     }
 
     override fun setDividerType(dividerType: Int) {
         datePickerHelper.setDividerType(dividerType)
     }
 
-    override fun setDividerPadding(padding: Float) {
-        datePickerHelper.setDividerPadding(padding)
+    override fun setDividerPadding(paddingPx: Int) {
+        datePickerHelper.setDividerPadding(paddingPx)
     }
 
-    override fun setDividerPadding(padding: Float, isDp: Boolean) {
-        datePickerHelper.setDividerPadding(padding, isDp)
+    override fun setDividerPadding(paddingDp: Float) {
+        datePickerHelper.setDividerPadding(paddingDp)
     }
 
     override fun setDividerCap(cap: Paint.Cap) {
         datePickerHelper.setDividerCap(cap)
     }
 
-    override fun setDividerOffsetY(offsetY: Float) {
-        datePickerHelper.setDividerOffsetY(offsetY)
+    override fun setDividerOffsetY(offsetYPx: Int) {
+        datePickerHelper.setDividerOffsetY(offsetYPx)
     }
 
-    override fun setDividerOffsetY(offsetY: Float, isDp: Boolean) {
-        datePickerHelper.setDividerOffsetY(offsetY, isDp)
+    override fun setDividerOffsetY(offsetYDp: Float) {
+        datePickerHelper.setDividerOffsetY(offsetYDp)
     }
 
     override fun setShowCurtain(showCurtain: Boolean) {
@@ -323,5 +323,69 @@ class DatePickerView @JvmOverloads constructor(context: Context,
 
     override fun setCanOverRangeScroll(canOverRange: Boolean) {
         datePickerHelper.setCanOverRangeScroll(canOverRange)
+    }
+
+    override fun setLeftText(text: CharSequence) {
+        datePickerHelper.setLeftText(text)
+    }
+
+    override fun setRightText(text: CharSequence) {
+        datePickerHelper.setRightText(text)
+    }
+
+    override fun setLeftTextSize(textSizePx: Int) {
+        datePickerHelper.setLeftTextSize(textSizePx)
+    }
+
+    override fun setLeftTextSize(textSizeSp: Float) {
+        datePickerHelper.setLeftTextSize(textSizeSp)
+    }
+
+    override fun setRightTextSize(textSizePx: Int) {
+        datePickerHelper.setRightTextSize(textSizePx)
+    }
+
+    override fun setRightTextSize(textSizeSp: Float) {
+        datePickerHelper.setRightTextSize(textSizeSp)
+    }
+
+    override fun setLeftTextColor(@ColorInt color: Int) {
+        datePickerHelper.setLeftTextColor(color)
+    }
+
+    override fun setLeftTextColorRes(@ColorRes colorRes: Int) {
+        datePickerHelper.setLeftTextColorRes(colorRes)
+    }
+
+    override fun setRightTextColor(@ColorInt color: Int) {
+        datePickerHelper.setRightTextColor(color)
+    }
+
+    override fun setRightTextColorRes(@ColorRes colorRes: Int) {
+        datePickerHelper.setRightTextColorRes(colorRes)
+    }
+
+    override fun setLeftTextMarginRight(marginRightPx: Int) {
+        datePickerHelper.setLeftTextMarginRight(marginRightPx)
+    }
+
+    override fun setLeftTextMarginRight(marginRightDp: Float) {
+        datePickerHelper.setLeftTextMarginRight(marginRightDp)
+    }
+
+    override fun setRightTextMarginLeft(marginLeftPx: Int) {
+        datePickerHelper.setRightTextMarginLeft(marginLeftPx)
+    }
+
+    override fun setRightTextMarginLeft(marginLeftDp: Float) {
+        datePickerHelper.setRightTextMarginLeft(marginLeftDp)
+    }
+
+    override fun setLeftTextGravity(gravity: Int) {
+        datePickerHelper.setLeftTextGravity(gravity)
+    }
+
+    override fun setRightTextGravity(gravity: Int) {
+        datePickerHelper.setRightTextGravity(gravity)
     }
 }

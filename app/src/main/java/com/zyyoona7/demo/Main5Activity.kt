@@ -202,8 +202,8 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
     }
 
     private fun initDefaultWheelAttrs() {
-        binding.wheelview.setTextSize(18f, true)
-        binding.wheelview.setLineSpacing(10f, true)
+        binding.wheelview.setTextSize(18f)
+        binding.wheelview.setLineSpacing(10f)
         binding.wheelview.setSoundResource(R.raw.button_choose)
         binding.wheelview.getAdapter()?.getSelectedItem<Int>()
         binding.wheelview.curtainColor = Color.WHITE
@@ -302,15 +302,18 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         }
         when (seekBar.id) {
             R.id.sb_visible_items -> binding.wheelview.visibleItems = progress
-            R.id.sb_line_spacing -> binding.wheelview.lineSpacing = progress.toFloat()
+            R.id.sb_line_spacing -> binding.wheelview.lineSpacing = progress
             R.id.sb_sound_volume -> binding.wheelview.setSoundVolume(progress / 100f)
-            R.id.sb_text_size -> binding.wheelview.textSize = progress.toFloat()
-            R.id.sb_text_boundary_margin -> binding.wheelview.textPaddingLeft = progress.toFloat()
+            R.id.sb_text_size -> binding.wheelview.textSize = progress
+            R.id.sb_text_boundary_margin -> {
+                binding.wheelview.textPaddingLeft=progress
+                binding.wheelview.textPaddingRight=progress
+            }
             R.id.sb_curved_arc_factor -> binding.wheelview.curvedArcDirectionFactor = progress / 100f
             R.id.sb_refract -> binding.wheelview.refractRatio = progress / 100f
-            R.id.sb_divider_height -> binding.wheelview.dividerHeight = progress.toFloat()
-            R.id.sb_divider_padding -> binding.wheelview.dividerPadding = progress.toFloat()
-            R.id.sb_divider_offset -> binding.wheelview.dividerOffsetY = progress.toFloat()
+            R.id.sb_divider_height -> binding.wheelview.dividerHeight = progress
+            R.id.sb_divider_padding -> binding.wheelview.dividerPadding = progress
+            R.id.sb_divider_offset -> binding.wheelview.dividerOffsetY = progress
         }
     }
 
