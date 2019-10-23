@@ -242,7 +242,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.btnNormalColor.setBackgroundColor(wheelView.normalTextColor)
 
         binding.sbTextBoundaryMargin.max = 150
-        binding.sbTextBoundaryMargin.progress = wheelView.textMarginLeft.toInt()
+        binding.sbTextBoundaryMargin.progress = wheelView.textPaddingLeft.toInt()
 
         binding.cbBoldSelected.isChecked = wheelView.isBoldForSelectedItem()
 
@@ -305,7 +305,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
             R.id.sb_line_spacing -> binding.wheelview.lineSpacing = progress.toFloat()
             R.id.sb_sound_volume -> binding.wheelview.setSoundVolume(progress / 100f)
             R.id.sb_text_size -> binding.wheelview.textSize = progress.toFloat()
-            R.id.sb_text_boundary_margin -> binding.wheelview.textMarginLeft = progress.toFloat()
+            R.id.sb_text_boundary_margin -> binding.wheelview.textPaddingLeft = progress.toFloat()
             R.id.sb_curved_arc_factor -> binding.wheelview.curvedArcDirectionFactor = progress / 100f
             R.id.sb_refract -> binding.wheelview.refractRatio = progress / 100f
             R.id.sb_divider_height -> binding.wheelview.dividerHeight = progress.toFloat()

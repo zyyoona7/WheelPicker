@@ -14,9 +14,9 @@
             <enum name="right" value="2" />
         </attr>
         <!--文本距离padding的外边距-->
-        <attr name="wv_textMargins" format="dimension" />
-        <attr name="wv_textMarginLeft" format="dimension" />
-        <attr name="wv_textMarginRight" format="dimension" />
+        <attr name="wv_textPadding" format="dimension" />
+        <attr name="wv_textPaddingLeft" format="dimension" />
+        <attr name="wv_textPaddingRight" format="dimension" />
         <!--未选中文字颜色-->
         <attr name="wv_normalTextColor" format="color" />
         <!--被选中的文字颜色-->

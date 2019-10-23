@@ -158,7 +158,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
     //文本左边距离paddingLeft的空隙，
     //类似于 paddingLeft 但是 paddingLeft 会影响 divider 和 curtain 绘制的起始位置，
     //这个属性只会影响 文本绘制时的起始位置
-    var textMarginLeft: Float = 0f
+    var textPaddingLeft: Float = 0f
         set(value) {
             if (value == field) {
                 return
@@ -169,7 +169,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
     //文本右边距离 paddingRight 的空隙，
     //类似于 paddingRight 但是 paddingRight 会影响 divider 和 curtain 绘制的起始位置，
     //这个属性只会影响 文本绘制时的起始位置
-    var textMarginRight: Float = 0f
+    var textPaddingRight: Float = 0f
         set(value) {
             if (value == field) {
                 return
@@ -424,7 +424,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         private const val TAG = "WheelView"
         private val DEFAULT_LINE_SPACING = dp2px(2f)
         private val DEFAULT_TEXT_SIZE = sp2px(15f)
-        private val DEFAULT_TEXT_BOUNDARY_MARGIN = dp2px(2f)
+        private val DEFAULT_TEXT_PADDING = dp2px(2f)
         private val DEFAULT_DIVIDER_HEIGHT = dp2px(1f)
         private const val DEFAULT_NORMAL_TEXT_COLOR = Color.DKGRAY
         private const val DEFAULT_SELECTED_TEXT_COLOR = Color.BLACK
@@ -504,18 +504,18 @@ open class WheelView @JvmOverloads constructor(context: Context,
         isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelView_wv_autoFitTextSize, false)
         minTextSize = typedArray.getDimension(R.styleable.WheelView_wv_minTextSize, sp2px(6f))
         textAlign = typedArray.getInt(R.styleable.WheelView_wv_textAlign, TEXT_ALIGN_CENTER)
-        val textMargins = typedArray.getDimension(R.styleable.WheelView_wv_textMargins,
-                DEFAULT_TEXT_BOUNDARY_MARGIN)
-        val textMarginLeft = typedArray.getDimension(R.styleable.WheelView_wv_textMarginLeft,
-                DEFAULT_TEXT_BOUNDARY_MARGIN)
-        val textMarginRight = typedArray.getDimension(R.styleable.WheelView_wv_textMarginRight,
-                DEFAULT_TEXT_BOUNDARY_MARGIN)
+        val textPadding = typedArray.getDimension(R.styleable.WheelView_wv_textPadding,
+                DEFAULT_TEXT_PADDING)
+        val textPaddingLeft = typedArray.getDimension(R.styleable.WheelView_wv_textPaddingLeft,
+                DEFAULT_TEXT_PADDING)
+        val textPaddingRight = typedArray.getDimension(R.styleable.WheelView_wv_textPaddingRight,
+                DEFAULT_TEXT_PADDING)
 
-        if (textMargins > 0) {
-            setTextMargins(textMargins, false)
+        if (textPadding > 0) {
+            setTextPadding(textPadding, false)
         } else {
-            this.textMarginLeft = textMarginLeft
-            this.textMarginRight = textMarginRight
+            this.textPaddingLeft = textPaddingLeft
+            this.textPaddingRight = textPaddingRight
         }
         normalTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalTextColor, DEFAULT_NORMAL_TEXT_COLOR)
         selectedTextColor = typedArray.getColor(R.styleable.WheelView_wv_selectedTextColor, DEFAULT_SELECTED_TEXT_COLOR)
@@ -535,7 +535,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         dividerType = typedArray.getInt(R.styleable.WheelView_wv_dividerType, DIVIDER_TYPE_FILL)
         dividerHeight = typedArray.getDimension(R.styleable.WheelView_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT)
         dividerColor = typedArray.getColor(R.styleable.WheelView_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR)
-        dividerPadding = typedArray.getDimension(R.styleable.WheelView_wv_dividerPadding, DEFAULT_TEXT_BOUNDARY_MARGIN)
+        dividerPadding = typedArray.getDimension(R.styleable.WheelView_wv_dividerPadding, DEFAULT_TEXT_PADDING)
 
         dividerOffsetY = typedArray.getDimensionPixelOffset(R.styleable.WheelView_wv_dividerOffsetY, 0).toFloat()
 
@@ -617,7 +617,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
             itemHeight * visibleItems + paddingTop + paddingBottom
         }
         var width = (maxTextWidth.toFloat() + paddingLeft.toFloat()
-                + paddingRight.toFloat() + textMarginLeft + textMarginRight).toInt()
+                + paddingRight.toFloat() + textPaddingLeft + textPaddingRight).toInt()
         if (isCurved) {
             val towardRange = (sin(Math.PI / 48) * height).toInt()
             width += towardRange
@@ -626,7 +626,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         val realWidth = resolveSizeAndState(width, widthMeasureSpec, 0)
         if (width > realWidth) {
             //测量的宽度比实际宽度要大，重新设置 maxTextWidth
-            maxTextWidth = (realWidth - textMarginLeft - textMarginRight - paddingLeft - paddingRight).toInt()
+            maxTextWidth = (realWidth - textPaddingLeft - textPaddingRight - paddingLeft - paddingRight).toInt()
         }
         //根据最大文字宽度，如果设置了自适应字体大小 则重新测量一次每个item对应的文字大小
         if (isAutoFitTextSize) {
@@ -747,8 +747,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     private fun calculateDrawStart() {
         startX = when (textAlign) {
-            TEXT_ALIGN_LEFT -> (paddingLeft + textMarginLeft).toInt()
-            TEXT_ALIGN_RIGHT -> (width.toFloat() - paddingRight.toFloat() - textMarginRight).toInt()
+            TEXT_ALIGN_LEFT -> (paddingLeft + textPaddingLeft).toInt()
+            TEXT_ALIGN_RIGHT -> (width.toFloat() - paddingRight.toFloat() - textPaddingRight).toInt()
             TEXT_ALIGN_CENTER -> width / 2
             else -> width / 2
         }
@@ -1751,24 +1751,24 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /**
      * 设置文本距离左右padding的距离
      */
-    fun setTextMargins(textMargins: Float, isDp: Boolean) {
-        val margins = if (isDp) dp2px(textMargins) else textMargins
-        this.textMarginLeft = margins
-        this.textMarginRight = margins
+    fun setTextPadding(textMargins: Float, isDp: Boolean) {
+        val padding = if (isDp) dp2px(textMargins) else textMargins
+        this.textPaddingLeft = padding
+        this.textPaddingRight = padding
     }
 
     /**
      * 设置文本左边距距离 paddingLeft 的距离
      */
-    fun setTextMarginLeft(textMarginLeft: Float, isDp: Boolean) {
-        this.textMarginLeft = if (isDp) dp2px(textMarginLeft) else textMarginLeft
+    fun setTextPaddingLeft(textMarginLeft: Float, isDp: Boolean) {
+        this.textPaddingLeft = if (isDp) dp2px(textMarginLeft) else textMarginLeft
     }
 
     /**
      * 设置文本右边距距离 paddingRight 的距离
      */
-    fun setTextMarginRight(textMarginRight: Float, isDp: Boolean) {
-        this.textMarginRight = if (isDp) dp2px(textMarginRight) else textMarginRight
+    fun setTextPaddingRight(textMarginRight: Float, isDp: Boolean) {
+        this.textPaddingRight = if (isDp) dp2px(textMarginRight) else textMarginRight
     }
 
     /**

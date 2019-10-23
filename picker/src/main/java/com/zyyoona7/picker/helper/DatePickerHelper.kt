@@ -286,42 +286,42 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
     }
 
     override fun setTextMargins(margin: Float) {
-        wheelYearView?.textMarginLeft = margin
-        wheelMonthView?.textMarginLeft = margin
-        wheelDayView?.textMarginLeft = margin
-        wheelYearView?.textMarginRight=margin
-        wheelMonthView?.textMarginRight=margin
-        wheelDayView?.textMarginRight=margin
+        wheelYearView?.textPaddingLeft = margin
+        wheelMonthView?.textPaddingLeft = margin
+        wheelDayView?.textPaddingLeft = margin
+        wheelYearView?.textPaddingRight=margin
+        wheelMonthView?.textPaddingRight=margin
+        wheelDayView?.textPaddingRight=margin
     }
 
     override fun setTextMargins(margin: Float, isDp: Boolean) {
-        wheelYearView?.setTextMargins(margin, isDp)
-        wheelMonthView?.setTextMargins(margin, isDp)
-        wheelDayView?.setTextMargins(margin, isDp)
+        wheelYearView?.setTextPadding(margin, isDp)
+        wheelMonthView?.setTextPadding(margin, isDp)
+        wheelDayView?.setTextPadding(margin, isDp)
     }
 
     override fun setTextMarginLeft(marginLeft: Float) {
-        wheelYearView?.textMarginLeft=marginLeft
-        wheelMonthView?.textMarginLeft=marginLeft
-        wheelDayView?.textMarginLeft=marginLeft
+        wheelYearView?.textPaddingLeft=marginLeft
+        wheelMonthView?.textPaddingLeft=marginLeft
+        wheelDayView?.textPaddingLeft=marginLeft
     }
 
     override fun setTextMarginLeft(marginLeft: Float, isDp: Boolean) {
-        wheelYearView?.setTextMarginLeft(marginLeft,isDp)
-        wheelMonthView?.setTextMarginLeft(marginLeft,isDp)
-        wheelDayView?.setTextMarginLeft(marginLeft,isDp)
+        wheelYearView?.setTextPaddingLeft(marginLeft,isDp)
+        wheelMonthView?.setTextPaddingLeft(marginLeft,isDp)
+        wheelDayView?.setTextPaddingLeft(marginLeft,isDp)
     }
 
     override fun setTextMarginRight(marginRight: Float) {
-        wheelYearView?.textMarginRight=marginRight
-        wheelMonthView?.textMarginRight=marginRight
-        wheelDayView?.textMarginRight=marginRight
+        wheelYearView?.textPaddingRight=marginRight
+        wheelMonthView?.textPaddingRight=marginRight
+        wheelDayView?.textPaddingRight=marginRight
     }
 
     override fun setTextMarginRight(marginRight: Float, isDp: Boolean) {
-        wheelYearView?.setTextMarginRight(marginRight,isDp)
-        wheelMonthView?.setTextMarginRight(marginRight,isDp)
-        wheelDayView?.setTextMarginRight(marginRight,isDp)
+        wheelYearView?.setTextPaddingRight(marginRight,isDp)
+        wheelMonthView?.setTextPaddingRight(marginRight,isDp)
+        wheelDayView?.setTextPaddingRight(marginRight,isDp)
     }
 
     override fun setTypeface(typeface: Typeface) {

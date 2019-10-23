@@ -251,42 +251,42 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
     }
 
     override fun setTextMargins(margin: Float) {
-        wheelView1?.textMarginLeft = margin
-        wheelView2?.textMarginLeft = margin
-        wheelView3?.textMarginLeft = margin
-        wheelView1?.textMarginRight = margin
-        wheelView2?.textMarginRight = margin
-        wheelView3?.textMarginRight = margin
+        wheelView1?.textPaddingLeft = margin
+        wheelView2?.textPaddingLeft = margin
+        wheelView3?.textPaddingLeft = margin
+        wheelView1?.textPaddingRight = margin
+        wheelView2?.textPaddingRight = margin
+        wheelView3?.textPaddingRight = margin
     }
 
     override fun setTextMargins(margin: Float, isDp: Boolean) {
-        wheelView1?.setTextMargins(margin, isDp)
-        wheelView2?.setTextMargins(margin, isDp)
-        wheelView3?.setTextMargins(margin, isDp)
+        wheelView1?.setTextPadding(margin, isDp)
+        wheelView2?.setTextPadding(margin, isDp)
+        wheelView3?.setTextPadding(margin, isDp)
     }
 
     override fun setTextMarginLeft(marginLeft: Float) {
-        wheelView1?.textMarginLeft = marginLeft
-        wheelView2?.textMarginLeft = marginLeft
-        wheelView3?.textMarginLeft = marginLeft
+        wheelView1?.textPaddingLeft = marginLeft
+        wheelView2?.textPaddingLeft = marginLeft
+        wheelView3?.textPaddingLeft = marginLeft
     }
 
     override fun setTextMarginLeft(marginLeft: Float, isDp: Boolean) {
-        wheelView1?.setTextMarginLeft(marginLeft, isDp)
-        wheelView2?.setTextMarginLeft(marginLeft, isDp)
-        wheelView3?.setTextMarginLeft(marginLeft, isDp)
+        wheelView1?.setTextPaddingLeft(marginLeft, isDp)
+        wheelView2?.setTextPaddingLeft(marginLeft, isDp)
+        wheelView3?.setTextPaddingLeft(marginLeft, isDp)
     }
 
     override fun setTextMarginRight(marginRight: Float) {
-        wheelView1?.textMarginRight = marginRight
-        wheelView2?.textMarginRight = marginRight
-        wheelView3?.textMarginRight = marginRight
+        wheelView1?.textPaddingRight = marginRight
+        wheelView2?.textPaddingRight = marginRight
+        wheelView3?.textPaddingRight = marginRight
     }
 
     override fun setTextMarginRight(marginRight: Float, isDp: Boolean) {
-        wheelView1?.setTextMarginRight(marginRight, isDp)
-        wheelView2?.setTextMarginRight(marginRight, isDp)
-        wheelView3?.setTextMarginRight(marginRight, isDp)
+        wheelView1?.setTextPaddingRight(marginRight, isDp)
+        wheelView2?.setTextPaddingRight(marginRight, isDp)
+        wheelView3?.setTextPaddingRight(marginRight, isDp)
     }
 
     override fun setTypeface(typeface: Typeface) {
