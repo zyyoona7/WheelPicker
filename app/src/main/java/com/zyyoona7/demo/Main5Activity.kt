@@ -3,7 +3,9 @@ package com.zyyoona7.demo
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
+import android.os.Handler
 import android.widget.SeekBar
+import android.widget.Toast
 import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.jaygoo.widget.OnRangeChangedListener
@@ -199,6 +201,12 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.wheelview.setData(daysList)
         binding.wheelview.setTextFormatter(IntTextFormatter("%d日"))
         binding.wheelview.setSelectedPosition(currentDay)
+        binding.wheelview.leftText="左"
+        binding.wheelview.rightText="右"
+
+        Handler().postDelayed({
+            Toast.makeText(this,"选中${binding.wheelview.getSelectedItem<Int>()?:-1}",Toast.LENGTH_LONG).show()
+        },1000)
     }
 
     private fun initDefaultWheelAttrs() {

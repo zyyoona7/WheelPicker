@@ -30,7 +30,7 @@
 
         <com.zyyoona7.wheel.WheelView
             android:id="@+id/wheelview"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
