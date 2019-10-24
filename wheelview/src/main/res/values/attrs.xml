@@ -17,11 +17,7 @@
         <attr name="wv_textPadding" format="dimension" />
         <attr name="wv_textPaddingLeft" format="dimension" />
         <attr name="wv_textPaddingRight" format="dimension" />
-        <attr name="wv_gravity" format="enum">
-            <enum name="center" value="0" />
-            <enum name="start" value="1" />
-            <enum name="end" value="2" />
-        </attr>
+        <attr name="android:gravity" />
         <!--左右附加文本相关-->
         <attr name="wv_leftText" format="string" />
         <attr name="wv_rightText" format="string" />

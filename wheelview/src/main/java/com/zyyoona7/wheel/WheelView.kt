@@ -642,12 +642,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         val rightTextGravity = typedArray.getInt(R.styleable.WheelView_wv_rightTextGravity, 0)
         this.leftTextGravity = getGravity(leftTextGravity)
         this.rightTextGravity = getGravity(rightTextGravity)
-        val textGravity = typedArray.getInt(R.styleable.WheelView_wv_gravity, 0)
-        this.gravity = when (textGravity) {
-            1 -> Gravity.START
-            2 -> Gravity.END
-            else -> Gravity.CENTER
-        }
+        gravity = typedArray.getInt(R.styleable.WheelView_android_gravity, Gravity.CENTER)
 
         normalTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalTextColor, DEFAULT_NORMAL_TEXT_COLOR)
         selectedTextColor = typedArray.getColor(R.styleable.WheelView_wv_selectedTextColor, DEFAULT_SELECTED_TEXT_COLOR)
