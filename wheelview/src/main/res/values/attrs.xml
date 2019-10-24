@@ -17,25 +17,29 @@
         <attr name="wv_textPadding" format="dimension" />
         <attr name="wv_textPaddingLeft" format="dimension" />
         <attr name="wv_textPaddingRight" format="dimension" />
-
+        <attr name="wv_gravity" format="enum">
+            <enum name="center" value="0" />
+            <enum name="start" value="1" />
+            <enum name="end" value="2" />
+        </attr>
         <!--左右附加文本相关-->
-        <attr name="wv_leftText" format="string"/>
-        <attr name="wv_rightText" format="string"/>
-        <attr name="wv_leftTextSize" format="dimension"/>
-        <attr name="wv_rightTextSize" format="dimension"/>
-        <attr name="wv_leftTextMarginRight" format="dimension"/>
-        <attr name="wv_rightTextMarginLeft" format="dimension"/>
-        <attr name="wv_leftTextColor" format="color"/>
-        <attr name="wv_rightTextColor" format="color"/>
+        <attr name="wv_leftText" format="string" />
+        <attr name="wv_rightText" format="string" />
+        <attr name="wv_leftTextSize" format="dimension" />
+        <attr name="wv_rightTextSize" format="dimension" />
+        <attr name="wv_leftTextMarginRight" format="dimension" />
+        <attr name="wv_rightTextMarginLeft" format="dimension" />
+        <attr name="wv_leftTextColor" format="color" />
+        <attr name="wv_rightTextColor" format="color" />
         <attr name="wv_leftTextGravity" format="enum">
-            <enum name="center" value="0"/>
-            <enum name="top" value="1"/>
-            <enum name="bottom" value="2"/>
+            <enum name="center" value="0" />
+            <enum name="top" value="1" />
+            <enum name="bottom" value="2" />
         </attr>
         <attr name="wv_rightTextGravity" format="enum">
-            <enum name="center" value="0"/>
-            <enum name="top" value="1"/>
-            <enum name="bottom" value="2"/>
+            <enum name="center" value="0" />
+            <enum name="top" value="1" />
+            <enum name="bottom" value="2" />
         </attr>
         <!--左右附加文本相关-->
 

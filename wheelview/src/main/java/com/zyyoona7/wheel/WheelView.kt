@@ -111,6 +111,15 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /*
       ---------- 文字相关 ----------
      */
+    var gravity: Int = 0
+        set(value) {
+            if (value == field) {
+                return
+            }
+            field = value
+            calculateTextRect()
+            invalidate()
+        }
     //字体大小
     var textSize: Int = 0
         set(value) {
@@ -261,6 +270,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
             }
         }
     //分割线填充类型
+    @DividerType
     var dividerType: Int = 0
         set(@DividerType value) {
             if (value == field) {
@@ -632,6 +642,12 @@ open class WheelView @JvmOverloads constructor(context: Context,
         val rightTextGravity = typedArray.getInt(R.styleable.WheelView_wv_rightTextGravity, 0)
         this.leftTextGravity = getGravity(leftTextGravity)
         this.rightTextGravity = getGravity(rightTextGravity)
+        val textGravity = typedArray.getInt(R.styleable.WheelView_wv_gravity, 0)
+        this.gravity = when (textGravity) {
+            1 -> Gravity.START
+            2 -> Gravity.END
+            else -> Gravity.CENTER
+        }
 
         normalTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalTextColor, DEFAULT_NORMAL_TEXT_COLOR)
         selectedTextColor = typedArray.getColor(R.styleable.WheelView_wv_selectedTextColor, DEFAULT_SELECTED_TEXT_COLOR)
@@ -782,7 +798,6 @@ open class WheelView @JvmOverloads constructor(context: Context,
 
         calculateTopAndBottomLimit()
         calculateTextRect()
-        calculateDrawStart()
         calculateLimitY()
         calculateScrollOffsetY()
         //修正滚动边界
@@ -894,13 +909,21 @@ open class WheelView @JvmOverloads constructor(context: Context,
 
     private fun calculateTextRect() {
         val centerY = measuredHeight / 2
-        val mainLeft = paddingLeft + textPaddingLeft + leftTextWidth + leftTextMarginRight + curvedArcWidth / 2
+        val mainLeft = when (gravity) {
+            Gravity.START, Gravity.LEFT -> paddingLeft + textPaddingLeft + leftTextWidth +
+                    leftTextMarginRight + curvedArcWidth / 2
+            Gravity.END, Gravity.RIGHT -> measuredWidth - paddingRight - rightTextMarginLeft -
+                    rightTextWidth - curvedArcWidth / 2 - mainTextMaxWidth
+            else -> measuredWidth / 2 - mainTextMaxWidth / 2
+        }
         val mainTop = centerY - mainTextHeight / 2
         mainTextRect.set(mainLeft, mainTop,
                 mainLeft + mainTextMaxWidth, mainTop + mainTextHeight)
 
         calculateLeftTextRect()
         calculateRightTextRect()
+
+        calculateDrawStart()
     }
 
     private fun calculateLeftTextRect() {
