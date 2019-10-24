@@ -550,8 +550,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
         const val DEFAULT_CURVED_FACTOR = 0.75f
 
         //分割线填充类型
-        const val DIVIDER_TYPE_FILL = 0
-        const val DIVIDER_TYPE_WRAP = 1
+        const val DIVIDER_FILL = 0
+        const val DIVIDER_WRAP = 1
+        //自适应延伸到左右额外文字处
+        const val DIVIDER_WRAP_ALL = 2
 
         /**
          * dp转换px
@@ -646,7 +648,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         isCyclic = typedArray.getBoolean(R.styleable.WheelView_wv_cyclic, false)
 
         isShowDivider = typedArray.getBoolean(R.styleable.WheelView_wv_showDivider, false)
-        dividerType = typedArray.getInt(R.styleable.WheelView_wv_dividerType, DIVIDER_TYPE_FILL)
+        dividerType = typedArray.getInt(R.styleable.WheelView_wv_dividerType, DIVIDER_FILL)
         dividerHeight = typedArray.getDimensionPixelSize(R.styleable.WheelView_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT)
         dividerColor = typedArray.getColor(R.styleable.WheelView_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR)
         dividerPadding = typedArray.getDimensionPixelSize(R.styleable.WheelView_wv_dividerPadding, DEFAULT_TEXT_PADDING)
@@ -767,7 +769,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         val realHeight = resolveSizeAndState(height, heightMeasureSpec, 0)
         setMeasuredDimension(realWidth, realHeight)
 
-        centerY=measuredHeight/2
+        centerY = measuredHeight / 2
         clipLeft = paddingLeft
         clipTop = paddingTop
         clipRight = measuredWidth - paddingRight
@@ -1073,23 +1075,32 @@ open class WheelView @JvmOverloads constructor(context: Context,
         normalPaint.strokeJoin = Paint.Join.ROUND
         normalPaint.strokeCap = dividerCap
         normalPaint.strokeWidth = dividerHeight.toFloat()
-        if (dividerType == DIVIDER_TYPE_FILL) {
-            canvas.drawLine(clipLeft.toFloat(), selectedItemTopLimit.toFloat(),
-                    clipRight.toFloat(), selectedItemTopLimit.toFloat(), normalPaint)
-            canvas.drawLine(clipLeft.toFloat(), selectedItemBottomLimit.toFloat(),
-                    clipRight.toFloat(), selectedItemBottomLimit.toFloat(), normalPaint)
-        } else {
-            val startX = mainTextRect.left - dividerPadding
-            val stopX = mainTextRect.right + dividerPadding
-
-            //边界处理 超过边界直接按照DIVIDER_TYPE_FILL类型处理
-            val wrapStartX = if (startX < clipLeft) clipLeft else startX
-            val wrapStopX = if (stopX > clipRight) clipRight else stopX
-            canvas.drawLine(wrapStartX.toFloat(), selectedItemTopLimit.toFloat(),
-                    wrapStopX.toFloat(), selectedItemTopLimit.toFloat(), normalPaint)
-            canvas.drawLine(wrapStartX.toFloat(), selectedItemBottomLimit.toFloat(),
-                    wrapStopX.toFloat(), selectedItemBottomLimit.toFloat(), normalPaint)
+        val startX: Float
+        val stopX: Float
+        when (dividerType) {
+            DIVIDER_WRAP -> {
+                val wStartX = mainTextRect.left - dividerPadding
+                val wStopX = mainTextRect.right + dividerPadding
+                //边界处理 超过边界直接按照DIVIDER_TYPE_FILL类型处理
+                startX = if (wStartX < clipLeft) clipLeft.toFloat() else wStartX.toFloat()
+                stopX = if (wStopX > clipRight) clipRight.toFloat() else wStopX.toFloat()
+            }
+            DIVIDER_WRAP_ALL -> {
+                val aStartX = mainTextRect.left - leftTextWidth - leftTextMarginRight - dividerPadding
+                val aStopX = mainTextRect.right + rightTextWidth + rightTextMarginLeft + dividerPadding
+                //边界处理 超过边界直接按照DIVIDER_TYPE_FILL类型处理
+                startX = if (aStartX < clipLeft) clipLeft.toFloat() else aStartX.toFloat()
+                stopX = if (aStopX > clipRight) clipRight.toFloat() else aStopX.toFloat()
+            }
+            else -> {
+                startX = clipLeft.toFloat()
+                stopX = clipRight.toFloat()
+            }
         }
+        canvas.drawLine(startX, selectedItemTopLimit.toFloat(),
+                stopX, selectedItemTopLimit.toFloat(), normalPaint)
+        canvas.drawLine(startX, selectedItemBottomLimit.toFloat(),
+                stopX, selectedItemBottomLimit.toFloat(), normalPaint)
         normalPaint.strokeWidth = originStrokeWidth
     }
 
@@ -1386,7 +1397,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
 
         // 调节中心点
         //根据弯曲（3d）对齐方式设置系数
-        val textCenterX=mainTextRect.centerX()
+        val textCenterX = mainTextRect.centerX()
         val centerX: Float = when (curvedArcDirection) {
             CURVED_ARC_DIRECTION_LEFT -> textCenterX * (1 + curvedArcDirectionFactor)
             CURVED_ARC_DIRECTION_RIGHT -> textCenterX * (1 - curvedArcDirectionFactor)
@@ -2038,7 +2049,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
     }
 
     /**
-     * 设置分割线类型为 [DIVIDER_TYPE_WRAP] 时，分割线与文字的左右内边距
+     * 设置分割线类型为 [DIVIDER_WRAP] 时，分割线与文字的左右内边距
      */
     fun setDividerPadding(dividerPaddingDp: Float) {
         this.dividerPadding = dp2px(dividerPaddingDp)
@@ -2350,7 +2361,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
      *
      * [dividerType]
      */
-    @IntDef(DIVIDER_TYPE_FILL, DIVIDER_TYPE_WRAP)
+    @IntDef(DIVIDER_FILL, DIVIDER_WRAP, DIVIDER_WRAP_ALL)
     @Retention(AnnotationRetention.SOURCE)
     annotation class DividerType
 

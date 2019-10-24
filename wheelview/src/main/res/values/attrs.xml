@@ -63,6 +63,7 @@
         <attr name="wv_dividerType" format="enum">
             <enum name="fill" value="0" />
             <enum name="wrap" value="1" />
+            <enum name="wrap_all" value="2" />
         </attr>
         <!--分割线颜色-->
         <attr name="wv_dividerColor" format="color" />

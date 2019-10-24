@@ -98,8 +98,8 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
 
         binding.rgDividerType.setOnCheckedChangeListener { _, checkedId ->
             binding.wheelview.dividerType = when (checkedId) {
-                R.id.rb_divider_fill -> WheelView.DIVIDER_TYPE_FILL
-                else -> WheelView.DIVIDER_TYPE_WRAP
+                R.id.rb_divider_fill -> WheelView.DIVIDER_FILL
+                else -> WheelView.DIVIDER_WRAP
             }
         }
 
@@ -270,7 +270,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.sbDividerHeight.progress = wheelView.dividerHeight.toInt()
         binding.btnDividerColor.setBackgroundColor(wheelView.dividerColor)
         when (wheelView.dividerType) {
-            WheelView.DIVIDER_TYPE_FILL -> binding.rbDividerFill.isChecked = true
+            WheelView.DIVIDER_FILL -> binding.rbDividerFill.isChecked = true
             else -> binding.rbDividerWrap.isChecked = true
         }
         binding.sbDividerPadding.max = 60
