@@ -37,6 +37,10 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
 
     override fun initListeners(savedInstanceState: Bundle?) {
 
+        binding.btnTimePicker.setOnClickListener {
+            TimePickerActivity.start(this)
+        }
+
         binding.btnDatePicker.setOnClickListener {
             DatePickerActivity.start(this)
         }

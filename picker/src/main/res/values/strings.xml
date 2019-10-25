@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Picker</string>
-    <string name="date_picker_view_year">年</string>
-    <string name="date_picker_view_month">月</string>
-    <string name="date_picker_view_day">日</string>
+    <string name="time_picker_am">上午</string>
+    <string name="time_picker_pm">下午</string>
 </resources>

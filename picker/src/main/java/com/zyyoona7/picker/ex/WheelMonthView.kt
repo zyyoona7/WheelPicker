@@ -11,16 +11,12 @@ class WheelMonthView @JvmOverloads constructor(context: Context,
                                                defStyleAttr: Int = 0)
     : WheelView(context, attrs, defStyleAttr), IndexOfAction<Int> {
 
-    private var selectedMonth: Int = 1
-    private var minSelectedMonth: Int = -1
-    private var maxSelectedMonth: Int = -1
-
     init {
         attrs?.let {
-            val typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelMonthView)
-            selectedMonth = typedArray.getInt(R.styleable.WheelMonthView_wv_selectedMonth, 1)
-            minSelectedMonth = typedArray.getInt(R.styleable.WheelYearView_wv_minSelectedYear, -1)
-            maxSelectedMonth = typedArray.getInt(R.styleable.WheelMonthView_wv_maxSelectedMonth, -1)
+            val typedArray = context.obtainStyledAttributes(it, R.styleable.WheelMonthView)
+            val selectedMonth = typedArray.getInt(R.styleable.WheelMonthView_wv_selectedMonth, 1)
+            val minSelectedMonth = typedArray.getInt(R.styleable.WheelYearView_wv_minSelectedYear, -1)
+            val maxSelectedMonth = typedArray.getInt(R.styleable.WheelMonthView_wv_maxSelectedMonth, -1)
             typedArray.recycle()
             val selectedPosition = indexOf(selectedMonth)
             val maxSelectedPosition = indexOf(maxSelectedMonth)

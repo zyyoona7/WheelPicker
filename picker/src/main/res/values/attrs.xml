@@ -21,4 +21,23 @@
         <attr name="wv_minSelectedDay" format="integer" />
         <attr name="wv_maxSelectedDay" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="WheelHourView">
+        <attr name="wv_is24Hour" format="boolean" />
+        <attr name="wv_selectedHour" format="integer" />
+        <attr name="wv_minSelectedHour" format="integer" />
+        <attr name="wv_maxSelectedHour" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="WheelMinuteView">
+        <attr name="wv_selectedMinute" format="integer" />
+        <attr name="wv_minSelectedMinute" format="integer" />
+        <attr name="wv_maxSelectedMinute" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="WheelSecondView">
+        <attr name="wv_selectedSecond" format="integer" />
+        <attr name="wv_minSelectedSecond" format="integer" />
+        <attr name="wv_maxSelectedSecond" format="integer" />
+    </declare-styleable>
 </resources>

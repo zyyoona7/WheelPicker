@@ -32,19 +32,16 @@ class WheelDayView @JvmOverloads constructor(context: Context,
             field = min(12, max(0, value))
             updateDayData()
         }
-    private var selectedDay = 1
-    private var minSelectedDay: Int = -1
-    private var maxSelectedDay: Int = -1
     private val daysArray: SparseArray<List<Int>> by lazy { SparseArray<List<Int>>() }
 
     init {
         attrs?.let {
-            val typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelDayView)
+            val typedArray = context.obtainStyledAttributes(it, R.styleable.WheelDayView)
             year = typedArray.getInt(R.styleable.WheelDayView_wv_year, 2019)
             month = typedArray.getInt(R.styleable.WheelDayView_wv_month, 1)
-            selectedDay = typedArray.getInt(R.styleable.WheelDayView_wv_selectedDay, 1)
-            minSelectedDay = typedArray.getInt(R.styleable.WheelDayView_wv_minSelectedDay, -1)
-            maxSelectedDay = typedArray.getInt(R.styleable.WheelDayView_wv_maxSelectedDay, -1)
+            val selectedDay = typedArray.getInt(R.styleable.WheelDayView_wv_selectedDay, 1)
+            val minSelectedDay = typedArray.getInt(R.styleable.WheelDayView_wv_minSelectedDay, -1)
+            val maxSelectedDay = typedArray.getInt(R.styleable.WheelDayView_wv_maxSelectedDay, -1)
             typedArray.recycle()
 
             val selectedPosition = indexOf(selectedDay)

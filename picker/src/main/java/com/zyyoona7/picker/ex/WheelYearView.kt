@@ -13,18 +13,15 @@ class WheelYearView @JvmOverloads constructor(context: Context,
 
     private var startYear = 1970
     private var endYear = 2100
-    private var selectedYear = 2000
-    private var maxSelectedYear = -1
-    private var minSelectedYear = -1
 
     init {
         attrs?.let {
-            val typedArray = context.obtainStyledAttributes(attrs, R.styleable.WheelYearView)
+            val typedArray = context.obtainStyledAttributes(it, R.styleable.WheelYearView)
             startYear = typedArray.getInt(R.styleable.WheelYearView_wv_startYear, 2000)
             endYear = typedArray.getInt(R.styleable.WheelYearView_wv_endYear, 2100)
-            selectedYear = typedArray.getInt(R.styleable.WheelYearView_wv_selectedYear, 2000)
-            maxSelectedYear = typedArray.getInt(R.styleable.WheelYearView_wv_maxSelectedYear, -1)
-            minSelectedYear = typedArray.getInt(R.styleable.WheelYearView_wv_minSelectedYear, -1)
+            val selectedYear = typedArray.getInt(R.styleable.WheelYearView_wv_selectedYear, 2000)
+            val maxSelectedYear = typedArray.getInt(R.styleable.WheelYearView_wv_maxSelectedYear, -1)
+            val minSelectedYear = typedArray.getInt(R.styleable.WheelYearView_wv_minSelectedYear, -1)
             typedArray.recycle()
 
             val selectedPosition = indexOf(selectedYear)

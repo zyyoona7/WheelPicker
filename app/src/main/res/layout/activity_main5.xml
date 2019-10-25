@@ -14,9 +14,17 @@
         tools:context="com.zyyoona7.demo.Main5Activity">
 
         <Button
+            android:id="@+id/btn_time_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBgBtnGray"
+            android:text="Time Picker" />
+
+        <Button
             android:id="@+id/btn_date_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:background="@color/colorBgBtnGray"
             android:text="Date Picker" />
 
