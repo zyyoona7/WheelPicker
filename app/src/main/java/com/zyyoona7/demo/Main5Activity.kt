@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
 import android.os.Handler
-import android.view.Gravity
 import android.widget.SeekBar
 import android.widget.Toast
 import com.flask.colorpicker.ColorPickerView
@@ -204,9 +203,10 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.wheelview.setSelectedPosition(currentDay)
 
         Handler().postDelayed({
-            Toast.makeText(this,"选中${binding.wheelview.getSelectedItem<Int>()?:-1}",
+            Toast.makeText(this, "选中${binding.wheelview.getSelectedItem<Int>() ?: -1}",
                     Toast.LENGTH_LONG).show()
-        },1000)
+        }, 1000)
+
     }
 
     private fun initDefaultWheelAttrs() {
@@ -314,8 +314,8 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
             R.id.sb_sound_volume -> binding.wheelview.setSoundVolume(progress / 100f)
             R.id.sb_text_size -> binding.wheelview.textSize = progress
             R.id.sb_text_boundary_margin -> {
-                binding.wheelview.textPaddingLeft=progress
-                binding.wheelview.textPaddingRight=progress
+                binding.wheelview.textPaddingLeft = progress
+                binding.wheelview.textPaddingRight = progress
             }
             R.id.sb_curved_arc_factor -> binding.wheelview.curvedArcDirectionFactor = progress / 100f
             R.id.sb_refract -> binding.wheelview.refractRatio = progress / 100f

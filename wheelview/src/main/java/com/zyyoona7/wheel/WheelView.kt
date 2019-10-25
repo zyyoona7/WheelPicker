@@ -751,9 +751,15 @@ open class WheelView @JvmOverloads constructor(context: Context,
         } else {
             itemHeight * visibleItems + paddingTop + paddingBottom
         }
-        val extraLeftTextWidth = leftTextWidth + leftTextMarginRight
-        val extraRightTextWidth = rightTextWidth + rightTextMarginLeft
-        var width: Int = mainTextMaxWidth + extraLeftTextWidth + extraRightTextWidth +
+        val leftTextExtraWidth = if (leftText.isEmpty()) 0 else leftTextWidth + leftTextMarginRight
+        val rightTextExtraWidth = if (rightText.isEmpty()) 0 else rightTextWidth + rightTextMarginLeft
+        //默认主体文字是居中的，所以如果左右有额外文字的话需要保证主体文字居中，宽度计算需要根据左右文字较大的一个*2
+        val leftAndRightExtraWidth = if (isDefaultGravity()) {
+            max(leftTextExtraWidth, rightTextExtraWidth) * 2
+        } else {
+            leftTextExtraWidth + rightTextExtraWidth
+        }
+        var width: Int = mainTextMaxWidth + leftAndRightExtraWidth +
                 textPaddingLeft + textPaddingRight + paddingLeft + paddingRight
         //根据偏移计算偏移造成的额外宽度
         if (isCurved && (curvedArcDirection == CURVED_ARC_DIRECTION_LEFT
@@ -772,8 +778,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         if (width > realWidth) {
             //测量的宽度比实际宽度要大，重新设置 mainTextMaxWidth
             mainTextMaxWidth = realWidth - textPaddingLeft - textPaddingRight -
-                    leftTextWidth - leftTextMarginRight - rightTextWidth - rightTextMarginLeft -
-                    paddingLeft - paddingRight
+                    leftAndRightExtraWidth - paddingLeft - paddingRight
             //最大宽度变了，则标记一下
             isDataSetChanged = true
         }
@@ -869,6 +874,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private fun calculateLeftTextWidth() {
         if (leftText.isEmpty()) {
             leftTextWidth = 0
+            leftTextHeight = 0
             return
         }
         leftTextPaint.textSize = leftTextSize.toFloat()
@@ -879,6 +885,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private fun calculateRightTextWidth() {
         if (rightText.isEmpty()) {
             rightTextWidth = 0
+            rightTextHeight = 0
             return
         }
         rightTextPaint.textSize = rightTextSize.toFloat()
@@ -904,11 +911,16 @@ open class WheelView @JvmOverloads constructor(context: Context,
 
     private fun calculateTextRect() {
         val centerY = measuredHeight / 2
+        val leftTextExtraWidth = if (leftText.isEmpty()) 0 else leftTextWidth + leftTextMarginRight
+        val rightTextExtraWidth = if (rightText.isEmpty()) 0 else rightTextWidth + rightTextMarginLeft
+
         val mainLeft = when (gravity) {
-            Gravity.START, Gravity.LEFT -> paddingLeft + textPaddingLeft + leftTextWidth +
-                    leftTextMarginRight + curvedArcWidth / 2
-            Gravity.END, Gravity.RIGHT -> measuredWidth - paddingRight - rightTextMarginLeft -
-                    rightTextWidth - curvedArcWidth / 2 - mainTextMaxWidth
+            Gravity.START, Gravity.LEFT -> paddingLeft + textPaddingLeft +
+                    leftTextExtraWidth + curvedArcWidth / 2
+            Gravity.END, Gravity.RIGHT -> measuredWidth - paddingRight -
+                    rightTextExtraWidth - curvedArcWidth / 2 - mainTextMaxWidth
+            Gravity.CENTER_HORIZONTAL -> (measuredWidth - leftTextExtraWidth -
+                    mainTextMaxWidth - rightTextExtraWidth) / 2 + leftTextExtraWidth
             else -> measuredWidth / 2 - mainTextMaxWidth / 2
         }
         val mainTop = centerY - mainTextHeight / 2
@@ -922,6 +934,9 @@ open class WheelView @JvmOverloads constructor(context: Context,
     }
 
     private fun calculateLeftTextRect() {
+        if (leftText.isEmpty()) {
+            return
+        }
         val leftTextLeft = mainTextRect.left - leftTextMarginRight - leftTextWidth
         val leftTextTop = when (leftTextGravity) {
             Gravity.TOP -> mainTextRect.top
@@ -933,6 +948,9 @@ open class WheelView @JvmOverloads constructor(context: Context,
     }
 
     private fun calculateRightTextRect() {
+        if (rightText.isEmpty()) {
+            return
+        }
         val rightTextLeft = mainTextRect.left + mainTextMaxWidth + rightTextMarginLeft
         val rightTextTop = when (rightTextGravity) {
             Gravity.TOP -> mainTextRect.top
@@ -941,6 +959,11 @@ open class WheelView @JvmOverloads constructor(context: Context,
         }
         rightTextRect.set(rightTextLeft, rightTextTop,
                 rightTextLeft + rightTextWidth, rightTextTop + rightTextHeight)
+    }
+
+    private fun isDefaultGravity(): Boolean {
+        return gravity != Gravity.LEFT && gravity != Gravity.START && gravity != Gravity.RIGHT
+                && gravity != Gravity.END && gravity != Gravity.CENTER_HORIZONTAL
     }
 
     /**
