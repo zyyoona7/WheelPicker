@@ -480,10 +480,22 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelDayView?.leftText = text
     }
 
+    override fun setLeftText(yearLeft: CharSequence, monthLeft: CharSequence, dayLeft: CharSequence) {
+        wheelYearView?.leftText = yearLeft
+        wheelMonthView?.leftText = monthLeft
+        wheelDayView?.leftText = dayLeft
+    }
+
     override fun setRightText(text: CharSequence) {
         wheelYearView?.rightText = text
         wheelMonthView?.rightText = text
         wheelDayView?.rightText = text
+    }
+
+    override fun setRightText(yearRight: CharSequence, monthRight: CharSequence, dayRight: CharSequence) {
+        wheelYearView?.rightText = yearRight
+        wheelMonthView?.rightText = monthRight
+        wheelDayView?.rightText = dayRight
     }
 
     override fun setLeftTextSize(textSizePx: Int) {

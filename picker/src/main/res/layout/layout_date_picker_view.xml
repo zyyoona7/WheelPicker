@@ -9,56 +9,15 @@
     <com.zyyoona7.picker.ex.WheelYearView
         android:id="@+id/wv_year"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/date_picker_view_margins"
-        android:layout_marginLeft="@dimen/date_picker_view_margins" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_year"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/date_picker_view_margins"
-        android:layout_marginLeft="@dimen/date_picker_view_margins"
-        android:layout_marginEnd="@dimen/date_picker_view_margins"
-        android:layout_marginRight="@dimen/date_picker_view_margins"
-        android:text="@string/date_picker_view_year"
-        tools:textSize="20sp" />
+        android:layout_height="wrap_content"/>
 
     <com.zyyoona7.picker.ex.WheelMonthView
         android:id="@+id/wv_month"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_month"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/date_picker_view_margins"
-        android:layout_marginLeft="@dimen/date_picker_view_margins"
-        android:layout_marginEnd="@dimen/date_picker_view_margins"
-        android:layout_marginRight="@dimen/date_picker_view_margins"
-        android:text="@string/date_picker_view_month"
-        tools:textSize="20sp" />
+        android:layout_height="wrap_content"/>
 
     <com.zyyoona7.picker.ex.WheelDayView
         android:id="@+id/wv_day"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginEnd="@dimen/date_picker_view_margins"
-        android:layout_marginRight="@dimen/date_picker_view_margins" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_day"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginEnd="@dimen/date_picker_view_margins"
-        android:layout_marginRight="@dimen/date_picker_view_margins"
-        android:text="@string/date_picker_view_day"
-        tools:textSize="20sp" />
+        android:layout_height="wrap_content"/>
 </merge>

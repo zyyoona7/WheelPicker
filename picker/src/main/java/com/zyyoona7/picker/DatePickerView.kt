@@ -7,7 +7,6 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.RawRes
@@ -34,47 +33,19 @@ class DatePickerView @JvmOverloads constructor(context: Context,
     : LinearLayout(context, attrs, defStyleAttr), DatePicker, WheelPicker {
 
     private val datePickerHelper: DatePickerHelper
-    val yearTextView: TextView
-    val monthTextView: TextView
-    val dayTextView: TextView
 
     companion object {
-        private const val DEFAULT_TEXT_SIZE = 16f
-        private const val DEFAULT_TEXT_COLOR = Color.BLACK
+        private const val DEFAULT_TEXT_SIZE = 18f
     }
 
     init {
         View.inflate(context, R.layout.layout_date_picker_view, this)
-        yearTextView = findViewById(R.id.tv_year)
-        monthTextView = findViewById(R.id.tv_month)
-        dayTextView = findViewById(R.id.tv_day)
         val wheelYearView = findViewById<WheelYearView>(R.id.wv_year)
         val wheelMonthView = findViewById<WheelMonthView>(R.id.wv_month)
         val wheelDayView = findViewById<WheelDayView>(R.id.wv_day)
         datePickerHelper = DatePickerHelper(wheelYearView, wheelMonthView, wheelDayView)
 
-        setLabelTextSize(DEFAULT_TEXT_SIZE)
-        setLabelTextColor(DEFAULT_TEXT_COLOR)
         setTextSize(DEFAULT_TEXT_SIZE)
-    }
-
-    fun setShowLabelText(isShow: Boolean) {
-        val visibility: Int = if (isShow) View.VISIBLE else View.GONE
-        yearTextView.visibility = visibility
-        monthTextView.visibility = visibility
-        dayTextView.visibility = visibility
-    }
-
-    fun setLabelTextColor(@ColorInt textColor: Int) {
-        yearTextView.setTextColor(textColor)
-        monthTextView.setTextColor(textColor)
-        dayTextView.setTextColor(textColor)
-    }
-
-    fun setLabelTextSize(textSize: Float) {
-        yearTextView.textSize = textSize
-        monthTextView.textSize = textSize
-        dayTextView.textSize = textSize
     }
 
     override fun setYearTextFormatter(textFormatter: IntTextFormatter) {
@@ -329,8 +300,16 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setLeftText(text)
     }
 
+    override fun setLeftText(yearLeft: CharSequence, monthLeft: CharSequence, dayLeft: CharSequence) {
+        datePickerHelper.setLeftText(yearLeft, monthLeft, dayLeft)
+    }
+
     override fun setRightText(text: CharSequence) {
         datePickerHelper.setRightText(text)
+    }
+
+    override fun setRightText(yearRight: CharSequence, monthRight: CharSequence, dayRight: CharSequence) {
+        datePickerHelper.setRightText(yearRight,monthRight, dayRight)
     }
 
     override fun setLeftTextSize(textSizePx: Int) {

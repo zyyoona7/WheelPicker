@@ -3,6 +3,7 @@ package com.zyyoona7.demo
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import com.zyyoona7.demo.activity.BaseActivity
 import com.zyyoona7.demo.databinding.ActivityDatePickerBinding
 import com.zyyoona7.wheel.WheelView
@@ -23,23 +24,19 @@ class DatePickerActivity : BaseActivity<ActivityDatePickerBinding>() {
         return R.layout.activity_date_picker
     }
 
-    var dateStr="哈喽哈喽哈喽halo"
-
     override fun initVariables(savedInstanceState: Bundle?) {
         binding.wheelYear.setTextFormatter(IntTextFormatter("公元%d年"))
         binding.wheelMonth.setTextFormatter(IntTextFormatter("%d月"))
         binding.wheelDay.setTextFormatter(IntTextFormatter("%d日"))
 
-        binding.wheelview.setData(arrayListOf(dateStr))
+        binding.datePicker.setRightText("年","月","日")
+        binding.datePicker.setRightTextMarginLeft(10f)
     }
 
     override fun initListeners(savedInstanceState: Bundle?) {
         binding.wheelYear.setOnItemSelectedListener(object : OnItemSelectedListener {
             override fun onItemSelected(wheelView: WheelView, adapter: ArrayWheelAdapter<*>, position: Int) {
                 binding.wheelDay.year = adapter.getSelectedItem<Int>() ?: 2019
-
-                dateStr+="哈喽"
-                binding.wheelview.setData(arrayListOf(dateStr))
             }
         })
         binding.wheelMonth.setOnItemSelectedListener(object : OnItemSelectedListener {

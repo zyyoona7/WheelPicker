@@ -33,6 +33,10 @@ interface DatePicker {
 
     fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar)
 
+    fun setLeftText(yearLeft:CharSequence,monthLeft:CharSequence,dayLeft:CharSequence)
+
+    fun setRightText(yearRight:CharSequence,monthRight:CharSequence,dayRight:CharSequence)
+
     fun getSelectedDate(): Date
 
     /**
