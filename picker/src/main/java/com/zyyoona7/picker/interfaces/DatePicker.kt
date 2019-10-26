@@ -25,24 +25,30 @@ interface DatePicker {
 
     fun setOnScrollChangedListener(listener: OnScrollChangedListener?)
 
+    fun setYearRange(startYear: Int, endYear: Int)
+
     fun setSelectedDate(date: Date)
 
     fun setSelectedDate(year: Int, month: Int, day: Int)
+
+    fun setMaxSelectedDate(maxDate: Date)
+
+    fun setMaxSelectedDate(maxCalendar: Calendar)
 
     fun setDateRange(minDate: Date, maxDate: Date)
 
     fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar)
 
-    fun setLeftText(yearLeft:CharSequence,monthLeft:CharSequence,dayLeft:CharSequence)
+    fun setLeftText(yearLeft: CharSequence, monthLeft: CharSequence, dayLeft: CharSequence)
 
-    fun setRightText(yearRight:CharSequence,monthRight:CharSequence,dayRight:CharSequence)
+    fun setRightText(yearRight: CharSequence, monthRight: CharSequence, dayRight: CharSequence)
 
     fun getSelectedDate(): Date
 
     /**
      * 选中日期字符串类型 yyyy-M-d
      */
-    fun getSelectedDateStr():String
+    fun getSelectedDateStr(): String
 
     fun getSelectedYear(): Int
 

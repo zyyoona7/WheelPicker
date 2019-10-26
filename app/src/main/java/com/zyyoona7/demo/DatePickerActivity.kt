@@ -3,13 +3,13 @@ package com.zyyoona7.demo
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import com.zyyoona7.demo.activity.BaseActivity
 import com.zyyoona7.demo.databinding.ActivityDatePickerBinding
 import com.zyyoona7.wheel.WheelView
 import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
 import com.zyyoona7.wheel.formatter.IntTextFormatter
 import com.zyyoona7.wheel.listener.OnItemSelectedListener
+import java.util.*
 
 class DatePickerActivity : BaseActivity<ActivityDatePickerBinding>() {
 
@@ -29,8 +29,10 @@ class DatePickerActivity : BaseActivity<ActivityDatePickerBinding>() {
         binding.wheelMonth.setTextFormatter(IntTextFormatter("%d月"))
         binding.wheelDay.setTextFormatter(IntTextFormatter("%d日"))
 
-        binding.datePicker.setRightText("年","月","日")
-        binding.datePicker.setRightTextMarginLeft(10f)
+        binding.datePicker1.setRightText("年","月","日")
+        binding.datePicker2.setRightTextMarginLeft(10f)
+
+        binding.datePicker5.setMaxSelectedDate(Calendar.getInstance())
     }
 
     override fun initListeners(savedInstanceState: Bundle?) {

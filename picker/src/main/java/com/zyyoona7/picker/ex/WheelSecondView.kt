@@ -19,8 +19,8 @@ class WheelSecondView @JvmOverloads constructor(context: Context,
 
             initSelectedPositionAndRange(indexOf(selectedSecond),
                     indexOf(minSelectedSecond), indexOf(maxSelectedSecond))
-            updateData()
         }
+        updateData()
     }
 
     @JvmOverloads

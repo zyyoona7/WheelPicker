@@ -34,6 +34,10 @@ class WheelDayView @JvmOverloads constructor(context: Context,
         }
     private val daysArray: SparseArray<List<Int>> by lazy { SparseArray<List<Int>>() }
 
+    companion object {
+        const val MIN_DAY = 1
+    }
+
     init {
         attrs?.let {
             val typedArray = context.obtainStyledAttributes(it, R.styleable.WheelDayView)
@@ -49,20 +53,20 @@ class WheelDayView @JvmOverloads constructor(context: Context,
             val minSelectedPosition = indexOf(minSelectedDay)
             initSelectedPositionAndRange(selectedPosition, minSelectedPosition, maxSelectedPosition)
 
-            updateDayData()
         }
+        updateDayData()
     }
 
     override fun indexOf(item: Int): Int {
         val days = getDaysByCalendar()
-        return if (item in 1..days) {
+        return if (item in MIN_DAY..days) {
             item - 1
         } else {
             -1
         }
     }
 
-    override fun getItem(index: Int): Int? {
+    override fun getItem(index: Int): Int {
         return if (index in 0 until getItemCount()) {
             index + 1
         } else {
@@ -91,7 +95,7 @@ class WheelDayView @JvmOverloads constructor(context: Context,
 
     private fun generateDays(days: Int): List<Int> {
         val daysList = mutableListOf<Int>()
-        for (i in 1..days) {
+        for (i in MIN_DAY..days) {
             daysList.add(i)
         }
         daysArray.put(days, daysList)
@@ -130,7 +134,11 @@ class WheelDayView @JvmOverloads constructor(context: Context,
     }
 
     @JvmOverloads
-    fun setSelectedDayRange(min: Int = 1, max: Int) {
+    fun setSelectedDayRange(min: Int = MIN_DAY, max: Int) {
         setSelectedRange(indexOf(min), indexOf(max))
+    }
+
+    fun getMaxDay(): Int {
+        return getItem(getItemCount() - 1)
     }
 }

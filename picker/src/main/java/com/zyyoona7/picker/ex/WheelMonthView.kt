@@ -11,6 +11,11 @@ class WheelMonthView @JvmOverloads constructor(context: Context,
                                                defStyleAttr: Int = 0)
     : WheelView(context, attrs, defStyleAttr), IndexOfAction<Int> {
 
+    companion object {
+        const val MIN_MONTH = 1
+        const val MAX_MONTH = 12
+    }
+
     init {
         attrs?.let {
             val typedArray = context.obtainStyledAttributes(it, R.styleable.WheelMonthView)
@@ -22,20 +27,19 @@ class WheelMonthView @JvmOverloads constructor(context: Context,
             val maxSelectedPosition = indexOf(maxSelectedMonth)
             val minSelectedPosition = indexOf(minSelectedMonth)
             initSelectedPositionAndRange(selectedPosition, minSelectedPosition, maxSelectedPosition)
-
-            updateMonthData()
         }
+        updateMonthData()
     }
 
     override fun indexOf(item: Int): Int {
-        return if (item in 1..12) {
+        return if (item in MIN_MONTH..MAX_MONTH) {
             item - 1
         } else {
             -1
         }
     }
 
-    override fun getItem(index: Int): Int? {
+    override fun getItem(index: Int): Int {
         if (index !in 0 until getItemCount()) {
             return -1
         }
@@ -44,7 +48,7 @@ class WheelMonthView @JvmOverloads constructor(context: Context,
 
     private fun updateMonthData() {
         val data = mutableListOf<Int>()
-        for (i in 1..12) {
+        for (i in MIN_MONTH..MAX_MONTH) {
             data.add(i)
         }
         setData(data)
@@ -57,7 +61,7 @@ class WheelMonthView @JvmOverloads constructor(context: Context,
     }
 
     @JvmOverloads
-    fun setSelectedMonthRange(minMonth: Int = 1, maxMonth: Int) {
+    fun setSelectedMonthRange(minMonth: Int = MIN_MONTH, maxMonth: Int) {
         setSelectedRange(indexOf(minMonth), indexOf(maxMonth))
     }
 }

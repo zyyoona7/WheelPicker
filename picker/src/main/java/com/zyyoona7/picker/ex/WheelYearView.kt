@@ -17,9 +17,9 @@ class WheelYearView @JvmOverloads constructor(context: Context,
     init {
         attrs?.let {
             val typedArray = context.obtainStyledAttributes(it, R.styleable.WheelYearView)
-            startYear = typedArray.getInt(R.styleable.WheelYearView_wv_startYear, 2000)
+            startYear = typedArray.getInt(R.styleable.WheelYearView_wv_startYear, 1970)
             endYear = typedArray.getInt(R.styleable.WheelYearView_wv_endYear, 2100)
-            val selectedYear = typedArray.getInt(R.styleable.WheelYearView_wv_selectedYear, 2000)
+            val selectedYear = typedArray.getInt(R.styleable.WheelYearView_wv_selectedYear, startYear)
             val maxSelectedYear = typedArray.getInt(R.styleable.WheelYearView_wv_maxSelectedYear, -1)
             val minSelectedYear = typedArray.getInt(R.styleable.WheelYearView_wv_minSelectedYear, -1)
             typedArray.recycle()
@@ -29,8 +29,8 @@ class WheelYearView @JvmOverloads constructor(context: Context,
             val minSelectedPosition = indexOf(minSelectedYear)
             initSelectedPositionAndRange(selectedPosition, minSelectedPosition, maxSelectedPosition)
 
-            updateYearData()
         }
+        updateYearData()
     }
 
     override fun indexOf(item: Int): Int {
@@ -60,7 +60,7 @@ class WheelYearView @JvmOverloads constructor(context: Context,
      * 设置年份取值范围
      */
     fun setYearRange(start: Int, end: Int) {
-        require(start >= end) {
+        require(start < end) {
             "endYear must be greater than startYear in WheelYearView."
         }
 

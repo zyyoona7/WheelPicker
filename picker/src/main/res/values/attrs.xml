@@ -40,4 +40,257 @@
         <attr name="wv_minSelectedSecond" format="integer" />
         <attr name="wv_maxSelectedSecond" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="DatePickerView">
+        <attr name="dpv_widthWeightMode" format="boolean"/>
+        <attr name="dpv_yearWeight" format="float"/>
+        <attr name="dpv_monthWeight" format="float"/>
+        <attr name="dpv_dayWeight" format="float"/>
+        <attr name="dpv_startYear" format="integer"/>
+        <attr name="dpv_endYear" format="integer"/>
+        <attr name="dpv_selectedYear" format="integer"/>
+        <attr name="dpv_selectedMonth" format="integer"/>
+        <attr name="dpv_selectedDay" format="integer"/>
+        <attr name="dpv_visibleItems" format="integer"/>
+        <attr name="dpv_lineSpacing" format="dimension"/>
+        <attr name="dpv_cyclic" format="boolean"/>
+        <attr name="dpv_textSize" format="dimension"/>
+        <attr name="dpv_textAlign" format="enum">
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+        <!--文本距离padding的外边距-->
+        <attr name="dpv_textPadding" format="dimension" />
+        <!--左右附加文本相关-->
+        <attr name="dpv_yearLeftText" format="string" />
+        <attr name="dpv_yearRightText" format="string" />
+        <attr name="dpv_monthLeftText" format="string" />
+        <attr name="dpv_monthRightText" format="string" />
+        <attr name="dpv_dayLeftText" format="string" />
+        <attr name="dpv_dayRightText" format="string" />
+        <attr name="dpv_leftTextSize" format="dimension" />
+        <attr name="dpv_rightTextSize" format="dimension" />
+        <attr name="dpv_leftTextMarginRight" format="dimension" />
+        <attr name="dpv_rightTextMarginLeft" format="dimension" />
+        <attr name="dpv_leftTextColor" format="color" />
+        <attr name="dpv_rightTextColor" format="color" />
+        <attr name="dpv_leftTextGravity" format="enum">
+            <enum name="center" value="0" />
+            <enum name="top" value="1" />
+            <enum name="bottom" value="2" />
+        </attr>
+        <attr name="dpv_rightTextGravity" format="enum">
+            <enum name="center" value="0" />
+            <enum name="top" value="1" />
+            <enum name="bottom" value="2" />
+        </attr>
+        <!--左右附加文本相关-->
+
+        <!--未选中文字颜色-->
+        <attr name="dpv_normalTextColor" format="color" />
+        <!--被选中的文字颜色-->
+        <attr name="dpv_selectedTextColor" format="color" />
+
+        <!--是否显示分割线-->
+        <attr name="dpv_showDivider" format="boolean" />
+        <!--分割线类型-->
+        <attr name="dpv_dividerType" format="enum">
+            <enum name="fill" value="0" />
+            <enum name="wrap" value="1" />
+            <enum name="wrap_all" value="2" />
+        </attr>
+        <!--分割线颜色-->
+        <attr name="dpv_dividerColor" format="color" />
+        <!--分割线高度-->
+        <attr name="dpv_dividerHeight" format="dimension" />
+        <!--wrap类型下分割线内边距-->
+        <attr name="dpv_dividerPadding" format="dimension" />
+
+
+        <!--是否是弯曲（3D）效果-->
+        <attr name="dpv_curved" format="boolean" />
+        <!--弯曲（3D）效果左右圆弧偏移效果方向 可向指定方向偏移-->
+        <attr name="dpv_curvedArcDirection" format="enum">
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+        <!--弯曲（3D）效果左右圆弧偏移效果方向系数 偏移系数-->
+        <attr name="dpv_curvedArcDirectionFactor" format="float" />
+        <!--选中后折射的偏移(弯曲（3D）效果和普通效果都适用) 与字体大小的比值，1为不偏移 越小偏移越明显-->
+        <attr name="dpv_refractRatio" format="float" />
+
+        <!--是否绘制选中区域-->
+        <attr name="dpv_showCurtain" format="boolean" />
+        <!--选中区域颜色-->
+        <attr name="dpv_curtainColor" format="color" />
+        <!--选中区域/分割线上下偏移，通过移动分割线上下限制的位置来实现扩大/缩小显示区域-->
+        <attr name="dpv_dividerOffsetY" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="LinkagePickerView">
+        <attr name="lpv_visibleItems" format="integer"/>
+        <attr name="lpv_lineSpacing" format="dimension"/>
+        <attr name="lpv_cyclic" format="boolean"/>
+        <attr name="lpv_textSize" format="dimension"/>
+        <attr name="lpv_textAlign" format="enum">
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+        <!--文本距离padding的外边距-->
+        <attr name="lpv_textPadding" format="dimension" />
+        <!--左右附加文本相关-->
+        <attr name="lpv_linkage1LeftText" format="string" />
+        <attr name="lpv_linkage1RightText" format="string" />
+        <attr name="lpv_linkage2LeftText" format="string" />
+        <attr name="lpv_linkage2RightText" format="string" />
+        <attr name="lpv_linkage3LeftText" format="string" />
+        <attr name="lpv_linkage3RightText" format="string" />
+        <attr name="lpv_leftTextSize" format="dimension" />
+        <attr name="lpv_rightTextSize" format="dimension" />
+        <attr name="lpv_leftTextMarginRight" format="dimension" />
+        <attr name="lpv_rightTextMarginLeft" format="dimension" />
+        <attr name="lpv_leftTextColor" format="color" />
+        <attr name="lpv_rightTextColor" format="color" />
+        <attr name="lpv_leftTextGravity" format="enum">
+            <enum name="center" value="0" />
+            <enum name="top" value="1" />
+            <enum name="bottom" value="2" />
+        </attr>
+        <attr name="lpv_rightTextGravity" format="enum">
+            <enum name="center" value="0" />
+            <enum name="top" value="1" />
+            <enum name="bottom" value="2" />
+        </attr>
+        <!--左右附加文本相关-->
+
+        <!--未选中文字颜色-->
+        <attr name="lpv_normalTextColor" format="color" />
+        <!--被选中的文字颜色-->
+        <attr name="lpv_selectedTextColor" format="color" />
+
+        <!--是否显示分割线-->
+        <attr name="lpv_showDivider" format="boolean" />
+        <!--分割线类型-->
+        <attr name="lpv_dividerType" format="enum">
+            <enum name="fill" value="0" />
+            <enum name="wrap" value="1" />
+            <enum name="wrap_all" value="2" />
+        </attr>
+        <!--分割线颜色-->
+        <attr name="lpv_dividerColor" format="color" />
+        <!--分割线高度-->
+        <attr name="lpv_dividerHeight" format="dimension" />
+        <!--wrap类型下分割线内边距-->
+        <attr name="lpv_dividerPadding" format="dimension" />
+
+
+        <!--是否是弯曲（3D）效果-->
+        <attr name="lpv_curved" format="boolean" />
+        <!--弯曲（3D）效果左右圆弧偏移效果方向 可向指定方向偏移-->
+        <attr name="lpv_curvedArcDirection" format="enum">
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+        <!--弯曲（3D）效果左右圆弧偏移效果方向系数 偏移系数-->
+        <attr name="lpv_curvedArcDirectionFactor" format="float" />
+        <!--选中后折射的偏移(弯曲（3D）效果和普通效果都适用) 与字体大小的比值，1为不偏移 越小偏移越明显-->
+        <attr name="lpv_refractRatio" format="float" />
+
+        <!--是否绘制选中区域-->
+        <attr name="lpv_showCurtain" format="boolean" />
+        <!--选中区域颜色-->
+        <attr name="lpv_curtainColor" format="color" />
+        <!--选中区域/分割线上下偏移，通过移动分割线上下限制的位置来实现扩大/缩小显示区域-->
+        <attr name="lpv_dividerOffsetY" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="TimePickerView">
+        <attr name="tpv_widthWeightMode" format="boolean"/>
+        <attr name="tpv_amPmWeight" format="float"/>
+        <attr name="tpv_hourWeight" format="float"/>
+        <attr name="tpv_minuteWeight" format="float"/>
+        <attr name="tpv_secondWeight" format="float"/>
+        <attr name="tpv_visibleItems" format="integer"/>
+        <attr name="tpv_lineSpacing" format="dimension"/>
+        <attr name="tpv_cyclic" format="boolean"/>
+        <attr name="tpv_textSize" format="dimension"/>
+        <attr name="tpv_textAlign" format="enum">
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+        <!--文本距离padding的外边距-->
+        <attr name="tpv_textPadding" format="dimension" />
+        <!--左右附加文本相关-->
+        <attr name="tpv_amPmLeftText" format="string" />
+        <attr name="tpv_amPmRightText" format="string" />
+        <attr name="tpv_hourLeftText" format="string" />
+        <attr name="tpv_hourRightText" format="string" />
+        <attr name="tpv_minuteLeftText" format="string" />
+        <attr name="tpv_minuteRightText" format="string" />
+        <attr name="tpv_secondLeftText" format="string" />
+        <attr name="tpv_secondRightText" format="string" />
+        <attr name="tpv_leftTextSize" format="dimension" />
+        <attr name="tpv_rightTextSize" format="dimension" />
+        <attr name="tpv_leftTextMarginRight" format="dimension" />
+        <attr name="tpv_rightTextMarginLeft" format="dimension" />
+        <attr name="tpv_leftTextColor" format="color" />
+        <attr name="tpv_rightTextColor" format="color" />
+        <attr name="tpv_leftTextGravity" format="enum">
+            <enum name="center" value="0" />
+            <enum name="top" value="1" />
+            <enum name="bottom" value="2" />
+        </attr>
+        <attr name="tpv_rightTextGravity" format="enum">
+            <enum name="center" value="0" />
+            <enum name="top" value="1" />
+            <enum name="bottom" value="2" />
+        </attr>
+        <!--左右附加文本相关-->
+
+        <!--未选中文字颜色-->
+        <attr name="tpv_normalTextColor" format="color" />
+        <!--被选中的文字颜色-->
+        <attr name="tpv_selectedTextColor" format="color" />
+
+        <!--是否显示分割线-->
+        <attr name="tpv_showDivider" format="boolean" />
+        <!--分割线类型-->
+        <attr name="tpv_dividerType" format="enum">
+            <enum name="fill" value="0" />
+            <enum name="wrap" value="1" />
+            <enum name="wrap_all" value="2" />
+        </attr>
+        <!--分割线颜色-->
+        <attr name="tpv_dividerColor" format="color" />
+        <!--分割线高度-->
+        <attr name="tpv_dividerHeight" format="dimension" />
+        <!--wrap类型下分割线内边距-->
+        <attr name="tpv_dividerPadding" format="dimension" />
+
+
+        <!--是否是弯曲（3D）效果-->
+        <attr name="tpv_curved" format="boolean" />
+        <!--弯曲（3D）效果左右圆弧偏移效果方向 可向指定方向偏移-->
+        <attr name="tpv_curvedArcDirection" format="enum">
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+        <!--弯曲（3D）效果左右圆弧偏移效果方向系数 偏移系数-->
+        <attr name="tpv_curvedArcDirectionFactor" format="float" />
+        <!--选中后折射的偏移(弯曲（3D）效果和普通效果都适用) 与字体大小的比值，1为不偏移 越小偏移越明显-->
+        <attr name="tpv_refractRatio" format="float" />
+
+        <!--是否绘制选中区域-->
+        <attr name="tpv_showCurtain" format="boolean" />
+        <!--选中区域颜色-->
+        <attr name="tpv_curtainColor" format="color" />
+        <!--选中区域/分割线上下偏移，通过移动分割线上下限制的位置来实现扩大/缩小显示区域-->
+        <attr name="tpv_dividerOffsetY" format="dimension" />
+    </declare-styleable>
 </resources>

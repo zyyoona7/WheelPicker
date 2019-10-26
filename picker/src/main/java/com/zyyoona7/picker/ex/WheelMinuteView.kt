@@ -19,8 +19,8 @@ class WheelMinuteView @JvmOverloads constructor(context: Context,
 
             initSelectedPositionAndRange(indexOf(selectedMinute),
                     indexOf(minSelectedMinute), indexOf(maxSelectedMinute))
-            updateData()
         }
+        updateData()
     }
 
     @JvmOverloads

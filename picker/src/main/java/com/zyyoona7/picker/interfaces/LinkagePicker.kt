@@ -29,6 +29,10 @@ interface LinkagePicker {
 
     fun setOnLinkageSelectedListener(listener:OnLinkageSelectedListener?)
 
+    fun setLeftText(linkage1Text:CharSequence,linkage2Text: CharSequence,linkage3Text: CharSequence)
+
+    fun setRightText(linkage1Text:CharSequence,linkage2Text: CharSequence,linkage3Text: CharSequence)
+
     fun getFirstWheelView():WheelView
 
     fun getSecondWheelView():WheelView

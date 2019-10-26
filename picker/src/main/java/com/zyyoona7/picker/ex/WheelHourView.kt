@@ -33,8 +33,8 @@ class WheelHourView @JvmOverloads constructor(context: Context,
             initSelectedPositionAndRange(indexOf(selectedHour),
                     indexOf(minSelectedHour), indexOf(maxSelectedHour))
 
-            updateHourData()
         }
+        updateHourData()
     }
 
     override fun indexOf(item: Int): Int {

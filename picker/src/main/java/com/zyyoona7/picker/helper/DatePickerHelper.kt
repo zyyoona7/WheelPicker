@@ -62,16 +62,31 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
             yearId -> {
                 val selectedYear = wheelYearView?.getItem(position) ?: DEFAULT_YEAR
                 wheelDayView?.year = selectedYear
-                if (selectedYear == minYear || selectedYear == maxYear) {
-                    wheelMonthView?.setSelectedMonthRange(minMonth, maxMonth)
-                    val selectedMonth = getSelectedMonth()
-                    //如果当前选中的月是最小选中的月或者最大选中的月 则限制选择 Day 的范围
-                    if (selectedMonth == minMonth || selectedMonth == maxMonth) {
-                        wheelDayView?.setSelectedDayRange(minDay, maxDay)
+                when (selectedYear) {
+                    minYear -> {
+                        wheelMonthView?.setSelectedMonthRange(minMonth, WheelMonthView.MAX_MONTH)
+                        val selectedMonth = getSelectedMonth()
+                        if (selectedMonth == minMonth) {
+                            wheelDayView?.let {
+                                it.setSelectedDayRange(minDay, it.getMaxDay())
+                            }
+                        } else {
+                            wheelDayView?.setSelectedDayRange(-1, -1)
+                        }
                     }
-                } else {
-                    wheelMonthView?.setSelectedMonthRange(-1, -1)
-                    wheelDayView?.setSelectedDayRange(-1, -1)
+                    maxYear -> {
+                        wheelMonthView?.setSelectedMonthRange(WheelMonthView.MIN_MONTH, maxMonth)
+                        val selectedMonth = getSelectedMonth()
+                        if (selectedMonth == maxMonth) {
+                            wheelDayView?.setSelectedDayRange(WheelDayView.MIN_DAY, maxDay)
+                        } else {
+                            wheelDayView?.setSelectedDayRange(-1, -1)
+                        }
+                    }
+                    else -> {
+                        wheelMonthView?.setSelectedMonthRange(-1, -1)
+                        wheelDayView?.setSelectedDayRange(-1, -1)
+                    }
                 }
             }
             monthId -> {
@@ -80,9 +95,12 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
                 val selectedMonth = wheelMonthView?.getItem(position) ?: DEFAULT_MONTH
                 //如果选中的年份是最小选中年或者最大选中年 并且 选中的月份是最小选中月或者最大选中月-
                 //才限制选择 Day 的范围
-                if (((selectedYear == minYear || selectedYear == maxYear)
-                                && (selectedMonth == minMonth || selectedMonth == maxMonth))) {
-                    wheelDayView?.setSelectedDayRange(minDay, maxDay)
+                if (selectedMonth == minMonth && selectedYear == minYear) {
+                    wheelDayView?.let {
+                        it.setSelectedDayRange(minDay, it.getMaxDay())
+                    }
+                } else if (selectedMonth == maxMonth && selectedYear == maxYear) {
+                    wheelDayView?.setSelectedDayRange(WheelDayView.MIN_DAY, maxDay)
                 } else {
                     wheelDayView?.setSelectedDayRange(-1, -1)
                 }
@@ -122,6 +140,10 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         this.scrollChangedListener = listener
     }
 
+    override fun setYearRange(startYear: Int, endYear: Int) {
+        wheelYearView?.setYearRange(startYear, endYear)
+    }
+
     override fun setSelectedDate(date: Date) {
         val calendar = Calendar.getInstance()
         calendar.time = date
@@ -134,6 +156,22 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelYearView?.setSelectedYear(year)
         wheelMonthView?.setSelectedMonth(month)
         wheelDayView?.setSelectedDay(day)
+    }
+
+    override fun setMaxSelectedDate(maxDate: Date) {
+        val maxCalendar = Calendar.getInstance()
+        maxCalendar.time = maxDate
+        setMaxSelectedDate(maxCalendar)
+    }
+
+    override fun setMaxSelectedDate(maxCalendar: Calendar) {
+        minYear = getWheelYearView().getItem(0)
+        maxYear = maxCalendar.get(Calendar.YEAR)
+        minMonth = WheelMonthView.MIN_MONTH
+        maxMonth = maxCalendar.get(Calendar.MONTH) + 1
+        minDay = WheelDayView.MIN_DAY
+        maxDay = maxCalendar.get(Calendar.DAY_OF_MONTH)
+        wheelYearView?.setSelectedYearRange(maxYear = maxYear)
     }
 
     override fun setDateRange(minDate: Date, maxDate: Date) {
@@ -372,13 +410,13 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelDayView?.dividerType = dividerType
     }
 
-    override fun setDividerPadding(paddingPx: Int) {
+    override fun setWheelDividerPadding(paddingPx: Int) {
         wheelYearView?.dividerPadding = paddingPx
         wheelMonthView?.dividerPadding = paddingPx
         wheelDayView?.dividerPadding = paddingPx
     }
 
-    override fun setDividerPadding(paddingDp: Float) {
+    override fun setWheelDividerPadding(paddingDp: Float) {
         wheelYearView?.setDividerPadding(paddingDp)
         wheelMonthView?.setDividerPadding(paddingDp)
         wheelDayView?.setDividerPadding(paddingDp)
@@ -475,9 +513,7 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
     }
 
     override fun setLeftText(text: CharSequence) {
-        wheelYearView?.leftText = text
-        wheelMonthView?.leftText = text
-        wheelDayView?.leftText = text
+        setLeftText(text,text,text)
     }
 
     override fun setLeftText(yearLeft: CharSequence, monthLeft: CharSequence, dayLeft: CharSequence) {
@@ -487,9 +523,7 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
     }
 
     override fun setRightText(text: CharSequence) {
-        wheelYearView?.rightText = text
-        wheelMonthView?.rightText = text
-        wheelDayView?.rightText = text
+        setRightText(text,text,text)
     }
 
     override fun setRightText(yearRight: CharSequence, monthRight: CharSequence, dayRight: CharSequence) {

@@ -1,10 +1,12 @@
 package com.zyyoona7.picker
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.view.View
+import android.view.Gravity
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
@@ -32,11 +34,88 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
     private val linkagePickerHelper: LinkagePickerHelper
 
     init {
-        View.inflate(context, R.layout.layout_linkage_picker_view, this)
-        val wheelView1 = findViewById<WheelView>(R.id.wheel_view_1)
-        val wheelView2 = findViewById<WheelView>(R.id.wheel_view_2)
-        val wheelView3 = findViewById<WheelView>(R.id.wheel_view_3)
+        val wheelView1 = WheelView(context)
+        val wheelView2 = WheelView(context)
+        val wheelView3 = WheelView(context)
+        wheelView1.id = R.id.wheel_linkage1
+        wheelView2.id = R.id.wheel_linkage2
+        wheelView3.id = R.id.wheel_linkage3
         linkagePickerHelper = LinkagePickerHelper(wheelView1, wheelView2, wheelView3)
+        attrs?.let {
+            initAttrs(context, it)
+        }
+        val layoutParams = LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
+        layoutParams.weight = 1f
+        layoutParams.gravity = Gravity.CENTER_VERTICAL
+        addView(wheelView1, layoutParams)
+        addView(wheelView2, layoutParams)
+        addView(wheelView3, layoutParams)
+    }
+
+    private fun initAttrs(context: Context, attrs: AttributeSet) {
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.LinkagePickerView)
+        setVisibleItems(typedArray.getInt(R.styleable.LinkagePickerView_lpv_visibleItems,
+                WheelView.DEFAULT_VISIBLE_ITEM))
+        setLineSpacing(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_lineSpacing,
+                WheelView.DEFAULT_LINE_SPACING))
+        setCyclic(typedArray.getBoolean(R.styleable.LinkagePickerView_lpv_cyclic, false))
+        setTextSize(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_textSize,
+                WheelView.DEFAULT_TEXT_SIZE))
+        setTextAlign(typedArray.getInt(R.styleable.LinkagePickerView_lpv_textAlign,
+                WheelView.TEXT_ALIGN_CENTER))
+        setTextPadding(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_textPadding,
+                WheelView.DEFAULT_TEXT_PADDING))
+        val linkage1LeftText = typedArray.getText(R.styleable.LinkagePickerView_lpv_linkage1LeftText)
+                ?: ""
+        val linkage2LeftText = typedArray.getText(R.styleable.LinkagePickerView_lpv_linkage2LeftText)
+                ?: ""
+        val linkage3LeftText = typedArray.getText(R.styleable.LinkagePickerView_lpv_linkage3LeftText)
+                ?: ""
+        setLeftText(linkage1LeftText, linkage2LeftText, linkage3LeftText)
+        val linkage1RightText = typedArray.getText(R.styleable.LinkagePickerView_lpv_linkage1RightText)
+                ?: ""
+        val linkage2RightText = typedArray.getText(R.styleable.LinkagePickerView_lpv_linkage2RightText)
+                ?: ""
+        val linkage3RightText = typedArray.getText(R.styleable.LinkagePickerView_lpv_linkage3RightText)
+                ?: ""
+        setRightText(linkage1RightText, linkage2RightText, linkage3RightText)
+        setLeftTextSize(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_leftTextSize,
+                WheelView.DEFAULT_TEXT_SIZE))
+        setRightTextSize(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_rightTextSize,
+                WheelView.DEFAULT_TEXT_SIZE))
+        setLeftTextMarginRight(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_leftTextMarginRight,
+                WheelView.DEFAULT_TEXT_PADDING))
+        setRightTextMarginLeft(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_rightTextMarginLeft,
+                WheelView.DEFAULT_TEXT_PADDING))
+        setLeftTextColor(typedArray.getColor(R.styleable.LinkagePickerView_lpv_leftTextColor,
+                WheelView.DEFAULT_SELECTED_TEXT_COLOR))
+        setRightTextColor(typedArray.getColor(R.styleable.LinkagePickerView_lpv_rightTextColor,
+                WheelView.DEFAULT_SELECTED_TEXT_COLOR))
+        val leftGravity = typedArray.getInt(R.styleable.LinkagePickerView_lpv_leftTextGravity, 0)
+        setLeftTextGravity(WheelView.getExtraGravity(leftGravity))
+        val rightGravity = typedArray.getInt(R.styleable.LinkagePickerView_lpv_rightTextGravity, 0)
+        setRightTextGravity(WheelView.getExtraGravity(rightGravity))
+        setNormalTextColor(typedArray.getColor(R.styleable.LinkagePickerView_lpv_normalTextColor,
+                WheelView.DEFAULT_NORMAL_TEXT_COLOR))
+        setSelectedTextColor(typedArray.getColor(R.styleable.LinkagePickerView_lpv_selectedTextColor,
+                WheelView.DEFAULT_SELECTED_TEXT_COLOR))
+        setShowDivider(typedArray.getBoolean(R.styleable.LinkagePickerView_lpv_showDivider, false))
+        setDividerType(typedArray.getInt(R.styleable.LinkagePickerView_lpv_dividerType, WheelView.DIVIDER_FILL))
+        setDividerColor(typedArray.getColor(R.styleable.LinkagePickerView_lpv_dividerColor,
+                WheelView.DEFAULT_SELECTED_TEXT_COLOR))
+        setDividerHeight(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_dividerHeight,
+                WheelView.DEFAULT_DIVIDER_HEIGHT))
+        setWheelDividerPadding(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_dividerPadding,
+                WheelView.DEFAULT_TEXT_PADDING))
+        setDividerOffsetY(typedArray.getDimensionPixelOffset(R.styleable.LinkagePickerView_lpv_dividerOffsetY, 0))
+        setCurved(typedArray.getBoolean(R.styleable.LinkagePickerView_lpv_curved, true))
+        setCurvedArcDirection(typedArray.getInt(R.styleable.LinkagePickerView_lpv_curvedArcDirection,
+                WheelView.CURVED_ARC_DIRECTION_CENTER))
+        setCurvedArcDirectionFactor(typedArray.getFloat(R.styleable.LinkagePickerView_lpv_curvedArcDirectionFactor,
+                WheelView.DEFAULT_CURVED_FACTOR))
+        setShowCurtain(typedArray.getBoolean(R.styleable.LinkagePickerView_lpv_showCurtain, false))
+        setCurtainColor(typedArray.getColor(R.styleable.LinkagePickerView_lpv_curtainColor, Color.TRANSPARENT))
+        typedArray.recycle()
     }
 
     override fun setTextFormatter(textFormatter: TextFormatter) {
@@ -203,12 +282,12 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setDividerType(dividerType)
     }
 
-    override fun setDividerPadding(paddingPx: Int) {
-        linkagePickerHelper.setDividerPadding(paddingPx)
+    override fun setWheelDividerPadding(paddingPx: Int) {
+        linkagePickerHelper.setWheelDividerPadding(paddingPx)
     }
 
-    override fun setDividerPadding(paddingDp: Float) {
-        linkagePickerHelper.setDividerPadding(paddingDp)
+    override fun setWheelDividerPadding(paddingDp: Float) {
+        linkagePickerHelper.setWheelDividerPadding(paddingDp)
     }
 
     override fun setDividerCap(cap: Paint.Cap) {
@@ -275,8 +354,16 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setLeftText(text)
     }
 
+    override fun setLeftText(linkage1Text: CharSequence, linkage2Text: CharSequence, linkage3Text: CharSequence) {
+        linkagePickerHelper.setLeftText(linkage1Text, linkage2Text, linkage3Text)
+    }
+
     override fun setRightText(text: CharSequence) {
         linkagePickerHelper.setRightText(text)
+    }
+
+    override fun setRightText(linkage1Text: CharSequence, linkage2Text: CharSequence, linkage3Text: CharSequence) {
+        linkagePickerHelper.setRightText(linkage1Text, linkage2Text, linkage3Text)
     }
 
     override fun setLeftTextSize(textSizePx: Int) {

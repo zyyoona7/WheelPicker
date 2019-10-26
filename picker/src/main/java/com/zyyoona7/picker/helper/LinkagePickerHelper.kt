@@ -339,13 +339,13 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.dividerType = dividerType
     }
 
-    override fun setDividerPadding(paddingPx: Int) {
+    override fun setWheelDividerPadding(paddingPx: Int) {
         wheelView1?.dividerPadding = paddingPx
         wheelView2?.dividerPadding = paddingPx
         wheelView3?.dividerPadding = paddingPx
     }
 
-    override fun setDividerPadding(paddingDp: Float) {
+    override fun setWheelDividerPadding(paddingDp: Float) {
         wheelView1?.setDividerPadding(paddingDp)
         wheelView2?.setDividerPadding(paddingDp)
         wheelView3?.setDividerPadding(paddingDp)
@@ -442,15 +442,23 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
     }
 
     override fun setLeftText(text: CharSequence) {
-        wheelView1?.leftText = text
-        wheelView2?.leftText = text
-        wheelView3?.leftText = text
+        setLeftText(text,text,text)
+    }
+
+    override fun setLeftText(linkage1Text: CharSequence, linkage2Text: CharSequence, linkage3Text: CharSequence) {
+        wheelView1?.leftText = linkage1Text
+        wheelView2?.leftText = linkage2Text
+        wheelView3?.leftText = linkage3Text
     }
 
     override fun setRightText(text: CharSequence) {
-        wheelView1?.rightText = text
-        wheelView2?.rightText = text
-        wheelView3?.rightText = text
+        setRightText(text, text, text)
+    }
+
+    override fun setRightText(linkage1Text: CharSequence, linkage2Text: CharSequence, linkage3Text: CharSequence) {
+        wheelView1?.rightText = linkage1Text
+        wheelView2?.rightText = linkage2Text
+        wheelView3?.rightText = linkage3Text
     }
 
     override fun setLeftTextSize(textSizePx: Int) {
