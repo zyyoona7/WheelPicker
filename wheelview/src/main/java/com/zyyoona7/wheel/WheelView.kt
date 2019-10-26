@@ -530,18 +530,18 @@ open class WheelView @JvmOverloads constructor(context: Context,
 
     companion object {
         private const val TAG = "WheelView"
-        private val DEFAULT_LINE_SPACING = dp2px(2f)
-        private val DEFAULT_TEXT_SIZE = sp2px(15f)
-        private val DEFAULT_MIN_TEXT_SIZE = sp2px(6f)
-        private val DEFAULT_TEXT_PADDING = dp2px(2f)
-        private val DEFAULT_DIVIDER_HEIGHT = dp2px(1f)
-        private const val DEFAULT_NORMAL_TEXT_COLOR = Color.DKGRAY
-        private const val DEFAULT_SELECTED_TEXT_COLOR = Color.BLACK
-        private const val DEFAULT_VISIBLE_ITEM = 5
+        val DEFAULT_LINE_SPACING = dp2px(2f)
+        val DEFAULT_TEXT_SIZE = sp2px(15f)
+        val DEFAULT_MIN_TEXT_SIZE = sp2px(6f)
+        val DEFAULT_TEXT_PADDING = dp2px(2f)
+        val DEFAULT_DIVIDER_HEIGHT = dp2px(1f)
+        const val DEFAULT_NORMAL_TEXT_COLOR = Color.DKGRAY
+        const val DEFAULT_SELECTED_TEXT_COLOR = Color.BLACK
+        const val DEFAULT_VISIBLE_ITEM = 5
         const val DEFAULT_SCROLL_DURATION = 250
-        private const val DEFAULT_CLICK_CONFIRM: Long = 120
+        const val DEFAULT_CLICK_CONFIRM: Long = 120
         //默认折射比值，通过字体大小来实现折射视觉差
-        private const val DEFAULT_REFRACT_RATIO = 1f
+        const val DEFAULT_REFRACT_RATIO = 1f
 
         //文字对齐方式
         const val TEXT_ALIGN_LEFT = 0
@@ -588,6 +588,14 @@ open class WheelView @JvmOverloads constructor(context: Context,
 
         private fun logAdapterNull() {
             Log.e(TAG, "the WheelView adapter is null.")
+        }
+
+        fun getExtraGravity(gravity: Int): Int {
+            return when (gravity) {
+                1 -> Gravity.TOP
+                2 -> Gravity.BOTTOM
+                else -> Gravity.CENTER
+            }
         }
     }
 
@@ -641,8 +649,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
         rightTextColor = typedArray.getColor(R.styleable.WheelView_wv_rightTextColor, DEFAULT_SELECTED_TEXT_COLOR)
         val leftTextGravity = typedArray.getInt(R.styleable.WheelView_wv_leftTextGravity, 0)
         val rightTextGravity = typedArray.getInt(R.styleable.WheelView_wv_rightTextGravity, 0)
-        this.leftTextGravity = getGravity(leftTextGravity)
-        this.rightTextGravity = getGravity(rightTextGravity)
+        this.leftTextGravity = getExtraGravity(leftTextGravity)
+        this.rightTextGravity = getExtraGravity(rightTextGravity)
         gravity = typedArray.getInt(R.styleable.WheelView_android_gravity, Gravity.CENTER)
 
         normalTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalTextColor, DEFAULT_NORMAL_TEXT_COLOR)
@@ -681,14 +689,6 @@ open class WheelView @JvmOverloads constructor(context: Context,
             refractRatio = DEFAULT_REFRACT_RATIO
         }
         typedArray.recycle()
-    }
-
-    private fun getGravity(gravity: Int): Int {
-        return when (gravity) {
-            1 -> Gravity.TOP
-            2 -> Gravity.BOTTOM
-            else -> Gravity.CENTER
-        }
     }
 
     /**
@@ -1078,6 +1078,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 }
             }
 
+            Log.d(TAG, "onDraw scrollOffsetY:${scrollOffsetY},selectedPosition:${selectedPosition}")
             //绘制item
             for (i in minIndex until maxIndex) {
                 if (isCurved) {
@@ -2201,6 +2202,17 @@ open class WheelView @JvmOverloads constructor(context: Context,
         //item之间差值
         val itemDistance = calculateItemDistance(realPosition)
         if (itemDistance == 0) {
+            if (itemHeight == 0) {
+                //此时还没有测量结束，直接赋值selctedPosition
+                selectedPosition = realPosition
+                currentScrollPosition = realPosition
+                wheelAdapter?.let {
+                    it.selectedItemPosition = selectedPosition
+                    //选中条目回调
+                    onItemSelected(it, selectedPosition)
+                    itemSelectedListener?.onItemSelected(this, it, selectedPosition)
+                }
+            }
             return
         }
         //如果Scroller滑动未停止，强制结束动画
@@ -2264,7 +2276,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 当前[position]大于最大选中下标
      */
     private fun isMoreThanMaxSelected(position: Int, adapter: ArrayWheelAdapter<*>): Boolean {
-        return maxSelectedPosition < adapter.getItemCount()
+        return maxSelectedPosition >= 0 && maxSelectedPosition < adapter.getItemCount()
                 && position > maxSelectedPosition
     }
 
@@ -2275,6 +2287,12 @@ open class WheelView @JvmOverloads constructor(context: Context,
     fun setSelectedRange(@IntRange(from = 0) min: Int = 0, @IntRange(from = 0) max: Int) {
         require(max >= min) {
             "maxSelectedPosition must be greater than minSelectedPosition in WheelView."
+        }
+        if (min < 0 && max < 0) {
+            minSelectedPosition = -1
+            maxSelectedPosition = -1
+            calculateLimitY()
+            return
         }
         minSelectedPosition = max(0, min)
         maxSelectedPosition = wheelAdapter?.let {
