@@ -1788,6 +1788,19 @@ public class WheelView<T> extends View implements Runnable {
         //item之间差值
         int itemDistance = calculateItemDistance(position);
         if (itemDistance == 0) {
+            //如果最开始设置了下标为0，则itemDistance==0
+            if (position!=mSelectedItemPosition) {
+                mSelectedItemPosition=position;
+                //选中条目回调
+                if (mOnItemSelectedListener != null) {
+                    mOnItemSelectedListener.onItemSelected(this, mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
+                }
+                onItemSelected(mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
+                if (mOnWheelChangedListener != null) {
+                    mOnWheelChangedListener.onWheelSelected(mSelectedItemPosition);
+                }
+                onWheelSelected(mSelectedItemPosition);
+            }
             return;
         }
         //如果Scroller滑动未停止，强制结束动画
