@@ -43,6 +43,12 @@ interface DatePicker {
 
     fun setRightText(yearRight: CharSequence, monthRight: CharSequence, dayRight: CharSequence)
 
+    fun setShowYear(isShow:Boolean)
+
+    fun setShowMonth(isShow:Boolean)
+
+    fun setShowDay(isShow:Boolean)
+
     fun getSelectedDate(): Date
 
     /**

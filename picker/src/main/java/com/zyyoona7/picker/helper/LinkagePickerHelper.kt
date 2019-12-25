@@ -147,6 +147,10 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         this.linkageSelectedListener = listener
     }
 
+    override fun setShowLinkage3(isShow: Boolean) {
+        wheelView3?.visibility = if (isShow) View.VISIBLE else View.GONE
+    }
+
     override fun getFirstWheelView(): WheelView {
         require(wheelView1 != null) {
             "First WheelView is null."
@@ -442,7 +446,7 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
     }
 
     override fun setLeftText(text: CharSequence) {
-        setLeftText(text,text,text)
+        setLeftText(text, text, text)
     }
 
     override fun setLeftText(linkage1Text: CharSequence, linkage2Text: CharSequence, linkage3Text: CharSequence) {

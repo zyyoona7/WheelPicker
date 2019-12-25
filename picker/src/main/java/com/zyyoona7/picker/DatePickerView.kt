@@ -38,6 +38,9 @@ class DatePickerView @JvmOverloads constructor(context: Context,
     private var yearWeight: Float = 1f
     private var monthWeight: Float = 1f
     private var dayWeight: Float = 1f
+    private var isShowYear:Boolean =true
+    private var isShowMonth:Boolean =true
+    private var isSHowDay:Boolean =true
 
     init {
         val wheelYearView = WheelYearView(context)
@@ -51,6 +54,15 @@ class DatePickerView @JvmOverloads constructor(context: Context,
             initAttrs(context, it)
         }
         addViews(wheelYearView, wheelMonthView, wheelDayView)
+        setShowYear(isShowYear)
+        setShowMonth(isShowMonth)
+        setShowDay(isSHowDay)
+        wheelYearView.setTextFormatter(IntTextFormatter("%04d"))
+        wheelMonthView.setTextFormatter(IntTextFormatter("%02d"))
+        wheelDayView.setTextFormatter(IntTextFormatter("%02d"))
+        wheelYearView.hasSameWidth=true
+        wheelMonthView.hasSameWidth=true
+        wheelDayView.hasSameWidth=true
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet) {
@@ -59,6 +71,9 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         yearWeight = typedArray.getFloat(R.styleable.DatePickerView_dpv_yearWeight, 1f)
         monthWeight = typedArray.getFloat(R.styleable.DatePickerView_dpv_monthWeight, 1f)
         dayWeight = typedArray.getFloat(R.styleable.DatePickerView_dpv_dayWeight, 1f)
+        isShowYear=typedArray.getBoolean(R.styleable.DatePickerView_dpv_showYear,true)
+        isShowMonth=typedArray.getBoolean(R.styleable.DatePickerView_dpv_showMonth,true)
+        isSHowDay=typedArray.getBoolean(R.styleable.DatePickerView_dpv_showDay,true)
         val startYear = typedArray.getInt(R.styleable.DatePickerView_dpv_startYear, -1)
         val endYear = typedArray.getInt(R.styleable.DatePickerView_dpv_endYear, -1)
         if (startYear > 0 && endYear > 0 && endYear > startYear) {
@@ -194,6 +209,18 @@ class DatePickerView @JvmOverloads constructor(context: Context,
 
     override fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar) {
         datePickerHelper.setDateRange(minCalendar, maxCalendar)
+    }
+
+    override fun setShowYear(isShow: Boolean) {
+        datePickerHelper.setShowYear(isShow)
+    }
+
+    override fun setShowMonth(isShow: Boolean) {
+        datePickerHelper.setShowMonth(isShow)
+    }
+
+    override fun setShowDay(isShow: Boolean) {
+        datePickerHelper.setShowDay(isShow)
     }
 
     override fun getSelectedDate(): Date {

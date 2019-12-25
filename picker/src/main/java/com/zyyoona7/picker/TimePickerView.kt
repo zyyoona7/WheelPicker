@@ -19,9 +19,11 @@ import com.zyyoona7.picker.helper.TimePickerHelper
 import com.zyyoona7.picker.interfaces.AmPmTextHandler
 import com.zyyoona7.picker.interfaces.TimePicker
 import com.zyyoona7.picker.interfaces.WheelPicker
+import com.zyyoona7.picker.listener.OnTimeSelectedListener
 import com.zyyoona7.wheel.WheelView
 import com.zyyoona7.wheel.formatter.IntTextFormatter
 import com.zyyoona7.wheel.listener.OnScrollChangedListener
+import java.util.*
 
 /**
  * 时间选择器 View
@@ -39,32 +41,52 @@ class TimePickerView @JvmOverloads constructor(context: Context,
     private var hourWeight: Float = 1f
     private var minuteWeight: Float = 1f
     private var secondWeight: Float = 1f
+    private var is24Hour:Boolean=false
+    private var isShowHour:Boolean=true
+    private var isShowMinute:Boolean=true
+    private var isShowSecond:Boolean=true
 
     init {
         val amPmWheel = WheelAmPmView(context)
         val hourWheel = WheelHourView(context)
         val minuteWheel = WheelMinuteView(context)
         val secondWheel = WheelSecondView(context)
+        amPmWheel.id=R.id.wheel_am_pm
+        hourWheel.id=R.id.wheel_hour
+        minuteWheel.id=R.id.wheel_minute
+        secondWheel.id=R.id.wheel_second
         timePickerHelper = TimePickerHelper(amPmWheel, hourWheel, minuteWheel, secondWheel)
 
         attrs?.let {
             initAttrs(context, it)
         }
         addViews(amPmWheel, hourWheel, minuteWheel, secondWheel)
+        setShowHour(isShowHour)
+        setShowMinute(isShowMinute)
+        setShowSecond(isShowSecond)
+        set24Hour(is24Hour)
+        setMinuteTextFormatter(IntTextFormatter())
+        setSecondTextFormatter(IntTextFormatter())
+        minuteWheel.hasSameWidth=true
+        secondWheel.hasSameWidth=true
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet) {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.TimePickerView)
+        is24Hour=typedArray.getBoolean(R.styleable.TimePickerView_tpv_is24Hour, TimePickerHelper.is24HourMode(context))
         widthWeightMode = typedArray.getBoolean(R.styleable.TimePickerView_tpv_widthWeightMode, false)
         amPmWeight = typedArray.getFloat(R.styleable.TimePickerView_tpv_amPmWeight, 1f)
         hourWeight = typedArray.getFloat(R.styleable.TimePickerView_tpv_hourWeight, 1f)
         minuteWeight = typedArray.getFloat(R.styleable.TimePickerView_tpv_minuteWeight, 1f)
         secondWeight = typedArray.getFloat(R.styleable.TimePickerView_tpv_secondWeight, 1f)
+        isShowHour=typedArray.getBoolean(R.styleable.TimePickerView_tpv_showHour,true)
+        isShowMinute=typedArray.getBoolean(R.styleable.TimePickerView_tpv_showMinute,true)
+        isShowSecond=typedArray.getBoolean(R.styleable.TimePickerView_tpv_showSecond,true)
         setVisibleItems(typedArray.getInt(R.styleable.TimePickerView_tpv_visibleItems,
                 WheelView.DEFAULT_VISIBLE_ITEM))
         setLineSpacing(typedArray.getDimensionPixelSize(R.styleable.TimePickerView_tpv_lineSpacing,
                 WheelView.DEFAULT_LINE_SPACING))
-        setCyclic(typedArray.getBoolean(R.styleable.TimePickerView_tpv_cyclic, false))
+        setCyclic(typedArray.getBoolean(R.styleable.TimePickerView_tpv_cyclic, true))
         setTextSize(typedArray.getDimensionPixelSize(R.styleable.TimePickerView_tpv_textSize,
                 WheelView.DEFAULT_TEXT_SIZE))
         setTextAlign(typedArray.getInt(R.styleable.TimePickerView_tpv_textAlign,
@@ -170,6 +192,34 @@ class TimePickerView @JvmOverloads constructor(context: Context,
 
     override fun setOnScrollChangedListener(listener: OnScrollChangedListener?) {
         timePickerHelper.setOnScrollChangedListener(listener)
+    }
+
+    override fun setOnTimeSelectedListener(listener: OnTimeSelectedListener?) {
+        timePickerHelper.setOnTimeSelectedListener(listener)
+    }
+
+    override fun setTime(calendar: Calendar, is24Hour: Boolean) {
+        timePickerHelper.setTime(calendar, is24Hour)
+    }
+
+    override fun setTime(hour: Int, minute: Int, second: Int) {
+        timePickerHelper.setTime(hour, minute, second)
+    }
+
+    override fun setTime(hour: Int, minute: Int, second: Int, isAm: Boolean) {
+        timePickerHelper.setTime(hour, minute, second, isAm)
+    }
+
+    override fun setShowHour(isShow: Boolean) {
+        timePickerHelper.setShowHour(isShow)
+    }
+
+    override fun setShowMinute(isShow: Boolean) {
+        timePickerHelper.setShowMinute(isShow)
+    }
+
+    override fun setShowSecond(isShow: Boolean) {
+        timePickerHelper.setShowSecond(isShow)
     }
 
     override fun setLeftText(amPmText: CharSequence, hourText: CharSequence,
@@ -440,5 +490,9 @@ class TimePickerView @JvmOverloads constructor(context: Context,
 
     override fun setRightTextGravity(gravity: Int) {
         timePickerHelper.setRightTextGravity(gravity)
+    }
+
+    override fun set24Hour(is24Hour: Boolean) {
+        timePickerHelper.set24Hour(is24Hour)
     }
 }

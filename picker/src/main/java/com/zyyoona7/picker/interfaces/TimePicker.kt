@@ -4,8 +4,10 @@ import com.zyyoona7.picker.ex.WheelAmPmView
 import com.zyyoona7.picker.ex.WheelHourView
 import com.zyyoona7.picker.ex.WheelMinuteView
 import com.zyyoona7.picker.ex.WheelSecondView
+import com.zyyoona7.picker.listener.OnTimeSelectedListener
 import com.zyyoona7.wheel.formatter.IntTextFormatter
 import com.zyyoona7.wheel.listener.OnScrollChangedListener
+import java.util.*
 
 interface TimePicker {
 
@@ -19,17 +21,42 @@ interface TimePicker {
 
     fun setOnScrollChangedListener(listener: OnScrollChangedListener?)
 
+    fun setOnTimeSelectedListener(listener: OnTimeSelectedListener?)
+
     fun setLeftText(amPmText: CharSequence, hourText: CharSequence,
                     minuteText: CharSequence, secondText: CharSequence)
 
     fun setRightText(amPmText: CharSequence, hourText: CharSequence,
                      minuteText: CharSequence, secondText: CharSequence)
 
-    fun getWheelAmPmView():WheelAmPmView
+    fun set24Hour(is24Hour: Boolean)
 
-    fun getWheelHourView():WheelHourView
+    /**
+     * 设置选中时间
+     */
+    fun setTime(calendar: Calendar, is24Hour: Boolean)
 
-    fun getWheelMinuteView():WheelMinuteView
+    /**
+     * 设置选中时间 24小时制
+     */
+    fun setTime(hour: Int, minute: Int, second: Int)
 
-    fun getWheelSecondView():WheelSecondView
+    /**
+     * 设置选中时间 12小时制
+     */
+    fun setTime(hour: Int, minute: Int, second: Int, isAm: Boolean)
+
+    fun setShowHour(isShow:Boolean)
+
+    fun setShowMinute(isShow:Boolean)
+
+    fun setShowSecond(isShow:Boolean)
+
+    fun getWheelAmPmView(): WheelAmPmView
+
+    fun getWheelHourView(): WheelHourView
+
+    fun getWheelMinuteView(): WheelMinuteView
+
+    fun getWheelSecondView(): WheelSecondView
 }

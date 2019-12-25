@@ -25,6 +25,8 @@ interface LinkagePicker {
 
     fun setData(firstData: List<Any>,useSecond: Boolean,useThird:Boolean)
 
+    fun setShowLinkage3(isShow:Boolean)
+
     fun setOnScrollChangedListener(listener:OnScrollChangedListener?)
 
     fun setOnLinkageSelectedListener(listener:OnLinkageSelectedListener?)

@@ -42,6 +42,9 @@
     </declare-styleable>
 
     <declare-styleable name="DatePickerView">
+        <attr name="dpv_showYear" format="boolean"/>
+        <attr name="dpv_showMonth" format="boolean"/>
+        <attr name="dpv_showDay" format="boolean"/>
         <attr name="dpv_widthWeightMode" format="boolean" />
         <attr name="dpv_yearWeight" format="float" />
         <attr name="dpv_monthWeight" format="float" />
@@ -130,6 +133,7 @@
     </declare-styleable>
 
     <declare-styleable name="LinkagePickerView">
+        <attr name="lpv_showLinkage3" format="boolean"/>
         <attr name="lpv_visibleItems" format="integer" />
         <attr name="lpv_lineSpacing" format="dimension" />
         <attr name="lpv_cyclic" format="boolean" />
@@ -209,6 +213,9 @@
     </declare-styleable>
 
     <declare-styleable name="TimePickerView">
+        <attr name="tpv_showHour" format="boolean"/>
+        <attr name="tpv_showMinute" format="boolean"/>
+        <attr name="tpv_showSecond" format="boolean"/>
         <attr name="tpv_is24Hour" format="boolean" />
         <attr name="tpv_widthWeightMode" format="boolean" />
         <attr name="tpv_amPmWeight" format="float" />

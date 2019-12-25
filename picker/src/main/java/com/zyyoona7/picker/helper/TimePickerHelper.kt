@@ -1,7 +1,10 @@
 package com.zyyoona7.picker.helper
 
+import android.content.Context
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.text.format.DateFormat
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.RawRes
@@ -12,407 +15,492 @@ import com.zyyoona7.picker.ex.WheelSecondView
 import com.zyyoona7.picker.interfaces.AmPmTextHandler
 import com.zyyoona7.picker.interfaces.TimePicker
 import com.zyyoona7.picker.interfaces.WheelPicker
+import com.zyyoona7.picker.listener.OnAmPmChangedListener
+import com.zyyoona7.picker.listener.OnTimeSelectedListener
 import com.zyyoona7.wheel.WheelView
 import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
 import com.zyyoona7.wheel.formatter.IntTextFormatter
 import com.zyyoona7.wheel.listener.OnItemSelectedListener
 import com.zyyoona7.wheel.listener.OnScrollChangedListener
-import kotlin.math.min
+import java.util.*
 
-class TimePickerHelper(private var amPmWheel: WheelAmPmView?,
-                       private var hourWheel: WheelHourView?,
-                       private var minuteWheel: WheelMinuteView?,
-                       private var secondWheel: WheelSecondView?)
-    : OnItemSelectedListener, OnScrollChangedListener, TimePicker, WheelPicker {
+class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
+                       private var wheelHourView: WheelHourView?,
+                       private var wheelMinuteView: WheelMinuteView?,
+                       private var wheelSecondView: WheelSecondView?)
+    : OnItemSelectedListener, OnScrollChangedListener, OnAmPmChangedListener, TimePicker, WheelPicker {
 
     private var scrollChangedListener: OnScrollChangedListener? = null
+    private var hourTextFormatter: IntTextFormatter? = null
+    private var timeSelectedListener: OnTimeSelectedListener? = null
 
     init {
-        amPmWheel?.setOnItemSelectedListener(this)
-        hourWheel?.setOnItemSelectedListener(this)
-        minuteWheel?.setOnItemSelectedListener(this)
-        secondWheel?.setOnItemSelectedListener(this)
+        wheelAmPmView?.setOnItemSelectedListener(this)
+        wheelHourView?.setOnItemSelectedListener(this)
+        wheelMinuteView?.setOnItemSelectedListener(this)
+        wheelSecondView?.setOnItemSelectedListener(this)
 
-        amPmWheel?.setOnScrollChangedListener(this)
-        hourWheel?.setOnScrollChangedListener(this)
-        minuteWheel?.setOnScrollChangedListener(this)
-        secondWheel?.setOnScrollChangedListener(this)
+        wheelAmPmView?.setOnScrollChangedListener(this)
+        wheelHourView?.setOnScrollChangedListener(this)
+        wheelMinuteView?.setOnScrollChangedListener(this)
+        wheelSecondView?.setOnScrollChangedListener(this)
+
+        wheelHourView?.setOnAmPmChangedListener(this)
+    }
+
+    companion object {
+
+        fun is24HourMode(context: Context): Boolean {
+            return DateFormat.is24HourFormat(context)
+        }
     }
 
     override fun onItemSelected(wheelView: WheelView, adapter: ArrayWheelAdapter<*>, position: Int) {
+        val amPmId = wheelView.id
+        wheelAmPmView?.let {
+            if (it.id == amPmId) {
+                wheelHourView?.hourType = if (position == 0) WheelHourView.TYPE_AM else WheelHourView.TYPE_PM
+            }
+        }
+        val is24Hour = wheelHourView?.is24Hour ?: false
+        val hour = wheelHourView?.getItem(position) ?: -1
+        val isAm = wheelHourView?.hourType == WheelHourView.TYPE_AM
+        val minute = wheelMinuteView?.getItem(position) ?: -1
+        val second = wheelSecondView?.getItem(position) ?: -1
+        timeSelectedListener?.onTimeSelected(is24Hour, hour, minute, second, isAm)
     }
 
     override fun onScrollChanged(wheelView: WheelView, scrollOffsetY: Int) {
+        scrollChangedListener?.onScrollChanged(wheelView, scrollOffsetY)
     }
 
     override fun onScrollStateChanged(wheelView: WheelView, state: Int) {
+        scrollChangedListener?.onScrollStateChanged(wheelView, state)
+    }
+
+    override fun onAmPmChanged(wheelHourView: WheelHourView, isAm: Boolean) {
+        wheelAmPmView?.setSelectedPosition(if (isAm) 0 else 1, true)
     }
 
     override fun setAmPmTextHandler(textHandler: AmPmTextHandler) {
-        amPmWheel?.amPmTextHandler=textHandler
+        wheelAmPmView?.amPmTextHandler = textHandler
     }
 
     override fun setHourTextFormatter(textFormatter: IntTextFormatter) {
-        hourWheel?.setTextFormatter(textFormatter)
+        this.hourTextFormatter = textFormatter
+        wheelHourView?.setTextFormatter(textFormatter)
     }
 
     override fun setMinuteTextFormatter(textFormatter: IntTextFormatter) {
-        minuteWheel?.setTextFormatter(textFormatter)
+        wheelMinuteView?.setTextFormatter(textFormatter)
     }
 
     override fun setSecondTextFormatter(textFormatter: IntTextFormatter) {
-        secondWheel?.setTextFormatter(textFormatter)
+        wheelSecondView?.setTextFormatter(textFormatter)
     }
 
     override fun setOnScrollChangedListener(listener: OnScrollChangedListener?) {
-        scrollChangedListener=listener
+        scrollChangedListener = listener
+    }
+
+    override fun setOnTimeSelectedListener(listener: OnTimeSelectedListener?) {
+        timeSelectedListener = listener
+    }
+
+    override fun setTime(calendar: Calendar, is24Hour: Boolean) {
+        val hourFor24 = calendar.get(Calendar.HOUR_OF_DAY)
+        val hourFor12 = calendar.get(Calendar.HOUR)
+        val amPm = calendar.get(Calendar.AM_PM)
+        val minute = calendar.get(Calendar.MINUTE)
+        val second = calendar.get(Calendar.SECOND)
+
+        if (is24Hour) {
+            setTime(hourFor24, minute, second)
+        } else {
+            setTime(hourFor12, minute, second, amPm == Calendar.AM)
+        }
+    }
+
+    override fun setTime(hour: Int, minute: Int, second: Int) {
+        val is24Hour = wheelHourView?.is24Hour ?: true
+        if (!is24Hour) {
+            set24Hour(true)
+        }
+        wheelHourView?.setSelectedHour(hour)
+        wheelMinuteView?.setSelectedMinute(minute)
+        wheelSecondView?.setSelectedSecond(second)
+    }
+
+    override fun setTime(hour: Int, minute: Int, second: Int, isAm: Boolean) {
+        val is24Hour = wheelHourView?.is24Hour ?: true
+        if (is24Hour) {
+            set24Hour(false)
+        }
+        wheelAmPmView?.setSelectedPosition(if (isAm) 0 else 1)
+        wheelHourView?.setSelectedHour(hour)
+        wheelMinuteView?.setSelectedMinute(minute)
+        wheelSecondView?.setSelectedSecond(second)
+    }
+
+    override fun setShowHour(isShow: Boolean) {
+        val visibility = if (isShow) View.VISIBLE else View.GONE
+        wheelHourView?.visibility = visibility
+        wheelAmPmView?.visibility = visibility
+    }
+
+    override fun setShowMinute(isShow: Boolean) {
+        wheelMinuteView?.visibility = if (isShow) View.VISIBLE else View.GONE
+    }
+
+    override fun setShowSecond(isShow: Boolean) {
+        wheelSecondView?.visibility = if (isShow) View.VISIBLE else View.GONE
     }
 
     override fun getWheelAmPmView(): WheelAmPmView {
-        require(amPmWheel != null) {
+        require(wheelAmPmView != null) {
             "WheelAmPmView is null."
         }
-        return amPmWheel!!
+        return wheelAmPmView!!
     }
 
     override fun getWheelHourView(): WheelHourView {
-        require(hourWheel != null) {
+        require(wheelHourView != null) {
             "WheelHourView is null."
         }
-        return hourWheel!!
+        return wheelHourView!!
     }
 
     override fun getWheelMinuteView(): WheelMinuteView {
-        require(minuteWheel != null) {
+        require(wheelMinuteView != null) {
             "WheelMinuteView is null."
         }
-        return minuteWheel!!
+        return wheelMinuteView!!
     }
 
     override fun getWheelSecondView(): WheelSecondView {
-        require(secondWheel != null) {
+        require(wheelSecondView != null) {
             "WheelSecondView is null."
         }
-        return secondWheel!!
+        return wheelSecondView!!
     }
 
     override fun setVisibleItems(visibleItems: Int) {
-        amPmWheel?.visibleItems = visibleItems
-        hourWheel?.visibleItems = visibleItems
-        minuteWheel?.visibleItems = visibleItems
-        secondWheel?.visibleItems = visibleItems
+        wheelAmPmView?.visibleItems = visibleItems
+        wheelHourView?.visibleItems = visibleItems
+        wheelMinuteView?.visibleItems = visibleItems
+        wheelSecondView?.visibleItems = visibleItems
     }
 
     override fun setLineSpacing(lineSpacingPx: Int) {
-        amPmWheel?.lineSpacing = lineSpacingPx
-        hourWheel?.lineSpacing = lineSpacingPx
-        minuteWheel?.lineSpacing = lineSpacingPx
-        secondWheel?.lineSpacing = lineSpacingPx
+        wheelAmPmView?.lineSpacing = lineSpacingPx
+        wheelHourView?.lineSpacing = lineSpacingPx
+        wheelMinuteView?.lineSpacing = lineSpacingPx
+        wheelSecondView?.lineSpacing = lineSpacingPx
     }
 
     override fun setLineSpacing(lineSpacingDp: Float) {
-        amPmWheel?.setLineSpacing(lineSpacingDp)
-        hourWheel?.setLineSpacing(lineSpacingDp)
-        minuteWheel?.setLineSpacing(lineSpacingDp)
-        secondWheel?.setLineSpacing(lineSpacingDp)
+        wheelAmPmView?.setLineSpacing(lineSpacingDp)
+        wheelHourView?.setLineSpacing(lineSpacingDp)
+        wheelMinuteView?.setLineSpacing(lineSpacingDp)
+        wheelSecondView?.setLineSpacing(lineSpacingDp)
     }
 
     override fun setCyclic(isCyclic: Boolean) {
-        amPmWheel?.isCyclic = isCyclic
-        hourWheel?.isCyclic = isCyclic
-        minuteWheel?.isCyclic = isCyclic
-        secondWheel?.isCyclic = isCyclic
+//        amPmWheel?.isCyclic = isCyclic
+        wheelHourView?.isCyclic = isCyclic
+        wheelMinuteView?.isCyclic = isCyclic
+        wheelSecondView?.isCyclic = isCyclic
     }
 
     override fun setTextSize(textSizePx: Int) {
-        amPmWheel?.textSize = textSizePx
-        hourWheel?.textSize = textSizePx
-        minuteWheel?.textSize = textSizePx
-        secondWheel?.textSize = textSizePx
+        wheelAmPmView?.textSize = textSizePx
+        wheelHourView?.textSize = textSizePx
+        wheelMinuteView?.textSize = textSizePx
+        wheelSecondView?.textSize = textSizePx
     }
 
     override fun setTextSize(textSizeSp: Float) {
-        amPmWheel?.setTextSize(textSizeSp)
-        hourWheel?.setTextSize(textSizeSp)
-        minuteWheel?.setTextSize(textSizeSp)
-        secondWheel?.setTextSize(textSizeSp)
+        wheelAmPmView?.setTextSize(textSizeSp)
+        wheelHourView?.setTextSize(textSizeSp)
+        wheelMinuteView?.setTextSize(textSizeSp)
+        wheelSecondView?.setTextSize(textSizeSp)
     }
 
     override fun setAutoFitTextSize(autoFit: Boolean) {
-        amPmWheel?.isAutoFitTextSize = autoFit
-        hourWheel?.isAutoFitTextSize = autoFit
-        minuteWheel?.isAutoFitTextSize = autoFit
-        secondWheel?.isAutoFitTextSize = autoFit
+        wheelAmPmView?.isAutoFitTextSize = autoFit
+        wheelHourView?.isAutoFitTextSize = autoFit
+        wheelMinuteView?.isAutoFitTextSize = autoFit
+        wheelSecondView?.isAutoFitTextSize = autoFit
     }
 
     override fun setMinTextSize(minTextSizePx: Int) {
-        amPmWheel?.minTextSize = minTextSizePx
-        hourWheel?.minTextSize = minTextSizePx
-        minuteWheel?.minTextSize = minTextSizePx
-        secondWheel?.minTextSize = minTextSizePx
+        wheelAmPmView?.minTextSize = minTextSizePx
+        wheelHourView?.minTextSize = minTextSizePx
+        wheelMinuteView?.minTextSize = minTextSizePx
+        wheelSecondView?.minTextSize = minTextSizePx
     }
 
     override fun setMinTextSize(minTextSizeSp: Float) {
-        amPmWheel?.setMinTextSize(minTextSizeSp)
-        hourWheel?.setMinTextSize(minTextSizeSp)
-        minuteWheel?.setMinTextSize(minTextSizeSp)
-        secondWheel?.setMinTextSize(minTextSizeSp)
+        wheelAmPmView?.setMinTextSize(minTextSizeSp)
+        wheelHourView?.setMinTextSize(minTextSizeSp)
+        wheelMinuteView?.setMinTextSize(minTextSizeSp)
+        wheelSecondView?.setMinTextSize(minTextSizeSp)
     }
 
     override fun setTextAlign(@WheelView.TextAlign textAlign: Int) {
-        amPmWheel?.textAlign = textAlign
-        hourWheel?.textAlign = textAlign
-        minuteWheel?.textAlign = textAlign
-        secondWheel?.textAlign = textAlign
+        wheelAmPmView?.textAlign = textAlign
+        wheelHourView?.textAlign = textAlign
+        wheelMinuteView?.textAlign = textAlign
+        wheelSecondView?.textAlign = textAlign
     }
 
     override fun setNormalTextColor(@ColorInt textColor: Int) {
-        amPmWheel?.normalTextColor = textColor
-        hourWheel?.normalTextColor = textColor
-        minuteWheel?.normalTextColor = textColor
-        secondWheel?.normalTextColor = textColor
+        wheelAmPmView?.normalTextColor = textColor
+        wheelHourView?.normalTextColor = textColor
+        wheelMinuteView?.normalTextColor = textColor
+        wheelSecondView?.normalTextColor = textColor
     }
 
     override fun setNormalTextColorRes(@ColorRes textColorRes: Int) {
-        amPmWheel?.setNormalTextColorRes(textColorRes)
-        hourWheel?.setNormalTextColorRes(textColorRes)
-        minuteWheel?.setNormalTextColorRes(textColorRes)
-        secondWheel?.setNormalTextColorRes(textColorRes)
+        wheelAmPmView?.setNormalTextColorRes(textColorRes)
+        wheelHourView?.setNormalTextColorRes(textColorRes)
+        wheelMinuteView?.setNormalTextColorRes(textColorRes)
+        wheelSecondView?.setNormalTextColorRes(textColorRes)
     }
 
     override fun setSelectedTextColor(@ColorInt textColor: Int) {
-        amPmWheel?.selectedTextColor = textColor
-        hourWheel?.selectedTextColor = textColor
-        minuteWheel?.selectedTextColor = textColor
-        secondWheel?.selectedTextColor = textColor
+        wheelAmPmView?.selectedTextColor = textColor
+        wheelHourView?.selectedTextColor = textColor
+        wheelMinuteView?.selectedTextColor = textColor
+        wheelSecondView?.selectedTextColor = textColor
     }
 
     override fun setSelectedTextColorRes(@ColorRes textColorRes: Int) {
-        amPmWheel?.setSelectedTextColorRes(textColorRes)
-        hourWheel?.setSelectedTextColorRes(textColorRes)
-        minuteWheel?.setSelectedTextColorRes(textColorRes)
-        secondWheel?.setSelectedTextColorRes(textColorRes)
+        wheelAmPmView?.setSelectedTextColorRes(textColorRes)
+        wheelHourView?.setSelectedTextColorRes(textColorRes)
+        wheelMinuteView?.setSelectedTextColorRes(textColorRes)
+        wheelSecondView?.setSelectedTextColorRes(textColorRes)
     }
 
     override fun setTextPadding(paddingPx: Int) {
-        amPmWheel?.textPaddingLeft = paddingPx
-        amPmWheel?.textPaddingRight = paddingPx
-        hourWheel?.textPaddingLeft = paddingPx
-        hourWheel?.textPaddingRight = paddingPx
-        minuteWheel?.textPaddingLeft = paddingPx
-        minuteWheel?.textPaddingRight = paddingPx
-        secondWheel?.textPaddingLeft = paddingPx
-        secondWheel?.textPaddingRight = paddingPx
+        wheelAmPmView?.textPaddingLeft = paddingPx
+        wheelAmPmView?.textPaddingRight = paddingPx
+        wheelHourView?.textPaddingLeft = paddingPx
+        wheelHourView?.textPaddingRight = paddingPx
+        wheelMinuteView?.textPaddingLeft = paddingPx
+        wheelMinuteView?.textPaddingRight = paddingPx
+        wheelSecondView?.textPaddingLeft = paddingPx
+        wheelSecondView?.textPaddingRight = paddingPx
     }
 
     override fun setTextPadding(paddingDp: Float) {
-        amPmWheel?.setTextPadding(paddingDp)
-        hourWheel?.setTextPadding(paddingDp)
-        minuteWheel?.setTextPadding(paddingDp)
-        secondWheel?.setTextPadding(paddingDp)
+        wheelAmPmView?.setTextPadding(paddingDp)
+        wheelHourView?.setTextPadding(paddingDp)
+        wheelMinuteView?.setTextPadding(paddingDp)
+        wheelSecondView?.setTextPadding(paddingDp)
     }
 
     override fun setTextPaddingLeft(textPaddingLeftPx: Int) {
-        amPmWheel?.textPaddingLeft = textPaddingLeftPx
-        hourWheel?.textPaddingLeft = textPaddingLeftPx
-        minuteWheel?.textPaddingLeft = textPaddingLeftPx
-        secondWheel?.textPaddingLeft = textPaddingLeftPx
+        wheelAmPmView?.textPaddingLeft = textPaddingLeftPx
+        wheelHourView?.textPaddingLeft = textPaddingLeftPx
+        wheelMinuteView?.textPaddingLeft = textPaddingLeftPx
+        wheelSecondView?.textPaddingLeft = textPaddingLeftPx
     }
 
     override fun setTextPaddingLeft(textPaddingLeftDp: Float) {
-        amPmWheel?.setTextPaddingLeft(textPaddingLeftDp)
-        hourWheel?.setTextPaddingLeft(textPaddingLeftDp)
-        minuteWheel?.setTextPaddingLeft(textPaddingLeftDp)
-        secondWheel?.setTextPaddingLeft(textPaddingLeftDp)
+        wheelAmPmView?.setTextPaddingLeft(textPaddingLeftDp)
+        wheelHourView?.setTextPaddingLeft(textPaddingLeftDp)
+        wheelMinuteView?.setTextPaddingLeft(textPaddingLeftDp)
+        wheelSecondView?.setTextPaddingLeft(textPaddingLeftDp)
     }
 
     override fun setTextPaddingRight(textPaddingRightPx: Int) {
-        amPmWheel?.textPaddingRight = textPaddingRightPx
-        hourWheel?.textPaddingRight = textPaddingRightPx
-        minuteWheel?.textPaddingRight = textPaddingRightPx
-        secondWheel?.textPaddingRight = textPaddingRightPx
+        wheelAmPmView?.textPaddingRight = textPaddingRightPx
+        wheelHourView?.textPaddingRight = textPaddingRightPx
+        wheelMinuteView?.textPaddingRight = textPaddingRightPx
+        wheelSecondView?.textPaddingRight = textPaddingRightPx
     }
 
     override fun setTextPaddingRight(textPaddingRightDp: Float) {
-        amPmWheel?.setTextPaddingRight(textPaddingRightDp)
-        hourWheel?.setTextPaddingRight(textPaddingRightDp)
-        minuteWheel?.setTextPaddingRight(textPaddingRightDp)
-        secondWheel?.setTextPaddingRight(textPaddingRightDp)
+        wheelAmPmView?.setTextPaddingRight(textPaddingRightDp)
+        wheelHourView?.setTextPaddingRight(textPaddingRightDp)
+        wheelMinuteView?.setTextPaddingRight(textPaddingRightDp)
+        wheelSecondView?.setTextPaddingRight(textPaddingRightDp)
     }
 
     override fun setTypeface(typeface: Typeface) {
-        amPmWheel?.setTypeface(typeface, false)
-        hourWheel?.setTypeface(typeface, false)
-        minuteWheel?.setTypeface(typeface, false)
-        secondWheel?.setTypeface(typeface, false)
+        wheelAmPmView?.setTypeface(typeface, false)
+        wheelHourView?.setTypeface(typeface, false)
+        wheelMinuteView?.setTypeface(typeface, false)
+        wheelSecondView?.setTypeface(typeface, false)
     }
 
     override fun setTypeface(typeface: Typeface, isBoldForSelectedItem: Boolean) {
-        amPmWheel?.setTypeface(typeface, isBoldForSelectedItem)
-        hourWheel?.setTypeface(typeface, isBoldForSelectedItem)
-        minuteWheel?.setTypeface(typeface, isBoldForSelectedItem)
-        secondWheel?.setTypeface(typeface, isBoldForSelectedItem)
+        wheelAmPmView?.setTypeface(typeface, isBoldForSelectedItem)
+        wheelHourView?.setTypeface(typeface, isBoldForSelectedItem)
+        wheelMinuteView?.setTypeface(typeface, isBoldForSelectedItem)
+        wheelSecondView?.setTypeface(typeface, isBoldForSelectedItem)
     }
 
     override fun setShowDivider(showDivider: Boolean) {
-        amPmWheel?.isShowDivider = showDivider
-        hourWheel?.isShowDivider = showDivider
-        minuteWheel?.isShowDivider = showDivider
-        secondWheel?.isShowDivider = showDivider
+        wheelAmPmView?.isShowDivider = showDivider
+        wheelHourView?.isShowDivider = showDivider
+        wheelMinuteView?.isShowDivider = showDivider
+        wheelSecondView?.isShowDivider = showDivider
     }
 
     override fun setDividerColor(@ColorInt dividerColor: Int) {
-        amPmWheel?.dividerColor = dividerColor
-        hourWheel?.dividerColor = dividerColor
-        minuteWheel?.dividerColor = dividerColor
-        secondWheel?.dividerColor = dividerColor
+        wheelAmPmView?.dividerColor = dividerColor
+        wheelHourView?.dividerColor = dividerColor
+        wheelMinuteView?.dividerColor = dividerColor
+        wheelSecondView?.dividerColor = dividerColor
     }
 
     override fun setDividerColorRes(@ColorRes dividerColorRes: Int) {
-        amPmWheel?.setDividerColorRes(dividerColorRes)
-        hourWheel?.setDividerColorRes(dividerColorRes)
-        minuteWheel?.setDividerColorRes(dividerColorRes)
-        secondWheel?.setDividerColorRes(dividerColorRes)
+        wheelAmPmView?.setDividerColorRes(dividerColorRes)
+        wheelHourView?.setDividerColorRes(dividerColorRes)
+        wheelMinuteView?.setDividerColorRes(dividerColorRes)
+        wheelSecondView?.setDividerColorRes(dividerColorRes)
     }
 
     override fun setDividerHeight(dividerHeightPx: Int) {
-        amPmWheel?.dividerHeight = dividerHeightPx
-        hourWheel?.dividerHeight = dividerHeightPx
-        minuteWheel?.dividerHeight = dividerHeightPx
-        secondWheel?.dividerHeight = dividerHeightPx
+        wheelAmPmView?.dividerHeight = dividerHeightPx
+        wheelHourView?.dividerHeight = dividerHeightPx
+        wheelMinuteView?.dividerHeight = dividerHeightPx
+        wheelSecondView?.dividerHeight = dividerHeightPx
     }
 
     override fun setDividerHeight(dividerHeightDp: Float) {
-        amPmWheel?.setDividerHeight(dividerHeightDp)
-        hourWheel?.setDividerHeight(dividerHeightDp)
-        minuteWheel?.setDividerHeight(dividerHeightDp)
-        secondWheel?.setDividerHeight(dividerHeightDp)
+        wheelAmPmView?.setDividerHeight(dividerHeightDp)
+        wheelHourView?.setDividerHeight(dividerHeightDp)
+        wheelMinuteView?.setDividerHeight(dividerHeightDp)
+        wheelSecondView?.setDividerHeight(dividerHeightDp)
     }
 
     override fun setDividerType(@WheelView.DividerType dividerType: Int) {
-        amPmWheel?.dividerType = dividerType
-        hourWheel?.dividerType = dividerType
-        minuteWheel?.dividerType = dividerType
-        secondWheel?.dividerType = dividerType
+        wheelAmPmView?.dividerType = dividerType
+        wheelHourView?.dividerType = dividerType
+        wheelMinuteView?.dividerType = dividerType
+        wheelSecondView?.dividerType = dividerType
     }
 
     override fun setWheelDividerPadding(paddingPx: Int) {
-        amPmWheel?.dividerPadding = paddingPx
-        hourWheel?.dividerPadding = paddingPx
-        minuteWheel?.dividerPadding = paddingPx
-        secondWheel?.dividerPadding = paddingPx
+        wheelAmPmView?.dividerPadding = paddingPx
+        wheelHourView?.dividerPadding = paddingPx
+        wheelMinuteView?.dividerPadding = paddingPx
+        wheelSecondView?.dividerPadding = paddingPx
     }
 
     override fun setWheelDividerPadding(paddingDp: Float) {
-        amPmWheel?.setDividerPadding(paddingDp)
-        hourWheel?.setDividerPadding(paddingDp)
-        minuteWheel?.setDividerPadding(paddingDp)
-        secondWheel?.setDividerPadding(paddingDp)
+        wheelAmPmView?.setDividerPadding(paddingDp)
+        wheelHourView?.setDividerPadding(paddingDp)
+        wheelMinuteView?.setDividerPadding(paddingDp)
+        wheelSecondView?.setDividerPadding(paddingDp)
     }
 
     override fun setDividerCap(cap: Paint.Cap) {
-        amPmWheel?.dividerCap = cap
-        hourWheel?.dividerCap = cap
-        minuteWheel?.dividerCap = cap
-        secondWheel?.dividerCap = cap
+        wheelAmPmView?.dividerCap = cap
+        wheelHourView?.dividerCap = cap
+        wheelMinuteView?.dividerCap = cap
+        wheelSecondView?.dividerCap = cap
     }
 
     override fun setDividerOffsetY(offsetYPx: Int) {
-        amPmWheel?.dividerOffsetY = offsetYPx
-        hourWheel?.dividerOffsetY = offsetYPx
-        minuteWheel?.dividerOffsetY = offsetYPx
-        secondWheel?.dividerOffsetY = offsetYPx
+        wheelAmPmView?.dividerOffsetY = offsetYPx
+        wheelHourView?.dividerOffsetY = offsetYPx
+        wheelMinuteView?.dividerOffsetY = offsetYPx
+        wheelSecondView?.dividerOffsetY = offsetYPx
     }
 
     override fun setDividerOffsetY(offsetYDp: Float) {
-        amPmWheel?.setDividerOffsetY(offsetYDp)
-        hourWheel?.setDividerOffsetY(offsetYDp)
-        minuteWheel?.setDividerOffsetY(offsetYDp)
-        secondWheel?.setDividerOffsetY(offsetYDp)
+        wheelAmPmView?.setDividerOffsetY(offsetYDp)
+        wheelHourView?.setDividerOffsetY(offsetYDp)
+        wheelMinuteView?.setDividerOffsetY(offsetYDp)
+        wheelSecondView?.setDividerOffsetY(offsetYDp)
     }
 
     override fun setShowCurtain(showCurtain: Boolean) {
-        amPmWheel?.isShowCurtain = showCurtain
-        hourWheel?.isShowCurtain = showCurtain
-        minuteWheel?.isShowCurtain = showCurtain
-        secondWheel?.isShowCurtain = showCurtain
+        wheelAmPmView?.isShowCurtain = showCurtain
+        wheelHourView?.isShowCurtain = showCurtain
+        wheelMinuteView?.isShowCurtain = showCurtain
+        wheelSecondView?.isShowCurtain = showCurtain
     }
 
     override fun setCurtainColor(@ColorInt curtainColor: Int) {
-        amPmWheel?.curtainColor = curtainColor
-        hourWheel?.curtainColor = curtainColor
-        minuteWheel?.curtainColor = curtainColor
-        secondWheel?.curtainColor = curtainColor
+        wheelAmPmView?.curtainColor = curtainColor
+        wheelHourView?.curtainColor = curtainColor
+        wheelMinuteView?.curtainColor = curtainColor
+        wheelSecondView?.curtainColor = curtainColor
     }
 
     override fun setCurtainColorRes(@ColorRes curtainColorRes: Int) {
-        amPmWheel?.setCurtainColorRes(curtainColorRes)
-        hourWheel?.setCurtainColorRes(curtainColorRes)
-        minuteWheel?.setCurtainColorRes(curtainColorRes)
-        secondWheel?.setCurtainColorRes(curtainColorRes)
+        wheelAmPmView?.setCurtainColorRes(curtainColorRes)
+        wheelHourView?.setCurtainColorRes(curtainColorRes)
+        wheelMinuteView?.setCurtainColorRes(curtainColorRes)
+        wheelSecondView?.setCurtainColorRes(curtainColorRes)
     }
 
     override fun setCurved(curved: Boolean) {
-        amPmWheel?.isCurved = curved
-        hourWheel?.isCurved = curved
-        minuteWheel?.isCurved = curved
-        secondWheel?.isCurved = curved
+        wheelAmPmView?.isCurved = curved
+        wheelHourView?.isCurved = curved
+        wheelMinuteView?.isCurved = curved
+        wheelSecondView?.isCurved = curved
     }
 
     override fun setCurvedArcDirection(@WheelView.CurvedArcDirection direction: Int) {
-        amPmWheel?.curvedArcDirection = direction
-        hourWheel?.curvedArcDirection = direction
-        minuteWheel?.curvedArcDirection = direction
-        secondWheel?.curvedArcDirection = direction
+        wheelAmPmView?.curvedArcDirection = direction
+        wheelHourView?.curvedArcDirection = direction
+        wheelMinuteView?.curvedArcDirection = direction
+        wheelSecondView?.curvedArcDirection = direction
     }
 
     override fun setCurvedArcDirectionFactor(factor: Float) {
-        amPmWheel?.curvedArcDirectionFactor = factor
-        hourWheel?.curvedArcDirectionFactor = factor
-        minuteWheel?.curvedArcDirectionFactor = factor
-        secondWheel?.curvedArcDirectionFactor = factor
+        wheelAmPmView?.curvedArcDirectionFactor = factor
+        wheelHourView?.curvedArcDirectionFactor = factor
+        wheelMinuteView?.curvedArcDirectionFactor = factor
+        wheelSecondView?.curvedArcDirectionFactor = factor
     }
 
     override fun setRefractRatio(ratio: Float) {
-        amPmWheel?.refractRatio = ratio
-        hourWheel?.refractRatio = ratio
-        minuteWheel?.refractRatio = ratio
-        secondWheel?.refractRatio = ratio
+        wheelAmPmView?.refractRatio = ratio
+        wheelHourView?.refractRatio = ratio
+        wheelMinuteView?.refractRatio = ratio
+        wheelSecondView?.refractRatio = ratio
     }
 
     override fun setSoundEffect(soundEffect: Boolean) {
-        amPmWheel?.isSoundEffect = soundEffect
-        hourWheel?.isSoundEffect = soundEffect
-        minuteWheel?.isSoundEffect = soundEffect
-        secondWheel?.isSoundEffect = soundEffect
+        wheelAmPmView?.isSoundEffect = soundEffect
+        wheelHourView?.isSoundEffect = soundEffect
+        wheelMinuteView?.isSoundEffect = soundEffect
+        wheelSecondView?.isSoundEffect = soundEffect
     }
 
     override fun setSoundResource(@RawRes soundRes: Int) {
-        amPmWheel?.setSoundResource(soundRes)
-        hourWheel?.setSoundResource(soundRes)
-        minuteWheel?.setSoundResource(soundRes)
-        secondWheel?.setSoundResource(soundRes)
+        wheelAmPmView?.setSoundResource(soundRes)
+        wheelHourView?.setSoundResource(soundRes)
+        wheelMinuteView?.setSoundResource(soundRes)
+        wheelSecondView?.setSoundResource(soundRes)
     }
 
     override fun setSoundVolume(playVolume: Float) {
-        amPmWheel?.setSoundVolume(playVolume)
-        hourWheel?.setSoundVolume(playVolume)
-        minuteWheel?.setSoundVolume(playVolume)
-        secondWheel?.setSoundVolume(playVolume)
+        wheelAmPmView?.setSoundVolume(playVolume)
+        wheelHourView?.setSoundVolume(playVolume)
+        wheelMinuteView?.setSoundVolume(playVolume)
+        wheelSecondView?.setSoundVolume(playVolume)
     }
 
     override fun setResetSelectedPosition(reset: Boolean) {
-        amPmWheel?.isResetSelectedPosition = reset
-        hourWheel?.isResetSelectedPosition = reset
-        minuteWheel?.isResetSelectedPosition = reset
-        secondWheel?.isResetSelectedPosition = reset
+        wheelAmPmView?.isResetSelectedPosition = reset
+        wheelHourView?.isResetSelectedPosition = reset
+        wheelMinuteView?.isResetSelectedPosition = reset
+        wheelSecondView?.isResetSelectedPosition = reset
     }
 
     override fun setCanOverRangeScroll(canOverRange: Boolean) {
-        amPmWheel?.canOverRangeScroll = canOverRange
-        hourWheel?.canOverRangeScroll = canOverRange
-        minuteWheel?.canOverRangeScroll = canOverRange
-        secondWheel?.canOverRangeScroll = canOverRange
+        wheelAmPmView?.canOverRangeScroll = canOverRange
+        wheelHourView?.canOverRangeScroll = canOverRange
+        wheelMinuteView?.canOverRangeScroll = canOverRange
+        wheelSecondView?.canOverRangeScroll = canOverRange
     }
 
     override fun setLeftText(text: CharSequence) {
@@ -421,10 +509,10 @@ class TimePickerHelper(private var amPmWheel: WheelAmPmView?,
 
     override fun setLeftText(amPmText: CharSequence, hourText: CharSequence,
                              minuteText: CharSequence, secondText: CharSequence) {
-        amPmWheel?.leftText = amPmText
-        hourWheel?.leftText = hourText
-        minuteWheel?.leftText = minuteText
-        secondWheel?.leftText = secondText
+        wheelAmPmView?.leftText = amPmText
+        wheelHourView?.leftText = hourText
+        wheelMinuteView?.leftText = minuteText
+        wheelSecondView?.leftText = secondText
     }
 
     override fun setRightText(text: CharSequence) {
@@ -433,107 +521,119 @@ class TimePickerHelper(private var amPmWheel: WheelAmPmView?,
 
     override fun setRightText(amPmText: CharSequence, hourText: CharSequence,
                               minuteText: CharSequence, secondText: CharSequence) {
-        amPmWheel?.rightText = amPmText
-        hourWheel?.rightText = hourText
-        minuteWheel?.rightText = minuteText
-        secondWheel?.rightText = secondText
+        wheelAmPmView?.rightText = amPmText
+        wheelHourView?.rightText = hourText
+        wheelMinuteView?.rightText = minuteText
+        wheelSecondView?.rightText = secondText
     }
 
     override fun setLeftTextSize(textSizePx: Int) {
-        amPmWheel?.leftTextSize = textSizePx
-        hourWheel?.leftTextSize = textSizePx
-        minuteWheel?.leftTextSize = textSizePx
-        secondWheel?.leftTextSize = textSizePx
+        wheelAmPmView?.leftTextSize = textSizePx
+        wheelHourView?.leftTextSize = textSizePx
+        wheelMinuteView?.leftTextSize = textSizePx
+        wheelSecondView?.leftTextSize = textSizePx
     }
 
     override fun setLeftTextSize(textSizeSp: Float) {
-        amPmWheel?.setLeftTextSize(textSizeSp)
-        hourWheel?.setLeftTextSize(textSizeSp)
-        minuteWheel?.setLeftTextSize(textSizeSp)
-        secondWheel?.setLeftTextSize(textSizeSp)
+        wheelAmPmView?.setLeftTextSize(textSizeSp)
+        wheelHourView?.setLeftTextSize(textSizeSp)
+        wheelMinuteView?.setLeftTextSize(textSizeSp)
+        wheelSecondView?.setLeftTextSize(textSizeSp)
     }
 
     override fun setRightTextSize(textSizePx: Int) {
-        amPmWheel?.rightTextSize = textSizePx
-        hourWheel?.rightTextSize = textSizePx
-        minuteWheel?.rightTextSize = textSizePx
-        secondWheel?.rightTextSize = textSizePx
+        wheelAmPmView?.rightTextSize = textSizePx
+        wheelHourView?.rightTextSize = textSizePx
+        wheelMinuteView?.rightTextSize = textSizePx
+        wheelSecondView?.rightTextSize = textSizePx
     }
 
     override fun setRightTextSize(textSizeSp: Float) {
-        amPmWheel?.setRightTextSize(textSizeSp)
-        hourWheel?.setRightTextSize(textSizeSp)
-        minuteWheel?.setRightTextSize(textSizeSp)
-        secondWheel?.setRightTextSize(textSizeSp)
+        wheelAmPmView?.setRightTextSize(textSizeSp)
+        wheelHourView?.setRightTextSize(textSizeSp)
+        wheelMinuteView?.setRightTextSize(textSizeSp)
+        wheelSecondView?.setRightTextSize(textSizeSp)
     }
 
     override fun setLeftTextColor(@ColorInt color: Int) {
-        amPmWheel?.leftTextColor = color
-        hourWheel?.leftTextColor = color
-        minuteWheel?.leftTextColor = color
-        secondWheel?.leftTextColor = color
+        wheelAmPmView?.leftTextColor = color
+        wheelHourView?.leftTextColor = color
+        wheelMinuteView?.leftTextColor = color
+        wheelSecondView?.leftTextColor = color
     }
 
     override fun setLeftTextColorRes(@ColorRes colorRes: Int) {
-        amPmWheel?.setLeftTextColorRes(colorRes)
-        hourWheel?.setLeftTextColorRes(colorRes)
-        minuteWheel?.setLeftTextColorRes(colorRes)
-        secondWheel?.setLeftTextColorRes(colorRes)
+        wheelAmPmView?.setLeftTextColorRes(colorRes)
+        wheelHourView?.setLeftTextColorRes(colorRes)
+        wheelMinuteView?.setLeftTextColorRes(colorRes)
+        wheelSecondView?.setLeftTextColorRes(colorRes)
     }
 
     override fun setRightTextColor(@ColorInt color: Int) {
-        amPmWheel?.rightTextColor = color
-        hourWheel?.rightTextColor = color
-        minuteWheel?.rightTextColor = color
-        secondWheel?.rightTextColor = color
+        wheelAmPmView?.rightTextColor = color
+        wheelHourView?.rightTextColor = color
+        wheelMinuteView?.rightTextColor = color
+        wheelSecondView?.rightTextColor = color
     }
 
     override fun setRightTextColorRes(@ColorRes colorRes: Int) {
-        amPmWheel?.setRightTextColorRes(colorRes)
-        hourWheel?.setRightTextColorRes(colorRes)
-        minuteWheel?.setRightTextColorRes(colorRes)
-        secondWheel?.setRightTextColorRes(colorRes)
+        wheelAmPmView?.setRightTextColorRes(colorRes)
+        wheelHourView?.setRightTextColorRes(colorRes)
+        wheelMinuteView?.setRightTextColorRes(colorRes)
+        wheelSecondView?.setRightTextColorRes(colorRes)
     }
 
     override fun setLeftTextMarginRight(marginRightPx: Int) {
-        amPmWheel?.leftTextMarginRight = marginRightPx
-        hourWheel?.leftTextMarginRight = marginRightPx
-        minuteWheel?.leftTextMarginRight = marginRightPx
-        secondWheel?.leftTextMarginRight = marginRightPx
+        wheelAmPmView?.leftTextMarginRight = marginRightPx
+        wheelHourView?.leftTextMarginRight = marginRightPx
+        wheelMinuteView?.leftTextMarginRight = marginRightPx
+        wheelSecondView?.leftTextMarginRight = marginRightPx
     }
 
     override fun setLeftTextMarginRight(marginRightDp: Float) {
-        amPmWheel?.setLeftTextMarginRight(marginRightDp)
-        hourWheel?.setLeftTextMarginRight(marginRightDp)
-        minuteWheel?.setLeftTextMarginRight(marginRightDp)
-        secondWheel?.setLeftTextMarginRight(marginRightDp)
+        wheelAmPmView?.setLeftTextMarginRight(marginRightDp)
+        wheelHourView?.setLeftTextMarginRight(marginRightDp)
+        wheelMinuteView?.setLeftTextMarginRight(marginRightDp)
+        wheelSecondView?.setLeftTextMarginRight(marginRightDp)
     }
 
     override fun setRightTextMarginLeft(marginLeftPx: Int) {
-        amPmWheel?.rightTextMarginLeft = marginLeftPx
-        hourWheel?.rightTextMarginLeft = marginLeftPx
-        minuteWheel?.rightTextMarginLeft = marginLeftPx
-        secondWheel?.rightTextMarginLeft = marginLeftPx
+        wheelAmPmView?.rightTextMarginLeft = marginLeftPx
+        wheelHourView?.rightTextMarginLeft = marginLeftPx
+        wheelMinuteView?.rightTextMarginLeft = marginLeftPx
+        wheelSecondView?.rightTextMarginLeft = marginLeftPx
     }
 
     override fun setRightTextMarginLeft(marginLeftDp: Float) {
-        amPmWheel?.setRightTextMarginLeft(marginLeftDp)
-        hourWheel?.setRightTextMarginLeft(marginLeftDp)
-        minuteWheel?.setRightTextMarginLeft(marginLeftDp)
-        secondWheel?.setRightTextMarginLeft(marginLeftDp)
+        wheelAmPmView?.setRightTextMarginLeft(marginLeftDp)
+        wheelHourView?.setRightTextMarginLeft(marginLeftDp)
+        wheelMinuteView?.setRightTextMarginLeft(marginLeftDp)
+        wheelSecondView?.setRightTextMarginLeft(marginLeftDp)
     }
 
     override fun setLeftTextGravity(gravity: Int) {
-        amPmWheel?.leftTextGravity = gravity
-        hourWheel?.leftTextGravity = gravity
-        minuteWheel?.leftTextGravity = gravity
-        secondWheel?.leftTextGravity = gravity
+        wheelAmPmView?.leftTextGravity = gravity
+        wheelHourView?.leftTextGravity = gravity
+        wheelMinuteView?.leftTextGravity = gravity
+        wheelSecondView?.leftTextGravity = gravity
     }
 
     override fun setRightTextGravity(gravity: Int) {
-        amPmWheel?.rightTextGravity = gravity
-        hourWheel?.rightTextGravity = gravity
-        minuteWheel?.rightTextGravity = gravity
-        secondWheel?.rightTextGravity = gravity
+        wheelAmPmView?.rightTextGravity = gravity
+        wheelHourView?.rightTextGravity = gravity
+        wheelMinuteView?.rightTextGravity = gravity
+        wheelSecondView?.rightTextGravity = gravity
+    }
+
+    override fun set24Hour(is24Hour: Boolean) {
+        val isHourVisible=wheelHourView?.visibility==View.VISIBLE
+        wheelAmPmView?.visibility = if (is24Hour) View.GONE else
+            (if(isHourVisible) View.VISIBLE else View.GONE)
+        wheelHourView?.is24Hour = is24Hour
+        if (hourTextFormatter == null) {
+            wheelHourView?.setTextFormatter(
+                    if (is24Hour) IntTextFormatter()
+                    else IntTextFormatter(IntTextFormatter.SINGLE_INT_FORMAT))
+        }
     }
 }

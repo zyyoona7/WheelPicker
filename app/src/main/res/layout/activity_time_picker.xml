@@ -1,16 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         tools:context="com.zyyoona7.demo.TimePickerActivity">
 
-        <com.zyyoona7.picker.TimePickerView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_auto_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="自动获取系统时制"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.zyyoona7.picker.TimePickerView
+                android:id="@+id/time_picker_auto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_auto_title"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent="0.7"
+                app:tpv_hourRightText="时"
+                app:tpv_minuteRightText="分"
+                app:tpv_rightTextMarginLeft="5dp"
+                app:tpv_secondRightText="秒"
+                app:tpv_textSize="22sp"
+                app:tpv_widthWeightMode="true" />
+
+            <TextView
+                android:id="@+id/tv_24_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="24小时制"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/time_picker_auto" />
+
+            <com.zyyoona7.picker.TimePickerView
+                android:id="@+id/time_picker_24"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:tpv_is24Hour="true"
+                app:tpv_textSize="20sp"
+                app:tpv_hourRightText="时"
+                app:tpv_minuteRightText="分"
+                app:tpv_secondRightText="秒"
+                app:tpv_rightTextGravity="top"
+                app:tpv_rightTextSize="13sp"
+                app:tpv_rightTextColor="@color/colorAccent"
+                app:layout_constraintTop_toBottomOf="@id/tv_24_title"/>
+
+            <TextView
+                android:id="@+id/tv_12_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="12小时制"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/time_picker_24" />
+
+            <com.zyyoona7.picker.TimePickerView
+                android:id="@+id/time_picker_12"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:tpv_is24Hour="false"
+                app:tpv_textSize="25sp"
+                app:tpv_hourRightText="时"
+                app:tpv_minuteRightText="分"
+                app:tpv_secondRightText="秒"
+                app:tpv_rightTextGravity="top"
+                app:tpv_rightTextSize="13sp"
+                app:tpv_showSecond="false"
+                app:tpv_rightTextColor="@color/colorPrimary"
+                app:layout_constraintTop_toBottomOf="@id/tv_12_title"/>
+
+            <com.zyyoona7.picker.TimePickerView
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:tpv_is24Hour="false"
+                app:tpv_textSize="25sp"
+                app:tpv_hourRightText="时"
+                app:tpv_minuteRightText="分"
+                app:tpv_secondRightText="秒"
+                app:tpv_rightTextGravity="top"
+                app:tpv_rightTextSize="13sp"
+                app:tpv_showHour="false"
+                app:tpv_rightTextColor="@color/colorPrimary"
+                app:layout_constraintTop_toBottomOf="@id/time_picker_12"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

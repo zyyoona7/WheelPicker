@@ -2,6 +2,7 @@ package com.zyyoona7.picker.helper
 
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.RawRes
@@ -200,6 +201,18 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         } catch (e: ParseException) {
             Date()
         }
+    }
+
+    override fun setShowYear(isShow: Boolean) {
+        wheelYearView?.visibility = if (isShow) View.VISIBLE else View.GONE
+    }
+
+    override fun setShowMonth(isShow: Boolean) {
+        wheelMonthView?.visibility = if (isShow) View.VISIBLE else View.GONE
+    }
+
+    override fun setShowDay(isShow: Boolean) {
+        wheelDayView?.visibility = if (isShow) View.VISIBLE else View.GONE
     }
 
     override fun getSelectedDateStr(): String {
@@ -513,7 +526,7 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
     }
 
     override fun setLeftText(text: CharSequence) {
-        setLeftText(text,text,text)
+        setLeftText(text, text, text)
     }
 
     override fun setLeftText(yearLeft: CharSequence, monthLeft: CharSequence, dayLeft: CharSequence) {
@@ -523,7 +536,7 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
     }
 
     override fun setRightText(text: CharSequence) {
-        setRightText(text,text,text)
+        setRightText(text, text, text)
     }
 
     override fun setRightText(yearRight: CharSequence, monthRight: CharSequence, dayRight: CharSequence) {

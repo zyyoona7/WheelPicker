@@ -32,6 +32,7 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
     : LinearLayout(context, attrs, defStyleAttr), LinkagePicker, WheelPicker {
 
     private val linkagePickerHelper: LinkagePickerHelper
+    private var isShowLinkage3:Boolean = true
 
     init {
         val wheelView1 = WheelView(context)
@@ -50,10 +51,12 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         addView(wheelView1, layoutParams)
         addView(wheelView2, layoutParams)
         addView(wheelView3, layoutParams)
+        setShowLinkage3(isShowLinkage3)
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet) {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.LinkagePickerView)
+        isShowLinkage3=typedArray.getBoolean(R.styleable.LinkagePickerView_lpv_showLinkage3,true)
         setVisibleItems(typedArray.getInt(R.styleable.LinkagePickerView_lpv_visibleItems,
                 WheelView.DEFAULT_VISIBLE_ITEM))
         setLineSpacing(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_lineSpacing,
@@ -156,6 +159,10 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
 
     override fun setOnLinkageSelectedListener(listener: OnLinkageSelectedListener?) {
         linkagePickerHelper.setOnLinkageSelectedListener(listener)
+    }
+
+    override fun setShowLinkage3(isShow: Boolean) {
+        linkagePickerHelper.setShowLinkage3(isShow)
     }
 
     override fun getFirstWheelView(): WheelView {
