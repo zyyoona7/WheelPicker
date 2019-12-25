@@ -10,6 +10,7 @@ class IntTextFormatter @JvmOverloads constructor(format: String = DEFAULT_INT_FO
     : SimpleTextFormatter<Int>(format) {
 
     companion object {
+        const val SINGLE_INT_FORMAT="%d"
         private const val DEFAULT_INT_FORMAT = "%02d"
     }
 }

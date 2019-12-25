@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.graphics.*
 import android.media.AudioManager
 import android.text.TextPaint
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.util.SparseArray
@@ -47,6 +48,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private var itemHeight: Int = 0
     //文字的最大宽度
     private var mainTextMaxWidth: Int = 0
+    //测量文字完成后的原始宽度
+    private var originTextMaxWidth: Int = 0
     private var leftTextWidth: Int = 0
     private var rightTextWidth: Int = 0
     //文字高度
@@ -111,6 +114,36 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /*
       ---------- 文字相关 ----------
      */
+    //每条数据有相同的宽度（减少文字测量）
+    // 如果数据中只有数字、汉字或者（数字和汉字）并且每个条目数据长度一致则可以使用此属性
+    // 如果有英文字母且不确定则不要使用此属性
+    // 因为字母测量出来的宽度不是一致的，而数字和汉字只要字数一样普通的字体宽度也是一样的
+    var hasSameWidth: Boolean = false
+        set(value) {
+            if (value == field) {
+                return
+            }
+            field = value
+            notifyChanged()
+        }
+    //最大宽度文字的下标（减少文字测量）
+    var maxWidthPosition: Int = -1
+        set(value) {
+            if (value == field) {
+                return
+            }
+            field = value
+            notifyChanged()
+        }
+    //最大宽度的文字内容（减少文字测量）
+    var maxWidthText: String? = null
+        set(value) {
+            if (value == field) {
+                return
+            }
+            field = value
+            notifyChanged()
+        }
     var gravity: Int = Gravity.CENTER
         set(value) {
             if (value == field) {
@@ -200,6 +233,16 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private var normalTypeface: Typeface? = null
     //如果 mIsBoldForSelectedItem==true 则这个字体为选中条目的字体
     private var boldTypeface: Typeface? = null
+
+    //是否绘制debug文字区域边界
+    var drawDebugRectEnabled: Boolean = false
+        set(value) {
+            if (value == field) {
+                return
+            }
+            field = value
+            invalidate()
+        }
     /*
       ---------- 文字相关 ----------
      */
@@ -775,15 +818,15 @@ open class WheelView @JvmOverloads constructor(context: Context,
             }
         }
 
-        val realWidth = resolveSizeAndState(width, widthMeasureSpec, 0)
+        val realWidth = resolveSize(width, widthMeasureSpec)
         if (width > realWidth) {
             //测量的宽度比实际宽度要大，重新设置 mainTextMaxWidth
             mainTextMaxWidth = realWidth - textPaddingLeft - textPaddingRight -
-                    leftAndRightExtraWidth - paddingLeft - paddingRight
+                    leftAndRightExtraWidth - paddingLeft - paddingRight - curvedArcWidth
             //最大宽度变了，则标记一下
             isDataSetChanged = true
         }
-        val realHeight = resolveSizeAndState(height, heightMeasureSpec, 0)
+        val realHeight = resolveSize(height, heightMeasureSpec)
         setMeasuredDimension(realWidth, realHeight)
 
         centerY = measuredHeight / 2
@@ -865,8 +908,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private fun calculateTextSizeAndItemHeight(isDataSetChanged: Boolean) {
         calculateLeftTextWidth()
         calculateRightTextWidth()
-        //数据变化时才重新测量文字宽高，减少计算量
-        if (isDataSetChanged) {
+        //数据变化时或者mainTextMaxWidth已经变化 才重新测量文字宽高，减少计算量
+        if (isDataSetChanged
+                || mainTextMaxWidth <= 0
+                || originTextMaxWidth != mainTextMaxWidth) {
             calculateMaxTextWidth()
         }
         calculateItemHeight()
@@ -899,13 +944,26 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     private fun calculateMaxTextWidth() {
         wheelAdapter?.let {
+            if (it.getItemCount() == 0) {
+                return
+            }
             //重新测量时 清除之前计算的值
             mainTextMaxWidth = 0
             mainTextPaint.textSize = textSize.toFloat()
-            for (i in 0 until it.getItemCount()) {
-                val textWidth = mainTextPaint.measureText(it.getItemText(it.getItemData(i))).toInt()
-                mainTextMaxWidth = max(textWidth, mainTextMaxWidth)
+            if (hasSameWidth) {
+                mainTextMaxWidth = mainTextPaint.measureText(it.getItemText(it.getItemData(0))).toInt()
+            } else if (maxWidthPosition >= 0 && maxWidthPosition < it.getItemCount()) {
+                mainTextMaxWidth = mainTextPaint.measureText(it.getItemText(it.getItemData(maxWidthPosition))).toInt()
+            } else if (!TextUtils.isEmpty(maxWidthText)) {
+                mainTextMaxWidth = mainTextPaint.measureText(maxWidthText).toInt()
+            } else {
+                for (i in 0 until it.getItemCount()) {
+                    val textWidth = mainTextPaint.measureText(it.getItemText(it.getItemData(i))).toInt()
+                    mainTextMaxWidth = max(textWidth, mainTextMaxWidth)
+                }
             }
+            //保存测量完的文字最大宽度
+            originTextMaxWidth = mainTextMaxWidth
             mainTextHeight = (mainTextPaint.fontMetrics.bottom - mainTextPaint.fontMetrics.top).toInt()
         } ?: logAdapterNull()
     }
@@ -1078,7 +1136,6 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 }
             }
 
-            Log.d(TAG, "onDraw scrollOffsetY:${scrollOffsetY},selectedPosition:${selectedPosition}")
             //绘制item
             for (i in minIndex until maxIndex) {
                 if (isCurved) {
@@ -1152,14 +1209,16 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     private fun drawExtraText(canvas: Canvas) {
         //debug 绘制边界
-//        val color = leftTextPaint.color
-//        leftTextPaint.color = Color.BLUE
-//        canvas.drawRect(mainTextRect, leftTextPaint)
-//        leftTextPaint.color = Color.RED
-//        canvas.drawRect(leftTextRect, leftTextPaint)
-//        leftTextPaint.color = Color.GREEN
-//        canvas.drawRect(rightTextRect, leftTextPaint)
-//        leftTextPaint.color = color
+        if (drawDebugRectEnabled) {
+            val color = leftTextPaint.color
+            leftTextPaint.color = Color.BLUE
+            canvas.drawRect(mainTextRect, leftTextPaint)
+            leftTextPaint.color = Color.RED
+            canvas.drawRect(leftTextRect, leftTextPaint)
+            leftTextPaint.color = Color.GREEN
+            canvas.drawRect(rightTextRect, leftTextPaint)
+            leftTextPaint.color = color
+        }
         drawExtraLeftText(canvas)
         drawExtraRightText(canvas)
     }
@@ -2327,6 +2386,13 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     fun getItemCount(): Int {
         return wheelAdapter?.getItemCount() ?: 0
+    }
+
+    /**
+     * 获取 item height
+     */
+    protected fun getItemHeight(): Int {
+        return itemHeight
     }
 
     fun getSoundVolume(): Float {
