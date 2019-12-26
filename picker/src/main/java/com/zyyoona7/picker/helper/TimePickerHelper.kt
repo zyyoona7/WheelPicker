@@ -145,7 +145,11 @@ class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
     override fun setShowHour(isShow: Boolean) {
         val visibility = if (isShow) View.VISIBLE else View.GONE
         wheelHourView?.visibility = visibility
-        wheelAmPmView?.visibility = visibility
+        wheelAmPmView?.visibility = if (isShow && wheelHourView?.is24Hour == false) {
+            View.VISIBLE
+        } else {
+            visibility
+        }
     }
 
     override fun setShowMinute(isShow: Boolean) {
@@ -626,9 +630,9 @@ class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
     }
 
     override fun set24Hour(is24Hour: Boolean) {
-        val isHourVisible=wheelHourView?.visibility==View.VISIBLE
+        val isHourVisible = wheelHourView?.visibility == View.VISIBLE
         wheelAmPmView?.visibility = if (is24Hour) View.GONE else
-            (if(isHourVisible) View.VISIBLE else View.GONE)
+            (if (isHourVisible) View.VISIBLE else View.GONE)
         wheelHourView?.is24Hour = is24Hour
         if (hourTextFormatter == null) {
             wheelHourView?.setTextFormatter(

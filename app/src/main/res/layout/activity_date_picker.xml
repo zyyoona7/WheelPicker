@@ -162,6 +162,54 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/date_picker_4" />
+
+            <com.zyyoona7.picker.DatePickerView
+                android:id="@+id/date_picker_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:dpv_dayRightText="日"
+                app:dpv_dividerType="wrap"
+                app:dpv_endYear="2088"
+                app:dpv_monthRightText="月"
+                app:dpv_rightTextMarginLeft="10dp"
+                app:dpv_selectedDay="4"
+                app:dpv_selectedMonth="5"
+                app:dpv_selectedYear="2000"
+                app:dpv_showDivider="true"
+                app:dpv_startYear="1988"
+                app:dpv_textSize="22sp"
+                app:dpv_yearRightText="年"
+                app:dpv_cyclic="true"
+                app:dpv_showYear="false"
+                app:dpv_selectedTextColor="#801BACC9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/date_picker_5" />
+
+            <com.zyyoona7.picker.DatePickerView
+                android:id="@+id/date_picker_7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:dpv_dayRightText="日"
+                app:dpv_dividerType="wrap"
+                app:dpv_endYear="2088"
+                app:dpv_monthRightText="月"
+                app:dpv_rightTextMarginLeft="10dp"
+                app:dpv_selectedDay="4"
+                app:dpv_selectedMonth="5"
+                app:dpv_selectedYear="2000"
+                app:dpv_showDivider="true"
+                app:dpv_startYear="1988"
+                app:dpv_textSize="22sp"
+                app:dpv_yearRightText="年"
+                app:dpv_cyclic="true"
+                app:dpv_showDay="false"
+                app:dpv_selectedTextColor="#801BACC9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/date_picker_6" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

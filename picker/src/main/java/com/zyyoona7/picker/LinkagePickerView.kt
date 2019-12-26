@@ -52,6 +52,9 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         addView(wheelView2, layoutParams)
         addView(wheelView3, layoutParams)
         setShowLinkage3(isShowLinkage3)
+        wheelView1.maxTextWidthMeasureType=WheelView.MEASURED_BY_MAX_LENGTH
+        wheelView2.maxTextWidthMeasureType=WheelView.MEASURED_BY_MAX_LENGTH
+        wheelView3.maxTextWidthMeasureType=WheelView.MEASURED_BY_MAX_LENGTH
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet) {

@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.graphics.*
 import android.media.AudioManager
 import android.text.TextPaint
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.util.SparseArray
@@ -114,11 +113,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /*
       ---------- 文字相关 ----------
      */
-    //每条数据有相同的宽度（减少文字测量）
-    // 如果数据中只有数字、汉字或者（数字和汉字）并且每个条目数据长度一致则可以使用此属性
-    // 如果有英文字母且不确定则不要使用此属性
-    // 因为字母测量出来的宽度不是一致的，而数字和汉字只要字数一样普通的字体宽度也是一样的
-    var hasSameWidth: Boolean = false
+    //最大文本宽度测量模式，适当的模式可以减少文字测量时间
+    var maxTextWidthMeasureType: Int = MEASURED_BY_DEFAULT
         set(value) {
             if (value == field) {
                 return
@@ -126,24 +122,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             notifyChanged()
         }
-    //最大宽度文字的下标（减少文字测量）
-    var maxWidthPosition: Int = -1
-        set(value) {
-            if (value == field) {
-                return
-            }
-            field = value
-            notifyChanged()
-        }
-    //最大宽度的文字内容（减少文字测量）
-    var maxWidthText: String? = null
-        set(value) {
-            if (value == field) {
-                return
-            }
-            field = value
-            notifyChanged()
-        }
+
     var gravity: Int = Gravity.CENTER
         set(value) {
             if (value == field) {
@@ -609,6 +588,15 @@ open class WheelView @JvmOverloads constructor(context: Context,
         //自适应延伸到左右额外文字处
         const val DIVIDER_WRAP_ALL = 2
 
+        //三种测量文字最大宽度的模式
+
+        //按照相同宽度测量，即只测量一个 item 的宽度来作为数据的最大宽度
+        const val MEASURED_BY_SAME_WIDTH = 1
+        //按照文本最大长度测量，即最长的文本 item 的宽度就是最大宽度
+        const val MEASURED_BY_MAX_LENGTH = 2
+        //文本挨个测量找到最大宽度
+        const val MEASURED_BY_DEFAULT = 3
+
         /**
          * dp转换px
          *
@@ -950,15 +938,19 @@ open class WheelView @JvmOverloads constructor(context: Context,
             //重新测量时 清除之前计算的值
             mainTextMaxWidth = 0
             mainTextPaint.textSize = textSize.toFloat()
-            if (hasSameWidth) {
+            if (maxTextWidthMeasureType == MEASURED_BY_SAME_WIDTH) {
                 mainTextMaxWidth = mainTextPaint.measureText(it.getItemText(it.getItemData(0))).toInt()
-            } else if (maxWidthPosition >= 0 && maxWidthPosition < it.getItemCount()) {
-                mainTextMaxWidth = mainTextPaint.measureText(it.getItemText(it.getItemData(maxWidthPosition))).toInt()
-            } else if (!TextUtils.isEmpty(maxWidthText)) {
-                mainTextMaxWidth = mainTextPaint.measureText(maxWidthText).toInt()
             } else {
+                var maxLength = -1
                 for (i in 0 until it.getItemCount()) {
-                    val textWidth = mainTextPaint.measureText(it.getItemText(it.getItemData(i))).toInt()
+                    val text = it.getItemText(it.getItemData(i))
+                    //按照文字长度测量宽度，可以减少测量耗时
+                    if (maxTextWidthMeasureType == MEASURED_BY_MAX_LENGTH
+                            && text.length <= maxLength) {
+                        continue
+                    }
+                    maxLength = text.length
+                    val textWidth = mainTextPaint.measureText(text).toInt()
                     mainTextMaxWidth = max(textWidth, mainTextMaxWidth)
                 }
             }
