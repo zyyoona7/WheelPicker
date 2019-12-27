@@ -114,6 +114,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
       ---------- 文字相关 ----------
      */
     //最大文本宽度测量模式，适当的模式可以减少文字测量时间
+    @MeasureType
     var maxTextWidthMeasureType: Int = MEASURED_BY_DEFAULT
         set(value) {
             if (value == field) {
@@ -2489,6 +2490,13 @@ open class WheelView @JvmOverloads constructor(context: Context,
     @IntDef(SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SCROLLING)
     @Retention(AnnotationRetention.SOURCE)
     annotation class ScrollState
+
+    /**
+     * 自定义最大文字宽度测量类型注解
+     */
+    @IntDef(MEASURED_BY_SAME_WIDTH, MEASURED_BY_MAX_LENGTH, MEASURED_BY_DEFAULT)
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class MeasureType
 
     /*
       ---------- 一些注解 ----------
