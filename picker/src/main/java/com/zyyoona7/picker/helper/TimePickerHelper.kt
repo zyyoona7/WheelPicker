@@ -160,6 +160,36 @@ class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
         wheelSecondView?.visibility = if (isShow) View.VISIBLE else View.GONE
     }
 
+    override fun setAmPmMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        wheelAmPmView?.maxTextWidthMeasureType=measureType
+    }
+
+    override fun setHourMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        wheelHourView?.maxTextWidthMeasureType=measureType
+    }
+
+    override fun setMinuteMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        wheelMinuteView?.maxTextWidthMeasureType=measureType
+    }
+
+    override fun setSecondMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        wheelSecondView?.maxTextWidthMeasureType=measureType
+    }
+
+    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        setMaxTextWidthMeasureType(measureType,measureType,measureType,measureType)
+    }
+
+    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType amPmType: Int,
+                                            @WheelView.MeasureType hourType: Int,
+                                            @WheelView.MeasureType minuteType: Int,
+                                            @WheelView.MeasureType secondType: Int) {
+        setAmPmMaxTextWidthMeasureType(amPmType)
+        setHourMaxTextWidthMeasureType(hourType)
+        setMinuteMaxTextWidthMeasureType(minuteType)
+        setSecondMaxTextWidthMeasureType(secondType)
+    }
+
     override fun getWheelAmPmView(): WheelAmPmView {
         require(wheelAmPmView != null) {
             "WheelAmPmView is null."

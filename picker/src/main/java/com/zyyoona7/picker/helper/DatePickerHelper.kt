@@ -215,6 +215,30 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelDayView?.visibility = if (isShow) View.VISIBLE else View.GONE
     }
 
+    override fun setYearMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        wheelYearView?.maxTextWidthMeasureType=measureType
+    }
+
+    override fun setMonthMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        wheelMonthView?.maxTextWidthMeasureType=measureType
+    }
+
+    override fun setDayMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        wheelDayView?.maxTextWidthMeasureType=measureType
+    }
+
+    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        setMaxTextWidthMeasureType(measureType,measureType,measureType)
+    }
+
+    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType yearType: Int,
+                                            @WheelView.MeasureType monthType: Int,
+                                            @WheelView.MeasureType dayType: Int) {
+        setYearMaxTextWidthMeasureType(yearType)
+        setMonthMaxTextWidthMeasureType(monthType)
+        setDayMaxTextWidthMeasureType(dayType)
+    }
+
     override fun getSelectedDateStr(): String {
         return "${getSelectedYear()}-${getSelectedMonth()}-${getSelectedDay()}"
     }

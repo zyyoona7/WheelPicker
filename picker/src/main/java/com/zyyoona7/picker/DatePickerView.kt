@@ -60,9 +60,7 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         wheelYearView.setTextFormatter(IntTextFormatter("%04d"))
         wheelMonthView.setTextFormatter(IntTextFormatter("%02d"))
         wheelDayView.setTextFormatter(IntTextFormatter("%02d"))
-        wheelYearView.maxTextWidthMeasureType=WheelView.MEASURED_BY_SAME_WIDTH
-        wheelMonthView.maxTextWidthMeasureType=WheelView.MEASURED_BY_SAME_WIDTH
-        wheelDayView.maxTextWidthMeasureType=WheelView.MEASURED_BY_SAME_WIDTH
+        setMaxTextWidthMeasureType(WheelView.MEASURED_BY_SAME_WIDTH)
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet) {
@@ -221,6 +219,28 @@ class DatePickerView @JvmOverloads constructor(context: Context,
 
     override fun setShowDay(isShow: Boolean) {
         datePickerHelper.setShowDay(isShow)
+    }
+
+    override fun setYearMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        datePickerHelper.setYearMaxTextWidthMeasureType(measureType)
+    }
+
+    override fun setMonthMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        datePickerHelper.setMonthMaxTextWidthMeasureType(measureType)
+    }
+
+    override fun setDayMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        datePickerHelper.setDayMaxTextWidthMeasureType(measureType)
+    }
+
+    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        datePickerHelper.setMaxTextWidthMeasureType(measureType)
+    }
+
+    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType yearType: Int,
+                                            @WheelView.MeasureType monthType: Int,
+                                            @WheelView.MeasureType dayType: Int) {
+        datePickerHelper.setMaxTextWidthMeasureType(yearType, monthType, dayType)
     }
 
     override fun getSelectedDate(): Date {

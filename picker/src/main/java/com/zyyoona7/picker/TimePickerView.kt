@@ -67,9 +67,8 @@ class TimePickerView @JvmOverloads constructor(context: Context,
         set24Hour(is24Hour)
         setMinuteTextFormatter(IntTextFormatter())
         setSecondTextFormatter(IntTextFormatter())
-        hourWheel.maxTextWidthMeasureType=WheelView.MEASURED_BY_MAX_LENGTH
-        minuteWheel.maxTextWidthMeasureType=WheelView.MEASURED_BY_SAME_WIDTH
-        secondWheel.maxTextWidthMeasureType=WheelView.MEASURED_BY_SAME_WIDTH
+        setMaxTextWidthMeasureType(WheelView.MEASURED_BY_MAX_LENGTH,WheelView.MEASURED_BY_MAX_LENGTH,
+                WheelView.MEASURED_BY_SAME_WIDTH,WheelView.MEASURED_BY_SAME_WIDTH)
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet) {
@@ -221,6 +220,33 @@ class TimePickerView @JvmOverloads constructor(context: Context,
 
     override fun setShowSecond(isShow: Boolean) {
         timePickerHelper.setShowSecond(isShow)
+    }
+
+    override fun setAmPmMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        timePickerHelper.setAmPmMaxTextWidthMeasureType(measureType)
+    }
+
+    override fun setHourMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        timePickerHelper.setHourMaxTextWidthMeasureType(measureType)
+    }
+
+    override fun setMinuteMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        timePickerHelper.setMinuteMaxTextWidthMeasureType(measureType)
+    }
+
+    override fun setSecondMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        timePickerHelper.setSecondMaxTextWidthMeasureType(measureType)
+    }
+
+    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        timePickerHelper.setMaxTextWidthMeasureType(measureType)
+    }
+
+    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType amPmType: Int,
+                                            @WheelView.MeasureType hourType: Int,
+                                            @WheelView.MeasureType minuteType: Int,
+                                            @WheelView.MeasureType secondType: Int) {
+        timePickerHelper.setMaxTextWidthMeasureType(amPmType, hourType, minuteType, secondType)
     }
 
     override fun setLeftText(amPmText: CharSequence, hourText: CharSequence,

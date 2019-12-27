@@ -151,6 +151,18 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.visibility = if (isShow) View.VISIBLE else View.GONE
     }
 
+    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+        setMaxTextWidthMeasureType(measureType,measureType,measureType)
+    }
+
+    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType linkage1Type: Int,
+                                            @WheelView.MeasureType linkage2Type: Int,
+                                            @WheelView.MeasureType linkage3Type: Int) {
+        wheelView1?.maxTextWidthMeasureType=linkage1Type
+        wheelView2?.maxTextWidthMeasureType=linkage2Type
+        wheelView3?.maxTextWidthMeasureType=linkage3Type
+    }
+
     override fun getFirstWheelView(): WheelView {
         require(wheelView1 != null) {
             "First WheelView is null."

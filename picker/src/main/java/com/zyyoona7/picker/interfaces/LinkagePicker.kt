@@ -27,6 +27,12 @@ interface LinkagePicker {
 
     fun setShowLinkage3(isShow:Boolean)
 
+    fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType:Int)
+
+    fun setMaxTextWidthMeasureType(@WheelView.MeasureType linkage1Type:Int,
+                              @WheelView.MeasureType linkage2Type:Int,
+                              @WheelView.MeasureType linkage3Type:Int)
+
     fun setOnScrollChangedListener(listener:OnScrollChangedListener?)
 
     fun setOnLinkageSelectedListener(listener:OnLinkageSelectedListener?)

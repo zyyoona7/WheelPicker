@@ -4,6 +4,7 @@ import com.zyyoona7.picker.ex.WheelDayView
 import com.zyyoona7.picker.ex.WheelMonthView
 import com.zyyoona7.picker.ex.WheelYearView
 import com.zyyoona7.picker.listener.OnDateSelectedListener
+import com.zyyoona7.wheel.WheelView
 import com.zyyoona7.wheel.formatter.IntTextFormatter
 import com.zyyoona7.wheel.listener.OnScrollChangedListener
 import java.util.*
@@ -48,6 +49,18 @@ interface DatePicker {
     fun setShowMonth(isShow:Boolean)
 
     fun setShowDay(isShow:Boolean)
+
+    fun setYearMaxTextWidthMeasureType(@WheelView.MeasureType measureType:Int)
+
+    fun setMonthMaxTextWidthMeasureType(@WheelView.MeasureType measureType:Int)
+
+    fun setDayMaxTextWidthMeasureType(@WheelView.MeasureType measureType:Int)
+
+    fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int)
+
+    fun setMaxTextWidthMeasureType(@WheelView.MeasureType yearType:Int,
+                                   @WheelView.MeasureType monthType:Int,
+                                   @WheelView.MeasureType dayType:Int)
 
     fun getSelectedDate(): Date
 
