@@ -133,7 +133,6 @@
     </declare-styleable>
 
     <declare-styleable name="LinkagePickerView">
-        <attr name="lpv_showLinkage3" format="boolean"/>
         <attr name="lpv_visibleItems" format="integer" />
         <attr name="lpv_lineSpacing" format="dimension" />
         <attr name="lpv_cyclic" format="boolean" />

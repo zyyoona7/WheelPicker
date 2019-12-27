@@ -11,11 +11,11 @@ interface LinkagePicker {
 
     fun setTextFormatter(textFormatter: TextFormatter)
 
-    fun setFirstTextFormatter(textFormatter: TextFormatter)
+    fun setLinkage1TextFormatter(textFormatter: TextFormatter)
 
-    fun setSecondTextFormatter(textFormatter: TextFormatter)
+    fun setLinkage2TextFormatter(textFormatter: TextFormatter)
 
-    fun setThirdTextFormatter(textFormatter: TextFormatter)
+    fun setLinkage3TextFormatter(textFormatter: TextFormatter)
 
     fun setOnRequestData2Listener(listener:OnRequestData2Listener?)
 
@@ -24,8 +24,6 @@ interface LinkagePicker {
     fun setData(firstData:List<Any>,useSecond:Boolean)
 
     fun setData(firstData: List<Any>,useSecond: Boolean,useThird:Boolean)
-
-    fun setShowLinkage3(isShow:Boolean)
 
     fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType:Int)
 
@@ -41,9 +39,12 @@ interface LinkagePicker {
 
     fun setRightText(linkage1Text:CharSequence,linkage2Text: CharSequence,linkage3Text: CharSequence)
 
-    fun getFirstWheelView():WheelView
+    fun getLinkage1WheelView():WheelView
 
-    fun getSecondWheelView():WheelView
+    fun getLinkage2WheelView():WheelView
 
-    fun getThirdWheelView():WheelView
+    fun getLinkage3WheelView():WheelView
+
+    //todo List<T>  List<List<T>> 这种结构的兼容
+    //todo 设置选中下标，设置选中的文本
 }

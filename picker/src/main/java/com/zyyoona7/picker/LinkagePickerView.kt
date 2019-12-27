@@ -32,7 +32,6 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
     : LinearLayout(context, attrs, defStyleAttr), LinkagePicker, WheelPicker {
 
     private val linkagePickerHelper: LinkagePickerHelper
-    private var isShowLinkage3:Boolean = true
 
     init {
         val wheelView1 = WheelView(context)
@@ -51,13 +50,11 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         addView(wheelView1, layoutParams)
         addView(wheelView2, layoutParams)
         addView(wheelView3, layoutParams)
-        setShowLinkage3(isShowLinkage3)
         setMaxTextWidthMeasureType(WheelView.MEASURED_BY_MAX_LENGTH)
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet) {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.LinkagePickerView)
-        isShowLinkage3=typedArray.getBoolean(R.styleable.LinkagePickerView_lpv_showLinkage3,true)
         setVisibleItems(typedArray.getInt(R.styleable.LinkagePickerView_lpv_visibleItems,
                 WheelView.DEFAULT_VISIBLE_ITEM))
         setLineSpacing(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_lineSpacing,
@@ -126,16 +123,16 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setTextFormatter(textFormatter)
     }
 
-    override fun setFirstTextFormatter(textFormatter: TextFormatter) {
-        linkagePickerHelper.setFirstTextFormatter(textFormatter)
+    override fun setLinkage1TextFormatter(textFormatter: TextFormatter) {
+        linkagePickerHelper.setLinkage1TextFormatter(textFormatter)
     }
 
-    override fun setSecondTextFormatter(textFormatter: TextFormatter) {
-        linkagePickerHelper.setSecondTextFormatter(textFormatter)
+    override fun setLinkage2TextFormatter(textFormatter: TextFormatter) {
+        linkagePickerHelper.setLinkage2TextFormatter(textFormatter)
     }
 
-    override fun setThirdTextFormatter(textFormatter: TextFormatter) {
-        linkagePickerHelper.setThirdTextFormatter(textFormatter)
+    override fun setLinkage3TextFormatter(textFormatter: TextFormatter) {
+        linkagePickerHelper.setLinkage3TextFormatter(textFormatter)
     }
 
     override fun setOnRequestData2Listener(listener: OnRequestData2Listener?) {
@@ -162,10 +159,6 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setOnLinkageSelectedListener(listener)
     }
 
-    override fun setShowLinkage3(isShow: Boolean) {
-        linkagePickerHelper.setShowLinkage3(isShow)
-    }
-
     override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
         linkagePickerHelper.setMaxTextWidthMeasureType(measureType)
     }
@@ -176,16 +169,16 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setMaxTextWidthMeasureType(linkage1Type, linkage2Type, linkage3Type)
     }
 
-    override fun getFirstWheelView(): WheelView {
-        return linkagePickerHelper.getFirstWheelView()
+    override fun getLinkage1WheelView(): WheelView {
+        return linkagePickerHelper.getLinkage1WheelView()
     }
 
-    override fun getSecondWheelView(): WheelView {
-        return linkagePickerHelper.getSecondWheelView()
+    override fun getLinkage2WheelView(): WheelView {
+        return linkagePickerHelper.getLinkage2WheelView()
     }
 
-    override fun getThirdWheelView(): WheelView {
-        return linkagePickerHelper.getThirdWheelView()
+    override fun getLinkage3WheelView(): WheelView {
+        return linkagePickerHelper.getLinkage3WheelView()
     }
 
     override fun setVisibleItems(visibleItems: Int) {

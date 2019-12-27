@@ -41,17 +41,17 @@ class LinkagePickerActivity : BaseActivity<ActivityLinkagePickerBinding>() {
             }
         })
         binding.linkagePicker.setOnRequestData2Listener(object : OnRequestData2Listener {
-            override fun convert(firstWv: WheelView): List<Any> {
-                return firstWv.getSelectedItem<CityEntity>()?.districts ?: emptyList()
+            override fun convert(linkage1Wv: WheelView): List<Any> {
+                return linkage1Wv.getSelectedItem<CityEntity>()?.districts ?: emptyList()
             }
         })
 
         binding.linkagePicker.setOnRequestData3Listener(object : OnRequestData3Listener {
-            override fun convert(firstWv: WheelView, secondWv: WheelView): List<Any> {
-                return secondWv.getSelectedItem<CityEntity>()?.districts ?: emptyList()
+            override fun convert(linkage1Wv: WheelView, linkage2Wv: WheelView): List<Any> {
+                return linkage2Wv.getSelectedItem<CityEntity>()?.districts ?: emptyList()
             }
         })
         val cityList = ParseHelper.parseThreeLevelCityList(this)
-        binding.linkagePicker.setData(cityList, useSecond = true, useThird = true)
+        binding.linkagePicker.setData(cityList, useSecond = true)
     }
 }

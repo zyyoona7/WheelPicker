@@ -46,20 +46,20 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         when (wheelView.id) {
             wheelView1Id -> {
                 wheelView2?.let {
-                    val secondData: List<Any> = requestData2Listener?.convert(getFirstWheelView())
+                    val secondData: List<Any> = requestData2Listener?.convert(getLinkage1WheelView())
                             ?: emptyList()
                     it.setData(secondData)
                 }
                 wheelView3?.let {
-                    val thirdData: List<Any> = requestData3Listener?.convert(getFirstWheelView(),
-                            getSecondWheelView()) ?: emptyList()
+                    val thirdData: List<Any> = requestData3Listener?.convert(getLinkage1WheelView(),
+                            getLinkage2WheelView()) ?: emptyList()
                     it.setData(thirdData)
                 }
             }
             wheelView2Id -> {
                 wheelView3?.let {
-                    val thirdData: List<Any> = requestData3Listener?.convert(getFirstWheelView(),
-                            getSecondWheelView()) ?: emptyList()
+                    val thirdData: List<Any> = requestData3Listener?.convert(getLinkage1WheelView(),
+                            getLinkage2WheelView()) ?: emptyList()
                     it.setData(thirdData)
                 }
             }
@@ -68,7 +68,7 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
             }
         }
 
-        linkageSelectedListener?.onLinkageSelected(getFirstWheelView(), wheelView2, wheelView3)
+        linkageSelectedListener?.onLinkageSelected(getLinkage1WheelView(), wheelView2, wheelView3)
     }
 
     override fun onScrollChanged(wheelView: WheelView, scrollOffsetY: Int) {
@@ -85,15 +85,15 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.setTextFormatter(textFormatter)
     }
 
-    override fun setFirstTextFormatter(textFormatter: TextFormatter) {
+    override fun setLinkage1TextFormatter(textFormatter: TextFormatter) {
         wheelView1?.setTextFormatter(textFormatter)
     }
 
-    override fun setSecondTextFormatter(textFormatter: TextFormatter) {
+    override fun setLinkage2TextFormatter(textFormatter: TextFormatter) {
         wheelView2?.setTextFormatter(textFormatter)
     }
 
-    override fun setThirdTextFormatter(textFormatter: TextFormatter) {
+    override fun setLinkage3TextFormatter(textFormatter: TextFormatter) {
         wheelView3?.setTextFormatter(textFormatter)
     }
 
@@ -113,7 +113,7 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
                 "use second WheelView must be execute setOnRequestData2Listener() before setData()."
             }
             wheelView2?.let {
-                val secondData: List<Any> = requestData2Listener?.convert(getFirstWheelView())
+                val secondData: List<Any> = requestData2Listener?.convert(getLinkage1WheelView())
                         ?: emptyList()
                 it.setData(secondData)
             }
@@ -126,8 +126,8 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
                 "use third WheelView must be execute setOnRequestData3Listener() before setData()."
             }
             wheelView3?.let {
-                val thirdData: List<Any> = requestData3Listener?.convert(getFirstWheelView(),
-                        getSecondWheelView()) ?: emptyList()
+                val thirdData: List<Any> = requestData3Listener?.convert(getLinkage1WheelView(),
+                        getLinkage2WheelView()) ?: emptyList()
                 it.setData(thirdData)
             }
         } else {
@@ -147,10 +147,6 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         this.linkageSelectedListener = listener
     }
 
-    override fun setShowLinkage3(isShow: Boolean) {
-        wheelView3?.visibility = if (isShow) View.VISIBLE else View.GONE
-    }
-
     override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
         setMaxTextWidthMeasureType(measureType,measureType,measureType)
     }
@@ -163,21 +159,21 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.maxTextWidthMeasureType=linkage3Type
     }
 
-    override fun getFirstWheelView(): WheelView {
+    override fun getLinkage1WheelView(): WheelView {
         require(wheelView1 != null) {
             "First WheelView is null."
         }
         return wheelView1!!
     }
 
-    override fun getSecondWheelView(): WheelView {
+    override fun getLinkage2WheelView(): WheelView {
         require(wheelView2 != null) {
             "Second WheelView is null."
         }
         return wheelView2!!
     }
 
-    override fun getThirdWheelView(): WheelView {
+    override fun getLinkage3WheelView(): WheelView {
         require(wheelView3 != null) {
             "Third WheelView is null."
         }
