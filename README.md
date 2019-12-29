@@ -1,4 +1,4 @@
-![](https://github.com/zyyoona7/WheelPicker/blob/master/perview/banner.png)
+![](https://github.com/zyyoona7/WheelPicker/blob/master/perview/banner.jpg)
 
 ![](https://img.shields.io/badge/platform-android-brightgreen.svg)
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
