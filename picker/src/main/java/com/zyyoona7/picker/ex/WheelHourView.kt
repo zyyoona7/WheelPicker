@@ -2,17 +2,14 @@ package com.zyyoona7.picker.ex
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import androidx.annotation.IntDef
 import com.zyyoona7.picker.R
-import com.zyyoona7.picker.interfaces.IndexOfAction
 import com.zyyoona7.picker.listener.OnAmPmChangedListener
-import com.zyyoona7.wheel.WheelView
 
 class WheelHourView @JvmOverloads constructor(context: Context,
                                               attrs: AttributeSet? = null,
                                               defStyleAttr: Int = 0)
-    : WheelView(context, attrs, defStyleAttr), IndexOfAction<Int> {
+    : WheelIntView(context, attrs, defStyleAttr) {
 
     var is24Hour: Boolean = true
         set(value) {
@@ -49,23 +46,16 @@ class WheelHourView @JvmOverloads constructor(context: Context,
             val maxSelectedHour = typedArray.getInt(R.styleable.WheelHourView_wv_maxSelectedHour, -1)
             typedArray.recycle()
 
-            initSelectedPositionAndRange(indexOf(selectedHour),
-                    indexOf(minSelectedHour), indexOf(maxSelectedHour))
+            initSelectedPositionAndRange(indexFor(selectedHour),
+                    indexFor(minSelectedHour), indexFor(maxSelectedHour))
 
         }
         updateHourData()
     }
 
-    override fun indexOf(item: Int): Int {
+    override fun indexFor(item: Int): Int {
         return if (!is24Hour && item == 12) 0 else
             if (item in hourRange) item else -1
-    }
-
-    override fun getItem(index: Int): Int {
-        if (index !in 0 until getItemCount()) {
-            return -1
-        }
-        return getAdapter()?.getItem<Int>(index) ?: -1
     }
 
     private fun updateHourData() {
@@ -89,11 +79,11 @@ class WheelHourView @JvmOverloads constructor(context: Context,
     @JvmOverloads
     fun setSelectedHour(hour: Int, isSmoothScroll: Boolean = false,
                         smoothDuration: Int = DEFAULT_SCROLL_DURATION) {
-        setSelectedPosition(indexOf(hour), isSmoothScroll, smoothDuration)
+        setSelectedPosition(indexFor(hour), isSmoothScroll, smoothDuration)
     }
 
     fun setSelectedHourRange(minHour: Int, maxHour: Int) {
-        setSelectedRange(indexOf(minHour), indexOf(maxHour))
+        setSelectedRange(indexFor(minHour), indexFor(maxHour))
     }
 
     fun setOnAmPmChangedListener(amPmChangedListener: OnAmPmChangedListener?) {

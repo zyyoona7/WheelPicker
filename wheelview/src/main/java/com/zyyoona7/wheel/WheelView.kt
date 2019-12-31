@@ -17,6 +17,7 @@ import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
+import com.zyyoona7.wheel.adapter.ItemIndexer
 import com.zyyoona7.wheel.formatter.TextFormatter
 import com.zyyoona7.wheel.listener.OnItemPositionChangedListener
 import com.zyyoona7.wheel.listener.OnItemSelectedListener
@@ -544,6 +545,11 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private var textFormatter: TextFormatter? = null
     //adapter 中的 formatter block
     private var formatterBlock: ((Any?) -> String)? = null
+    //adapter 中的 itemIndexer
+    private var itemIndexer: ItemIndexer? = null
+    //adapter 中的 itemIndexerBlock
+    private var itemIndexerBlock: ((ArrayWheelAdapter<*>, Any?) -> Int)? = null
+
 
     //需设置 isAutoFitTextSize=true
     //用来保存对应下标下 重新测量过的 textSize
@@ -1966,6 +1972,26 @@ open class WheelView @JvmOverloads constructor(context: Context,
             it.formatterBlock = this.formatterBlock
             checkResetPosition()
             notifyDataSetChanged()
+        }
+    }
+
+    /**
+     * 设置自己实现的 [ItemIndexer] 索引器，以便 adapter.indexOf() 时调用
+     */
+    fun setItemIndexer(itemIndexer: ItemIndexer) {
+        this.itemIndexer = itemIndexer
+        wheelAdapter?.let {
+            it.itemIndexer = this.itemIndexer
+        }
+    }
+
+    /**
+     * 设置自己实现的 [ItemIndexer] 索引器，以便 adapter.indexOf() 时调用
+     */
+    fun setItemIndexer(indexerBlock: (ArrayWheelAdapter<*>, Any?) -> Int) {
+        this.itemIndexerBlock = indexerBlock
+        wheelAdapter?.let {
+            it.itemIndexerBlock = this.itemIndexerBlock
         }
     }
 

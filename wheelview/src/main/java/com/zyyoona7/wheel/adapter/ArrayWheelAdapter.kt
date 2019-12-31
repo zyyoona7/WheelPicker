@@ -13,6 +13,8 @@ open class ArrayWheelAdapter<T> @JvmOverloads constructor(data: List<T>? = null)
     internal var finishScrollCallback: OnFinishScrollCallback? = null
     internal var selectedItemPosition: Int = 0
     internal var isCyclic: Boolean = false
+    internal var itemIndexer: ItemIndexer? = null
+    internal var itemIndexerBlock: ((ArrayWheelAdapter<*>, Any?) -> Int)? = null
 
     override fun getItemText(item: Any?): String {
         return textFormatter?.formatText(item)
@@ -36,6 +38,30 @@ open class ArrayWheelAdapter<T> @JvmOverloads constructor(data: List<T>? = null)
             }
         }
         return ""
+    }
+
+    /**
+     * 根据item参数信息查找所在的下标
+     */
+    @JvmOverloads
+    fun indexOf(item: Any?, isCompareFormatText: Boolean = false): Int {
+        return itemIndexer?.indexOf(this, item)
+                ?:(itemIndexerBlock?.invoke(this,item)?: internalIndexOf(item, isCompareFormatText))
+    }
+
+    private fun internalIndexOf(item: Any?, isCompareFormatText: Boolean): Int {
+        for (i in getData().indices) {
+            if (isCompareFormatText) {
+                if (getItemTextByIndex(i) == item) {
+                    return i
+                }
+            } else {
+                if (getData()[i] == item) {
+                    return i
+                }
+            }
+        }
+        return -1
     }
 
     /**

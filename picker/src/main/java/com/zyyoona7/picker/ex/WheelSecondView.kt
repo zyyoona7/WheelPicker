@@ -17,8 +17,8 @@ class WheelSecondView @JvmOverloads constructor(context: Context,
             val maxSelectedSecond = typedArray.getInt(R.styleable.WheelSecondView_wv_maxSelectedSecond, -1)
             typedArray.recycle()
 
-            initSelectedPositionAndRange(indexOf(selectedSecond),
-                    indexOf(minSelectedSecond), indexOf(maxSelectedSecond))
+            initSelectedPositionAndRange(indexFor(selectedSecond),
+                    indexFor(minSelectedSecond), indexFor(maxSelectedSecond))
         }
         updateData()
     }
@@ -26,10 +26,10 @@ class WheelSecondView @JvmOverloads constructor(context: Context,
     @JvmOverloads
     fun setSelectedSecond(second: Int, isSmoothScroll: Boolean = false,
                           smoothDuration: Int = DEFAULT_SCROLL_DURATION) {
-        setSelectedPosition(indexOf(second), isSmoothScroll, smoothDuration)
+        setSelectedPosition(indexFor(second), isSmoothScroll, smoothDuration)
     }
 
     fun setSelectedSecondRange(minSecond: Int, maxSecond: Int) {
-        setSelectedRange(indexOf(minSecond), indexOf(maxSecond))
+        setSelectedRange(indexFor(minSecond), indexFor(maxSecond))
     }
 }

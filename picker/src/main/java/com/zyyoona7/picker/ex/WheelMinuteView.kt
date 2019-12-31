@@ -17,8 +17,8 @@ class WheelMinuteView @JvmOverloads constructor(context: Context,
             val maxSelectedMinute = typedArray.getInt(R.styleable.WheelMinuteView_wv_maxSelectedMinute, -1)
             typedArray.recycle()
 
-            initSelectedPositionAndRange(indexOf(selectedMinute),
-                    indexOf(minSelectedMinute), indexOf(maxSelectedMinute))
+            initSelectedPositionAndRange(indexFor(selectedMinute),
+                    indexFor(minSelectedMinute), indexFor(maxSelectedMinute))
         }
         updateData()
     }
@@ -26,10 +26,10 @@ class WheelMinuteView @JvmOverloads constructor(context: Context,
     @JvmOverloads
     fun setSelectedMinute(minute: Int, isSmoothScroll: Boolean = false,
                           smoothDuration: Int = DEFAULT_SCROLL_DURATION) {
-        setSelectedPosition(indexOf(minute), isSmoothScroll, smoothDuration)
+        setSelectedPosition(indexFor(minute), isSmoothScroll, smoothDuration)
     }
 
     fun setSelectedMinuteRange(minMinute: Int, maxMinute: Int) {
-        setSelectedRange(indexOf(minMinute), indexOf(maxMinute))
+        setSelectedRange(indexFor(minMinute), indexFor(maxMinute))
     }
 }

@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.SparseArray
 import com.zyyoona7.picker.R
-import com.zyyoona7.picker.interfaces.IndexOfAction
-import com.zyyoona7.wheel.WheelView
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
@@ -13,7 +11,7 @@ import kotlin.math.min
 class WheelDayView @JvmOverloads constructor(context: Context,
                                              attrs: AttributeSet? = null,
                                              defStyleAttr: Int = 0)
-    : WheelView(context, attrs, defStyleAttr), IndexOfAction<Int> {
+    : WheelIntView(context, attrs, defStyleAttr) {
 
     var year: Int = -1
         set(value) {
@@ -48,30 +46,18 @@ class WheelDayView @JvmOverloads constructor(context: Context,
             val maxSelectedDay = typedArray.getInt(R.styleable.WheelDayView_wv_maxSelectedDay, -1)
             typedArray.recycle()
 
-            val selectedPosition = indexOf(selectedDay)
-            val maxSelectedPosition = indexOf(maxSelectedDay)
-            val minSelectedPosition = indexOf(minSelectedDay)
+            val selectedPosition = indexFor(selectedDay)
+            val maxSelectedPosition = indexFor(maxSelectedDay)
+            val minSelectedPosition = indexFor(minSelectedDay)
             initSelectedPositionAndRange(selectedPosition, minSelectedPosition, maxSelectedPosition)
 
         }
         updateDayData()
     }
 
-    override fun indexOf(item: Int): Int {
+    override fun indexFor(item: Int): Int {
         val days = getDaysByCalendar()
-        return if (item in MIN_DAY..days) {
-            item - 1
-        } else {
-            -1
-        }
-    }
-
-    override fun getItem(index: Int): Int {
-        return if (index in 0 until getItemCount()) {
-            index + 1
-        } else {
-            -1
-        }
+        return if (item in MIN_DAY..days) item - 1 else -1
     }
 
     private fun updateDayData() {
@@ -130,15 +116,15 @@ class WheelDayView @JvmOverloads constructor(context: Context,
     @JvmOverloads
     fun setSelectedDay(dayOfMonth: Int, isSmoothScroll: Boolean = false,
                        smoothDuration: Int = DEFAULT_SCROLL_DURATION) {
-        setSelectedPosition(indexOf(dayOfMonth), isSmoothScroll, smoothDuration)
+        setSelectedPosition(indexFor(dayOfMonth), isSmoothScroll, smoothDuration)
     }
 
     @JvmOverloads
     fun setSelectedDayRange(min: Int = MIN_DAY, max: Int) {
-        setSelectedRange(indexOf(min), indexOf(max))
+        setSelectedRange(indexFor(min), indexFor(max))
     }
 
     fun getMaxDay(): Int {
-        return getItem(getItemCount() - 1)
+        return getAdapter()?.getItem(getItemCount() - 1) ?: -1
     }
 }

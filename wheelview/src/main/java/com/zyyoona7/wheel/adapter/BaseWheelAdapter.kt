@@ -18,7 +18,7 @@ abstract class BaseWheelAdapter<T>(data: List<T>? = null) {
     }
 
     internal fun getItemData(position: Int): T? {
-        return if (position in 0 until dataList.size) dataList[position] else null
+        return if (dataList.size > 0 && position in 0 until dataList.size) dataList[position] else null
     }
 
     fun setData(data: List<T>) {

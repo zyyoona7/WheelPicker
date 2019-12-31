@@ -3,13 +3,11 @@ package com.zyyoona7.picker.ex
 import android.content.Context
 import android.util.AttributeSet
 import com.zyyoona7.picker.R
-import com.zyyoona7.picker.interfaces.IndexOfAction
-import com.zyyoona7.wheel.WheelView
 
 class WheelMonthView @JvmOverloads constructor(context: Context,
                                                attrs: AttributeSet? = null,
                                                defStyleAttr: Int = 0)
-    : WheelView(context, attrs, defStyleAttr), IndexOfAction<Int> {
+    : WheelIntView(context, attrs, defStyleAttr) {
 
     companion object {
         const val MIN_MONTH = 1
@@ -23,27 +21,20 @@ class WheelMonthView @JvmOverloads constructor(context: Context,
             val minSelectedMonth = typedArray.getInt(R.styleable.WheelYearView_wv_minSelectedYear, -1)
             val maxSelectedMonth = typedArray.getInt(R.styleable.WheelMonthView_wv_maxSelectedMonth, -1)
             typedArray.recycle()
-            val selectedPosition = indexOf(selectedMonth)
-            val maxSelectedPosition = indexOf(maxSelectedMonth)
-            val minSelectedPosition = indexOf(minSelectedMonth)
+            val selectedPosition = indexFor(selectedMonth)
+            val maxSelectedPosition = indexFor(maxSelectedMonth)
+            val minSelectedPosition = indexFor(minSelectedMonth)
             initSelectedPositionAndRange(selectedPosition, minSelectedPosition, maxSelectedPosition)
         }
         updateMonthData()
     }
 
-    override fun indexOf(item: Int): Int {
+    override fun indexFor(item: Int): Int {
         return if (item in MIN_MONTH..MAX_MONTH) {
             item - 1
         } else {
             -1
         }
-    }
-
-    override fun getItem(index: Int): Int {
-        if (index !in 0 until getItemCount()) {
-            return -1
-        }
-        return index + 1
     }
 
     private fun updateMonthData() {
@@ -57,11 +48,11 @@ class WheelMonthView @JvmOverloads constructor(context: Context,
     @JvmOverloads
     fun setSelectedMonth(month: Int, isSmoothScroll: Boolean = false,
                          smoothDuration: Int = DEFAULT_SCROLL_DURATION) {
-        setSelectedPosition(indexOf(month), isSmoothScroll, smoothDuration)
+        setSelectedPosition(indexFor(month), isSmoothScroll, smoothDuration)
     }
 
     @JvmOverloads
     fun setSelectedMonthRange(minMonth: Int = MIN_MONTH, maxMonth: Int) {
-        setSelectedRange(indexOf(minMonth), indexOf(maxMonth))
+        setSelectedRange(indexFor(minMonth), indexFor(maxMonth))
     }
 }
