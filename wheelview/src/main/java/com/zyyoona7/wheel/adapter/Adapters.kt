@@ -3,7 +3,47 @@ package com.zyyoona7.wheel.adapter
 import com.zyyoona7.wheel.formatter.TextFormatter
 
 /**
+ * WheelView Adapter 的基类
+ *
+ * @author zyyoona7
+ */
+abstract class BaseWheelAdapter<T>(data: List<T>? = null) {
+
+    private val dataList: MutableList<T> = mutableListOf()
+
+    init {
+        data?.let {
+            setData(it)
+        }
+    }
+
+    fun getItemCount(): Int {
+        return dataList.size
+    }
+
+    internal fun getItemData(position: Int): T? {
+        return if (dataList.size > 0 && position in 0 until dataList.size) dataList[position] else null
+    }
+
+    fun setData(data: List<T>) {
+        dataList.clear()
+        dataList.addAll(data)
+    }
+
+    fun getData(): List<T> {
+        return dataList
+    }
+
+    internal abstract fun getItemText(item: Any?): String
+
+    internal abstract fun getItemTextByIndex(index: Int): String
+}
+
+
+/**
  * WheelView Adapter 的实现类
+ *
+ * @author zyyoona7
  */
 open class ArrayWheelAdapter<T> @JvmOverloads constructor(data: List<T>? = null)
     : BaseWheelAdapter<T>(data) {
@@ -46,7 +86,8 @@ open class ArrayWheelAdapter<T> @JvmOverloads constructor(data: List<T>? = null)
     @JvmOverloads
     fun indexOf(item: Any?, isCompareFormatText: Boolean = false): Int {
         return itemIndexer?.indexOf(this, item)
-                ?:(itemIndexerBlock?.invoke(this,item)?: internalIndexOf(item, isCompareFormatText))
+                ?: (itemIndexerBlock?.invoke(this, item)
+                        ?: internalIndexOf(item, isCompareFormatText))
     }
 
     private fun internalIndexOf(item: Any?, isCompareFormatText: Boolean): Int {
@@ -100,4 +141,15 @@ open class ArrayWheelAdapter<T> @JvmOverloads constructor(data: List<T>? = null)
 
         fun onFinishScroll()
     }
+}
+
+
+/**
+ * item 索引器，用来自定义 indexOf 逻辑
+ *
+ * @author zyyoona7
+ */
+interface ItemIndexer {
+
+    fun indexOf(adapter: ArrayWheelAdapter<*>, item: Any?): Int
 }

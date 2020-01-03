@@ -12,9 +12,7 @@ import com.zyyoona7.picker.ex.WheelAmPmView
 import com.zyyoona7.picker.ex.WheelHourView
 import com.zyyoona7.picker.ex.WheelMinuteView
 import com.zyyoona7.picker.ex.WheelSecondView
-import com.zyyoona7.picker.interfaces.AmPmTextHandler
-import com.zyyoona7.picker.interfaces.TimePicker
-import com.zyyoona7.picker.interfaces.WheelPicker
+import com.zyyoona7.picker.listener.AmPmTextHandler
 import com.zyyoona7.picker.listener.OnAmPmChangedListener
 import com.zyyoona7.picker.listener.OnTimeSelectedListener
 import com.zyyoona7.wheel.WheelView
@@ -59,12 +57,12 @@ class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
         val amPmId = wheelView.id
         wheelAmPmView?.let {
             if (it.id == amPmId) {
-                wheelHourView?.hourType = if (position == 0) WheelHourView.TYPE_AM else WheelHourView.TYPE_PM
+                wheelHourView?.hourType = if (position == 0) WheelHourView.HourType.AM else WheelHourView.HourType.PM
             }
         }
         val is24Hour = wheelHourView?.is24Hour ?: false
         val hour = wheelHourView?.getAdapter()?.getItem(position) ?: -1
-        val isAm = wheelHourView?.hourType == WheelHourView.TYPE_AM
+        val isAm = wheelHourView?.hourType == WheelHourView.HourType.AM
         val minute = wheelMinuteView?.getAdapter()?.getItem(position) ?: -1
         val second = wheelSecondView?.getAdapter()?.getItem(position) ?: -1
         timeSelectedListener?.onTimeSelected(is24Hour, hour, minute, second, isAm)

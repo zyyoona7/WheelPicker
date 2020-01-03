@@ -9,8 +9,6 @@ import androidx.annotation.RawRes
 import com.zyyoona7.picker.ex.WheelDayView
 import com.zyyoona7.picker.ex.WheelMonthView
 import com.zyyoona7.picker.ex.WheelYearView
-import com.zyyoona7.picker.interfaces.DatePicker
-import com.zyyoona7.picker.interfaces.WheelPicker
 import com.zyyoona7.picker.listener.OnDateSelectedListener
 import com.zyyoona7.wheel.WheelView
 import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
@@ -61,7 +59,7 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         val monthId = wheelMonthView?.id ?: -1
         when (wheelView.id) {
             yearId -> {
-                val selectedYear = wheelYearView?.getAdapter()?.getItem(position) ?: DEFAULT_YEAR
+                val selectedYear = wheelYearView?.getItem(position) ?: DEFAULT_YEAR
                 wheelDayView?.year = selectedYear
                 when (selectedYear) {
                     minYear -> {
@@ -91,10 +89,10 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
                 }
             }
             monthId -> {
-                wheelDayView?.month = wheelMonthView?.getAdapter()?.getItem(position)
+                wheelDayView?.month = wheelMonthView?.getItem(position)
                         ?: DEFAULT_MONTH
                 val selectedYear = getSelectedYear()
-                val selectedMonth = wheelMonthView?.getAdapter()?.getItem(position) ?: DEFAULT_MONTH
+                val selectedMonth = wheelMonthView?.getItem(position) ?: DEFAULT_MONTH
                 //如果选中的年份是最小选中年或者最大选中年 并且 选中的月份是最小选中月或者最大选中月-
                 //才限制选择 Day 的范围
                 if (selectedMonth == minMonth && selectedYear == minYear) {
@@ -167,7 +165,7 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
     }
 
     override fun setMaxSelectedDate(maxCalendar: Calendar) {
-        minYear = getWheelYearView().getAdapter()?.getItem(0) ?: 1970
+        minYear = getWheelYearView().getItem(0) ?: 1970
         maxYear = maxCalendar.get(Calendar.YEAR)
         minMonth = WheelMonthView.MIN_MONTH
         maxMonth = maxCalendar.get(Calendar.MONTH) + 1

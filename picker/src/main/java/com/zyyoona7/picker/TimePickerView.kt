@@ -15,10 +15,10 @@ import com.zyyoona7.picker.ex.WheelAmPmView
 import com.zyyoona7.picker.ex.WheelHourView
 import com.zyyoona7.picker.ex.WheelMinuteView
 import com.zyyoona7.picker.ex.WheelSecondView
+import com.zyyoona7.picker.helper.TimePicker
 import com.zyyoona7.picker.helper.TimePickerHelper
-import com.zyyoona7.picker.interfaces.AmPmTextHandler
-import com.zyyoona7.picker.interfaces.TimePicker
-import com.zyyoona7.picker.interfaces.WheelPicker
+import com.zyyoona7.picker.helper.WheelPicker
+import com.zyyoona7.picker.listener.AmPmTextHandler
 import com.zyyoona7.picker.listener.OnTimeSelectedListener
 import com.zyyoona7.wheel.WheelView
 import com.zyyoona7.wheel.formatter.IntTextFormatter

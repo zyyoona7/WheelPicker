@@ -187,7 +187,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     var textSize: Int = DEFAULT_TEXT_SIZE
         set(value) {
-            if (value == field || value <= 0) {
+            if (value == field) {
                 return
             }
             field = value
@@ -2171,6 +2171,11 @@ open class WheelView @JvmOverloads constructor(context: Context,
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
+    fun getAdapter(): ArrayWheelAdapter<*>? {
+        return wheelAdapter
+    }
+
     /**
      * 设置 [TextFormatter]
      */
@@ -2213,11 +2218,6 @@ open class WheelView @JvmOverloads constructor(context: Context,
         wheelAdapter?.let {
             it.itemIndexerBlock = this.itemIndexerBlock
         }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun getAdapter(): ArrayWheelAdapter<*>? {
-        return wheelAdapter
     }
 
     private fun checkResetPosition() {
@@ -2621,10 +2621,27 @@ open class WheelView @JvmOverloads constructor(context: Context,
     }
 
     /**
+     * 获取指定条目的数据
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun <V> getItem(position: Int): V? {
+        return wheelAdapter?.getItem(position)
+    }
+
+    /**
      * 获取数据总条目数
      */
     fun getItemCount(): Int {
         return wheelAdapter?.getItemCount() ?: 0
+    }
+
+    @JvmOverloads
+    open fun indexOf(item: Any?, isCompareFormatText: Boolean = false): Int {
+        return wheelAdapter?.indexOf(item, isCompareFormatText) ?: -1
+    }
+
+    fun hasItemIndexer(): Boolean {
+        return itemIndexer != null || itemIndexerBlock != null
     }
 
     /**

@@ -12,8 +12,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.RawRes
 import com.zyyoona7.picker.helper.LinkagePickerHelper
-import com.zyyoona7.picker.interfaces.LinkagePicker
-import com.zyyoona7.picker.interfaces.WheelPicker
+import com.zyyoona7.picker.helper.LinkagePicker
+import com.zyyoona7.picker.helper.WheelPicker
 import com.zyyoona7.picker.listener.OnLinkageSelectedListener
 import com.zyyoona7.picker.listener.OnRequestData2Listener
 import com.zyyoona7.picker.listener.OnRequestData3Listener
