@@ -194,9 +194,6 @@ open class WheelView @JvmOverloads constructor(context: Context,
             notifyDataSetChanged()
         }
 
-    /**
-     * 是否自动调整字体大小以显示完全
-     */
     var isAutoFitTextSize: Boolean = false
         set(value) {
             field = value
