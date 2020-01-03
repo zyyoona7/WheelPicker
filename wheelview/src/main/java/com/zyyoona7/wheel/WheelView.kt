@@ -35,7 +35,9 @@ open class WheelView @JvmOverloads constructor(context: Context,
                                                defStyleAttr: Int = 0)
     : View(context, attrs, defStyleAttr), Runnable, ArrayWheelAdapter.OnFinishScrollCallback {
 
-    //画笔
+    /**
+     * 画笔
+     */
     private val normalPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mainTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
     private val leftTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
@@ -44,33 +46,53 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private val mainTextRect = Rect()
     private val leftTextRect = Rect()
     private val rightTextRect = Rect()
-    //每个item的高度
-    private var itemHeight: Int = 0
-    //文字的最大宽度
+    /**
+     * 文字的最大宽度
+     */
     private var mainTextMaxWidth: Int = 0
-    //测量文字完成后的原始宽度
+    /**
+     * 测量文字完成后的原始宽度
+     */
     private var originTextMaxWidth: Int = 0
     private var leftTextWidth: Int = 0
     private var rightTextWidth: Int = 0
-    //文字高度
+    /**
+     * 每个item的高度
+     */
+    private var itemHeight: Int = 0
+    /**
+     * 文字高度
+     */
     private var mainTextHeight: Int = 0
     private var leftTextHeight: Int = 0
     private var rightTextHeight: Int = 0
-    //弯曲效果时，为了适配偏移多增加的宽度
+    /**
+     * 弯曲效果时，为了适配偏移多增加的宽度
+     */
     private var curvedArcWidth: Int = 0
-    //文字起始X
+    /**
+     * 文字起始X
+     */
     private var textDrawStartX: Int = 0
-    //Y轴中心点
+    /**
+     * Y轴中心点
+     */
     private var centerY: Int = 0
-    //选中边界的上下限制
+    /**
+     * 选中边界的上下限制
+     */
     private var selectedItemTopLimit: Int = 0
     private var selectedItemBottomLimit: Int = 0
-    //裁剪边界
+    /**
+     * 裁剪的边界
+     */
     private var clipLeft: Int = 0
     private var clipTop: Int = 0
     private var clipRight: Int = 0
     private var clipBottom: Int = 0
-    //3D效果
+    /**
+     * 3D效果实现
+     */
     private val cameraForCurved = Camera()
     private val matrixForCurved = Matrix()
 
@@ -79,42 +101,67 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private var maxFlingVelocity: Int = 0
     private var minFlingVelocity: Int = 0
 
-    //最小滚动距离，上边界
+    /**
+     * 最小滚动距离，上边界
+     */
     private var minScrollY: Int = 0
-    //最大滚动距离，下边界
+    /**
+     * 最大滚动距离，下边界
+     */
     private var maxScrollY: Int = 0
 
-    //Y轴滚动偏移
+    /**
+     * Y轴滚动偏移
+     */
     private var scrollOffsetY: Int = 0
-    //Y轴已滚动偏移，控制重绘次数
+    /**
+     * Y轴已滚动偏移，控制重绘次数
+     */
     private var scrolledY = 0
-    //手指最后触摸的位置
+    /**
+     * 手指最后触摸的位置
+     */
     private var lastTouchY: Float = 0f
-    //手指按下时间，根据按下抬起时间差处理点击滚动
+    /**
+     * 手指按下时间，根据按下抬起时间差处理点击滚动
+     */
     private var downStartTime: Long = 0L
-    //是否强制停止滚动
+    /**
+     * 是否强制停止滚动
+     */
     private var isForceFinishScroll = false
-    //是否是快速滚动，快速滚动结束后跳转位置
+    /**
+     * 是否是快速滚动，快速滚动结束后跳转位置
+     */
     private var isFlingScroll: Boolean = false
     private val soundHelper: SoundHelper by lazy { SoundHelper.obtain() }
     private var wheelAdapter: ArrayWheelAdapter<*>? = null
 
-    //当前滚动经过的下标
+    /**
+     * 当前滚动经过的下标
+     */
     private var currentScrollPosition: Int = 0
-    //记录已经执行过 itemPositionChange 的滚动的下标，防止多次执行
-    //position不改变得情况下只执行一次 itemPositionChanged()
+    /**
+     * 记录已经执行过 itemPositionChange 的滚动的下标，防止多次执行
+     * position不改变得情况下只执行一次 itemPositionChanged()
+     */
     private var itemChangedPosition = -1
-    //当前滚动状态
+    /**
+     * 当前滚动状态
+     */
     @ScrollState
     private var currentScrollState: Int = SCROLL_STATE_IDLE
 
-    //属性
-    //当前选中的下标
+    /**
+     * 当前选中的下标
+     */
     private var selectedPosition: Int = 0
     /*
       ---------- 文字相关 ----------
      */
-    //最大文本宽度测量模式，适当的模式可以减少文字测量时间
+    /**
+     * 最大文本宽度测量模式，适当的模式可以减少文字测量时间
+     */
     @MeasureType
     var maxTextWidthMeasureType: Int = MEASURED_BY_DEFAULT
         set(value) {
@@ -134,7 +181,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
             calculateTextRect()
             invalidate()
         }
-    //字体大小
+
+    /**
+     * 字体大小
+     */
     var textSize: Int = DEFAULT_TEXT_SIZE
         set(value) {
             if (value == field || value <= 0) {
@@ -143,13 +193,19 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             notifyDataSetChanged()
         }
-    //是否自动调整字体大小以显示完全
+
+    /**
+     * 是否自动调整字体大小以显示完全
+     */
     var isAutoFitTextSize: Boolean = false
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-    //缩放后最小字体大小
+
+    /**
+     * 缩放后最小字体大小
+     */
     var minTextSize: Int = DEFAULT_MIN_TEXT_SIZE
         set(value) {
             if (value == field) {
@@ -158,7 +214,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             notifyChanged()
         }
-    //文字对齐方式
+
+    /**
+     * 文字对齐方式
+     */
     @TextAlign
     var textAlign: Int = TEXT_ALIGN_CENTER
         set(@TextAlign value) {
@@ -168,7 +227,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             notifyTextAlignChanged()
         }
-    //未选中item文字颜色
+
+    /**
+     * 未选中item文字颜色
+     */
     var normalTextColor: Int = DEFAULT_NORMAL_TEXT_COLOR
         set(@ColorInt value) {
             if (value == field) {
@@ -177,7 +239,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             invalidate()
         }
-    //选中item文字颜色
+
+    /**
+     * 选中item文字颜色
+     */
     var selectedTextColor: Int = DEFAULT_SELECTED_TEXT_COLOR
         set(@ColorInt value) {
             if (value == field) {
@@ -186,9 +251,12 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             invalidate()
         }
-    //文本左边距离paddingLeft的空隙，
-    //类似于 paddingLeft 但是 paddingLeft 会影响 divider 和 curtain 绘制的起始位置，
-    //这个属性只会影响 文本绘制时的起始位置
+
+    /**
+     * 文本左边距离paddingLeft的空隙，
+     * 类似于 paddingLeft 但是 paddingLeft 会影响 divider 和 curtain 绘制的起始位置，
+     * 这个属性只会影响 文本绘制时的起始位置
+     */
     var textPaddingLeft: Int = DEFAULT_TEXT_PADDING
         set(value) {
             if (value == field) {
@@ -197,9 +265,12 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             requestLayout()
         }
-    //文本右边距离 paddingRight 的空隙，
-    //类似于 paddingRight 但是 paddingRight 会影响 divider 和 curtain 绘制的起始位置，
-    //这个属性只会影响 文本绘制时的起始位置
+
+    /**
+     * 文本右边距离 paddingRight 的空隙，
+     * 类似于 paddingRight 但是 paddingRight 会影响 divider 和 curtain 绘制的起始位置，
+     * 这个属性只会影响 文本绘制时的起始位置
+     */
     var textPaddingRight: Int = DEFAULT_TEXT_PADDING
         set(value) {
             if (value == field) {
@@ -208,14 +279,23 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             requestLayout()
         }
-    //字体
+
+    /**
+     * 是否设置选中字体加粗
+     */
     private var isBoldForSelectedItem = false
-    //如果 mIsBoldForSelectedItem==true 则这个字体为未选中条目的字体
+    /**
+     * 如果 isBoldForSelectedItem==true 则这个字体为未选中条目的字体
+     */
     private var normalTypeface: Typeface? = null
-    //如果 mIsBoldForSelectedItem==true 则这个字体为选中条目的字体
+    /**
+     * 如果 isBoldForSelectedItem==true 则这个字体为选中条目的字体
+     */
     private var boldTypeface: Typeface? = null
 
-    //是否绘制debug文字区域边界
+    /**
+     * 是否绘制debug文字区域边界
+     */
     var drawDebugRectEnabled: Boolean = false
         set(value) {
             if (value == field) {
@@ -224,10 +304,14 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             invalidate()
         }
+
     /*
       ---------- 文字相关 ----------
      */
-    //可见的item条数
+
+    /**
+     * 可见的item条数
+     */
     var visibleItems: Int = DEFAULT_VISIBLE_ITEM
         set(value) {
             val newValue = adjustVisibleItems(value)
@@ -237,7 +321,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = newValue
             notifyChanged()
         }
-    //每个item之间的空间，行间距
+
+    /**
+     * 每个item之间的空间，行间距
+     */
     var lineSpacing: Int = DEFAULT_LINE_SPACING
         set(value) {
             if (value == field) {
@@ -246,7 +333,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             notifyChanged()
         }
-    //是否循环滚动
+
+    /**
+     * 是否循环滚动
+     */
     var isCyclic: Boolean = false
         set(value) {
             if (value == field) {
@@ -256,10 +346,14 @@ open class WheelView @JvmOverloads constructor(context: Context,
             wheelAdapter?.isCyclic = field
             notifyCyclicChanged()
         }
+
     /*
       ---------- 分割线相关 ----------
      */
-    //是否显示分割线
+
+    /**
+     * 是否显示分割线
+     */
     var isShowDivider: Boolean = false
         set(value) {
             if (value == field) {
@@ -271,7 +365,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
             }
             invalidate()
         }
-    //分割线的颜色
+
+    /**
+     * 分割线的颜色
+     */
     var dividerColor: Int = DEFAULT_SELECTED_TEXT_COLOR
         set(@ColorInt value) {
             if (value == field) {
@@ -282,7 +379,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 invalidate()
             }
         }
-    //分割线高度
+
+    /**
+     * 分割线高度
+     */
     var dividerHeight: Int = DEFAULT_DIVIDER_HEIGHT
         set(value) {
             if (value == field) {
@@ -293,7 +393,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 invalidate()
             }
         }
-    //分割线填充类型
+
+    /**
+     * 分割线填充类型
+     */
     @DividerType
     var dividerType: Int = DIVIDER_FILL
         set(@DividerType value) {
@@ -305,7 +408,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 invalidate()
             }
         }
-    //分割线类型为DIVIDER_TYPE_WRAP时 分割线左右两端距离文字的间距
+
+    /**
+     * 分割线类型为DIVIDER_TYPE_WRAP时 分割线左右两端距离文字的间距
+     */
     var dividerPadding: Int = 0
         set(value) {
             if (value == field) {
@@ -316,7 +422,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 invalidate()
             }
         }
-    //分割线两端形状，默认圆头
+
+    /**
+     * 分割线两端形状，默认圆头
+     */
     var dividerCap: Paint.Cap = Paint.Cap.ROUND
         set(value) {
             if (value == field) {
@@ -327,7 +436,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 invalidate()
             }
         }
-    //分割线和选中区域垂直方向的偏移，实现扩大选中区域
+
+    /**
+     * 分割线和选中区域垂直方向的偏移，实现扩大选中区域
+     */
     var dividerOffsetY: Int = 0
         set(value) {
             if (value == field) {
@@ -339,13 +451,18 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 invalidate()
             }
         }
+
     /*
       ---------- 分割线相关 ----------
      */
+
     /*
       ---------- 选中区域蒙层相关 ----------
      */
-    //是否绘制选中区域
+
+    /**
+     * 是否绘制选中区域
+     */
     var isShowCurtain: Boolean = false
         set(value) {
             if (value == field) {
@@ -354,7 +471,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             invalidate()
         }
-    //选中区域颜色
+
+    /**
+     * 选中区域颜色
+     */
     @ColorInt
     var curtainColor: Int = Color.TRANSPARENT
         set(@ColorInt value) {
@@ -366,13 +486,18 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 invalidate()
             }
         }
+
     /*
       ---------- 选中区域蒙层相关 ----------
      */
+
     /*
       ---------- 3D效果相关 ----------
      */
-    //是否是弯曲（3D）效果
+
+    /**
+     * 是否是弯曲（3D）效果
+     */
     var isCurved: Boolean = true
         set(value) {
             if (value == field) {
@@ -382,7 +507,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
             calculateItemHeight()
             requestLayout()
         }
-    //弯曲（3D）效果左右圆弧偏移效果方向 center 不偏移
+
+    /**
+     * 弯曲（3D）效果左右圆弧偏移效果方向 center 不偏移
+     */
     @CurvedArcDirection
     var curvedArcDirection: Int = CURVED_ARC_DIRECTION_CENTER
         set(@CurvedArcDirection value) {
@@ -395,7 +523,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 invalidate()
             }
         }
-    //弯曲（3D）效果左右圆弧偏移效果系数 0-1之间 越大越明显
+
+    /**
+     * 弯曲（3D）效果左右圆弧偏移效果系数 0-1之间 越大越明显
+     */
     var curvedArcDirectionFactor: Float = DEFAULT_CURVED_FACTOR
         set(value) {
             if (value == field) {
@@ -407,8 +538,11 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 invalidate()
             }
         }
-    //选中后折射的偏移 与字体大小的比值，1为不偏移 越小偏移越明显
-    //(普通效果和3d效果都适用)
+
+    /**
+     * 选中后折射的偏移 与字体大小的比值，1为不偏移 越小偏移越明显
+     * (普通效果和3d效果都适用)
+     */
     var refractRatio: Float = DEFAULT_REFRACT_RATIO
         set(value) {
             if (value == field) {
@@ -417,10 +551,14 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = min(1f, max(0f, value))
             invalidate()
         }
+
     /*
       ---------- 3D效果相关 ----------
      */
-    //是否开启音频效果
+
+    /**
+     * 是否开启音频效果
+     */
     var isSoundEffect = false
         set(value) {
             field = value
@@ -428,25 +566,36 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 initDefaultVolume()
             }
         }
-    //数据变化时，是否重置选中下标到第一个位置
+
+    /**
+     * 数据变化时，是否重置选中下标到第一个位置
+     */
     var isResetSelectedPosition = false
+
     /*
       ---------- 选中范围限制 ----------
      */
+
     private var maxSelectedPosition: Int = -1
     private var minSelectedPosition: Int = -1
-    //有滚动限制并且不是循环滚动时 超出限制范围是否可以继续滚动
+
+    /**
+     * 有滚动限制并且不是循环滚动时 超出限制范围是否可以继续滚动
+     */
     var canOverRangeScroll: Boolean = true
         set(value) {
             field = value
             calculateLimitY()
         }
+
     /*
       ---------- 选中范围限制 ----------
      */
+
     /*
       ---------- 左右额外文字相关 ----------
      */
+
     var leftText: CharSequence = ""
         set(value) {
             if (value == field) {
@@ -455,6 +604,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             notifyChanged()
         }
+
     var rightText: CharSequence = ""
         set(value) {
             if (value == field) {
@@ -463,6 +613,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             notifyChanged()
         }
+
     var leftTextSize: Int = DEFAULT_TEXT_SIZE
         set(value) {
             if (value == field) {
@@ -471,6 +622,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             notifyChanged()
         }
+
     var rightTextSize: Int = DEFAULT_TEXT_SIZE
         set(value) {
             if (value == field) {
@@ -479,6 +631,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             notifyChanged()
         }
+
     var leftTextMarginRight: Int = 0
         set(value) {
             if (value == field) {
@@ -487,6 +640,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             notifyChanged()
         }
+
     var rightTextMarginLeft: Int = 0
         set(value) {
             if (value == field) {
@@ -495,6 +649,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             notifyChanged()
         }
+
     var leftTextColor: Int = Color.BLACK
         set(value) {
             if (value == field) {
@@ -503,6 +658,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             invalidate()
         }
+
     var rightTextColor: Int = Color.BLACK
         set(value) {
             if (value == field) {
@@ -511,6 +667,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
             field = value
             invalidate()
         }
+
     var leftTextGravity: Int = Gravity.CENTER
         set(value) {
             if (value == field) {
@@ -520,6 +677,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
             calculateLeftTextRect()
             invalidate()
         }
+
     var rightTextGravity: Int = Gravity.CENTER
         set(value) {
             if (value == field) {
@@ -529,32 +687,48 @@ open class WheelView @JvmOverloads constructor(context: Context,
             calculateRightTextRect()
             invalidate()
         }
+
     /*
       ---------- 左右额外文字相关 ----------
      */
+
     /*
       ---------- 监听器 -----------
      */
+
     private var itemSelectedListener: OnItemSelectedListener? = null
     private var scrollChangedListener: OnScrollChangedListener? = null
     private var itemPositionChangedListener: OnItemPositionChangedListener? = null
+
     /*
       ---------- 监听器 ----------
      */
-    //adapter 中的 textFormatter
+
+    /**
+     * adapter 中的 textFormatter
+     */
     private var textFormatter: TextFormatter? = null
-    //adapter 中的 formatter block
+    /**
+     * adapter 中的 formatter block
+     */
     private var formatterBlock: ((Any?) -> String)? = null
-    //adapter 中的 itemIndexer
+    /**
+     * adapter 中的 itemIndexer
+     */
     private var itemIndexer: ItemIndexer? = null
-    //adapter 中的 itemIndexerBlock
+    /**
+     * adapter 中的 itemIndexerBlock
+     */
     private var itemIndexerBlock: ((ArrayWheelAdapter<*>, Any?) -> Int)? = null
 
 
-    //需设置 isAutoFitTextSize=true
-    //用来保存对应下标下 重新测量过的 textSize
+    /**
+     * 用来保存对应下标下 重新测量过的 textSize （需设置 isAutoFitTextSize=true）
+     */
     private val resizeArray: SparseArray<Float> by lazy { SparseArray<Float>() }
-    //标记 数据是否有变化，如果变化了则重新测量文字宽度
+    /**
+     * 标记 数据是否有变化，如果变化了则重新测量文字宽度
+     */
     private var isDataSetChanged: Boolean = false
 
     companion object {
@@ -569,39 +743,59 @@ open class WheelView @JvmOverloads constructor(context: Context,
         const val DEFAULT_VISIBLE_ITEM = 5
         const val DEFAULT_SCROLL_DURATION = 250
         const val DEFAULT_CLICK_CONFIRM: Long = 120
-        //默认折射比值，通过字体大小来实现折射视觉差
+        /**
+         * 默认折射比值，通过字体大小来实现折射视觉差
+         */
         const val DEFAULT_REFRACT_RATIO = 1f
 
-        //文字对齐方式
+        /**
+         * 文字对齐方式
+         */
         const val TEXT_ALIGN_LEFT = 0
         const val TEXT_ALIGN_CENTER = 1
         const val TEXT_ALIGN_RIGHT = 2
 
-        //滚动状态
+        /**
+         * 滚动状态
+         */
         const val SCROLL_STATE_IDLE = 0
         const val SCROLL_STATE_DRAGGING = 1
         const val SCROLL_STATE_SCROLLING = 2
 
-        //弯曲效果对齐方式
+        /**
+         * 弯曲效果对齐方式
+         */
         const val CURVED_ARC_DIRECTION_LEFT = 0
         const val CURVED_ARC_DIRECTION_CENTER = 1
         const val CURVED_ARC_DIRECTION_RIGHT = 2
 
         const val DEFAULT_CURVED_FACTOR = 0.75f
 
-        //分割线填充类型
+        /**
+         * 分割线填充类型
+         */
         const val DIVIDER_FILL = 0
         const val DIVIDER_WRAP = 1
-        //自适应延伸到左右额外文字处
+        /**
+         * 自适应延伸到左右额外文字处
+         */
         const val DIVIDER_WRAP_ALL = 2
 
-        //三种测量文字最大宽度的模式
+        /*
+          ---------- 三种测量文字最大宽度的模式 ----------
+         */
 
-        //按照相同宽度测量，即只测量一个 item 的宽度来作为数据的最大宽度
+        /**
+         * 按照相同宽度测量，即只测量一个 item 的宽度来作为数据的最大宽度
+         */
         const val MEASURED_BY_SAME_WIDTH = 1
-        //按照文本最大长度测量，即最长的文本 item 的宽度就是最大宽度
+        /**
+         * 按照文本最大长度测量，即最长的文本 item 的宽度就是最大宽度
+         */
         const val MEASURED_BY_MAX_LENGTH = 2
-        //文本挨个测量找到最大宽度
+        /**
+         * 文本挨个测量找到最大宽度
+         */
         const val MEASURED_BY_DEFAULT = 3
 
         /**
