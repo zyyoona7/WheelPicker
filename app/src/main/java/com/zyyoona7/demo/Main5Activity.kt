@@ -86,24 +86,24 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
 
         binding.rgAlign.setOnCheckedChangeListener { _, checkedId ->
             binding.wheelview.textAlign = when (checkedId) {
-                R.id.rb_align_left -> WheelView.TEXT_ALIGN_LEFT
-                R.id.rb_align_right -> WheelView.TEXT_ALIGN_RIGHT
-                else -> WheelView.TEXT_ALIGN_CENTER
+                R.id.rb_align_left -> Paint.Align.LEFT
+                R.id.rb_align_right -> Paint.Align.RIGHT
+                else -> Paint.Align.CENTER
             }
         }
 
         binding.rgDirection.setOnCheckedChangeListener { _, checkedId ->
             binding.wheelview.curvedArcDirection = when (checkedId) {
-                R.id.rb_direction_left -> WheelView.CURVED_ARC_DIRECTION_LEFT
-                R.id.rb_direction_right -> WheelView.CURVED_ARC_DIRECTION_RIGHT
-                else -> WheelView.CURVED_ARC_DIRECTION_CENTER
+                R.id.rb_direction_left -> WheelView.CurvedArcDirection.LEFT
+                R.id.rb_direction_right -> WheelView.CurvedArcDirection.RIGHT
+                else -> WheelView.CurvedArcDirection.CENTER
             }
         }
 
         binding.rgDividerType.setOnCheckedChangeListener { _, checkedId ->
             binding.wheelview.dividerType = when (checkedId) {
-                R.id.rb_divider_fill -> WheelView.DIVIDER_FILL
-                else -> WheelView.DIVIDER_WRAP
+                R.id.rb_divider_fill -> WheelView.DividerType.FILL
+                else -> WheelView.DividerType.WRAP
             }
         }
 
@@ -242,11 +242,11 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.btnCurtainColor.setBackgroundColor(wheelView.curtainColor)
 
         binding.sbTextSize.max = 70
-        binding.sbTextSize.progress = wheelView.textSize.toInt()
+        binding.sbTextSize.progress = wheelView.textSize
 
         when (wheelView.textAlign) {
-            WheelView.TEXT_ALIGN_LEFT -> binding.rbAlignLeft.isChecked = true
-            WheelView.TEXT_ALIGN_RIGHT -> binding.rbAlignRight.isChecked = true
+            Paint.Align.LEFT -> binding.rbAlignLeft.isChecked = true
+            Paint.Align.RIGHT-> binding.rbAlignRight.isChecked = true
             else -> binding.rbAlignCenter.isChecked = true
         }
 
@@ -260,8 +260,8 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
 
         binding.scCurved.isChecked = wheelView.isCurved
         when (wheelView.curvedArcDirection) {
-            WheelView.CURVED_ARC_DIRECTION_LEFT -> binding.rbDirectionLeft.isChecked = true
-            WheelView.CURVED_ARC_DIRECTION_RIGHT -> binding.rbDirectionRight.isChecked = true
+            WheelView.CurvedArcDirection.LEFT -> binding.rbDirectionLeft.isChecked = true
+            WheelView.CurvedArcDirection.RIGHT -> binding.rbDirectionRight.isChecked = true
             else -> binding.rbDirectionCenter.isChecked = true
         }
         binding.sbCurvedArcFactor.max = 100
@@ -274,7 +274,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.sbDividerHeight.progress = wheelView.dividerHeight.toInt()
         binding.btnDividerColor.setBackgroundColor(wheelView.dividerColor)
         when (wheelView.dividerType) {
-            WheelView.DIVIDER_FILL -> binding.rbDividerFill.isChecked = true
+            WheelView.DividerType.FILL -> binding.rbDividerFill.isChecked = true
             else -> binding.rbDividerWrap.isChecked = true
         }
         binding.sbDividerPadding.max = 60

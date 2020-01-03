@@ -36,7 +36,7 @@ interface WheelPicker {
 
     fun setMinTextSize(minTextSizeSp: Float)
 
-    fun setTextAlign(@WheelView.TextAlign textAlign: Int)
+    fun setTextAlign(textAlign: Paint.Align)
 
     fun setNormalTextColor(@ColorInt textColor: Int)
 
@@ -79,7 +79,7 @@ interface WheelPicker {
 
     fun setDividerHeight(dividerHeightDp: Float)
 
-    fun setDividerType(@WheelView.DividerType dividerType: Int)
+    fun setDividerType(dividerType: WheelView.DividerType)
 
     fun setWheelDividerPadding(paddingPx: Int)
 
@@ -109,7 +109,7 @@ interface WheelPicker {
      */
     fun setCurved(curved: Boolean)
 
-    fun setCurvedArcDirection(@WheelView.CurvedArcDirection direction: Int)
+    fun setCurvedArcDirection(direction: WheelView.CurvedArcDirection)
 
     fun setCurvedArcDirectionFactor(factor: Float)
 

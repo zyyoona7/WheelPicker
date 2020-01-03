@@ -12,8 +12,10 @@ import android.util.SparseArray
 import android.util.TypedValue
 import android.view.*
 import android.widget.Scroller
-import androidx.annotation.*
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.annotation.IntRange
+import androidx.annotation.RawRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
@@ -149,7 +151,6 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /**
      * 当前滚动状态
      */
-    @ScrollState
     private var currentScrollState: Int = SCROLL_STATE_IDLE
 
     /**
@@ -162,8 +163,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /**
      * 最大文本宽度测量模式，适当的模式可以减少文字测量时间
      */
-    @MeasureType
-    var maxTextWidthMeasureType: Int = MEASURED_BY_DEFAULT
+    var maxTextWidthMeasureType: MeasureType = MeasureType.DEFAULT
         set(value) {
             if (value == field) {
                 return
@@ -194,6 +194,9 @@ open class WheelView @JvmOverloads constructor(context: Context,
             notifyDataSetChanged()
         }
 
+    /**
+     * 是否自动调整字体大小以显示完全
+     */
     var isAutoFitTextSize: Boolean = false
         set(value) {
             field = value
@@ -215,9 +218,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /**
      * 文字对齐方式
      */
-    @TextAlign
-    var textAlign: Int = TEXT_ALIGN_CENTER
-        set(@TextAlign value) {
+    var textAlign: Paint.Align = Paint.Align.CENTER
+        set(value) {
             if (value == field) {
                 return
             }
@@ -228,8 +230,9 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /**
      * 未选中item文字颜色
      */
+    @ColorInt
     var normalTextColor: Int = DEFAULT_NORMAL_TEXT_COLOR
-        set(@ColorInt value) {
+        set(value) {
             if (value == field) {
                 return
             }
@@ -240,8 +243,9 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /**
      * 选中item文字颜色
      */
+    @ColorInt
     var selectedTextColor: Int = DEFAULT_SELECTED_TEXT_COLOR
-        set(@ColorInt value) {
+        set(value) {
             if (value == field) {
                 return
             }
@@ -394,9 +398,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /**
      * 分割线填充类型
      */
-    @DividerType
-    var dividerType: Int = DIVIDER_FILL
-        set(@DividerType value) {
+    var dividerType: DividerType = DividerType.FILL
+        set(value) {
             if (value == field) {
                 return
             }
@@ -508,9 +511,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /**
      * 弯曲（3D）效果左右圆弧偏移效果方向 center 不偏移
      */
-    @CurvedArcDirection
-    var curvedArcDirection: Int = CURVED_ARC_DIRECTION_CENTER
-        set(@CurvedArcDirection value) {
+    var curvedArcDirection: CurvedArcDirection = CurvedArcDirection.CENTER
+        set(value) {
             if (value == field) {
                 return
             }
@@ -801,6 +803,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
          * @param dp dp值
          * @return 转换后的px值
          */
+        @JvmStatic
         protected fun dp2px(dp: Float): Int {
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Resources.getSystem().displayMetrics).toInt()
         }
@@ -811,6 +814,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
          * @param sp sp值
          * @return 转换后的px值
          */
+        @JvmStatic
         protected fun sp2px(sp: Float): Int {
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, Resources.getSystem().displayMetrics).toInt()
         }
@@ -819,11 +823,39 @@ open class WheelView @JvmOverloads constructor(context: Context,
             Log.e(TAG, "the WheelView adapter is null.")
         }
 
-        fun getExtraGravity(gravity: Int): Int {
+        @JvmStatic
+        fun covertExtraGravity(gravity: Int): Int {
             return when (gravity) {
                 1 -> Gravity.TOP
                 2 -> Gravity.BOTTOM
                 else -> Gravity.CENTER
+            }
+        }
+
+        @JvmStatic
+        fun convertTextAlign(align: Int): Paint.Align {
+            return when (align) {
+                TEXT_ALIGN_LEFT -> Paint.Align.LEFT
+                TEXT_ALIGN_RIGHT -> Paint.Align.RIGHT
+                else -> Paint.Align.CENTER
+            }
+        }
+
+        @JvmStatic
+        fun convertCurvedArcDirection(direction: Int): CurvedArcDirection {
+            return when (direction) {
+                CURVED_ARC_DIRECTION_LEFT -> CurvedArcDirection.LEFT
+                CURVED_ARC_DIRECTION_RIGHT -> CurvedArcDirection.RIGHT
+                else -> CurvedArcDirection.CENTER
+            }
+        }
+
+        @JvmStatic
+        fun convertDividerType(dividerType: Int): DividerType {
+            return when (dividerType) {
+                DIVIDER_WRAP -> DividerType.WRAP
+                DIVIDER_WRAP_ALL -> DividerType.WRAP_ALL
+                else -> DividerType.FILL
             }
         }
     }
@@ -853,7 +885,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         textSize = typedArray.getDimensionPixelSize(R.styleable.WheelView_wv_textSize, DEFAULT_TEXT_SIZE)
         isAutoFitTextSize = typedArray.getBoolean(R.styleable.WheelView_wv_autoFitTextSize, false)
         minTextSize = typedArray.getDimensionPixelSize(R.styleable.WheelView_wv_minTextSize, DEFAULT_MIN_TEXT_SIZE)
-        textAlign = typedArray.getInt(R.styleable.WheelView_wv_textAlign, TEXT_ALIGN_CENTER)
+        textAlign = convertTextAlign(typedArray.getInt(R.styleable.WheelView_wv_textAlign, TEXT_ALIGN_CENTER))
         val textPadding = typedArray.getDimensionPixelSize(R.styleable.WheelView_wv_textPadding,
                 DEFAULT_TEXT_PADDING)
         val textPaddingLeft = typedArray.getDimensionPixelSize(R.styleable.WheelView_wv_textPaddingLeft,
@@ -878,8 +910,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
         rightTextColor = typedArray.getColor(R.styleable.WheelView_wv_rightTextColor, DEFAULT_SELECTED_TEXT_COLOR)
         val leftTextGravity = typedArray.getInt(R.styleable.WheelView_wv_leftTextGravity, 0)
         val rightTextGravity = typedArray.getInt(R.styleable.WheelView_wv_rightTextGravity, 0)
-        this.leftTextGravity = getExtraGravity(leftTextGravity)
-        this.rightTextGravity = getExtraGravity(rightTextGravity)
+        this.leftTextGravity = covertExtraGravity(leftTextGravity)
+        this.rightTextGravity = covertExtraGravity(rightTextGravity)
         gravity = typedArray.getInt(R.styleable.WheelView_android_gravity, Gravity.CENTER)
 
         normalTextColor = typedArray.getColor(R.styleable.WheelView_wv_normalTextColor, DEFAULT_NORMAL_TEXT_COLOR)
@@ -897,7 +929,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         isCyclic = typedArray.getBoolean(R.styleable.WheelView_wv_cyclic, false)
 
         isShowDivider = typedArray.getBoolean(R.styleable.WheelView_wv_showDivider, false)
-        dividerType = typedArray.getInt(R.styleable.WheelView_wv_dividerType, DIVIDER_FILL)
+        dividerType = convertDividerType(typedArray.getInt(R.styleable.WheelView_wv_dividerType, DIVIDER_FILL))
         dividerHeight = typedArray.getDimensionPixelSize(R.styleable.WheelView_wv_dividerHeight, DEFAULT_DIVIDER_HEIGHT)
         dividerColor = typedArray.getColor(R.styleable.WheelView_wv_dividerColor, DEFAULT_SELECTED_TEXT_COLOR)
         dividerPadding = typedArray.getDimensionPixelSize(R.styleable.WheelView_wv_dividerPadding, DEFAULT_TEXT_PADDING)
@@ -908,7 +940,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
         curtainColor = typedArray.getColor(R.styleable.WheelView_wv_curtainColor, Color.TRANSPARENT)
 
         isCurved = typedArray.getBoolean(R.styleable.WheelView_wv_curved, true)
-        curvedArcDirection = typedArray.getInt(R.styleable.WheelView_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER)
+        curvedArcDirection = convertCurvedArcDirection(
+                typedArray.getInt(R.styleable.WheelView_wv_curvedArcDirection, CURVED_ARC_DIRECTION_CENTER))
         curvedArcDirectionFactor = typedArray.getFloat(R.styleable.WheelView_wv_curvedArcDirectionFactor, DEFAULT_CURVED_FACTOR)
         //折射偏移默认值
         refractRatio = typedArray.getFloat(R.styleable.WheelView_wv_refractRatio, DEFAULT_REFRACT_RATIO)
@@ -992,8 +1025,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
         var width: Int = mainTextMaxWidth + leftAndRightExtraWidth +
                 textPaddingLeft + textPaddingRight + paddingLeft + paddingRight
         //根据偏移计算偏移造成的额外宽度
-        if (isCurved && (curvedArcDirection == CURVED_ARC_DIRECTION_LEFT
-                        || curvedArcDirection == CURVED_ARC_DIRECTION_RIGHT)) {
+        if (isCurved && (curvedArcDirection == CurvedArcDirection.LEFT
+                        || curvedArcDirection == CurvedArcDirection.RIGHT)) {
             val towardRange = (sin(Math.PI / 48) * height * curvedArcDirectionFactor).toInt()
             //如果偏移时候宽度足够则不需要增加宽度，如果宽度不足则增加宽度以适配偏移
             if (width <= mainTextMaxWidth + towardRange) {
@@ -1136,14 +1169,14 @@ open class WheelView @JvmOverloads constructor(context: Context,
             //重新测量时 清除之前计算的值
             mainTextMaxWidth = 0
             mainTextPaint.textSize = textSize.toFloat()
-            if (maxTextWidthMeasureType == MEASURED_BY_SAME_WIDTH) {
+            if (maxTextWidthMeasureType == MeasureType.SAME_WIDTH) {
                 mainTextMaxWidth = mainTextPaint.measureText(it.getItemText(it.getItemData(0))).toInt()
             } else {
                 var maxLength = -1
                 for (i in 0 until it.getItemCount()) {
                     val text = it.getItemText(it.getItemData(i))
                     //按照文字长度测量宽度，可以减少测量耗时
-                    if (maxTextWidthMeasureType == MEASURED_BY_MAX_LENGTH
+                    if (maxTextWidthMeasureType == MeasureType.MAX_LENGTH
                             && text.length <= maxLength) {
                         continue
                     }
@@ -1164,9 +1197,9 @@ open class WheelView @JvmOverloads constructor(context: Context,
         val rightTextExtraWidth = if (rightText.isEmpty()) 0 else rightTextWidth + rightTextMarginLeft
 
         val mainLeft = when (gravity) {
-            Gravity.START, Gravity.LEFT -> paddingLeft + textPaddingLeft +
+            Gravity.START -> paddingLeft + textPaddingLeft +
                     leftTextExtraWidth + curvedArcWidth / 2
-            Gravity.END, Gravity.RIGHT -> measuredWidth - paddingRight -
+            Gravity.END -> measuredWidth - paddingRight -
                     rightTextExtraWidth - curvedArcWidth / 2 - mainTextMaxWidth
             Gravity.CENTER_HORIZONTAL -> (measuredWidth - leftTextExtraWidth -
                     mainTextMaxWidth - rightTextExtraWidth) / 2 + leftTextExtraWidth
@@ -1211,8 +1244,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
     }
 
     private fun isDefaultGravity(): Boolean {
-        return gravity != Gravity.LEFT && gravity != Gravity.START && gravity != Gravity.RIGHT
-                && gravity != Gravity.END && gravity != Gravity.CENTER_HORIZONTAL
+        return gravity != Gravity.START && gravity != Gravity.END
+                && gravity != Gravity.CENTER_HORIZONTAL
     }
 
     /**
@@ -1229,8 +1262,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     private fun calculateDrawStart() {
         textDrawStartX = when (textAlign) {
-            TEXT_ALIGN_LEFT -> mainTextRect.left
-            TEXT_ALIGN_RIGHT -> mainTextRect.right
+            Paint.Align.LEFT -> mainTextRect.left
+            Paint.Align.RIGHT -> mainTextRect.right
             else -> mainTextRect.centerX()
         }
     }
@@ -1279,11 +1312,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 更新textAlign
      */
     private fun updateTextAlign() {
-        when (textAlign) {
-            TEXT_ALIGN_LEFT -> mainTextPaint.textAlign = Paint.Align.LEFT
-            TEXT_ALIGN_RIGHT -> mainTextPaint.textAlign = Paint.Align.RIGHT
-            else -> mainTextPaint.textAlign = Paint.Align.CENTER
-        }
+        mainTextPaint.textAlign = textAlign
     }
 
     /*
@@ -1368,14 +1397,14 @@ open class WheelView @JvmOverloads constructor(context: Context,
         val startX: Float
         val stopX: Float
         when (dividerType) {
-            DIVIDER_WRAP -> {
+            DividerType.WRAP -> {
                 val wStartX = mainTextRect.left - dividerPadding
                 val wStopX = mainTextRect.right + dividerPadding
                 //边界处理 超过边界直接按照DIVIDER_TYPE_FILL类型处理
                 startX = if (wStartX < clipLeft) clipLeft.toFloat() else wStartX.toFloat()
                 stopX = if (wStopX > clipRight) clipRight.toFloat() else wStopX.toFloat()
             }
-            DIVIDER_WRAP_ALL -> {
+            DividerType.WRAP_ALL -> {
                 val aStartX = mainTextRect.left - leftTextWidth - leftTextMarginRight - dividerPadding
                 val aStopX = mainTextRect.right + rightTextWidth + rightTextMarginLeft + dividerPadding
                 //边界处理 超过边界直接按照DIVIDER_TYPE_FILL类型处理
@@ -1691,8 +1720,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
         //根据弯曲（3d）对齐方式设置系数
         val textCenterX = mainTextRect.centerX()
         val centerX: Float = when (curvedArcDirection) {
-            CURVED_ARC_DIRECTION_LEFT -> textCenterX * (1 + curvedArcDirectionFactor)
-            CURVED_ARC_DIRECTION_RIGHT -> textCenterX * (1 - curvedArcDirectionFactor)
+            CurvedArcDirection.LEFT -> textCenterX * (1 + curvedArcDirectionFactor)
+            CurvedArcDirection.RIGHT -> textCenterX * (1 - curvedArcDirectionFactor)
             else -> textCenterX.toFloat()
         }
 
@@ -1797,7 +1826,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
                     //快速滑动
                     scroller.forceFinished(true)
                     isFlingScroll = true
-                    scroller.fling(0, scrollOffsetY, 0, (-velocityY).toInt(), 0, 0,
+                    scroller.fling(0, scrollOffsetY, 0, -velocityY, 0, 0,
                             minScrollY, maxScrollY)
                 } else {
                     var clickToCenterDistance = 0
@@ -2634,7 +2663,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
 
     }
 
-    protected open fun onWheelScrollStateChanged(@ScrollState state: Int) {
+    protected open fun onWheelScrollStateChanged(state: Int) {
 
     }
 
@@ -2668,54 +2697,39 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
 
     /*
-      ---------- 一些注解 ----------
+      ---------- 一些枚举 ----------
      */
 
     /**
-     * 自定义文字对齐方式注解
+     * 自定义左右圆弧效果方向枚举
      *
      *
-     * [textAlign]
+     * @see [CURVED_ARC_DIRECTION_LEFT]
+     * @see [CURVED_ARC_DIRECTION_CENTER]
+     * @see [CURVED_ARC_DIRECTION_RIGHT]
      */
-    @IntDef(TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, TEXT_ALIGN_RIGHT)
-    @Retention(AnnotationRetention.SOURCE)
-    annotation class TextAlign
+    enum class CurvedArcDirection { LEFT, CENTER, RIGHT }
 
     /**
-     * 自定义左右圆弧效果方向注解
+     * 自定义分割线类型枚举
      *
      *
-     * [curvedArcDirection]
+     * @see [DIVIDER_FILL]
+     * @see [DIVIDER_WRAP]
+     * @see [DIVIDER_WRAP_ALL]
      */
-    @IntDef(CURVED_ARC_DIRECTION_LEFT, CURVED_ARC_DIRECTION_CENTER, CURVED_ARC_DIRECTION_RIGHT)
-    @Retention(AnnotationRetention.SOURCE)
-    annotation class CurvedArcDirection
+    enum class DividerType { FILL, WRAP, WRAP_ALL }
 
     /**
-     * 自定义分割线类型注解
+     * 自定义最大文字宽度测量类型枚举
      *
-     *
-     * [dividerType]
+     * @see [MEASURED_BY_SAME_WIDTH]
+     * @see [MEASURED_BY_MAX_LENGTH]
+     * @see [MEASURED_BY_DEFAULT]
      */
-    @IntDef(DIVIDER_FILL, DIVIDER_WRAP, DIVIDER_WRAP_ALL)
-    @Retention(AnnotationRetention.SOURCE)
-    annotation class DividerType
-
-    /**
-     * 自定义滚动状态注解
-     */
-    @IntDef(SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SCROLLING)
-    @Retention(AnnotationRetention.SOURCE)
-    annotation class ScrollState
-
-    /**
-     * 自定义最大文字宽度测量类型注解
-     */
-    @IntDef(MEASURED_BY_SAME_WIDTH, MEASURED_BY_MAX_LENGTH, MEASURED_BY_DEFAULT)
-    @Retention(AnnotationRetention.SOURCE)
-    annotation class MeasureType
+    enum class MeasureType { SAME_WIDTH, MAX_LENGTH, DEFAULT }
 
     /*
-      ---------- 一些注解 ----------
+      ---------- 一些枚举 ----------
      */
 }

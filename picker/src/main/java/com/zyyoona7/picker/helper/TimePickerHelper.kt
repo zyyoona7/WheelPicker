@@ -160,30 +160,30 @@ class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
         wheelSecondView?.visibility = if (isShow) View.VISIBLE else View.GONE
     }
 
-    override fun setAmPmMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
-        wheelAmPmView?.maxTextWidthMeasureType=measureType
+    override fun setAmPmMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
+        wheelAmPmView?.maxTextWidthMeasureType = measureType
     }
 
-    override fun setHourMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
-        wheelHourView?.maxTextWidthMeasureType=measureType
+    override fun setHourMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
+        wheelHourView?.maxTextWidthMeasureType = measureType
     }
 
-    override fun setMinuteMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
-        wheelMinuteView?.maxTextWidthMeasureType=measureType
+    override fun setMinuteMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
+        wheelMinuteView?.maxTextWidthMeasureType = measureType
     }
 
-    override fun setSecondMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
-        wheelSecondView?.maxTextWidthMeasureType=measureType
+    override fun setSecondMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
+        wheelSecondView?.maxTextWidthMeasureType = measureType
     }
 
-    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
-        setMaxTextWidthMeasureType(measureType,measureType,measureType,measureType)
+    override fun setMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
+        setMaxTextWidthMeasureType(measureType, measureType, measureType, measureType)
     }
 
-    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType amPmType: Int,
-                                            @WheelView.MeasureType hourType: Int,
-                                            @WheelView.MeasureType minuteType: Int,
-                                            @WheelView.MeasureType secondType: Int) {
+    override fun setMaxTextWidthMeasureType(amPmType: WheelView.MeasureType,
+                                            hourType: WheelView.MeasureType,
+                                            minuteType: WheelView.MeasureType,
+                                            secondType: WheelView.MeasureType) {
         setAmPmMaxTextWidthMeasureType(amPmType)
         setHourMaxTextWidthMeasureType(hourType)
         setMinuteMaxTextWidthMeasureType(minuteType)
@@ -281,7 +281,7 @@ class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
         wheelSecondView?.setMinTextSize(minTextSizeSp)
     }
 
-    override fun setTextAlign(@WheelView.TextAlign textAlign: Int) {
+    override fun setTextAlign(textAlign: Paint.Align) {
         wheelAmPmView?.textAlign = textAlign
         wheelHourView?.textAlign = textAlign
         wheelMinuteView?.textAlign = textAlign
@@ -411,7 +411,7 @@ class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
         wheelSecondView?.setDividerHeight(dividerHeightDp)
     }
 
-    override fun setDividerType(@WheelView.DividerType dividerType: Int) {
+    override fun setDividerType(dividerType: WheelView.DividerType) {
         wheelAmPmView?.dividerType = dividerType
         wheelHourView?.dividerType = dividerType
         wheelMinuteView?.dividerType = dividerType
@@ -481,7 +481,7 @@ class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
         wheelSecondView?.isCurved = curved
     }
 
-    override fun setCurvedArcDirection(@WheelView.CurvedArcDirection direction: Int) {
+    override fun setCurvedArcDirection(direction: WheelView.CurvedArcDirection) {
         wheelAmPmView?.curvedArcDirection = direction
         wheelHourView?.curvedArcDirection = direction
         wheelMinuteView?.curvedArcDirection = direction

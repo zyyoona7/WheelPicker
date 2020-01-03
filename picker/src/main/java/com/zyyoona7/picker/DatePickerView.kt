@@ -38,9 +38,9 @@ class DatePickerView @JvmOverloads constructor(context: Context,
     private var yearWeight: Float = 1f
     private var monthWeight: Float = 1f
     private var dayWeight: Float = 1f
-    private var isShowYear:Boolean =true
-    private var isShowMonth:Boolean =true
-    private var isSHowDay:Boolean =true
+    private var isShowYear: Boolean = true
+    private var isShowMonth: Boolean = true
+    private var isSHowDay: Boolean = true
 
     init {
         val wheelYearView = WheelYearView(context)
@@ -60,7 +60,7 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         wheelYearView.setTextFormatter(IntTextFormatter("%04d"))
         wheelMonthView.setTextFormatter(IntTextFormatter("%02d"))
         wheelDayView.setTextFormatter(IntTextFormatter("%02d"))
-        setMaxTextWidthMeasureType(WheelView.MEASURED_BY_SAME_WIDTH)
+        setMaxTextWidthMeasureType(WheelView.MeasureType.SAME_WIDTH)
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet) {
@@ -69,9 +69,9 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         yearWeight = typedArray.getFloat(R.styleable.DatePickerView_dpv_yearWeight, 1f)
         monthWeight = typedArray.getFloat(R.styleable.DatePickerView_dpv_monthWeight, 1f)
         dayWeight = typedArray.getFloat(R.styleable.DatePickerView_dpv_dayWeight, 1f)
-        isShowYear=typedArray.getBoolean(R.styleable.DatePickerView_dpv_showYear,true)
-        isShowMonth=typedArray.getBoolean(R.styleable.DatePickerView_dpv_showMonth,true)
-        isSHowDay=typedArray.getBoolean(R.styleable.DatePickerView_dpv_showDay,true)
+        isShowYear = typedArray.getBoolean(R.styleable.DatePickerView_dpv_showYear, true)
+        isShowMonth = typedArray.getBoolean(R.styleable.DatePickerView_dpv_showMonth, true)
+        isSHowDay = typedArray.getBoolean(R.styleable.DatePickerView_dpv_showDay, true)
         val startYear = typedArray.getInt(R.styleable.DatePickerView_dpv_startYear, -1)
         val endYear = typedArray.getInt(R.styleable.DatePickerView_dpv_endYear, -1)
         if (startYear > 0 && endYear > 0 && endYear > startYear) {
@@ -90,8 +90,8 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         setCyclic(typedArray.getBoolean(R.styleable.DatePickerView_dpv_cyclic, false))
         setTextSize(typedArray.getDimensionPixelSize(R.styleable.DatePickerView_dpv_textSize,
                 WheelView.DEFAULT_TEXT_SIZE))
-        setTextAlign(typedArray.getInt(R.styleable.DatePickerView_dpv_textAlign,
-                WheelView.TEXT_ALIGN_CENTER))
+        setTextAlign(WheelView.convertTextAlign(typedArray.getInt(R.styleable.DatePickerView_dpv_textAlign,
+                WheelView.TEXT_ALIGN_CENTER)))
         setTextPadding(typedArray.getDimensionPixelSize(R.styleable.DatePickerView_dpv_textPadding,
                 WheelView.DEFAULT_TEXT_PADDING))
         val yearLeftText = typedArray.getText(R.styleable.DatePickerView_dpv_yearLeftText) ?: ""
@@ -115,15 +115,16 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         setRightTextColor(typedArray.getColor(R.styleable.DatePickerView_dpv_rightTextColor,
                 WheelView.DEFAULT_SELECTED_TEXT_COLOR))
         val leftGravity = typedArray.getInt(R.styleable.DatePickerView_dpv_leftTextGravity, 0)
-        setLeftTextGravity(WheelView.getExtraGravity(leftGravity))
+        setLeftTextGravity(WheelView.covertExtraGravity(leftGravity))
         val rightGravity = typedArray.getInt(R.styleable.DatePickerView_dpv_rightTextGravity, 0)
-        setRightTextGravity(WheelView.getExtraGravity(rightGravity))
+        setRightTextGravity(WheelView.covertExtraGravity(rightGravity))
         setNormalTextColor(typedArray.getColor(R.styleable.DatePickerView_dpv_normalTextColor,
                 WheelView.DEFAULT_NORMAL_TEXT_COLOR))
         setSelectedTextColor(typedArray.getColor(R.styleable.DatePickerView_dpv_selectedTextColor,
                 WheelView.DEFAULT_SELECTED_TEXT_COLOR))
         setShowDivider(typedArray.getBoolean(R.styleable.DatePickerView_dpv_showDivider, false))
-        setDividerType(typedArray.getInt(R.styleable.DatePickerView_dpv_dividerType, WheelView.DIVIDER_FILL))
+        setDividerType(WheelView.convertDividerType(typedArray.getInt(R.styleable.DatePickerView_dpv_dividerType,
+                WheelView.DIVIDER_FILL)))
         setDividerColor(typedArray.getColor(R.styleable.DatePickerView_dpv_dividerColor,
                 WheelView.DEFAULT_SELECTED_TEXT_COLOR))
         setDividerHeight(typedArray.getDimensionPixelSize(R.styleable.DatePickerView_dpv_dividerHeight,
@@ -132,8 +133,8 @@ class DatePickerView @JvmOverloads constructor(context: Context,
                 WheelView.DEFAULT_TEXT_PADDING))
         setDividerOffsetY(typedArray.getDimensionPixelOffset(R.styleable.DatePickerView_dpv_dividerOffsetY, 0))
         setCurved(typedArray.getBoolean(R.styleable.DatePickerView_dpv_curved, true))
-        setCurvedArcDirection(typedArray.getInt(R.styleable.DatePickerView_dpv_curvedArcDirection,
-                WheelView.CURVED_ARC_DIRECTION_CENTER))
+        setCurvedArcDirection(WheelView.convertCurvedArcDirection(typedArray.getInt(R.styleable.DatePickerView_dpv_curvedArcDirection,
+                WheelView.CURVED_ARC_DIRECTION_CENTER)))
         setCurvedArcDirectionFactor(typedArray.getFloat(R.styleable.DatePickerView_dpv_curvedArcDirectionFactor,
                 WheelView.DEFAULT_CURVED_FACTOR))
         setShowCurtain(typedArray.getBoolean(R.styleable.DatePickerView_dpv_showCurtain, false))
@@ -221,25 +222,25 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setShowDay(isShow)
     }
 
-    override fun setYearMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+    override fun setYearMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
         datePickerHelper.setYearMaxTextWidthMeasureType(measureType)
     }
 
-    override fun setMonthMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+    override fun setMonthMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
         datePickerHelper.setMonthMaxTextWidthMeasureType(measureType)
     }
 
-    override fun setDayMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+    override fun setDayMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
         datePickerHelper.setDayMaxTextWidthMeasureType(measureType)
     }
 
-    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+    override fun setMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
         datePickerHelper.setMaxTextWidthMeasureType(measureType)
     }
 
-    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType yearType: Int,
-                                            @WheelView.MeasureType monthType: Int,
-                                            @WheelView.MeasureType dayType: Int) {
+    override fun setMaxTextWidthMeasureType(yearType: WheelView.MeasureType,
+                                            monthType: WheelView.MeasureType,
+                                            dayType: WheelView.MeasureType) {
         datePickerHelper.setMaxTextWidthMeasureType(yearType, monthType, dayType)
     }
 
@@ -311,7 +312,7 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setMinTextSize(minTextSizeSp)
     }
 
-    override fun setTextAlign(@WheelView.TextAlign textAlign: Int) {
+    override fun setTextAlign(textAlign: Paint.Align) {
         datePickerHelper.setTextAlign(textAlign)
     }
 
@@ -383,7 +384,7 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setDividerHeight(dividerHeightDp)
     }
 
-    override fun setDividerType(dividerType: Int) {
+    override fun setDividerType(dividerType: WheelView.DividerType) {
         datePickerHelper.setDividerType(dividerType)
     }
 
@@ -423,7 +424,7 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setCurved(curved)
     }
 
-    override fun setCurvedArcDirection(@WheelView.CurvedArcDirection direction: Int) {
+    override fun setCurvedArcDirection(direction: WheelView.CurvedArcDirection) {
         datePickerHelper.setCurvedArcDirection(direction)
     }
 

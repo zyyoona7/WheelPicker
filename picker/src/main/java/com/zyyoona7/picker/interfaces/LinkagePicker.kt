@@ -17,33 +17,33 @@ interface LinkagePicker {
 
     fun setLinkage3TextFormatter(textFormatter: TextFormatter)
 
-    fun setOnRequestData2Listener(listener:OnRequestData2Listener?)
+    fun setOnRequestData2Listener(listener: OnRequestData2Listener?)
 
     fun setOnRequestData3Listener(listener: OnRequestData3Listener?)
 
-    fun setData(firstData:List<Any>,useSecond:Boolean)
+    fun setData(firstData: List<Any>, useSecond: Boolean)
 
-    fun setData(firstData: List<Any>,useSecond: Boolean,useThird:Boolean)
+    fun setData(firstData: List<Any>, useSecond: Boolean, useThird: Boolean)
 
-    fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType:Int)
+    fun setMaxTextWidthMeasureType(measureType: WheelView.MeasureType)
 
-    fun setMaxTextWidthMeasureType(@WheelView.MeasureType linkage1Type:Int,
-                              @WheelView.MeasureType linkage2Type:Int,
-                              @WheelView.MeasureType linkage3Type:Int)
+    fun setMaxTextWidthMeasureType(linkage1Type: WheelView.MeasureType,
+                                   linkage2Type: WheelView.MeasureType,
+                                   linkage3Type: WheelView.MeasureType)
 
-    fun setOnScrollChangedListener(listener:OnScrollChangedListener?)
+    fun setOnScrollChangedListener(listener: OnScrollChangedListener?)
 
-    fun setOnLinkageSelectedListener(listener:OnLinkageSelectedListener?)
+    fun setOnLinkageSelectedListener(listener: OnLinkageSelectedListener?)
 
-    fun setLeftText(linkage1Text:CharSequence,linkage2Text: CharSequence,linkage3Text: CharSequence)
+    fun setLeftText(linkage1Text: CharSequence, linkage2Text: CharSequence, linkage3Text: CharSequence)
 
-    fun setRightText(linkage1Text:CharSequence,linkage2Text: CharSequence,linkage3Text: CharSequence)
+    fun setRightText(linkage1Text: CharSequence, linkage2Text: CharSequence, linkage3Text: CharSequence)
 
-    fun getLinkage1WheelView():WheelView
+    fun getLinkage1WheelView(): WheelView
 
-    fun getLinkage2WheelView():WheelView
+    fun getLinkage2WheelView(): WheelView
 
-    fun getLinkage3WheelView():WheelView
+    fun getLinkage3WheelView(): WheelView
 
     //todo List<T>  List<List<T>> 这种结构的兼容
     //todo 设置选中下标，设置选中的文本

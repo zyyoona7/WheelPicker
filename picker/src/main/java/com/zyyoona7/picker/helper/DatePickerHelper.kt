@@ -91,7 +91,8 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
                 }
             }
             monthId -> {
-                wheelDayView?.month = wheelMonthView?.getAdapter()?.getItem(position) ?: DEFAULT_MONTH
+                wheelDayView?.month = wheelMonthView?.getAdapter()?.getItem(position)
+                        ?: DEFAULT_MONTH
                 val selectedYear = getSelectedYear()
                 val selectedMonth = wheelMonthView?.getAdapter()?.getItem(position) ?: DEFAULT_MONTH
                 //如果选中的年份是最小选中年或者最大选中年 并且 选中的月份是最小选中月或者最大选中月-
@@ -166,7 +167,7 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
     }
 
     override fun setMaxSelectedDate(maxCalendar: Calendar) {
-        minYear = getWheelYearView().getAdapter()?.getItem(0)?:1970
+        minYear = getWheelYearView().getAdapter()?.getItem(0) ?: 1970
         maxYear = maxCalendar.get(Calendar.YEAR)
         minMonth = WheelMonthView.MIN_MONTH
         maxMonth = maxCalendar.get(Calendar.MONTH) + 1
@@ -215,25 +216,25 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelDayView?.visibility = if (isShow) View.VISIBLE else View.GONE
     }
 
-    override fun setYearMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
-        wheelYearView?.maxTextWidthMeasureType=measureType
+    override fun setYearMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
+        wheelYearView?.maxTextWidthMeasureType = measureType
     }
 
-    override fun setMonthMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
-        wheelMonthView?.maxTextWidthMeasureType=measureType
+    override fun setMonthMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
+        wheelMonthView?.maxTextWidthMeasureType = measureType
     }
 
-    override fun setDayMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
-        wheelDayView?.maxTextWidthMeasureType=measureType
+    override fun setDayMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
+        wheelDayView?.maxTextWidthMeasureType = measureType
     }
 
-    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
-        setMaxTextWidthMeasureType(measureType,measureType,measureType)
+    override fun setMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
+        setMaxTextWidthMeasureType(measureType, measureType, measureType)
     }
 
-    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType yearType: Int,
-                                            @WheelView.MeasureType monthType: Int,
-                                            @WheelView.MeasureType dayType: Int) {
+    override fun setMaxTextWidthMeasureType(yearType: WheelView.MeasureType,
+                                            monthType: WheelView.MeasureType,
+                                            dayType: WheelView.MeasureType) {
         setYearMaxTextWidthMeasureType(yearType)
         setMonthMaxTextWidthMeasureType(monthType)
         setDayMaxTextWidthMeasureType(dayType)
@@ -330,7 +331,7 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelDayView?.setMinTextSize(minTextSizeSp)
     }
 
-    override fun setTextAlign(@WheelView.TextAlign textAlign: Int) {
+    override fun setTextAlign(textAlign: Paint.Align) {
         wheelYearView?.textAlign = textAlign
         wheelMonthView?.textAlign = textAlign
         wheelDayView?.textAlign = textAlign
@@ -441,7 +442,7 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelDayView?.setDividerHeight(dividerHeightDp)
     }
 
-    override fun setDividerType(dividerType: Int) {
+    override fun setDividerType(dividerType: WheelView.DividerType) {
         wheelYearView?.dividerType = dividerType
         wheelMonthView?.dividerType = dividerType
         wheelDayView?.dividerType = dividerType
@@ -501,7 +502,7 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelDayView?.isCurved = curved
     }
 
-    override fun setCurvedArcDirection(@WheelView.CurvedArcDirection direction: Int) {
+    override fun setCurvedArcDirection(direction: WheelView.CurvedArcDirection) {
         wheelYearView?.curvedArcDirection = direction
         wheelMonthView?.curvedArcDirection = direction
         wheelDayView?.curvedArcDirection = direction

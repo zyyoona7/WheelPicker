@@ -50,7 +50,7 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         addView(wheelView1, layoutParams)
         addView(wheelView2, layoutParams)
         addView(wheelView3, layoutParams)
-        setMaxTextWidthMeasureType(WheelView.MEASURED_BY_MAX_LENGTH)
+        setMaxTextWidthMeasureType(WheelView.MeasureType.MAX_LENGTH)
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet) {
@@ -62,8 +62,8 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         setCyclic(typedArray.getBoolean(R.styleable.LinkagePickerView_lpv_cyclic, false))
         setTextSize(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_textSize,
                 WheelView.DEFAULT_TEXT_SIZE))
-        setTextAlign(typedArray.getInt(R.styleable.LinkagePickerView_lpv_textAlign,
-                WheelView.TEXT_ALIGN_CENTER))
+        setTextAlign(WheelView.convertTextAlign(typedArray.getInt(R.styleable.LinkagePickerView_lpv_textAlign,
+                WheelView.TEXT_ALIGN_CENTER)))
         setTextPadding(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_textPadding,
                 WheelView.DEFAULT_TEXT_PADDING))
         val linkage1LeftText = typedArray.getText(R.styleable.LinkagePickerView_lpv_linkage1LeftText)
@@ -93,15 +93,16 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         setRightTextColor(typedArray.getColor(R.styleable.LinkagePickerView_lpv_rightTextColor,
                 WheelView.DEFAULT_SELECTED_TEXT_COLOR))
         val leftGravity = typedArray.getInt(R.styleable.LinkagePickerView_lpv_leftTextGravity, 0)
-        setLeftTextGravity(WheelView.getExtraGravity(leftGravity))
+        setLeftTextGravity(WheelView.covertExtraGravity(leftGravity))
         val rightGravity = typedArray.getInt(R.styleable.LinkagePickerView_lpv_rightTextGravity, 0)
-        setRightTextGravity(WheelView.getExtraGravity(rightGravity))
+        setRightTextGravity(WheelView.covertExtraGravity(rightGravity))
         setNormalTextColor(typedArray.getColor(R.styleable.LinkagePickerView_lpv_normalTextColor,
                 WheelView.DEFAULT_NORMAL_TEXT_COLOR))
         setSelectedTextColor(typedArray.getColor(R.styleable.LinkagePickerView_lpv_selectedTextColor,
                 WheelView.DEFAULT_SELECTED_TEXT_COLOR))
         setShowDivider(typedArray.getBoolean(R.styleable.LinkagePickerView_lpv_showDivider, false))
-        setDividerType(typedArray.getInt(R.styleable.LinkagePickerView_lpv_dividerType, WheelView.DIVIDER_FILL))
+        setDividerType(WheelView.convertDividerType(typedArray.getInt(R.styleable.LinkagePickerView_lpv_dividerType,
+                WheelView.DIVIDER_FILL)))
         setDividerColor(typedArray.getColor(R.styleable.LinkagePickerView_lpv_dividerColor,
                 WheelView.DEFAULT_SELECTED_TEXT_COLOR))
         setDividerHeight(typedArray.getDimensionPixelSize(R.styleable.LinkagePickerView_lpv_dividerHeight,
@@ -110,8 +111,8 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
                 WheelView.DEFAULT_TEXT_PADDING))
         setDividerOffsetY(typedArray.getDimensionPixelOffset(R.styleable.LinkagePickerView_lpv_dividerOffsetY, 0))
         setCurved(typedArray.getBoolean(R.styleable.LinkagePickerView_lpv_curved, true))
-        setCurvedArcDirection(typedArray.getInt(R.styleable.LinkagePickerView_lpv_curvedArcDirection,
-                WheelView.CURVED_ARC_DIRECTION_CENTER))
+        setCurvedArcDirection(WheelView.convertCurvedArcDirection(typedArray.getInt(R.styleable.LinkagePickerView_lpv_curvedArcDirection,
+                WheelView.CURVED_ARC_DIRECTION_CENTER)))
         setCurvedArcDirectionFactor(typedArray.getFloat(R.styleable.LinkagePickerView_lpv_curvedArcDirectionFactor,
                 WheelView.DEFAULT_CURVED_FACTOR))
         setShowCurtain(typedArray.getBoolean(R.styleable.LinkagePickerView_lpv_showCurtain, false))
@@ -159,13 +160,13 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setOnLinkageSelectedListener(listener)
     }
 
-    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+    override fun setMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
         linkagePickerHelper.setMaxTextWidthMeasureType(measureType)
     }
 
-    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType linkage1Type: Int,
-                                            @WheelView.MeasureType linkage2Type: Int,
-                                            @WheelView.MeasureType linkage3Type: Int) {
+    override fun setMaxTextWidthMeasureType(linkage1Type: WheelView.MeasureType,
+                                            linkage2Type: WheelView.MeasureType,
+                                            linkage3Type: WheelView.MeasureType) {
         linkagePickerHelper.setMaxTextWidthMeasureType(linkage1Type, linkage2Type, linkage3Type)
     }
 
@@ -217,7 +218,7 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setMinTextSize(minTextSizeSp)
     }
 
-    override fun setTextAlign(@WheelView.TextAlign textAlign: Int) {
+    override fun setTextAlign(textAlign: Paint.Align) {
         linkagePickerHelper.setTextAlign(textAlign)
     }
 
@@ -289,7 +290,7 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setDividerHeight(dividerHeightDp)
     }
 
-    override fun setDividerType(@WheelView.DividerType dividerType: Int) {
+    override fun setDividerType(dividerType: WheelView.DividerType) {
         linkagePickerHelper.setDividerType(dividerType)
     }
 
@@ -329,7 +330,7 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setCurved(curved)
     }
 
-    override fun setCurvedArcDirection(@WheelView.CurvedArcDirection direction: Int) {
+    override fun setCurvedArcDirection(direction: WheelView.CurvedArcDirection) {
         linkagePickerHelper.setCurvedArcDirection(direction)
     }
 

@@ -47,26 +47,26 @@ interface TimePicker {
      */
     fun setTime(hour: Int, minute: Int, second: Int, isAm: Boolean)
 
-    fun setShowHour(isShow:Boolean)
+    fun setShowHour(isShow: Boolean)
 
-    fun setShowMinute(isShow:Boolean)
+    fun setShowMinute(isShow: Boolean)
 
-    fun setShowSecond(isShow:Boolean)
+    fun setShowSecond(isShow: Boolean)
 
-    fun setAmPmMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int)
+    fun setAmPmMaxTextWidthMeasureType(measureType: WheelView.MeasureType)
 
-    fun setHourMaxTextWidthMeasureType(@WheelView.MeasureType measureType:Int)
+    fun setHourMaxTextWidthMeasureType(measureType: WheelView.MeasureType)
 
-    fun setMinuteMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int)
+    fun setMinuteMaxTextWidthMeasureType(measureType: WheelView.MeasureType)
 
-    fun setSecondMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int)
+    fun setSecondMaxTextWidthMeasureType(measureType: WheelView.MeasureType)
 
-    fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int)
+    fun setMaxTextWidthMeasureType(measureType: WheelView.MeasureType)
 
-    fun setMaxTextWidthMeasureType(@WheelView.MeasureType amPmType:Int,
-                                   @WheelView.MeasureType hourType:Int,
-                                   @WheelView.MeasureType minuteType:Int,
-                                   @WheelView.MeasureType secondType:Int)
+    fun setMaxTextWidthMeasureType(amPmType: WheelView.MeasureType,
+                                   hourType: WheelView.MeasureType,
+                                   minuteType: WheelView.MeasureType,
+                                   secondType: WheelView.MeasureType)
 
     fun getWheelAmPmView(): WheelAmPmView
 

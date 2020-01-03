@@ -44,23 +44,23 @@ interface DatePicker {
 
     fun setRightText(yearRight: CharSequence, monthRight: CharSequence, dayRight: CharSequence)
 
-    fun setShowYear(isShow:Boolean)
+    fun setShowYear(isShow: Boolean)
 
-    fun setShowMonth(isShow:Boolean)
+    fun setShowMonth(isShow: Boolean)
 
-    fun setShowDay(isShow:Boolean)
+    fun setShowDay(isShow: Boolean)
 
-    fun setYearMaxTextWidthMeasureType(@WheelView.MeasureType measureType:Int)
+    fun setYearMaxTextWidthMeasureType(measureType: WheelView.MeasureType)
 
-    fun setMonthMaxTextWidthMeasureType(@WheelView.MeasureType measureType:Int)
+    fun setMonthMaxTextWidthMeasureType(measureType: WheelView.MeasureType)
 
-    fun setDayMaxTextWidthMeasureType(@WheelView.MeasureType measureType:Int)
+    fun setDayMaxTextWidthMeasureType(measureType: WheelView.MeasureType)
 
-    fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int)
+    fun setMaxTextWidthMeasureType(measureType: WheelView.MeasureType)
 
-    fun setMaxTextWidthMeasureType(@WheelView.MeasureType yearType:Int,
-                                   @WheelView.MeasureType monthType:Int,
-                                   @WheelView.MeasureType dayType:Int)
+    fun setMaxTextWidthMeasureType(yearType: WheelView.MeasureType,
+                                   monthType: WheelView.MeasureType,
+                                   dayType: WheelView.MeasureType)
 
     fun getSelectedDate(): Date
 

@@ -9,5 +9,5 @@ interface OnScrollChangedListener {
 
     fun onScrollChanged(wheelView: WheelView, scrollOffsetY: Int)
 
-    fun onScrollStateChanged(wheelView: WheelView, @WheelView.ScrollState state: Int)
+    fun onScrollStateChanged(wheelView: WheelView, state: Int)
 }

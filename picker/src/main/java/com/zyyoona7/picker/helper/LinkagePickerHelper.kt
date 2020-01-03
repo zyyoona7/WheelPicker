@@ -147,16 +147,16 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         this.linkageSelectedListener = listener
     }
 
-    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
-        setMaxTextWidthMeasureType(measureType,measureType,measureType)
+    override fun setMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
+        setMaxTextWidthMeasureType(measureType, measureType, measureType)
     }
 
-    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType linkage1Type: Int,
-                                            @WheelView.MeasureType linkage2Type: Int,
-                                            @WheelView.MeasureType linkage3Type: Int) {
-        wheelView1?.maxTextWidthMeasureType=linkage1Type
-        wheelView2?.maxTextWidthMeasureType=linkage2Type
-        wheelView3?.maxTextWidthMeasureType=linkage3Type
+    override fun setMaxTextWidthMeasureType(linkage1Type: WheelView.MeasureType,
+                                            linkage2Type: WheelView.MeasureType,
+                                            linkage3Type: WheelView.MeasureType) {
+        wheelView1?.maxTextWidthMeasureType = linkage1Type
+        wheelView2?.maxTextWidthMeasureType = linkage2Type
+        wheelView3?.maxTextWidthMeasureType = linkage3Type
     }
 
     override fun getLinkage1WheelView(): WheelView {
@@ -234,7 +234,7 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.setMinTextSize(minTextSizeSp)
     }
 
-    override fun setTextAlign(textAlign: Int) {
+    override fun setTextAlign(textAlign: Paint.Align) {
         wheelView1?.textAlign = textAlign
         wheelView2?.textAlign = textAlign
         wheelView3?.textAlign = textAlign
@@ -345,7 +345,7 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.setDividerHeight(dividerHeightDp)
     }
 
-    override fun setDividerType(@WheelView.DividerType dividerType: Int) {
+    override fun setDividerType(dividerType: WheelView.DividerType) {
         wheelView1?.dividerType = dividerType
         wheelView2?.dividerType = dividerType
         wheelView3?.dividerType = dividerType
@@ -405,7 +405,7 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.isCurved = curved
     }
 
-    override fun setCurvedArcDirection(@WheelView.CurvedArcDirection direction: Int) {
+    override fun setCurvedArcDirection(direction: WheelView.CurvedArcDirection) {
         wheelView1?.curvedArcDirection = direction
         wheelView2?.curvedArcDirection = direction
         wheelView3?.curvedArcDirection = direction

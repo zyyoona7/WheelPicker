@@ -41,20 +41,20 @@ class TimePickerView @JvmOverloads constructor(context: Context,
     private var hourWeight: Float = 1f
     private var minuteWeight: Float = 1f
     private var secondWeight: Float = 1f
-    private var is24Hour:Boolean=false
-    private var isShowHour:Boolean=true
-    private var isShowMinute:Boolean=true
-    private var isShowSecond:Boolean=true
+    private var is24Hour: Boolean = false
+    private var isShowHour: Boolean = true
+    private var isShowMinute: Boolean = true
+    private var isShowSecond: Boolean = true
 
     init {
         val amPmWheel = WheelAmPmView(context)
         val hourWheel = WheelHourView(context)
         val minuteWheel = WheelMinuteView(context)
         val secondWheel = WheelSecondView(context)
-        amPmWheel.id=R.id.wheel_am_pm
-        hourWheel.id=R.id.wheel_hour
-        minuteWheel.id=R.id.wheel_minute
-        secondWheel.id=R.id.wheel_second
+        amPmWheel.id = R.id.wheel_am_pm
+        hourWheel.id = R.id.wheel_hour
+        minuteWheel.id = R.id.wheel_minute
+        secondWheel.id = R.id.wheel_second
         timePickerHelper = TimePickerHelper(amPmWheel, hourWheel, minuteWheel, secondWheel)
 
         attrs?.let {
@@ -67,21 +67,23 @@ class TimePickerView @JvmOverloads constructor(context: Context,
         set24Hour(is24Hour)
         setMinuteTextFormatter(IntTextFormatter())
         setSecondTextFormatter(IntTextFormatter())
-        setMaxTextWidthMeasureType(WheelView.MEASURED_BY_MAX_LENGTH,WheelView.MEASURED_BY_MAX_LENGTH,
-                WheelView.MEASURED_BY_SAME_WIDTH,WheelView.MEASURED_BY_SAME_WIDTH)
+        setMaxTextWidthMeasureType(WheelView.MeasureType.MAX_LENGTH,
+                WheelView.MeasureType.MAX_LENGTH,
+                WheelView.MeasureType.SAME_WIDTH,
+                WheelView.MeasureType.SAME_WIDTH)
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet) {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.TimePickerView)
-        is24Hour=typedArray.getBoolean(R.styleable.TimePickerView_tpv_is24Hour, TimePickerHelper.is24HourMode(context))
+        is24Hour = typedArray.getBoolean(R.styleable.TimePickerView_tpv_is24Hour, TimePickerHelper.is24HourMode(context))
         widthWeightMode = typedArray.getBoolean(R.styleable.TimePickerView_tpv_widthWeightMode, false)
         amPmWeight = typedArray.getFloat(R.styleable.TimePickerView_tpv_amPmWeight, 1f)
         hourWeight = typedArray.getFloat(R.styleable.TimePickerView_tpv_hourWeight, 1f)
         minuteWeight = typedArray.getFloat(R.styleable.TimePickerView_tpv_minuteWeight, 1f)
         secondWeight = typedArray.getFloat(R.styleable.TimePickerView_tpv_secondWeight, 1f)
-        isShowHour=typedArray.getBoolean(R.styleable.TimePickerView_tpv_showHour,true)
-        isShowMinute=typedArray.getBoolean(R.styleable.TimePickerView_tpv_showMinute,true)
-        isShowSecond=typedArray.getBoolean(R.styleable.TimePickerView_tpv_showSecond,true)
+        isShowHour = typedArray.getBoolean(R.styleable.TimePickerView_tpv_showHour, true)
+        isShowMinute = typedArray.getBoolean(R.styleable.TimePickerView_tpv_showMinute, true)
+        isShowSecond = typedArray.getBoolean(R.styleable.TimePickerView_tpv_showSecond, true)
         setVisibleItems(typedArray.getInt(R.styleable.TimePickerView_tpv_visibleItems,
                 WheelView.DEFAULT_VISIBLE_ITEM))
         setLineSpacing(typedArray.getDimensionPixelSize(R.styleable.TimePickerView_tpv_lineSpacing,
@@ -89,8 +91,8 @@ class TimePickerView @JvmOverloads constructor(context: Context,
         setCyclic(typedArray.getBoolean(R.styleable.TimePickerView_tpv_cyclic, true))
         setTextSize(typedArray.getDimensionPixelSize(R.styleable.TimePickerView_tpv_textSize,
                 WheelView.DEFAULT_TEXT_SIZE))
-        setTextAlign(typedArray.getInt(R.styleable.TimePickerView_tpv_textAlign,
-                WheelView.TEXT_ALIGN_CENTER))
+        setTextAlign(WheelView.convertTextAlign(typedArray.getInt(R.styleable.TimePickerView_tpv_textAlign,
+                WheelView.TEXT_ALIGN_CENTER)))
         setTextPadding(typedArray.getDimensionPixelSize(R.styleable.TimePickerView_tpv_textPadding,
                 WheelView.DEFAULT_TEXT_PADDING))
         val amPmLeftText = typedArray.getText(R.styleable.TimePickerView_tpv_amPmLeftText)
@@ -124,15 +126,16 @@ class TimePickerView @JvmOverloads constructor(context: Context,
         setRightTextColor(typedArray.getColor(R.styleable.TimePickerView_tpv_rightTextColor,
                 WheelView.DEFAULT_SELECTED_TEXT_COLOR))
         val leftGravity = typedArray.getInt(R.styleable.TimePickerView_tpv_leftTextGravity, 0)
-        setLeftTextGravity(WheelView.getExtraGravity(leftGravity))
+        setLeftTextGravity(WheelView.covertExtraGravity(leftGravity))
         val rightGravity = typedArray.getInt(R.styleable.TimePickerView_tpv_rightTextGravity, 0)
-        setRightTextGravity(WheelView.getExtraGravity(rightGravity))
+        setRightTextGravity(WheelView.covertExtraGravity(rightGravity))
         setNormalTextColor(typedArray.getColor(R.styleable.TimePickerView_tpv_normalTextColor,
                 WheelView.DEFAULT_NORMAL_TEXT_COLOR))
         setSelectedTextColor(typedArray.getColor(R.styleable.TimePickerView_tpv_selectedTextColor,
                 WheelView.DEFAULT_SELECTED_TEXT_COLOR))
         setShowDivider(typedArray.getBoolean(R.styleable.TimePickerView_tpv_showDivider, false))
-        setDividerType(typedArray.getInt(R.styleable.TimePickerView_tpv_dividerType, WheelView.DIVIDER_FILL))
+        setDividerType(WheelView.convertDividerType(typedArray.getInt(R.styleable.TimePickerView_tpv_dividerType,
+                WheelView.DIVIDER_FILL)))
         setDividerColor(typedArray.getColor(R.styleable.TimePickerView_tpv_dividerColor,
                 WheelView.DEFAULT_SELECTED_TEXT_COLOR))
         setDividerHeight(typedArray.getDimensionPixelSize(R.styleable.TimePickerView_tpv_dividerHeight,
@@ -141,8 +144,8 @@ class TimePickerView @JvmOverloads constructor(context: Context,
                 WheelView.DEFAULT_TEXT_PADDING))
         setDividerOffsetY(typedArray.getDimensionPixelOffset(R.styleable.TimePickerView_tpv_dividerOffsetY, 0))
         setCurved(typedArray.getBoolean(R.styleable.TimePickerView_tpv_curved, true))
-        setCurvedArcDirection(typedArray.getInt(R.styleable.TimePickerView_tpv_curvedArcDirection,
-                WheelView.CURVED_ARC_DIRECTION_CENTER))
+        setCurvedArcDirection(WheelView.convertCurvedArcDirection(typedArray.getInt(R.styleable.TimePickerView_tpv_curvedArcDirection,
+                WheelView.CURVED_ARC_DIRECTION_CENTER)))
         setCurvedArcDirectionFactor(typedArray.getFloat(R.styleable.TimePickerView_tpv_curvedArcDirectionFactor,
                 WheelView.DEFAULT_CURVED_FACTOR))
         setShowCurtain(typedArray.getBoolean(R.styleable.TimePickerView_tpv_showCurtain, false))
@@ -222,30 +225,30 @@ class TimePickerView @JvmOverloads constructor(context: Context,
         timePickerHelper.setShowSecond(isShow)
     }
 
-    override fun setAmPmMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+    override fun setAmPmMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
         timePickerHelper.setAmPmMaxTextWidthMeasureType(measureType)
     }
 
-    override fun setHourMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+    override fun setHourMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
         timePickerHelper.setHourMaxTextWidthMeasureType(measureType)
     }
 
-    override fun setMinuteMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+    override fun setMinuteMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
         timePickerHelper.setMinuteMaxTextWidthMeasureType(measureType)
     }
 
-    override fun setSecondMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+    override fun setSecondMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
         timePickerHelper.setSecondMaxTextWidthMeasureType(measureType)
     }
 
-    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType measureType: Int) {
+    override fun setMaxTextWidthMeasureType(measureType: WheelView.MeasureType) {
         timePickerHelper.setMaxTextWidthMeasureType(measureType)
     }
 
-    override fun setMaxTextWidthMeasureType(@WheelView.MeasureType amPmType: Int,
-                                            @WheelView.MeasureType hourType: Int,
-                                            @WheelView.MeasureType minuteType: Int,
-                                            @WheelView.MeasureType secondType: Int) {
+    override fun setMaxTextWidthMeasureType(amPmType: WheelView.MeasureType,
+                                            hourType: WheelView.MeasureType,
+                                            minuteType: WheelView.MeasureType,
+                                            secondType: WheelView.MeasureType) {
         timePickerHelper.setMaxTextWidthMeasureType(amPmType, hourType, minuteType, secondType)
     }
 
@@ -311,7 +314,7 @@ class TimePickerView @JvmOverloads constructor(context: Context,
         timePickerHelper.setMinTextSize(minTextSizeSp)
     }
 
-    override fun setTextAlign(@WheelView.TextAlign textAlign: Int) {
+    override fun setTextAlign(textAlign: Paint.Align) {
         timePickerHelper.setTextAlign(textAlign)
     }
 
@@ -383,7 +386,7 @@ class TimePickerView @JvmOverloads constructor(context: Context,
         timePickerHelper.setDividerHeight(dividerHeightDp)
     }
 
-    override fun setDividerType(@WheelView.DividerType dividerType: Int) {
+    override fun setDividerType(dividerType: WheelView.DividerType) {
         timePickerHelper.setDividerType(dividerType)
     }
 
@@ -423,7 +426,7 @@ class TimePickerView @JvmOverloads constructor(context: Context,
         timePickerHelper.setCurved(curved)
     }
 
-    override fun setCurvedArcDirection(@WheelView.CurvedArcDirection direction: Int) {
+    override fun setCurvedArcDirection(direction: WheelView.CurvedArcDirection) {
         timePickerHelper.setCurvedArcDirection(direction)
     }
 
