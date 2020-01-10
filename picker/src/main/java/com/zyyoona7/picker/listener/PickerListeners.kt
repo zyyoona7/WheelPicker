@@ -7,9 +7,9 @@ import java.util.*
 
 interface AmPmTextHandler {
 
-    fun amText(context: Context):String
+    fun amText(context: Context): String
 
-    fun pmText(context: Context):String
+    fun pmText(context: Context): String
 }
 
 /**
@@ -19,7 +19,7 @@ interface AmPmTextHandler {
  */
 interface OnAmPmChangedListener {
 
-    fun onAmPmChanged(wheelHourView: WheelHourView, isAm:Boolean)
+    fun onAmPmChanged(wheelHourView: WheelHourView, isAm: Boolean)
 }
 
 /**
@@ -39,7 +39,7 @@ interface OnDateSelectedListener {
  */
 interface OnTimeSelectedListener {
 
-    fun onTimeSelected(is24Hour:Boolean,hour:Int,minute:Int,second:Int,isAm:Boolean)
+    fun onTimeSelected(is24Hour: Boolean, hour: Int, minute: Int, second: Int, isAm: Boolean)
 }
 
 /**
@@ -59,7 +59,7 @@ interface OnLinkageSelectedListener {
  */
 interface OnRequestData2Listener {
 
-    fun convert(linkage1Wv: WheelView):List<Any>
+    fun convert(linkage1Wv: WheelView): List<Any>
 }
 
 /**
@@ -69,5 +69,28 @@ interface OnRequestData2Listener {
  */
 interface OnRequestData3Listener {
 
-    fun convert(linkage1Wv:WheelView, linkage2Wv:WheelView):List<Any>
+    fun convert(linkage1Wv: WheelView, linkage2Wv: WheelView): List<Any>
+}
+
+
+/**
+ * 请求联动2 WheelView 数据
+ *
+ * @author zyyoona7
+ */
+interface OnDoubleLoadDataListener {
+
+    fun onLoadData2(linkage1Wv: WheelView): List<Any>
+}
+
+/**
+ * 请求联动2和3 WheelView 数据
+ *
+ * @author zyyoona7
+ */
+interface OnTripleLoadDataListener {
+
+    fun onLoadData2(linkage1Wv: WheelView): List<Any>
+
+    fun onLoadData3(linkage1Wv: WheelView, linkage2Wv: WheelView): List<Any>
 }

@@ -334,13 +334,21 @@ interface LinkagePicker {
 
     fun setLinkage3TextFormatter(textFormatter: TextFormatter)
 
-    fun setOnRequestData2Listener(listener: OnRequestData2Listener?)
+    fun setData(firstData: List<Any>, doubleLoadDataListener: OnDoubleLoadDataListener)
 
-    fun setOnRequestData3Listener(listener: OnRequestData3Listener?)
+    fun setData(firstData: List<Any>, tripleLoadDataListener: OnTripleLoadDataListener)
 
-    fun setData(firstData: List<Any>, useSecond: Boolean)
+    fun setSelectedPosition(linkage1Pos: Int, linkage2Pos: Int)
 
-    fun setData(firstData: List<Any>, useSecond: Boolean, useThird: Boolean)
+    fun setSelectedPosition(linkage1Pos: Int, linkage2Pos: Int, linkage3Pos: Int)
+
+    fun setSelectedItem(linkage1Item: Any, linkage2Item: Any, isCompareFormatText: Boolean)
+
+    fun setSelectedItem(linkage1Item: Any, linkage2Item: Any)
+
+    fun setSelectedItem(linkage1Item: Any, linkage2Item: Any, linkage3Item: Any)
+
+    fun setSelectedItem(linkage1Item: Any, linkage2Item: Any, linkage3Item: Any, isCompareFormatText: Boolean)
 
     fun setMaxTextWidthMeasureType(measureType: WheelView.MeasureType)
 

@@ -7,8 +7,8 @@ import com.zyyoona7.demo.activity.BaseActivity
 import com.zyyoona7.demo.databinding.ActivityLinkagePickerBinding
 import com.zyyoona7.demo.entities.CityEntity
 import com.zyyoona7.demo.utils.ParseHelper
-import com.zyyoona7.picker.listener.OnRequestData2Listener
-import com.zyyoona7.picker.listener.OnRequestData3Listener
+import com.zyyoona7.picker.listener.OnDoubleLoadDataListener
+import com.zyyoona7.picker.listener.OnTripleLoadDataListener
 import com.zyyoona7.wheel.WheelView
 import com.zyyoona7.wheel.formatter.SimpleTextFormatter
 
@@ -40,18 +40,29 @@ class LinkagePickerActivity : BaseActivity<ActivityLinkagePickerBinding>() {
                 return item.name
             }
         })
-        binding.linkagePicker.setOnRequestData2Listener(object : OnRequestData2Listener {
-            override fun convert(linkage1Wv: WheelView): List<Any> {
+
+        val cityList = ParseHelper.parseThreeLevelCityList(this)
+
+        //两级联动
+//        binding.linkagePicker.setData(cityList, object : OnDoubleLoadDataListener {
+//            override fun onLoadData2(linkage1Wv: WheelView): List<Any> {
+//                return linkage1Wv.getSelectedItem<CityEntity>()?.districts ?: emptyList()
+//            }
+//
+//        })
+
+        //三级联动
+        binding.linkagePicker.setData(cityList,object : OnTripleLoadDataListener {
+            override fun onLoadData2(linkage1Wv: WheelView): List<Any> {
                 return linkage1Wv.getSelectedItem<CityEntity>()?.districts ?: emptyList()
             }
-        })
 
-        binding.linkagePicker.setOnRequestData3Listener(object : OnRequestData3Listener {
-            override fun convert(linkage1Wv: WheelView, linkage2Wv: WheelView): List<Any> {
+            override fun onLoadData3(linkage1Wv: WheelView, linkage2Wv: WheelView): List<Any> {
                 return linkage2Wv.getSelectedItem<CityEntity>()?.districts ?: emptyList()
             }
         })
-        val cityList = ParseHelper.parseThreeLevelCityList(this)
-        binding.linkagePicker.setData(cityList, useSecond = true)
+
+        binding.linkagePicker.setSelectedItem("河北省", "邯郸市",
+                "北京市", true)
     }
 }

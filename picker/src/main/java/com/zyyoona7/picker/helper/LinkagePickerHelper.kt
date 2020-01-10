@@ -6,9 +6,9 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.RawRes
+import com.zyyoona7.picker.listener.OnDoubleLoadDataListener
 import com.zyyoona7.picker.listener.OnLinkageSelectedListener
-import com.zyyoona7.picker.listener.OnRequestData2Listener
-import com.zyyoona7.picker.listener.OnRequestData3Listener
+import com.zyyoona7.picker.listener.OnTripleLoadDataListener
 import com.zyyoona7.wheel.WheelView
 import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
 import com.zyyoona7.wheel.formatter.TextFormatter
@@ -20,8 +20,8 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
                           private var wheelView3: WheelView?)
     : OnItemSelectedListener, OnScrollChangedListener, LinkagePicker, WheelPicker {
 
-    private var requestData2Listener: OnRequestData2Listener? = null
-    private var requestData3Listener: OnRequestData3Listener? = null
+    private var doubleLoadDataListener: OnDoubleLoadDataListener? = null
+    private var tripleLoadDataListener: OnTripleLoadDataListener? = null
     private var scrollChangedListener: OnScrollChangedListener? = null
     private var linkageSelectedListener: OnLinkageSelectedListener? = null
 
@@ -43,22 +43,17 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
 
         when (wheelView.id) {
             wheelView1Id -> {
-                wheelView2?.let {
-                    val secondData: List<Any> = requestData2Listener?.convert(getLinkage1WheelView())
-                            ?: emptyList()
-                    it.setData(secondData)
-                }
-                wheelView3?.let {
-                    val thirdData: List<Any> = requestData3Listener?.convert(getLinkage1WheelView(),
-                            getLinkage2WheelView()) ?: emptyList()
-                    it.setData(thirdData)
+                tripleLoadDataListener?.let {
+                    wheelView2?.setData(it.onLoadData2(getLinkage1WheelView()))
+                    wheelView3?.setData(it.onLoadData3(getLinkage1WheelView(), getLinkage2WheelView()))
+                } ?: kotlin.run {
+                    wheelView2?.setData(doubleLoadDataListener?.onLoadData2(getLinkage1WheelView())
+                            ?: emptyList())
                 }
             }
             wheelView2Id -> {
-                wheelView3?.let {
-                    val thirdData: List<Any> = requestData3Listener?.convert(getLinkage1WheelView(),
-                            getLinkage2WheelView()) ?: emptyList()
-                    it.setData(thirdData)
+                tripleLoadDataListener?.let {
+                    wheelView3?.setData(it.onLoadData3(getLinkage1WheelView(), getLinkage2WheelView()))
                 }
             }
             else -> {
@@ -95,46 +90,57 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.setTextFormatter(textFormatter)
     }
 
-    override fun setOnRequestData2Listener(listener: OnRequestData2Listener?) {
-        this.requestData2Listener = listener
-
-    }
-
-    override fun setOnRequestData3Listener(listener: OnRequestData3Listener?) {
-        this.requestData3Listener = listener
-    }
-
-    override fun setData(firstData: List<Any>, useSecond: Boolean, useThird: Boolean) {
+    override fun setData(firstData: List<Any>, doubleLoadDataListener: OnDoubleLoadDataListener) {
         wheelView1?.setData(firstData)
-        if (useSecond) {
-            require(requestData2Listener != null) {
-                "use second WheelView must be execute setOnRequestData2Listener() before setData()."
-            }
-            wheelView2?.let {
-                val secondData: List<Any> = requestData2Listener?.convert(getLinkage1WheelView())
-                        ?: emptyList()
-                it.setData(secondData)
-            }
-        } else {
-            wheelView2?.visibility = View.GONE
-            return
-        }
-        if (useThird) {
-            require(requestData2Listener != null) {
-                "use third WheelView must be execute setOnRequestData3Listener() before setData()."
-            }
-            wheelView3?.let {
-                val thirdData: List<Any> = requestData3Listener?.convert(getLinkage1WheelView(),
-                        getLinkage2WheelView()) ?: emptyList()
-                it.setData(thirdData)
-            }
-        } else {
-            wheelView3?.visibility = View.GONE
-        }
+        this.doubleLoadDataListener = doubleLoadDataListener
+        this.tripleLoadDataListener = null
+        wheelView2?.setData(this.doubleLoadDataListener?.onLoadData2(getLinkage1WheelView())
+                ?: emptyList())
+        wheelView3?.visibility = View.GONE
     }
 
-    override fun setData(firstData: List<Any>, useSecond: Boolean) {
-        setData(firstData, useSecond, false)
+    override fun setData(firstData: List<Any>, tripleLoadDataListener: OnTripleLoadDataListener) {
+        wheelView1?.setData(firstData)
+        this.tripleLoadDataListener = tripleLoadDataListener
+        this.doubleLoadDataListener = null
+        wheelView2?.setData(this.tripleLoadDataListener?.onLoadData2(getLinkage1WheelView())
+                ?: emptyList())
+        wheelView3?.setData(this.tripleLoadDataListener?.onLoadData3(getLinkage1WheelView(),
+                getLinkage2WheelView()) ?: emptyList())
+    }
+
+    override fun setSelectedPosition(linkage1Pos: Int, linkage2Pos: Int) {
+        setSelectedPosition(linkage1Pos, linkage2Pos, -1)
+    }
+
+    override fun setSelectedPosition(linkage1Pos: Int, linkage2Pos: Int, linkage3Pos: Int) {
+        wheelView1?.setSelectedPosition(linkage1Pos)
+        wheelView2?.setSelectedPosition(linkage2Pos)
+        wheelView3?.setSelectedPosition(linkage3Pos)
+    }
+
+    override fun setSelectedItem(linkage1Item: Any, linkage2Item: Any) {
+        setSelectedItem(linkage1Item, linkage2Item, false)
+    }
+
+    override fun setSelectedItem(linkage1Item: Any, linkage2Item: Any, isCompareFormatText: Boolean) {
+        setSelectedItem(linkage1Item, linkage2Item, "", isCompareFormatText)
+    }
+
+    override fun setSelectedItem(linkage1Item: Any, linkage2Item: Any, linkage3Item: Any) {
+        setSelectedItem(linkage1Item, linkage2Item, linkage3Item, false)
+    }
+
+    override fun setSelectedItem(linkage1Item: Any, linkage2Item: Any, linkage3Item: Any, isCompareFormatText: Boolean) {
+        wheelView1?.let {
+            it.setSelectedPosition(it.indexOf(linkage1Item, isCompareFormatText))
+        }
+        wheelView2?.let {
+            it.setSelectedPosition(it.indexOf(linkage2Item, isCompareFormatText))
+        }
+        wheelView3?.let {
+            it.setSelectedPosition(it.indexOf(linkage3Item, isCompareFormatText))
+        }
     }
 
     override fun setOnScrollChangedListener(listener: OnScrollChangedListener?) {

@@ -11,12 +11,12 @@ import android.widget.LinearLayout
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.RawRes
-import com.zyyoona7.picker.helper.LinkagePickerHelper
 import com.zyyoona7.picker.helper.LinkagePicker
+import com.zyyoona7.picker.helper.LinkagePickerHelper
 import com.zyyoona7.picker.helper.WheelPicker
+import com.zyyoona7.picker.listener.OnDoubleLoadDataListener
 import com.zyyoona7.picker.listener.OnLinkageSelectedListener
-import com.zyyoona7.picker.listener.OnRequestData2Listener
-import com.zyyoona7.picker.listener.OnRequestData3Listener
+import com.zyyoona7.picker.listener.OnTripleLoadDataListener
 import com.zyyoona7.wheel.WheelView
 import com.zyyoona7.wheel.formatter.TextFormatter
 import com.zyyoona7.wheel.listener.OnScrollChangedListener
@@ -136,20 +136,36 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setLinkage3TextFormatter(textFormatter)
     }
 
-    override fun setOnRequestData2Listener(listener: OnRequestData2Listener?) {
-        linkagePickerHelper.setOnRequestData2Listener(listener)
+    override fun setData(firstData: List<Any>, doubleLoadDataListener: OnDoubleLoadDataListener) {
+        linkagePickerHelper.setData(firstData, doubleLoadDataListener)
     }
 
-    override fun setOnRequestData3Listener(listener: OnRequestData3Listener?) {
-        linkagePickerHelper.setOnRequestData3Listener(listener)
+    override fun setData(firstData: List<Any>, tripleLoadDataListener: OnTripleLoadDataListener) {
+        linkagePickerHelper.setData(firstData, tripleLoadDataListener)
     }
 
-    override fun setData(firstData: List<Any>, useSecond: Boolean) {
-        linkagePickerHelper.setData(firstData, useSecond)
+    override fun setSelectedPosition(linkage1Pos: Int, linkage2Pos: Int) {
+        linkagePickerHelper.setSelectedPosition(linkage1Pos, linkage2Pos)
     }
 
-    override fun setData(firstData: List<Any>, useSecond: Boolean, useThird: Boolean) {
-        linkagePickerHelper.setData(firstData, useSecond, useThird)
+    override fun setSelectedPosition(linkage1Pos: Int, linkage2Pos: Int, linkage3Pos: Int) {
+        linkagePickerHelper.setSelectedPosition(linkage1Pos, linkage2Pos, linkage3Pos)
+    }
+
+    override fun setSelectedItem(linkage1Item: Any, linkage2Item: Any) {
+        linkagePickerHelper.setSelectedItem(linkage1Item, linkage2Item)
+    }
+
+    override fun setSelectedItem(linkage1Item: Any, linkage2Item: Any, isCompareFormatText: Boolean) {
+        linkagePickerHelper.setSelectedItem(linkage1Item, linkage2Item, isCompareFormatText)
+    }
+
+    override fun setSelectedItem(linkage1Item: Any, linkage2Item: Any, linkage3Item: Any) {
+        linkagePickerHelper.setSelectedItem(linkage1Item, linkage2Item, linkage3Item)
+    }
+
+    override fun setSelectedItem(linkage1Item: Any, linkage2Item: Any, linkage3Item: Any, isCompareFormatText: Boolean) {
+        linkagePickerHelper.setSelectedItem(linkage1Item, linkage2Item, linkage3Item, isCompareFormatText)
     }
 
     override fun setOnScrollChangedListener(listener: OnScrollChangedListener?) {
