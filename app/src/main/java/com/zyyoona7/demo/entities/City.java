@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CityEntity implements Serializable {
+public class City implements Serializable {
 
     //国家
     public static final String LEVEL_COUNTRY = "country";
@@ -22,7 +22,7 @@ public class CityEntity implements Serializable {
     private String name;
     private String center;
     private String level;
-    private List<CityEntity> districts;
+    private List<City> districts;
 
     public String getCitycode() {
         return citycode;
@@ -64,18 +64,18 @@ public class CityEntity implements Serializable {
         this.level = level;
     }
 
-    public List<CityEntity> getDistricts() {
-        return districts == null ? new ArrayList<CityEntity>(1) : districts;
+    public List<City> getDistricts() {
+        return districts == null ? new ArrayList<City>(1) : districts;
     }
 
-    public void setDistricts(List<CityEntity> districts) {
+    public void setDistricts(List<City> districts) {
         this.districts = districts;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "CityEntity{" +
+        return "City{" +
                 "citycode='" + citycode + '\'' +
                 ", adcode='" + adcode + '\'' +
                 ", name='" + name + '\'' +

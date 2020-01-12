@@ -10,7 +10,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-import com.zyyoona7.demo.entities.CityEntity;
+import com.zyyoona7.demo.entities.City;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,13 +33,13 @@ public class ParseHelper {
 
     private ParseHelper(){}
 
-    public static void initTwoLevelCityList(Context context, List<CityEntity> pList, List<List<CityEntity>> cList) {
+    public static void initTwoLevelCityList(Context context, List<City> pList, List<List<City>> cList) {
 
-        List<CityEntity> twoLevelList = parseTwoLevelCityList(context);
+        List<City> twoLevelList = parseTwoLevelCityList(context);
         pList.addAll(twoLevelList);
-        for (CityEntity cityEntity : twoLevelList) {
-            List<CityEntity> cityList = new ArrayList<>(1);
-            List<CityEntity> subCityList = cityEntity.getDistricts();
+        for (City cityEntity : twoLevelList) {
+            List<City> cityList = new ArrayList<>(1);
+            List<City> subCityList = cityEntity.getDistricts();
             cityList.addAll(subCityList);
 
             cList.add(cityList);
@@ -47,14 +47,14 @@ public class ParseHelper {
 
     }
 
-    public static void initThreeLevelCityList(Context context, List<CityEntity> pList, List<List<CityEntity>> cList, List<List<List<CityEntity>>> aList) {
-        List<CityEntity> threeLevelCityList = parseThreeLevelCityList(context);
+    public static void initThreeLevelCityList(Context context, List<City> pList, List<List<City>> cList, List<List<List<City>>> aList) {
+        List<City> threeLevelCityList = parseThreeLevelCityList(context);
         pList.addAll(threeLevelCityList);
-        for (CityEntity cityEntity : threeLevelCityList) {
-            List<CityEntity> cityList = new ArrayList<>(1);
-            List<List<CityEntity>> areaList = new ArrayList<>(1);
-            List<CityEntity> subCityList = cityEntity.getDistricts();
-            for (CityEntity entity : subCityList) {
+        for (City cityEntity : threeLevelCityList) {
+            List<City> cityList = new ArrayList<>(1);
+            List<List<City>> areaList = new ArrayList<>(1);
+            List<City> subCityList = cityEntity.getDistricts();
+            for (City entity : subCityList) {
                 cityList.add(entity);
                 areaList.add(entity.getDistricts());
             }
@@ -63,18 +63,18 @@ public class ParseHelper {
         }
     }
 
-    private static void initCityList(List<CityEntity> parseList, List<CityEntity> pList, List<List<CityEntity>> cList, List<List<List<CityEntity>>> aList, boolean isThreeLevel) {
+    private static void initCityList(List<City> parseList, List<City> pList, List<List<City>> cList, List<List<List<City>>> aList, boolean isThreeLevel) {
 
         if (parseList == null) {
             return;
         }
         pList = parseList;
-        for (CityEntity cityEntity : parseList) {
-            List<CityEntity> cityList = new ArrayList<>(1);
+        for (City cityEntity : parseList) {
+            List<City> cityList = new ArrayList<>(1);
             if (isThreeLevel) {
-                List<List<CityEntity>> areaList = new ArrayList<>(1);
+                List<List<City>> areaList = new ArrayList<>(1);
             }
-            List<CityEntity> subCityList = cityEntity.getDistricts();
+            List<City> subCityList = cityEntity.getDistricts();
             cityList.addAll(subCityList);
 
         }
@@ -86,7 +86,7 @@ public class ParseHelper {
      * @param context
      * @return
      */
-    public static List<CityEntity> parseTwoLevelCityList(Context context) {
+    public static List<City> parseTwoLevelCityList(Context context) {
         return parseCityList(context, NAME_AREA_LEVEL_2);
     }
 
@@ -96,7 +96,7 @@ public class ParseHelper {
      * @param context
      * @return
      */
-    public static List<CityEntity> parseThreeLevelCityList(Context context) {
+    public static List<City> parseThreeLevelCityList(Context context) {
         return parseCityList(context, NAME_AREA_LEVEL_3);
     }
 
@@ -107,7 +107,7 @@ public class ParseHelper {
      * @param assetFileName
      * @return
      */
-    private static List<CityEntity> parseCityList(Context context, String assetFileName) {
+    private static List<City> parseCityList(Context context, String assetFileName) {
 
         JSONObject jsonObject = AssetUtils.loadJSONAsset(context, assetFileName);
         try {
@@ -115,9 +115,9 @@ public class ParseHelper {
             JSONObject countryJobj = jsonArray.getJSONObject(0);
             String contentString = countryJobj.getString("districts");
             Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(String.class, new CityEntityStringJsonDeserializer())
+                    .registerTypeAdapter(String.class, new CityStringJsonDeserializer())
                     .create();
-            return gson.fromJson(contentString, new TypeToken<List<CityEntity>>() {
+            return gson.fromJson(contentString, new TypeToken<List<City>>() {
             }.getType());
         } catch (JSONException e) {
             Log.d(TAG,"城市列表 JSON 数据解析异常：" + e.getMessage());
@@ -125,7 +125,7 @@ public class ParseHelper {
         return new ArrayList<>(1);
     }
 
-    public static class CityEntityStringJsonDeserializer implements JsonDeserializer<String> {
+    public static class CityStringJsonDeserializer implements JsonDeserializer<String> {
 
         @Override
         public String deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
