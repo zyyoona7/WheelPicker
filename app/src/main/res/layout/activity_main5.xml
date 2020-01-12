@@ -32,9 +32,9 @@
             android:id="@+id/btn_linkage_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:background="@color/colorBgBtnGray"
-            android:text="Linkage Picker"
-            android:layout_marginTop="20dp"/>
+            android:text="Linkage Picker" />
 
         <com.zyyoona7.wheel.WheelView
             android:id="@+id/wheelview"
@@ -43,7 +43,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:background="@color/colorWheelView"
-            app:wv_textSize="20sp"/>
+            app:wv_textSize="20sp" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -242,8 +242,8 @@
                     android:id="@+id/tv_curtain_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="选中区域相关"
                     android:layout_marginTop="10dp"
+                    android:text="选中区域相关"
                     android:textAppearance="@style/DivTitleAppearance"
                     app:layout_constraintTop_toBottomOf="@id/sc_vibrate" />
 
@@ -418,13 +418,74 @@
                     app:layout_constraintTop_toTopOf="@id/btn_font_medium" />
 
                 <TextView
+                    android:id="@+id/tv_extra_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="主体两侧附加文字相关"
+                    android:textAppearance="@style/DivTitleAppearance"
+                    app:layout_constraintTop_toBottomOf="@id/btn_font_medium" />
+
+                <TextView
+                    android:id="@+id/tv_extra_left_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="设置左侧附加文字"
+                    android:textAppearance="@style/TitleAppearance"
+                    app:layout_constraintTop_toBottomOf="@id/tv_extra_text" />
+
+                <EditText
+                    android:id="@+id/et_extra_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="输入附加在左侧的文本内容并点击按钮"
+                    app:layout_constraintTop_toBottomOf="@id/tv_extra_left_title" />
+
+                <Button
+                    android:id="@+id/btn_extra_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="应用左侧附加文字"
+                    android:background="@color/colorBgBtnNormal"
+                    app:layout_constraintTop_toBottomOf="@id/et_extra_left" />
+
+                <TextView
+                    android:id="@+id/tv_extra_right_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="设置右侧附加文字"
+                    android:textAppearance="@style/TitleAppearance"
+                    app:layout_constraintTop_toBottomOf="@id/btn_extra_left" />
+
+                <EditText
+                    android:id="@+id/et_extra_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="输入附加在右侧的文本内容并点击按钮"
+                    app:layout_constraintTop_toBottomOf="@id/tv_extra_right_title" />
+
+                <Button
+                    android:id="@+id/btn_extra_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="应用左侧附加文字"
+                    android:background="@color/colorBgBtnNormal"
+                    app:layout_constraintTop_toBottomOf="@id/et_extra_right" />
+
+                <TextView
                     android:id="@+id/tv_curved_div"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="弯曲效果相关"
                     android:textAppearance="@style/DivTitleAppearance"
-                    app:layout_constraintTop_toBottomOf="@id/btn_font_medium" />
+                    app:layout_constraintTop_toBottomOf="@id/btn_extra_right" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/sc_curved"
@@ -563,21 +624,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     app:layout_constraintTop_toBottomOf="@id/tv_divider_type_title">
 
                     <RadioButton
                         android:id="@+id/rb_divider_wrap"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="自适应字体最大宽度" />
 
                     <RadioButton
-                        android:id="@+id/rb_divider_fill"
-                        android:layout_width="0dp"
+                        android:id="@+id/rb_divider_wrap_all"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:text="自适应字体最大宽度延伸到左右额外文字处" />
+
+                    <RadioButton
+                        android:id="@+id/rb_divider_fill"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="铺满View的宽度" />
                 </RadioGroup>
 

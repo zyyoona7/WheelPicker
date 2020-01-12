@@ -103,6 +103,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.rgDividerType.setOnCheckedChangeListener { _, checkedId ->
             binding.wheelview.dividerType = when (checkedId) {
                 R.id.rb_divider_fill -> WheelView.DividerType.FILL
+                R.id.rb_divider_wrap_all->WheelView.DividerType.WRAP_ALL
                 else -> WheelView.DividerType.WRAP
             }
         }
@@ -190,6 +191,14 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
                 }
             }
         })
+
+        binding.btnExtraLeft.setOnClickListener {
+            binding.wheelview.leftText=binding.etExtraLeft.text
+        }
+
+        binding.btnExtraRight.setOnClickListener {
+            binding.wheelview.rightText=binding.etExtraRight.text
+        }
     }
 
     private fun initWheelData() {
@@ -218,6 +227,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.wheelview.setLineSpacing(10f)
         binding.wheelview.setSoundResource(R.raw.button_choose)
         binding.wheelview.getAdapter()?.getSelectedItem<Int>()
+        binding.wheelview.setTextPadding(20f)
         binding.wheelview.curtainColor = Color.WHITE
     }
 
@@ -254,7 +264,7 @@ class Main5Activity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarCha
         binding.btnNormalColor.setBackgroundColor(wheelView.normalTextColor)
 
         binding.sbTextBoundaryMargin.max = 150
-        binding.sbTextBoundaryMargin.progress = wheelView.textPaddingLeft.toInt()
+        binding.sbTextBoundaryMargin.progress = wheelView.textPaddingLeft
 
         binding.cbBoldSelected.isChecked = wheelView.isBoldForSelectedItem()
 
