@@ -172,14 +172,19 @@ open class WheelView @JvmOverloads constructor(context: Context,
             notifyChanged()
         }
 
+    /**
+     * 权重，只有 CENTER，CENTER_HORIZONTAL 效果且需要设置 leftText/rightText 才能有效果
+     *
+     * CENTER 主体文本居中
+     * CENTER_HORIZONTAL 整体居中
+     */
     var gravity: Int = Gravity.CENTER
         set(value) {
             if (value == field) {
                 return
             }
             field = value
-            calculateTextRect()
-            invalidate()
+            notifyDataSetChanged()
         }
 
     /**
@@ -1017,10 +1022,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
         val leftTextExtraWidth = if (leftText.isEmpty()) 0 else leftTextWidth + leftTextMarginRight
         val rightTextExtraWidth = if (rightText.isEmpty()) 0 else rightTextWidth + rightTextMarginLeft
         //默认主体文字是居中的，所以如果左右有额外文字的话需要保证主体文字居中，宽度计算需要根据左右文字较大的一个*2
-        val leftAndRightExtraWidth = if (isDefaultGravity()) {
-            max(leftTextExtraWidth, rightTextExtraWidth) * 2
-        } else {
+        val leftAndRightExtraWidth = if (gravity == Gravity.CENTER_HORIZONTAL) {
             leftTextExtraWidth + rightTextExtraWidth
+        } else {
+            max(leftTextExtraWidth, rightTextExtraWidth) * 2
         }
         var width: Int = mainTextMaxWidth + leftAndRightExtraWidth +
                 textPaddingLeft + textPaddingRight + paddingLeft + paddingRight
@@ -1197,10 +1202,6 @@ open class WheelView @JvmOverloads constructor(context: Context,
         val rightTextExtraWidth = if (rightText.isEmpty()) 0 else rightTextWidth + rightTextMarginLeft
 
         val mainLeft = when (gravity) {
-            Gravity.START -> paddingLeft + textPaddingLeft +
-                    leftTextExtraWidth + curvedArcWidth / 2
-            Gravity.END -> measuredWidth - paddingRight -
-                    rightTextExtraWidth - curvedArcWidth / 2 - mainTextMaxWidth
             Gravity.CENTER_HORIZONTAL -> (measuredWidth - leftTextExtraWidth -
                     mainTextMaxWidth - rightTextExtraWidth) / 2 + leftTextExtraWidth
             else -> measuredWidth / 2 - mainTextMaxWidth / 2
@@ -1241,11 +1242,6 @@ open class WheelView @JvmOverloads constructor(context: Context,
         }
         rightTextRect.set(rightTextLeft, rightTextTop,
                 rightTextLeft + rightTextWidth, rightTextTop + rightTextHeight)
-    }
-
-    private fun isDefaultGravity(): Boolean {
-        return gravity != Gravity.START && gravity != Gravity.END
-                && gravity != Gravity.CENTER_HORIZONTAL
     }
 
     /**
