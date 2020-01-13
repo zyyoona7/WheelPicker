@@ -65,7 +65,7 @@
                 android:id="@+id/rb_divider_wrap_all"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="自适应字体最大宽度延伸到左右额外文字处"
+                android:text="自适应字体最大宽度延伸到左右附加文字处"
                 style="@style/NormalAppearance"/>
 
             <RadioButton

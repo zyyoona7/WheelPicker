@@ -38,6 +38,13 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorBgBtnGray"
                 android:text="Linkage Picker" />
+
+            <Button
+                android:id="@+id/btn_date_picker_df"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorBgBtnGray"
+                android:text="选择日期" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

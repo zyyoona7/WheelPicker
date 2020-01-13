@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.zyyoona7.demo.activity.BaseActivity
 import com.zyyoona7.demo.databinding.ActivityDetailsBinding
+import com.zyyoona7.demo.dialogfragment.DatePickerDialogFragment
 
 class DetailsActivity : BaseActivity<ActivityDetailsBinding>() {
 
@@ -34,6 +35,11 @@ class DetailsActivity : BaseActivity<ActivityDetailsBinding>() {
 
         binding.btnLinkagePicker.setOnClickListener {
             LinkagePickerActivity.start(this)
+        }
+
+        binding.btnDatePickerDf.setOnClickListener {
+            DatePickerDialogFragment.newInstance()
+                    .show(supportFragmentManager,"DatePicker")
         }
     }
 }

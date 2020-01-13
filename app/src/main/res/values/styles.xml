@@ -22,4 +22,9 @@
         <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/colorTextDiv</item>
     </style>
+
+    <style name="DialogAnim">
+        <item name="android:windowEnterAnimation">@anim/dialog_show</item>
+        <item name="android:windowExitAnimation">@anim/dialog_hide</item>
+    </style>
 </resources>

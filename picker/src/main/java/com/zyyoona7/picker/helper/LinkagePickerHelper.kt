@@ -34,6 +34,7 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.setOnScrollChangedListener(this)
 
         setAutoFitTextSize(true)
+        setResetSelectedPosition(true)
     }
 
 
