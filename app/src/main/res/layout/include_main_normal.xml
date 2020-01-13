@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/divider_ver10_bg"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sc_debug"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置开启 debug 绘制区域"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <TextView
+            android:id="@+id/tv_visible_items_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置可见条目数量"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <SeekBar
+            android:id="@+id/sb_visible_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sc_cyclic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置是否循环"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <TextView
+            android:id="@+id/tv_line_spacing_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置行间距"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <SeekBar
+            android:id="@+id/sb_line_spacing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_textAlign_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置 WheelView 权重"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <RadioGroup
+            android:id="@+id/rg_gravity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_gravity_center"
+                style="@style/NormalAppearance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="CENTER" />
+
+            <RadioButton
+                android:id="@+id/rb_gravity_center_horizontal"
+                style="@style/NormalAppearance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="CENTER_HORIZONTAL" />
+        </RadioGroup>
+    </LinearLayout>
+</layout>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@drawable/divider_ver10_bg"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/tv_selected_div"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="滚动下标相关"
+            android:textAppearance="@style/DivTitleAppearance" />
+
+        <CheckBox
+            android:id="@+id/cb_selected_random"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="是否随机选中"
+            style="@style/NormalAppearance"
+            />
+
+        <TextView
+            android:id="@+id/tv_selected_position_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置选中下标"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <com.zjun.widget.RuleView
+            android:id="@+id/br_selected_position"
+            android:layout_width="match_parent"
+            android:layout_height="70dp" />
+
+        <CheckBox
+            android:id="@+id/cb_selected_smooth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="是否平滑滚动"
+            style="@style/NormalAppearance"/>
+
+        <TextView
+            android:id="@+id/tv_selected_duration_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置平滑滚动持续时间"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <SeekBar
+            android:id="@+id/sb_selected_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_selected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBgBtnNormal"
+            android:text="选中下标" />
+
+        <TextView
+            android:id="@+id/tv_selected_range_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置滚动范围限制"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sc_can_over_range_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置在有滚动范围限制时是否可以超出范围滚动" />
+
+        <com.jaygoo.widget.RangeSeekBar
+            android:id="@+id/rsb_selected_range"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:rsb_gravity="center"
+            app:rsb_indicator_padding_bottom="3dp"
+            app:rsb_indicator_padding_left="3dp"
+            app:rsb_indicator_padding_right="3dp"
+            app:rsb_indicator_padding_top="3dp"
+            app:rsb_indicator_show_mode="showWhenTouch"
+            app:rsb_min_interval="1"
+            app:rsb_mode="range"
+            app:rsb_progress_color="@color/colorAccent" />
+
+    </LinearLayout>
+</layout>

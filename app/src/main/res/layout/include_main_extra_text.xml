@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@drawable/divider_ver10_bg"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/tv_extra_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="文本两侧附加文字相关"
+            android:textAppearance="@style/DivTitleAppearance" />
+
+        <TextView
+            android:id="@+id/tv_extra_left_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置左侧附加文字"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <EditText
+            android:id="@+id/et_extra_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入附加在左侧的文本内容并点击按钮"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_extra_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBgBtnNormal"
+            android:text="应用左侧附加文字" />
+
+        <TextView
+            android:id="@+id/tv_extra_right_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置右侧附加文字"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <EditText
+            android:id="@+id/et_extra_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入附加在右侧的文本内容并点击按钮"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_extra_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBgBtnNormal"
+            android:text="应用左侧附加文字" />
+
+        <TextView
+            android:id="@+id/tv_left_textSize_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置左侧附加文字大小"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <SeekBar
+            android:id="@+id/sb_left_text_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_right_textSize_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置右侧附加文字大小"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <SeekBar
+            android:id="@+id/sb_right_text_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_extra_left_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置左侧附加文字颜色"
+            android:textColor="@color/colorBgBtnText" />
+
+        <Button
+            android:id="@+id/btn_extra_right_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置右侧附加文字颜色"
+            android:textColor="@color/colorBgBtnText" />
+
+        <TextView
+            android:id="@+id/tv_left_text_margin_right_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置左侧附加文字右边距"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <SeekBar
+            android:id="@+id/sb_left_text_margin_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_right_text_margin_left_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置右侧附加文字左边距"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <SeekBar
+            android:id="@+id/sb_right_text_margin_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_left_gravity_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置左侧附加文字对齐方式"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <RadioGroup
+            android:id="@+id/rg_left_gravity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_left_gravity_top"
+                style="@style/NormalAppearance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="顶部对齐" />
+
+            <RadioButton
+                android:id="@+id/rb_left_gravity_center"
+                style="@style/NormalAppearance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="居中对齐" />
+
+            <RadioButton
+                android:id="@+id/rb_left_gravity_bottom"
+                style="@style/NormalAppearance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="底部对齐" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tv_right_gravity_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置右侧附加文字对齐方式"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <RadioGroup
+            android:id="@+id/rg_right_gravity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_right_gravity_top"
+                style="@style/NormalAppearance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="顶部对齐" />
+
+            <RadioButton
+                android:id="@+id/rb_right_gravity_center"
+                style="@style/NormalAppearance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="居中对齐" />
+
+            <RadioButton
+                android:id="@+id/rb_right_gravity_bottom"
+                style="@style/NormalAppearance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="底部对齐" />
+        </RadioGroup>
+    </LinearLayout>
+</layout>

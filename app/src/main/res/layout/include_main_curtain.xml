@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        android:divider="@drawable/divider_ver10_bg">
+
+        <TextView
+            android:id="@+id/tv_curtain_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="选中区域相关"
+            android:textAppearance="@style/DivTitleAppearance" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sc_has_curtain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置是否绘制选中区域"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <Button
+            android:id="@+id/btn_curtain_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置选中区域颜色"
+            android:textColor="@color/colorBgBtnText" />
+
+    </LinearLayout>
+</layout>

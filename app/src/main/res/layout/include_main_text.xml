@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@drawable/divider_ver10_bg"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/tv_text_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="文本设置相关"
+            android:textAppearance="@style/DivTitleAppearance" />
+
+        <TextView
+            android:id="@+id/tv_textSize_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置文本大小"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <SeekBar
+            android:id="@+id/sb_text_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_textAlign_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置文本对齐方式"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <RadioGroup
+            android:id="@+id/rg_align"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_align_left"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="左对齐"
+                style="@style/NormalAppearance"/>
+
+            <RadioButton
+                android:id="@+id/rb_align_center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="居中对齐"
+                style="@style/NormalAppearance"/>
+
+            <RadioButton
+                android:id="@+id/rb_align_right"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="右对齐"
+                style="@style/NormalAppearance"/>
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btn_selected_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置选中文字颜色"
+            android:textColor="@color/colorBgBtnText" />
+
+        <Button
+            android:id="@+id/btn_normal_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置未选中文字颜色"
+            android:textColor="@color/colorBgBtnText" />
+
+        <TextView
+            android:id="@+id/tv_text_boundary_margin_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置文字外边距"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <SeekBar
+            android:id="@+id/sb_text_boundary_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_font_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置文字字体"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <CheckBox
+            android:id="@+id/cb_bold_selected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="是否开启选中文字粗体（非选中正常）"
+            style="@style/NormalAppearance"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/divider_hor10_bg"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <Button
+                android:id="@+id/btn_font_medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorBgBtnNormal"
+                android:text="Medium" />
+
+            <Button
+                android:id="@+id/btn_font_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorBgBtnNormal"
+                android:text="Regular" />
+
+            <Button
+                android:id="@+id/btn_font_light"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorBgBtnNormal"
+                android:text="Light" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

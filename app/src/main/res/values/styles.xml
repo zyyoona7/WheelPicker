@@ -8,12 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="NormalAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/colorTextBlack</item>
+    </style>
+
     <style name="TitleAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/colorTextBlack</item>
     </style>
+
     <style name="DivTitleAppearance" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/colorTextDiv</item>
     </style>
 </resources>

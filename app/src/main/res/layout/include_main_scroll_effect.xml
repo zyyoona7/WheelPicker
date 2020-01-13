@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        android:divider="@drawable/divider_ver10_bg">
+
+        <TextView
+            android:id="@+id/tv_sound_div"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="滚动音效相关"
+            android:textAppearance="@style/DivTitleAppearance" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sc_sound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置是否开启滚动音效"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <TextView
+            android:id="@+id/tv_sound_volume_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置滚动音效音量"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <SeekBar
+            android:id="@+id/sb_sound_volume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sc_vibrate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置是否开启滚动震动"
+            android:textAppearance="@style/TitleAppearance" />
+
+    </LinearLayout>
+</layout>

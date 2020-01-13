@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        android:divider="@drawable/divider_ver10_bg">
+
+        <TextView
+            android:id="@+id/tv_curved_div"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="弯曲效果相关"
+            android:textAppearance="@style/DivTitleAppearance" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sc_curved"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置是否开启弯曲效果"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <TextView
+            android:id="@+id/tv_curved_arc_direction_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置左右圆弧偏移效果方向"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <RadioGroup
+            android:id="@+id/rg_direction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_direction_left"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="向左偏移"
+                style="@style/NormalAppearance"/>
+
+            <RadioButton
+                android:id="@+id/rb_direction_center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="不偏移"
+                style="@style/NormalAppearance"/>
+
+            <RadioButton
+                android:id="@+id/rb_direction_right"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="向右偏移"
+                style="@style/NormalAppearance"/>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tv_curved_arc_factor_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置左右圆弧偏移系数"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <SeekBar
+            android:id="@+id/sb_curved_arc_factor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_refract_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置选中效果与非选中效果滚动时折射效果系数"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <SeekBar
+            android:id="@+id/sb_refract"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</layout>
