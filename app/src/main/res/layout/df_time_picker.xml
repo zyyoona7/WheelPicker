@@ -28,5 +28,22 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.zyyoona7.picker.TimePickerView
+            android:id="@+id/time_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_cancel"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.7"
+            android:padding="20dp"
+            app:tpv_hourRightText="时"
+            app:tpv_minuteRightText="分"
+            app:tpv_rightTextMarginLeft="5dp"
+            app:tpv_secondRightText="秒"
+            app:tpv_textSize="22sp"
+            app:tpv_widthWeightMode="true" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
