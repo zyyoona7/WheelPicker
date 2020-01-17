@@ -194,6 +194,8 @@ interface DatePicker {
 
     fun setSelectedDate(date: Date)
 
+    fun setSelectedDate(calendar: Calendar)
+
     fun setSelectedDate(year: Int, month: Int, day: Int)
 
     fun setMaxSelectedDate(maxDate: Date)
@@ -309,6 +311,16 @@ interface TimePicker {
                                    minuteType: WheelView.MeasureType,
                                    secondType: WheelView.MeasureType)
 
+    fun is24Hour(): Boolean
+
+    fun isAm():Boolean
+
+    fun getSelectedHour(): Int
+
+    fun getSelectedMinute(): Int
+
+    fun getSelectedSecond(): Int
+
     fun getWheelAmPmView(): WheelAmPmView
 
     fun getWheelHourView(): WheelHourView
@@ -364,12 +376,15 @@ interface LinkagePicker {
 
     fun setRightText(linkage1Text: CharSequence, linkage2Text: CharSequence, linkage3Text: CharSequence)
 
+    fun <T> getLinkage1SelectedItem(): T?
+
+    fun <T> getLinkage2SelectedItem(): T?
+
+    fun <T> getLinkage3SelectedItem(): T?
+
     fun getLinkage1WheelView(): WheelView
 
     fun getLinkage2WheelView(): WheelView
 
     fun getLinkage3WheelView(): WheelView
-
-    //todo List<T>  List<List<T>> 这种结构的兼容
-    //todo 设置选中下标，设置选中的文本
 }

@@ -190,6 +190,10 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setSelectedDate(date)
     }
 
+    override fun setSelectedDate(calendar: Calendar) {
+        datePickerHelper.setSelectedDate(calendar)
+    }
+
     override fun setSelectedDate(year: Int, month: Int, day: Int) {
         datePickerHelper.setSelectedDate(year, month, day)
     }

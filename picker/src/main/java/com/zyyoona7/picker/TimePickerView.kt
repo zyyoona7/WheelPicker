@@ -525,4 +525,24 @@ class TimePickerView @JvmOverloads constructor(context: Context,
     override fun set24Hour(is24Hour: Boolean) {
         timePickerHelper.set24Hour(is24Hour)
     }
+
+    override fun is24Hour(): Boolean {
+        return timePickerHelper.is24Hour()
+    }
+
+    override fun isAm(): Boolean {
+        return timePickerHelper.isAm()
+    }
+
+    override fun getSelectedHour(): Int {
+        return timePickerHelper.getSelectedHour()
+    }
+
+    override fun getSelectedMinute(): Int {
+        return timePickerHelper.getSelectedMinute()
+    }
+
+    override fun getSelectedSecond(): Int {
+        return timePickerHelper.getSelectedSecond()
+    }
 }

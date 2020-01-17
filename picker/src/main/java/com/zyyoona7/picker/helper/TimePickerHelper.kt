@@ -668,4 +668,24 @@ class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
                     else IntTextFormatter(IntTextFormatter.SINGLE_INT_FORMAT))
         }
     }
+
+    override fun is24Hour(): Boolean {
+        return wheelHourView?.is24Hour ?: false
+    }
+
+    override fun isAm(): Boolean {
+        return wheelAmPmView?.isAm() ?: false
+    }
+
+    override fun getSelectedHour(): Int {
+        return getWheelHourView().getSelectedItem<Int>() ?: 12
+    }
+
+    override fun getSelectedMinute(): Int {
+        return getWheelMinuteView().getSelectedItem<Int>() ?: 0
+    }
+
+    override fun getSelectedSecond(): Int {
+        return getWheelSecondView().getSelectedItem<Int>() ?: 0
+    }
 }

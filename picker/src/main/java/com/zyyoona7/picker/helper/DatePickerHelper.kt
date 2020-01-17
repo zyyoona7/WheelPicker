@@ -147,6 +147,10 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
     override fun setSelectedDate(date: Date) {
         val calendar = Calendar.getInstance()
         calendar.time = date
+        setSelectedDate(calendar)
+    }
+
+    override fun setSelectedDate(calendar: Calendar) {
         setSelectedDate(calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.DAY_OF_MONTH))
@@ -243,15 +247,15 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
     }
 
     override fun getSelectedYear(): Int {
-        return wheelYearView?.getSelectedItem<Int>() ?: DEFAULT_YEAR
+        return getWheelYearView().getSelectedItem<Int>() ?: DEFAULT_YEAR
     }
 
     override fun getSelectedMonth(): Int {
-        return wheelMonthView?.getSelectedItem<Int>() ?: DEFAULT_MONTH
+        return getWheelMonthView().getSelectedItem<Int>() ?: DEFAULT_MONTH
     }
 
     override fun getSelectedDay(): Int {
-        return wheelDayView?.getSelectedItem<Int>() ?: DEFAULT_DAY
+        return getWheelDayView().getSelectedItem<Int>() ?: DEFAULT_DAY
     }
 
     override fun getWheelYearView(): WheelYearView {

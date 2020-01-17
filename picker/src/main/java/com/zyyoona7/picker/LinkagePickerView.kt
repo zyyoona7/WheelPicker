@@ -186,6 +186,18 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setMaxTextWidthMeasureType(linkage1Type, linkage2Type, linkage3Type)
     }
 
+    override fun <T> getLinkage1SelectedItem(): T? {
+        return linkagePickerHelper.getLinkage1SelectedItem()
+    }
+
+    override fun <T> getLinkage2SelectedItem(): T? {
+        return linkagePickerHelper.getLinkage2SelectedItem()
+    }
+
+    override fun <T> getLinkage3SelectedItem(): T? {
+        return linkagePickerHelper.getLinkage3SelectedItem()
+    }
+
     override fun getLinkage1WheelView(): WheelView {
         return linkagePickerHelper.getLinkage1WheelView()
     }

@@ -164,6 +164,18 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.maxTextWidthMeasureType = linkage3Type
     }
 
+    override fun <T> getLinkage1SelectedItem(): T? {
+        return getLinkage1WheelView().getSelectedItem()
+    }
+
+    override fun <T> getLinkage2SelectedItem(): T? {
+        return getLinkage2WheelView().getSelectedItem()
+    }
+
+    override fun <T> getLinkage3SelectedItem(): T? {
+        return getLinkage3WheelView().getSelectedItem()
+    }
+
     override fun getLinkage1WheelView(): WheelView {
         require(wheelView1 != null) {
             "First WheelView is null."
