@@ -73,7 +73,7 @@ OnLinkageSelectedListener,OnTimeSelectedListener{
         }
 
         binding.btnTimePickerDf.setOnClickListener {
-            TimePickerDialogFragment.newInstance(hour, minute, second)
+            TimePickerDialogFragment.newInstance(hour, minute, second,is24Hour,isAm)
                     .show(supportFragmentManager,"TimePicker")
         }
     }

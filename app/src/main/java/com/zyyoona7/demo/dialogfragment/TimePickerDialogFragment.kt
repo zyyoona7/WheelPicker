@@ -6,27 +6,34 @@ import com.zyyoona7.demo.R
 import com.zyyoona7.demo.databinding.DfTimePickerBinding
 import com.zyyoona7.picker.helper.TimePickerHelper
 import com.zyyoona7.picker.listener.OnTimeSelectedListener
+import java.util.*
 
 class TimePickerDialogFragment : BaseDialogFragment<DfTimePickerBinding>() {
 
-    private var hour:Int=-1
-    private var minute:Int=-1
-    private var second:Int=-1
+    private var hour: Int = -1
+    private var minute: Int = -1
+    private var second: Int = -1
+    private var is24Hour = true
+    private var isAm = true
 
-    companion object{
+    companion object {
 
-        private const val KEY_HOUR="KEY_HOUR"
-        private const val KEY_MINUTE="KEY_MINUTE"
-        private const val KEY_SECOND="KEY_SECOND"
+        private const val KEY_IS_24HOUR = "KEY_IS_24HOUR"
+        private const val KEY_HOUR = "KEY_HOUR"
+        private const val KEY_MINUTE = "KEY_MINUTE"
+        private const val KEY_SECOND = "KEY_SECOND"
+        private const val KEY_IS_AM = "KEY_IS_AM"
 
-        fun newInstance(hour:Int,minute:Int,second:Int):TimePickerDialogFragment{
+        fun newInstance(hour: Int, minute: Int, second: Int, is24Hour: Boolean, isAm: Boolean): TimePickerDialogFragment {
             return TimePickerDialogFragment()
                     .apply {
-                        val bundle=Bundle()
-                        bundle.putInt(KEY_HOUR,hour)
-                        bundle.putInt(KEY_MINUTE,minute)
-                        bundle.putInt(KEY_SECOND,second)
-                        arguments=bundle
+                        val bundle = Bundle()
+                        bundle.putInt(KEY_HOUR, hour)
+                        bundle.putInt(KEY_MINUTE, minute)
+                        bundle.putInt(KEY_SECOND, second)
+                        bundle.putBoolean(KEY_IS_24HOUR, is24Hour)
+                        bundle.putBoolean(KEY_IS_AM, isAm)
+                        arguments = bundle
                     }
         }
     }
@@ -37,22 +44,25 @@ class TimePickerDialogFragment : BaseDialogFragment<DfTimePickerBinding>() {
 
     override fun initVariables(savedInstanceState: Bundle?) {
         arguments?.let {
-            hour=it.getInt(KEY_HOUR,-1)
-            minute=it.getInt(KEY_MINUTE,-1)
-            second=it.getInt(KEY_SECOND,-1)
+            hour = it.getInt(KEY_HOUR, -1)
+            minute = it.getInt(KEY_MINUTE, -1)
+            second = it.getInt(KEY_SECOND, -1)
+            is24Hour = it.getBoolean(KEY_IS_24HOUR, true)
+            isAm = it.getBoolean(KEY_IS_AM, true)
         }
 
-        binding.timePicker.setTime(hour, minute, second)
-
-        binding.timePicker.set24Hour(TimePickerHelper.is24HourMode(activity!!))
-
+        if (hour==-1) {
+            binding.timePicker.setTime(Calendar.getInstance(),TimePickerHelper.is24HourMode(activity!!))
+        }else {
+            binding.timePicker.setTime(hour, minute, second, is24Hour, isAm)
+        }
     }
 
     override fun initListeners(savedInstanceState: Bundle?) {
 
-        binding.timePicker.setOnTimeSelectedListener(object :OnTimeSelectedListener{
+        binding.timePicker.setOnTimeSelectedListener(object : OnTimeSelectedListener {
             override fun onTimeSelected(is24Hour: Boolean, hour: Int, minute: Int, second: Int, isAm: Boolean) {
-                Log.d("TimePickerDF","selectedTime:$hour-$minute-$second")
+                Log.d("TimePickerDF", "selectedTime:$hour-$minute-$second")
             }
         })
 
