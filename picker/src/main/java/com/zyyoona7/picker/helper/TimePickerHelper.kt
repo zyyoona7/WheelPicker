@@ -113,13 +113,26 @@ class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
         val second = calendar.get(Calendar.SECOND)
 
         if (is24Hour) {
-            setTime(hourFor24, minute, second)
+            setTimeFor24(hourFor24, minute, second)
         } else {
-            setTime(hourFor12, minute, second, amPm == Calendar.AM)
+            setTimeFor12(hourFor12, minute, second, amPm == Calendar.AM)
         }
     }
 
-    override fun setTime(hour: Int, minute: Int, second: Int) {
+    override fun setTime(hour: Int, minute: Int, second: Int, is24Hour: Boolean, isAm: Boolean) {
+        val calendar = Calendar.getInstance()
+        if (is24Hour) {
+            calendar.set(Calendar.HOUR_OF_DAY, hour)
+        } else {
+            calendar.set(Calendar.HOUR, hour)
+        }
+        calendar.set(Calendar.AM_PM, if (isAm) Calendar.AM else Calendar.PM)
+        calendar.set(Calendar.MINUTE,minute)
+        calendar.set(Calendar.SECOND,second)
+        setTime(calendar,is24Hour)
+    }
+
+    override fun setTimeFor24(hour: Int, minute: Int, second: Int) {
         val is24Hour = wheelHourView?.is24Hour ?: true
         if (!is24Hour) {
             set24Hour(true)
@@ -129,7 +142,7 @@ class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
         wheelSecondView?.setSelectedSecond(second)
     }
 
-    override fun setTime(hour: Int, minute: Int, second: Int, isAm: Boolean) {
+    override fun setTimeFor12(hour: Int, minute: Int, second: Int, isAm: Boolean) {
         val is24Hour = wheelHourView?.is24Hour ?: true
         if (is24Hour) {
             set24Hour(false)

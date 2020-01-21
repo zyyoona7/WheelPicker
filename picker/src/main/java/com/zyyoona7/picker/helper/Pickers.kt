@@ -281,14 +281,19 @@ interface TimePicker {
     fun setTime(calendar: Calendar, is24Hour: Boolean)
 
     /**
+     * 设置选中时间
+     */
+    fun setTime(hour: Int,minute: Int,second: Int,is24Hour: Boolean,isAm: Boolean)
+
+    /**
      * 设置选中时间 24小时制
      */
-    fun setTime(hour: Int, minute: Int, second: Int)
+    fun setTimeFor24(hour: Int, minute: Int, second: Int)
 
     /**
      * 设置选中时间 12小时制
      */
-    fun setTime(hour: Int, minute: Int, second: Int, isAm: Boolean)
+    fun setTimeFor12(hour: Int, minute: Int, second: Int, isAm: Boolean)
 
     fun setShowHour(isShow: Boolean)
 
