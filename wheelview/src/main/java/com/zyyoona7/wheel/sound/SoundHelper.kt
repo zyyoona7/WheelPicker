@@ -14,12 +14,12 @@ import kotlin.math.min
 @Suppress("DEPRECATION")
 class SoundHelper private constructor() {
 
-    private val mSoundPool: SoundPool = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    private val soundPool: SoundPool = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         SoundPool.Builder().build()
     } else {
         SoundPool(1, AudioManager.STREAM_MUSIC, 0)
     }
-    private var mSoundId: Int = 0
+    private var soundId: Int = 0
     /**
      * 音频播放音量 range 0.0-1.0
      */
@@ -48,15 +48,15 @@ class SoundHelper private constructor() {
      * @param resId   音频资源 [RawRes]
      */
     fun load(context: Context, @RawRes resId: Int) {
-        mSoundId = mSoundPool.load(context, resId, 1)
+        soundId = soundPool.load(context, resId, 1)
     }
 
     /**
      * 播放声音效果
      */
     fun playSoundEffect() {
-        if (mSoundId != 0) {
-            mSoundPool.play(mSoundId, soundPlayVolume, soundPlayVolume, 1, 0, 1f)
+        if (soundId != 0) {
+            soundPool.play(soundId, soundPlayVolume, soundPlayVolume, 1, 0, 1f)
         }
     }
 
@@ -64,6 +64,6 @@ class SoundHelper private constructor() {
      * 释放SoundPool
      */
     fun release() {
-        mSoundPool.release()
+        soundPool.release()
     }
 }

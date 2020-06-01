@@ -57,27 +57,6 @@ interface OnLinkageSelectedListener {
  *
  * @author zyyoona7
  */
-interface OnRequestData2Listener {
-
-    fun convert(linkage1Wv: WheelView): List<Any>
-}
-
-/**
- * 请求联动3 WheelView 数据
- *
- * @author zyyoona7
- */
-interface OnRequestData3Listener {
-
-    fun convert(linkage1Wv: WheelView, linkage2Wv: WheelView): List<Any>
-}
-
-
-/**
- * 请求联动2 WheelView 数据
- *
- * @author zyyoona7
- */
 interface OnDoubleLoadDataListener {
 
     fun onLoadData2(linkage1Wv: WheelView): List<Any>
