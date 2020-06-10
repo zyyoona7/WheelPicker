@@ -61,6 +61,14 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
     public OptionsPickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
+        int[] attrsArray = new int[] {
+                android.R.attr.layout_height
+        };
+
+        TypedArray ta = context.obtainStyledAttributes(attrs, attrsArray);
+        int layout_height = ta.getLayoutDimension(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ta.recycle();
+            
         initViews(context);
     }
 
@@ -69,7 +77,7 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
      *
      * @param context 上下文
      */
-    private void initViews(Context context) {
+    private void initViews(Context context, int layoutHeight) {
         setOrientation(HORIZONTAL);
         mOptionsWv1 = new WheelView<>(context);
         mOptionsWv1.setId(ID_OPTIONS_WV_1);
@@ -78,7 +86,7 @@ public class OptionsPickerView<T> extends LinearLayout implements WheelView.OnIt
         mOptionsWv3 = new WheelView<>(context);
         mOptionsWv3.setId(ID_OPTIONS_WV_3);
 
-        LinearLayout.LayoutParams layoutParams = new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams = new LayoutParams(0, layoutHeight);
         layoutParams.weight = 1;
         addView(mOptionsWv1, layoutParams);
         addView(mOptionsWv2, layoutParams);
