@@ -5,13 +5,16 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.media.AudioManager
+import android.os.SystemClock
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.Log
 import android.util.SparseArray
 import android.util.TypedValue
 import android.view.*
-import android.widget.Scroller
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.Interpolator
+import android.widget.OverScroller
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.IntRange
@@ -48,43 +51,52 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private val mainTextRect = Rect()
     private val leftTextRect = Rect()
     private val rightTextRect = Rect()
+
     /**
      * 文字的最大宽度
      */
     private var mainTextMaxWidth: Int = 0
+
     /**
      * 测量文字完成后的原始宽度
      */
     private var originTextMaxWidth: Int = 0
     private var leftTextWidth: Int = 0
     private var rightTextWidth: Int = 0
+
     /**
      * 每个item的高度
      */
     private var itemHeight: Int = 0
+
     /**
      * 文字高度
      */
     private var mainTextHeight: Int = 0
     private var leftTextHeight: Int = 0
     private var rightTextHeight: Int = 0
+
     /**
      * 弯曲效果时，为了适配偏移多增加的宽度
      */
     private var curvedArcWidth: Int = 0
+
     /**
      * 文字起始X
      */
     private var textDrawStartX: Int = 0
+
     /**
      * Y轴中心点
      */
     private var centerY: Int = 0
+
     /**
      * 选中边界的上下限制
      */
     private var selectedItemTopLimit: Int = 0
     private var selectedItemBottomLimit: Int = 0
+
     /**
      * 裁剪的边界
      */
@@ -92,13 +104,15 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private var clipTop: Int = 0
     private var clipRight: Int = 0
     private var clipBottom: Int = 0
+
     /**
      * 3D效果实现
      */
     private val cameraForCurved = Camera()
     private val matrixForCurved = Matrix()
 
-    private val scroller: Scroller = Scroller(context)
+    private val scroller: OverScroller = OverScroller(context, QuinticInterpolator())
+    private val adjustScroller: OverScroller = OverScroller(context, DecelerateInterpolator(2.5f))
     private var velocityTracker: VelocityTracker? = null
     private var maxFlingVelocity: Int = 0
     private var minFlingVelocity: Int = 0
@@ -107,6 +121,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 最小滚动距离，上边界
      */
     private var minScrollY: Int = 0
+
     /**
      * 最大滚动距离，下边界
      */
@@ -116,22 +131,27 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * Y轴滚动偏移
      */
     private var scrollOffsetY: Int = 0
+
     /**
      * Y轴已滚动偏移，控制重绘次数
      */
     private var scrolledY = 0
+
     /**
      * 手指最后触摸的位置
      */
     private var lastTouchY: Float = 0f
+
     /**
      * 手指按下时间，根据按下抬起时间差处理点击滚动
      */
     private var downStartTime: Long = 0L
+
     /**
      * 是否强制停止滚动
      */
     private var isForceFinishScroll = false
+
     /**
      * 是否是快速滚动，快速滚动结束后跳转位置
      */
@@ -143,11 +163,13 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 当前滚动经过的下标
      */
     private var currentScrollPosition: Int = 0
+
     /**
      * 记录已经执行过 itemPositionChange 的滚动的下标，防止多次执行
      * position不改变得情况下只执行一次 itemPositionChanged()
      */
     private var itemChangedPosition = -1
+
     /**
      * 当前滚动状态
      */
@@ -290,10 +312,12 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 是否设置选中字体加粗
      */
     private var isBoldForSelectedItem = false
+
     /**
      * 如果 isBoldForSelectedItem==true 则这个字体为未选中条目的字体
      */
     private var normalTypeface: Typeface? = null
+
     /**
      * 如果 isBoldForSelectedItem==true 则这个字体为选中条目的字体
      */
@@ -712,14 +736,17 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * adapter 中的 textFormatter
      */
     private var textFormatter: TextFormatter? = null
+
     /**
      * adapter 中的 formatter block
      */
     private var formatterBlock: ((Any?) -> String)? = null
+
     /**
      * adapter 中的 itemIndexer
      */
     private var itemIndexer: ItemIndexer? = null
+
     /**
      * adapter 中的 itemIndexerBlock
      */
@@ -730,6 +757,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 用来保存对应下标下 重新测量过的 textSize （需设置 isAutoFitTextSize=true）
      */
     private val resizeArray: SparseArray<Float> by lazy { SparseArray<Float>() }
+
     /**
      * 标记 数据是否有变化，如果变化了则重新测量文字宽度
      */
@@ -747,6 +775,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         const val DEFAULT_VISIBLE_ITEM = 5
         const val DEFAULT_SCROLL_DURATION = 250
         const val DEFAULT_CLICK_CONFIRM: Long = 120
+
         /**
          * 默认折射比值，通过字体大小来实现折射视觉差
          */
@@ -780,6 +809,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
          */
         const val DIVIDER_FILL = 0
         const val DIVIDER_WRAP = 1
+
         /**
          * 自适应延伸到左右额外文字处
          */
@@ -793,10 +823,12 @@ open class WheelView @JvmOverloads constructor(context: Context,
          * 按照相同宽度测量，即只测量一个 item 的宽度来作为数据的最大宽度
          */
         const val MEASURED_BY_SAME_WIDTH = 1
+
         /**
          * 按照文本最大长度测量，即最长的文本 item 的宽度就是最大宽度
          */
         const val MEASURED_BY_MAX_LENGTH = 2
+
         /**
          * 文本挨个测量找到最大宽度
          */
@@ -1786,14 +1818,11 @@ open class WheelView @JvmOverloads constructor(context: Context,
                     parent.requestDisallowInterceptTouchEvent(true)
                 }
                 //如果未滚动完成，强制滚动完成
-                if (!scroller.isFinished) {
-                    //强制滚动完成
-                    scroller.forceFinished(true)
-                    isForceFinishScroll = true
-                }
+                forceFinishScroll(true)
+                isFlingScroll = false
                 lastTouchY = event.y
                 //按下时间
-                downStartTime = System.currentTimeMillis()
+                downStartTime = SystemClock.elapsedRealtime()
             }
             MotionEvent.ACTION_MOVE -> {
                 //手指移动
@@ -1820,13 +1849,13 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 val velocityY: Int = velocityTracker?.yVelocity?.toInt() ?: minFlingVelocity
                 if (abs(velocityY) > minFlingVelocity) {
                     //快速滑动
-                    scroller.forceFinished(true)
+                    forceFinishScroll()
                     isFlingScroll = true
                     scroller.fling(0, scrollOffsetY, 0, -velocityY, 0, 0,
                             minScrollY, maxScrollY)
                 } else {
                     var clickToCenterDistance = 0
-                    if (System.currentTimeMillis() - downStartTime <= DEFAULT_CLICK_CONFIRM) {
+                    if (SystemClock.elapsedRealtime() - downStartTime <= DEFAULT_CLICK_CONFIRM) {
                         //处理点击滚动
                         //手指抬起的位置到中心的距离为滚动差值
                         clickToCenterDistance = (event.y - centerY).toInt()
@@ -1841,7 +1870,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
                     if (isInMinRange || isInMaxRange) {
                         //在滚动范围之内再修正位置
                         //平稳滑动
-                        scroller.startScroll(0, scrollOffsetY, 0, scrollRange)
+                        adjustScroll(scrollRange)
                     }
                 }
 
@@ -1879,8 +1908,13 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 使用run方法而不是computeScroll是因为，invalidate也会执行computeScroll导致回调执行不准确
      */
     override fun run() {
+        var scroller = this.scroller
+        if (scroller.isFinished) {
+            scroller = adjustScroller
+        }
         //停止滚动更新当前下标
-        if (scroller.isFinished && !isForceFinishScroll && !isFlingScroll) {
+        if (this.scroller.isFinished && adjustScroller.isFinished
+                && !isForceFinishScroll && !isFlingScroll) {
             if (itemHeight == 0) return
             //滚动状态停止
             //回调
@@ -1924,11 +1958,18 @@ open class WheelView @JvmOverloads constructor(context: Context,
             //滚动完成后，根据是否为快速滚动处理是否需要调整最终位置
             isFlingScroll = false
             //快速滚动后需要调整滚动完成后的最终位置，重新启动scroll滑动到中心位置
-            scroller.startScroll(0, scrollOffsetY,
-                    0, calculateDistanceToEndPoint(scrollOffsetY % dividedItemHeight()))
+            val remainder = scrollOffsetY % dividedItemHeight()
+            if (remainder != 0) {
+                adjustScroll(calculateDistanceToEndPoint(remainder))
+            }
             invalidateIfYChanged()
             ViewCompat.postOnAnimation(this, this)
         }
+    }
+
+    private fun adjustScroll(deltaY: Int) {
+        adjustScroller.startScroll(0, scrollOffsetY,
+                0, deltaY, DEFAULT_SCROLL_DURATION)
     }
 
     /**
@@ -2129,8 +2170,21 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 强制滚动完成，直接停止
      */
     private fun forceFinishScroll() {
+        forceFinishScroll(false)
+    }
+
+    /**
+     * 强制滚动完成，直接停止
+     */
+    private fun forceFinishScroll(isMarkForceFinish: Boolean) {
         if (!scroller.isFinished) {
             scroller.forceFinished(true)
+        }
+        if (!adjustScroller.isFinished) {
+            adjustScroller.forceFinished(true)
+        }
+        if (isMarkForceFinish) {
+            isForceFinishScroll = true
         }
     }
 
@@ -2140,6 +2194,9 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private fun abortFinishScroll() {
         if (!scroller.isFinished) {
             scroller.abortAnimation()
+        }
+        if (!adjustScroller.isFinished) {
+            adjustScroller.abortAnimation()
         }
     }
 
@@ -2745,4 +2802,12 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /*
       ---------- 一些枚举 ----------
      */
+
+    class QuinticInterpolator : Interpolator {
+        override fun getInterpolation(input: Float): Float {
+            var newT = input
+            newT -= 1.0f
+            return newT * newT * newT * newT * newT + 1.0f
+        }
+    }
 }

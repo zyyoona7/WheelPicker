@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 20
-        versionName "2.0.0"
+        versionCode 21
+        versionName "2.0.1"
     }
 
     buildTypes {
@@ -24,7 +24,7 @@ android {
 
 dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
-    compileOnly 'androidx.appcompat:appcompat:1.1.0'
+    compileOnly 'androidx.appcompat:appcompat:1.2.0'
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
@@ -36,7 +36,7 @@ publish {
     //项目名称 project name
     artifactId = 'wheelview'
     //版本号 version code
-    publishVersion = '2.0.0'
+    publishVersion = '2.0.1'
     //项目描述 description
     desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
     //项目网址链接 link
