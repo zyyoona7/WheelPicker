@@ -67,7 +67,7 @@ class WheelYearView @JvmOverloads constructor(context: Context,
      * 设置年份取值范围
      */
     fun setYearRange(start: Int, end: Int) {
-        require(start < end) {
+        require(start <= end) {
             "endYear must be greater than startYear in WheelYearView."
         }
 

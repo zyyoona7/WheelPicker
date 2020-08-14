@@ -74,7 +74,7 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         isSHowDay = typedArray.getBoolean(R.styleable.DatePickerView_dpv_showDay, true)
         val startYear = typedArray.getInt(R.styleable.DatePickerView_dpv_startYear, -1)
         val endYear = typedArray.getInt(R.styleable.DatePickerView_dpv_endYear, -1)
-        if (startYear > 0 && endYear > 0 && endYear > startYear) {
+        if (startYear > 0 && endYear > 0 && endYear >= startYear) {
             setYearRange(startYear, endYear)
         }
         val selectedYear = typedArray.getInt(R.styleable.DatePickerView_dpv_selectedYear, -1)
