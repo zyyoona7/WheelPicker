@@ -1912,6 +1912,24 @@ open class WheelView @JvmOverloads constructor(context: Context,
         if (scroller.isFinished) {
             scroller = adjustScroller
         }
+
+        checkFinishedSelectedPosition()
+
+        if (scroller.computeScrollOffset()) {
+            updateScrollOffsetY(scroller)
+            ViewCompat.postOnAnimation(this, this)
+        } else if (isFlingScroll) {
+            //滚动完成后，根据是否为快速滚动处理是否需要调整最终位置
+            isFlingScroll = false
+            adjustScrollOffsetY(true)
+            ViewCompat.postOnAnimation(this, this)
+        }
+    }
+
+    /**
+     * 检查当滚动结束后选中的下标
+     */
+    private fun checkFinishedSelectedPosition() {
         //停止滚动更新当前下标
         if (this.scroller.isFinished && adjustScroller.isFinished
                 && !isForceFinishScroll && !isFlingScroll) {
@@ -1942,29 +1960,38 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 itemSelectedListener?.onItemSelected(this, it, selectedPosition)
             }
         }
+    }
 
-        if (scroller.computeScrollOffset()) {
-            val oldY = scrollOffsetY
-            scrollOffsetY = scroller.currY
+    /**
+     * 根据当前 [scroller] 更新 [scrollOffsetY]
+     */
+    private fun updateScrollOffsetY(scroller: OverScroller) {
+        val oldY = scrollOffsetY
+        scrollOffsetY = scroller.currY
 
-            if (oldY != scrollOffsetY) {
-                currentScrollState = SCROLL_STATE_SCROLLING
-                onWheelScrollStateChanged(SCROLL_STATE_SCROLLING)
-                scrollChangedListener?.onScrollStateChanged(this, SCROLL_STATE_SCROLLING)
-            }
-            invalidateIfYChanged()
-            ViewCompat.postOnAnimation(this, this)
-        } else if (isFlingScroll) {
-            //滚动完成后，根据是否为快速滚动处理是否需要调整最终位置
-            isFlingScroll = false
-            //快速滚动后需要调整滚动完成后的最终位置，重新启动scroll滑动到中心位置
-            val remainder = scrollOffsetY % dividedItemHeight()
-            if (remainder != 0) {
-                adjustScroll(calculateDistanceToEndPoint(remainder))
-            }
-            invalidateIfYChanged()
-            ViewCompat.postOnAnimation(this, this)
+        if (oldY != scrollOffsetY) {
+            currentScrollState = SCROLL_STATE_SCROLLING
+            onWheelScrollStateChanged(SCROLL_STATE_SCROLLING)
+            scrollChangedListener?.onScrollStateChanged(this, SCROLL_STATE_SCROLLING)
         }
+        invalidateIfYChanged()
+    }
+
+    /**
+     * 调整 [scrollOffsetY] 到选中位置
+     */
+    private fun adjustScrollOffsetY(isAnimate: Boolean) {
+        //快速滚动后需要调整滚动完成后的最终位置，重新启动scroll滑动到中心位置
+        val remainder = scrollOffsetY % dividedItemHeight()
+        if (remainder != 0) {
+            val offset = calculateDistanceToEndPoint(remainder)
+            if (isAnimate) {
+                adjustScroll(offset)
+            } else {
+                scrollOffsetY += offset
+            }
+        }
+        invalidateIfYChanged()
     }
 
     private fun adjustScroll(deltaY: Int) {
@@ -2177,11 +2204,16 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 强制滚动完成，直接停止
      */
     private fun forceFinishScroll(isMarkForceFinish: Boolean) {
+        isFlingScroll = false
         if (!scroller.isFinished) {
             scroller.forceFinished(true)
+            updateScrollOffsetY(scroller)
+            adjustScrollOffsetY(false)
         }
         if (!adjustScroller.isFinished) {
             adjustScroller.forceFinished(true)
+            updateScrollOffsetY(adjustScroller)
+            adjustScrollOffsetY(false)
         }
         if (isMarkForceFinish) {
             isForceFinishScroll = true
@@ -2192,11 +2224,16 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 强制滚动完成，并且直接滚动到最终位置
      */
     private fun abortFinishScroll() {
+        isFlingScroll = false
         if (!scroller.isFinished) {
             scroller.abortAnimation()
+            updateScrollOffsetY(scroller)
+            adjustScrollOffsetY(false)
         }
         if (!adjustScroller.isFinished) {
             adjustScroller.abortAnimation()
+            updateScrollOffsetY(adjustScroller)
+            adjustScrollOffsetY(false)
         }
     }
 
@@ -2205,6 +2242,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     override fun onFinishScroll() {
         forceFinishScroll()
+        checkFinishedSelectedPosition()
     }
 
     fun <T> setData(data: List<T>) {
@@ -2661,8 +2699,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 获取选中下标
      */
     fun getSelectedPosition(): Int {
-        //如果正在滚动，停止滚动
-        forceFinishScroll()
+        onFinishScroll()
         return selectedPosition
     }
 

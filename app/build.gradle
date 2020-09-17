@@ -27,16 +27,16 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation "com.google.code.gson:gson:2.8.5"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "com.google.code.gson:gson:2.8.6"
     implementation project(':picker')
-//    implementation 'com.github.zyyoona7:pickerview:1.0.9'
+//    implementation 'com.github.zyyoona7:pickerview:2.0.2'
     implementation 'com.github.zyyoona7:EasyDialog:1.1.4'
-    implementation "androidx.core:core-ktx:1.1.0"
+    implementation "androidx.core:core-ktx:1.3.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.github.QuadFlask:colorpicker:0.0.15'
     implementation 'com.github.Jay-Goo:RangeSeekBar:3.0.0'
