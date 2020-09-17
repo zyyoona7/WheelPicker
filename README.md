@@ -2,8 +2,8 @@
 
 ![](https://img.shields.io/badge/platform-android-brightgreen.svg)
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
-[![](https://img.shields.io/badge/pickerview-1.0.9-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
-[![](https://img.shields.io/badge/wheelview-1.0.7-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
+[![](https://img.shields.io/badge/pickerview-2.0.2-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
+[![](https://img.shields.io/badge/wheelview-2.0.2-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
 [![](https://img.shields.io/github/license/zyyoona7/WheelPicker.svg)](https://github.com/zyyoona7/WheelPicker#license)
 ### 简介（Introduction）
 
@@ -21,14 +21,14 @@
 #### 1.依赖（dependency）
 
 ```groovy
-    implementation 'com.github.zyyoona7:wheelview:2.0.0'
+    implementation 'com.github.zyyoona7:wheelview:2.0.2'
 ```
 
 
 #### PickerView Usage
 
 ```groovy
-    implementation 'com.github.zyyoona7:pickerview:2.0.0'
+    implementation 'com.github.zyyoona7:pickerview:2.0.2'
 ```
 ### 详细文档
 
