@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 10
-        versionName "1.0.9"
+        versionCode 11
+        versionName "1.1.0"
 
     }
 
@@ -47,7 +47,7 @@ publish {
     //项目名称 project name
     artifactId = 'pickerview'
     //版本号 version code
-    publishVersion = '1.0.9'
+    publishVersion = '1.1.0'
     //项目描述 description
     desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
     //项目网址链接 link

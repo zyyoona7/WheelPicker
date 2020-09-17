@@ -3,16 +3,14 @@
 buildscript {
     
     repositories {
-        //解决 Can not resolve Junit
-        maven { url 'http://repo1.maven.org/maven2' }
         mavenCentral()
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.5.2'
         //bintray release插件
-        classpath 'com.novoda:bintray-release:0.9.1'
+        classpath 'com.novoda:bintray-release:0.9.2'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -22,8 +20,6 @@ buildscript {
 
 allprojects {
     repositories {
-        //解决 Can not resolve Junit
-        maven { url 'http://repo1.maven.org/maven2' }
         mavenCentral()
         google()
         jcenter()

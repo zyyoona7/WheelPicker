@@ -70,8 +70,10 @@ public class Main3Activity extends AppCompatActivity {
         defaultDpv.setLabelTextSize(20);
         defaultDpv.setCurved(false);
         defaultDpv.setVisibleItems(3);
-        defaultDpv.setSelectedMonth(2);
-        //设置最大选择日期
+        defaultDpv.setSelectedYear(2001);
+        defaultDpv.setSelectedMonth(1);
+        defaultDpv.setSelectedDay(1);
+//        //设置最大选择日期
         Calendar maxCalendar = Calendar.getInstance();
         maxCalendar.set(Calendar.YEAR, 2018);
         defaultDpv.setMaxDate(maxCalendar);
