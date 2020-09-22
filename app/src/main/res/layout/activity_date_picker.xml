@@ -157,7 +157,7 @@
                 app:dpv_startYear="1988"
                 app:dpv_textSize="22sp"
                 app:dpv_yearRightText="年"
-                app:dpv_cyclic="true"
+                app:dpv_cyclic="false"
                 app:dpv_selectedTextColor="#801BACC9"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -35,6 +35,7 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
     private var maxMonth: Int = -1
     private var minDay: Int = -1
     private var maxDay: Int = -1
+    private var selectedRangeMode: WheelView.SelectedRangeMode = WheelView.SelectedRangeMode.OVER_RANGE_SCROLL
     private var dateSelectedListener: OnDateSelectedListener? = null
     private var scrollChangedListener: OnScrollChangedListener? = null
 
@@ -63,21 +64,21 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
                 wheelDayView?.year = selectedYear
                 when (selectedYear) {
                     minYear -> {
-                        wheelMonthView?.setSelectedMonthRange(minMonth, WheelMonthView.MAX_MONTH)
+                        wheelMonthView?.setSelectedMonthRange(minMonth, WheelMonthView.MAX_MONTH, selectedRangeMode)
                         val selectedMonth = getSelectedMonth()
                         if (selectedMonth == minMonth) {
                             wheelDayView?.let {
-                                it.setSelectedDayRange(minDay, it.getMaxDay())
+                                it.setSelectedDayRange(minDay, it.getMaxDay(), selectedRangeMode)
                             }
                         } else {
                             wheelDayView?.setSelectedDayRange(-1, -1)
                         }
                     }
                     maxYear -> {
-                        wheelMonthView?.setSelectedMonthRange(WheelMonthView.MIN_MONTH, maxMonth)
+                        wheelMonthView?.setSelectedMonthRange(WheelMonthView.MIN_MONTH, maxMonth, selectedRangeMode)
                         val selectedMonth = getSelectedMonth()
                         if (selectedMonth == maxMonth) {
-                            wheelDayView?.setSelectedDayRange(WheelDayView.MIN_DAY, maxDay)
+                            wheelDayView?.setSelectedDayRange(WheelDayView.MIN_DAY, maxDay, selectedRangeMode)
                         } else {
                             wheelDayView?.setSelectedDayRange(-1, -1)
                         }
@@ -97,10 +98,10 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
                 //才限制选择 Day 的范围
                 if (selectedMonth == minMonth && selectedYear == minYear) {
                     wheelDayView?.let {
-                        it.setSelectedDayRange(minDay, it.getMaxDay())
+                        it.setSelectedDayRange(minDay, it.getMaxDay(), selectedRangeMode)
                     }
                 } else if (selectedMonth == maxMonth && selectedYear == maxYear) {
-                    wheelDayView?.setSelectedDayRange(WheelDayView.MIN_DAY, maxDay)
+                    wheelDayView?.setSelectedDayRange(WheelDayView.MIN_DAY, maxDay, selectedRangeMode)
                 } else {
                     wheelDayView?.setSelectedDayRange(-1, -1)
                 }
@@ -165,17 +166,28 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
     override fun setMaxSelectedDate(maxDate: Date) {
         val maxCalendar = Calendar.getInstance()
         maxCalendar.time = maxDate
-        setMaxSelectedDate(maxCalendar)
+        setMaxSelectedDate(maxCalendar, WheelView.SelectedRangeMode.OVER_RANGE_SCROLL)
+    }
+
+    override fun setMaxSelectedDate(maxDate: Date, selectedRangeMode: WheelView.SelectedRangeMode) {
+        val maxCalendar = Calendar.getInstance()
+        maxCalendar.time = maxDate
+        setMaxSelectedDate(maxCalendar, selectedRangeMode)
     }
 
     override fun setMaxSelectedDate(maxCalendar: Calendar) {
+        setMaxSelectedDate(maxCalendar, WheelView.SelectedRangeMode.OVER_RANGE_SCROLL)
+    }
+
+    override fun setMaxSelectedDate(maxCalendar: Calendar, selectedRangeMode: WheelView.SelectedRangeMode) {
         minYear = getWheelYearView().getItem(0) ?: 1970
         maxYear = maxCalendar.get(Calendar.YEAR)
         minMonth = WheelMonthView.MIN_MONTH
         maxMonth = maxCalendar.get(Calendar.MONTH) + 1
         minDay = WheelDayView.MIN_DAY
         maxDay = maxCalendar.get(Calendar.DAY_OF_MONTH)
-        wheelYearView?.setSelectedYearRange(maxYear = maxYear)
+        this.selectedRangeMode = selectedRangeMode
+        wheelYearView?.setSelectedYearRange(maxYear = maxYear, selectedRangeMode = selectedRangeMode)
     }
 
     override fun setDateRange(minDate: Date, maxDate: Date) {
@@ -183,17 +195,31 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         minCalendar.time = minDate
         val maxCalendar = Calendar.getInstance()
         maxCalendar.time = maxDate
-        setDateRange(minCalendar, maxCalendar)
+        setDateRange(minCalendar, maxCalendar, WheelView.SelectedRangeMode.OVER_RANGE_SCROLL)
+    }
+
+    override fun setDateRange(minDate: Date, maxDate: Date, selectedRangeMode: WheelView.SelectedRangeMode) {
+        val minCalendar = Calendar.getInstance()
+        minCalendar.time = minDate
+        val maxCalendar = Calendar.getInstance()
+        maxCalendar.time = maxDate
+        setDateRange(minCalendar, maxCalendar, selectedRangeMode)
     }
 
     override fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar) {
+        setDateRange(minCalendar, maxCalendar, WheelView.SelectedRangeMode.OVER_RANGE_SCROLL)
+    }
+
+    override fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar,
+                              selectedRangeMode: WheelView.SelectedRangeMode) {
         minYear = minCalendar.get(Calendar.YEAR)
         maxYear = maxCalendar.get(Calendar.YEAR)
         minMonth = minCalendar.get(Calendar.MONTH) + 1
         maxMonth = maxCalendar.get(Calendar.MONTH) + 1
         minDay = minCalendar.get(Calendar.DAY_OF_MONTH)
         maxDay = maxCalendar.get(Calendar.DAY_OF_MONTH)
-        wheelYearView?.setSelectedYearRange(minYear, maxYear)
+        this.selectedRangeMode = selectedRangeMode
+        wheelYearView?.setSelectedYearRange(minYear, maxYear, selectedRangeMode)
     }
 
     override fun getSelectedDate(): Date {
@@ -544,12 +570,6 @@ class DatePickerHelper(private var wheelYearView: WheelYearView?,
         wheelYearView?.isResetSelectedPosition = reset
         wheelMonthView?.isResetSelectedPosition = reset
         wheelDayView?.isResetSelectedPosition = reset
-    }
-
-    override fun setCanOverRangeScroll(canOverRange: Boolean) {
-        wheelYearView?.canOverRangeScroll = canOverRange
-        wheelMonthView?.canOverRangeScroll = canOverRange
-        wheelDayView?.canOverRangeScroll = canOverRange
     }
 
     override fun setLeftText(text: CharSequence) {

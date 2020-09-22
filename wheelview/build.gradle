@@ -4,13 +4,13 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.novoda.bintray-release'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 22
-        versionName "2.0.2"
+        targetSdkVersion 30
+        versionCode 24
+        versionName "2.0.3"
     }
 
     buildTypes {
@@ -36,7 +36,7 @@ publish {
     //项目名称 project name
     artifactId = 'wheelview'
     //版本号 version code
-    publishVersion = '2.0.2'
+    publishVersion = '2.0.3'
     //项目描述 description
     desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
     //项目网址链接 link

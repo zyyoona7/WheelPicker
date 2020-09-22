@@ -79,7 +79,7 @@ class MainActivity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarChan
         }
 
         binding.inScroll.scCanOverRangeScroll.setOnCheckedChangeListener { _, isChecked ->
-            binding.wheelview.canOverRangeScroll = isChecked
+//            binding.wheelview.canOverRangeScroll = isChecked
         }
 
         binding.inText.rgAlign.setOnCheckedChangeListener { _, checkedId ->
@@ -174,7 +174,8 @@ class MainActivity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarChan
 
             override fun onRangeChanged(view: RangeSeekBar?, leftValue: Float,
                                         rightValue: Float, isFromUser: Boolean) {
-                binding.wheelview.setSelectedRange(leftValue.toInt(), rightValue.toInt())
+                binding.wheelview.setSelectedRange(leftValue.toInt(), rightValue.toInt(),
+                        WheelView.SelectedRangeMode.OVER_RANGE_HIDE_ITEM)
             }
 
             override fun onStopTrackingTouch(view: RangeSeekBar?, isLeft: Boolean) {
@@ -346,7 +347,7 @@ class MainActivity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarChan
                 maxValue.toFloat())
         binding.inScroll.rsbSelectedRange.setProgress(0f, binding.inScroll.rsbSelectedRange.maxProgress)
 
-        binding.inScroll.scCanOverRangeScroll.isChecked = wheelView.canOverRangeScroll
+        binding.inScroll.scCanOverRangeScroll.isChecked = false
 
         binding.inScroll.brSelectedPosition.setValue(0f, maxValue.toFloat(), 0f, 1f, 5)
 

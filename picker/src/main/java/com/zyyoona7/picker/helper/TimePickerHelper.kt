@@ -541,13 +541,6 @@ class TimePickerHelper(private var wheelAmPmView: WheelAmPmView?,
         wheelSecondView?.isResetSelectedPosition = reset
     }
 
-    override fun setCanOverRangeScroll(canOverRange: Boolean) {
-        wheelAmPmView?.canOverRangeScroll = canOverRange
-        wheelHourView?.canOverRangeScroll = canOverRange
-        wheelMinuteView?.canOverRangeScroll = canOverRange
-        wheelSecondView?.canOverRangeScroll = canOverRange
-    }
-
     override fun setLeftText(text: CharSequence) {
         setLeftText(text, text, text, text)
     }

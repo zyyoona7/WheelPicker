@@ -132,8 +132,6 @@ interface WheelPicker {
 
     fun setResetSelectedPosition(reset: Boolean)
 
-    fun setCanOverRangeScroll(canOverRange: Boolean)
-
     /*
       ---------- 左右额外的文字相关设置 ----------
      */
@@ -200,11 +198,20 @@ interface DatePicker {
 
     fun setMaxSelectedDate(maxDate: Date)
 
+    fun setMaxSelectedDate(maxDate: Date,selectedRangeMode: WheelView.SelectedRangeMode)
+
     fun setMaxSelectedDate(maxCalendar: Calendar)
+
+    fun setMaxSelectedDate(maxCalendar: Calendar,selectedRangeMode: WheelView.SelectedRangeMode)
 
     fun setDateRange(minDate: Date, maxDate: Date)
 
+    fun setDateRange(minDate: Date, maxDate: Date, selectedRangeMode: WheelView.SelectedRangeMode)
+
     fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar)
+
+    fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar,
+                     selectedRangeMode: WheelView.SelectedRangeMode)
 
     fun setLeftText(yearLeft: CharSequence, monthLeft: CharSequence, dayLeft: CharSequence)
 
@@ -283,7 +290,7 @@ interface TimePicker {
     /**
      * 设置选中时间
      */
-    fun setTime(hour: Int,minute: Int,second: Int,is24Hour: Boolean,isAm: Boolean)
+    fun setTime(hour: Int, minute: Int, second: Int, is24Hour: Boolean, isAm: Boolean)
 
     /**
      * 设置选中时间 24小时制

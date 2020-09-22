@@ -202,16 +202,33 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setMaxSelectedDate(maxDate)
     }
 
+    override fun setMaxSelectedDate(maxDate: Date, selectedRangeMode: WheelView.SelectedRangeMode) {
+        datePickerHelper.setMaxSelectedDate(maxDate, selectedRangeMode)
+    }
+
     override fun setMaxSelectedDate(maxCalendar: Calendar) {
         datePickerHelper.setMaxSelectedDate(maxCalendar)
+    }
+
+    override fun setMaxSelectedDate(maxCalendar: Calendar, selectedRangeMode: WheelView.SelectedRangeMode) {
+        datePickerHelper.setMaxSelectedDate(maxCalendar, selectedRangeMode)
     }
 
     override fun setDateRange(minDate: Date, maxDate: Date) {
         datePickerHelper.setDateRange(minDate, maxDate)
     }
 
+    override fun setDateRange(minDate: Date, maxDate: Date, selectedRangeMode: WheelView.SelectedRangeMode) {
+        datePickerHelper.setDateRange(minDate, maxDate, selectedRangeMode)
+    }
+
     override fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar) {
         datePickerHelper.setDateRange(minCalendar, maxCalendar)
+    }
+
+    override fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar,
+                              selectedRangeMode: WheelView.SelectedRangeMode) {
+        datePickerHelper.setDateRange(minCalendar, maxCalendar, selectedRangeMode)
     }
 
     override fun setShowYear(isShow: Boolean) {
@@ -454,10 +471,6 @@ class DatePickerView @JvmOverloads constructor(context: Context,
 
     override fun setResetSelectedPosition(reset: Boolean) {
         datePickerHelper.setResetSelectedPosition(reset)
-    }
-
-    override fun setCanOverRangeScroll(canOverRange: Boolean) {
-        datePickerHelper.setCanOverRangeScroll(canOverRange)
     }
 
     override fun setLeftText(text: CharSequence) {

@@ -386,10 +386,6 @@ class LinkagePickerView @JvmOverloads constructor(context: Context,
         linkagePickerHelper.setResetSelectedPosition(reset)
     }
 
-    override fun setCanOverRangeScroll(canOverRange: Boolean) {
-        linkagePickerHelper.setCanOverRangeScroll(canOverRange)
-    }
-
     override fun setLeftText(text: CharSequence) {
         linkagePickerHelper.setLeftText(text)
     }

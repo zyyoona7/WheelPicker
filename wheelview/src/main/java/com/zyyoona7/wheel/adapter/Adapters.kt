@@ -10,6 +10,9 @@ import com.zyyoona7.wheel.formatter.TextFormatter
 abstract class BaseWheelAdapter<T>(data: List<T>? = null) {
 
     private val dataList: MutableList<T> = mutableListOf()
+    private var isRangeData: Boolean = false
+    internal var isCyclic: Boolean = false
+    private val rangeDataList: MutableList<T> by lazy { mutableListOf<T>() }
 
     init {
         data?.let {
@@ -18,11 +21,19 @@ abstract class BaseWheelAdapter<T>(data: List<T>? = null) {
     }
 
     fun getItemCount(): Int {
+        return if (!isCyclic && isRangeData) rangeDataList.size else dataList.size
+    }
+
+    internal fun getRealItemCount(): Int {
         return dataList.size
     }
 
     internal fun getItemData(position: Int): T? {
-        return if (dataList.size > 0 && position in 0 until dataList.size) dataList[position] else null
+        return if (!isCyclic && isRangeData){
+            if (inRange(position,rangeDataList)) rangeDataList[position] else null
+        }else{
+            if (inRange(position,dataList)) dataList[position] else null
+        }
     }
 
     fun setData(data: List<T>) {
@@ -30,8 +41,26 @@ abstract class BaseWheelAdapter<T>(data: List<T>? = null) {
         dataList.addAll(data)
     }
 
+    fun setDataRange(min: Int, max: Int) {
+        if (min < 0 || max < 0 || min > max
+                || !inRange(min, dataList) || !inRange(max, dataList)) {
+            isRangeData = false
+            rangeDataList.clear()
+            return
+        }
+        isRangeData = true
+        rangeDataList.clear()
+        for (pos in min..max){
+            rangeDataList.add(dataList[pos])
+        }
+    }
+
     fun getData(): List<T> {
-        return dataList
+        return if (!isCyclic && isRangeData) rangeDataList else dataList
+    }
+
+    protected fun inRange(position: Int, dataList: List<T>): Boolean {
+        return dataList.isNotEmpty() && position in dataList.indices
     }
 
     internal abstract fun getItemText(item: Any?): String
@@ -52,7 +81,6 @@ open class ArrayWheelAdapter<T> @JvmOverloads constructor(data: List<T>? = null)
     internal var formatterBlock: ((Any?) -> String)? = null
     internal var finishScrollCallback: OnFinishScrollCallback? = null
     internal var selectedItemPosition: Int = 0
-    internal var isCyclic: Boolean = false
     internal var itemIndexer: ItemIndexer? = null
     internal var itemIndexerBlock: ((ArrayWheelAdapter<*>, Any?) -> Int)? = null
 

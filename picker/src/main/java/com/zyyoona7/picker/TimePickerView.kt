@@ -458,10 +458,6 @@ class TimePickerView @JvmOverloads constructor(context: Context,
         timePickerHelper.setResetSelectedPosition(reset)
     }
 
-    override fun setCanOverRangeScroll(canOverRange: Boolean) {
-        timePickerHelper.setCanOverRangeScroll(canOverRange)
-    }
-
     override fun setLeftText(text: CharSequence) {
         timePickerHelper.setLeftText(text)
     }

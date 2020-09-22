@@ -464,12 +464,6 @@ class LinkagePickerHelper(private var wheelView1: WheelView?,
         wheelView3?.isResetSelectedPosition = reset
     }
 
-    override fun setCanOverRangeScroll(canOverRange: Boolean) {
-        wheelView1?.canOverRangeScroll = canOverRange
-        wheelView2?.canOverRangeScroll = canOverRange
-        wheelView3?.canOverRangeScroll = canOverRange
-    }
-
     override fun setLeftText(text: CharSequence) {
         setLeftText(text, text, text)
     }

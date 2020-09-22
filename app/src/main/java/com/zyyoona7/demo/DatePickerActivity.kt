@@ -32,7 +32,7 @@ class DatePickerActivity : BaseActivity<ActivityDatePickerBinding>() {
         binding.datePicker1.setRightText("年","月","日")
         binding.datePicker2.setRightTextMarginLeft(10f)
 
-        binding.datePicker5.setMaxSelectedDate(Calendar.getInstance())
+        binding.datePicker5.setMaxSelectedDate(Calendar.getInstance(),WheelView.SelectedRangeMode.OVER_RANGE_HIDE_ITEM)
     }
 
     override fun initListeners(savedInstanceState: Bundle?) {
