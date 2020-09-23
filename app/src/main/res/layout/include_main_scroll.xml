@@ -18,11 +18,10 @@
 
         <CheckBox
             android:id="@+id/cb_selected_random"
+            style="@style/NormalAppearance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="是否随机选中"
-            style="@style/NormalAppearance"
-            />
+            android:text="是否随机选中" />
 
         <TextView
             android:id="@+id/tv_selected_position_title"
@@ -38,10 +37,10 @@
 
         <CheckBox
             android:id="@+id/cb_selected_smooth"
+            style="@style/NormalAppearance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="是否平滑滚动"
-            style="@style/NormalAppearance"/>
+            android:text="是否平滑滚动" />
 
         <TextView
             android:id="@+id/tv_selected_duration_title"
@@ -63,17 +62,47 @@
             android:text="选中下标" />
 
         <TextView
+            android:id="@+id/tv_selectable_range_mode_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设置可滚动范围模式（选择后设置滚动范围才能生效）"
+            android:textAppearance="@style/TitleAppearance" />
+
+        <RadioGroup
+            android:id="@+id/rg_selectable_range_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/rb_mode_over_range_scroll"
+                style="@style/NormalAppearance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="超出滚动范围后自动滚回最大/最小位置（支持Cyclic）" />
+
+            <RadioButton
+                android:id="@+id/rb_mode_over_range_cant_scroll"
+                style="@style/NormalAppearance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="仅在可选范围内滚动，范围外 item 可见（不支持Cyclic）" />
+
+            <RadioButton
+                android:id="@+id/rb_mode_over_range_hide_item"
+                style="@style/NormalAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="仅在可选范围内滚动，范围外 item 不可见（不支持Cyclic）" />
+        </RadioGroup>
+
+        <TextView
             android:id="@+id/tv_selected_range_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="设置滚动范围限制"
             android:textAppearance="@style/TitleAppearance" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/sc_can_over_range_scroll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="设置在有滚动范围限制时是否可以超出范围滚动" />
 
         <com.jaygoo.widget.RangeSeekBar
             android:id="@+id/rsb_selected_range"

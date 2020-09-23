@@ -12,7 +12,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.jaygoo.widget.OnRangeChangedListener
 import com.jaygoo.widget.RangeSeekBar
 import com.zyyoona7.demo.activity.BaseActivity
-import com.zyyoona7.demo.databinding.ActivityMain5Binding
+import com.zyyoona7.demo.databinding.ActivityMainBinding
 import com.zyyoona7.demo.utils.typefaceLight
 import com.zyyoona7.demo.utils.typefaceMedium
 import com.zyyoona7.demo.utils.typefaceRegular
@@ -20,15 +20,15 @@ import com.zyyoona7.demo.utils.vibrateShot
 import com.zyyoona7.wheel.WheelView
 import com.zyyoona7.wheel.formatter.IntTextFormatter
 import com.zyyoona7.wheel.listener.OnItemPositionChangedListener
-import kotlinx.android.synthetic.main.activity_main5.*
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.random.Random
 
 
-class MainActivity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarChangeListener {
+class MainActivity : BaseActivity<ActivityMainBinding>(), SeekBar.OnSeekBarChangeListener {
 
     override fun initLayoutId(): Int {
-        return R.layout.activity_main5
+        return R.layout.activity_main
     }
 
     override fun initVariables(savedInstanceState: Bundle?) {
@@ -76,10 +76,6 @@ class MainActivity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarChan
 
         binding.inDivider.scShowDivider.setOnCheckedChangeListener { _, isChecked ->
             binding.wheelview.isShowDivider = isChecked
-        }
-
-        binding.inScroll.scCanOverRangeScroll.setOnCheckedChangeListener { _, isChecked ->
-//            binding.wheelview.canOverRangeScroll = isChecked
         }
 
         binding.inText.rgAlign.setOnCheckedChangeListener { _, checkedId ->
@@ -174,8 +170,12 @@ class MainActivity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarChan
 
             override fun onRangeChanged(view: RangeSeekBar?, leftValue: Float,
                                         rightValue: Float, isFromUser: Boolean) {
-                binding.wheelview.setSelectedRange(leftValue.toInt(), rightValue.toInt(),
-                        WheelView.SelectedRangeMode.OVER_RANGE_HIDE_ITEM)
+                val mode = when (binding.inScroll.rgSelectableRangeMode.checkedRadioButtonId) {
+                    R.id.rb_mode_over_range_scroll -> WheelView.OverRangeMode.NORMAL
+                    R.id.rb_mode_over_range_cant_scroll -> WheelView.OverRangeMode.CANT_SCROLL
+                    else -> WheelView.OverRangeMode.HIDE_ITEM
+                }
+                binding.wheelview.setSelectableRange(leftValue.toInt(), rightValue.toInt(), mode)
             }
 
             override fun onStopTrackingTouch(view: RangeSeekBar?, isLeft: Boolean) {
@@ -346,8 +346,6 @@ class MainActivity : BaseActivity<ActivityMain5Binding>(), SeekBar.OnSeekBarChan
         binding.inScroll.rsbSelectedRange.setRange(0f,
                 maxValue.toFloat())
         binding.inScroll.rsbSelectedRange.setProgress(0f, binding.inScroll.rsbSelectedRange.maxProgress)
-
-        binding.inScroll.scCanOverRangeScroll.isChecked = false
 
         binding.inScroll.brSelectedPosition.setValue(0f, maxValue.toFloat(), 0f, 1f, 5)
 
