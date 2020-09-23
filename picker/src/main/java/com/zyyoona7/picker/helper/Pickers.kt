@@ -198,20 +198,20 @@ interface DatePicker {
 
     fun setMaxSelectedDate(maxDate: Date)
 
-    fun setMaxSelectedDate(maxDate: Date,selectedRangeMode: WheelView.SelectedRangeMode)
+    fun setMaxSelectedDate(maxDate: Date, overRangeMode: WheelView.OverRangeMode)
 
     fun setMaxSelectedDate(maxCalendar: Calendar)
 
-    fun setMaxSelectedDate(maxCalendar: Calendar,selectedRangeMode: WheelView.SelectedRangeMode)
+    fun setMaxSelectedDate(maxCalendar: Calendar, overRangeMode: WheelView.OverRangeMode)
 
     fun setDateRange(minDate: Date, maxDate: Date)
 
-    fun setDateRange(minDate: Date, maxDate: Date, selectedRangeMode: WheelView.SelectedRangeMode)
+    fun setDateRange(minDate: Date, maxDate: Date, overRangeMode: WheelView.OverRangeMode)
 
     fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar)
 
     fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar,
-                     selectedRangeMode: WheelView.SelectedRangeMode)
+                     overRangeMode: WheelView.OverRangeMode)
 
     fun setLeftText(yearLeft: CharSequence, monthLeft: CharSequence, dayLeft: CharSequence)
 

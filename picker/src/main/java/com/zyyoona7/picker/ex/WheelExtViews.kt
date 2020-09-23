@@ -90,15 +90,15 @@ class WheelYearView @JvmOverloads constructor(context: Context,
      */
     @JvmOverloads
     fun setSelectedYearRange(minYear: Int = startYear, maxYear: Int) {
-        setSelectedRange(indexOf(minYear), indexOf(maxYear), SelectedRangeMode.OVER_RANGE_SCROLL)
+        setSelectableRange(indexOf(minYear), indexOf(maxYear))
     }
 
     /**
      * 设置可以选中的年份范围
      */
     @JvmOverloads
-    fun setSelectedYearRange(minYear: Int = startYear, maxYear: Int, selectedRangeMode: SelectedRangeMode) {
-        setSelectedRange(indexOf(minYear), indexOf(maxYear), selectedRangeMode)
+    fun setSelectedYearRange(minYear: Int = startYear, maxYear: Int, overRangeMode: OverRangeMode) {
+        setSelectableRange(indexOf(minYear), indexOf(maxYear), overRangeMode)
     }
 }
 
@@ -161,12 +161,12 @@ class WheelMonthView @JvmOverloads constructor(context: Context,
 
     @JvmOverloads
     fun setSelectedMonthRange(minMonth: Int = MIN_MONTH, maxMonth: Int) {
-        setSelectedRange(indexOf(minMonth), indexOf(maxMonth), SelectedRangeMode.OVER_RANGE_SCROLL)
+        setSelectableRange(indexOf(minMonth), indexOf(maxMonth))
     }
 
     @JvmOverloads
-    fun setSelectedMonthRange(minMonth: Int = MIN_MONTH, maxMonth: Int, selectedRangeMode: SelectedRangeMode) {
-        setSelectedRange(indexOf(minMonth), indexOf(maxMonth), selectedRangeMode)
+    fun setSelectedMonthRange(minMonth: Int = MIN_MONTH, maxMonth: Int, overRangeMode: OverRangeMode) {
+        setSelectableRange(indexOf(minMonth), indexOf(maxMonth), overRangeMode)
     }
 }
 
@@ -293,12 +293,12 @@ class WheelDayView @JvmOverloads constructor(context: Context,
 
     @JvmOverloads
     fun setSelectedDayRange(min: Int = MIN_DAY, max: Int) {
-        setSelectedRange(indexOf(min), indexOf(max), SelectedRangeMode.OVER_RANGE_SCROLL)
+        setSelectableRange(indexOf(min), indexOf(max))
     }
 
     @JvmOverloads
-    fun setSelectedDayRange(min: Int = MIN_DAY, max: Int, selectedRangeMode: SelectedRangeMode) {
-        setSelectedRange(indexOf(min), indexOf(max), selectedRangeMode)
+    fun setSelectedDayRange(min: Int = MIN_DAY, max: Int, overRangeMode: OverRangeMode) {
+        setSelectableRange(indexOf(min), indexOf(max), overRangeMode)
     }
 
     fun getMaxDay(): Int {
@@ -440,8 +440,8 @@ class WheelHourView @JvmOverloads constructor(context: Context,
 
     @JvmOverloads
     fun setSelectedHourRange(minHour: Int, maxHour: Int,
-                             selectedRangeMode: SelectedRangeMode = SelectedRangeMode.OVER_RANGE_SCROLL) {
-        setSelectedRange(indexOf(minHour), indexOf(maxHour), selectedRangeMode)
+                             overRangeMode: OverRangeMode = OverRangeMode.NORMAL) {
+        setSelectableRange(indexOf(minHour), indexOf(maxHour), overRangeMode)
     }
 
     fun setOnAmPmChangedListener(amPmChangedListener: OnAmPmChangedListener?) {
@@ -539,8 +539,8 @@ class WheelMinuteView @JvmOverloads constructor(context: Context,
 
     @JvmOverloads
     fun setSelectedMinuteRange(minMinute: Int, maxMinute: Int,
-                               selectedRangeMode: SelectedRangeMode = SelectedRangeMode.OVER_RANGE_SCROLL) {
-        setSelectedRange(indexOf(minMinute), indexOf(maxMinute), selectedRangeMode)
+                               overRangeMode: OverRangeMode = OverRangeMode.NORMAL) {
+        setSelectableRange(indexOf(minMinute), indexOf(maxMinute), overRangeMode)
     }
 }
 
@@ -576,7 +576,7 @@ class WheelSecondView @JvmOverloads constructor(context: Context,
 
     @JvmOverloads
     fun setSelectedSecondRange(minSecond: Int, maxSecond: Int,
-                               selectedRangeMode: SelectedRangeMode = SelectedRangeMode.OVER_RANGE_SCROLL) {
-        setSelectedRange(indexOf(minSecond), indexOf(maxSecond), selectedRangeMode)
+                               overRangeMode: OverRangeMode = OverRangeMode.NORMAL) {
+        setSelectableRange(indexOf(minSecond), indexOf(maxSecond), overRangeMode)
     }
 }

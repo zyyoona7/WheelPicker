@@ -21,7 +21,7 @@ import androidx.annotation.IntRange
 import androidx.annotation.RawRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import com.zyyoona7.wheel.WheelView.SelectedRangeMode.*
+import com.zyyoona7.wheel.WheelView.OverRangeMode.*
 import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
 import com.zyyoona7.wheel.adapter.ItemIndexer
 import com.zyyoona7.wheel.formatter.TextFormatter
@@ -614,9 +614,9 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private var isHideOverRangeItem: Boolean = false
 
     /**
-     * setSelectedRange 后，展示和操作形式 @see [SelectedRangeMode]
+     * setSelectedRange 后，展示和操作形式 @see [OverRangeMode]
      */
-    private var selectedRangeMode: SelectedRangeMode = OVER_RANGE_SCROLL
+    private var mOverRangeMode: OverRangeMode = NORMAL
     /*
       ---------- 选中范围限制 ----------
      */
@@ -1313,7 +1313,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     private fun maxScrollPosition(adapter: ArrayWheelAdapter<*>): Int {
         return if (maxSelectedPosition >= 0 && maxSelectedPosition < adapter.getItemCount()
-                && selectedRangeMode == OVER_RANGE_CANT_SCROLL) {
+                && mOverRangeMode == CANT_SCROLL) {
             maxSelectedPosition
         } else {
             adapter.getItemCount() - 1
@@ -1323,7 +1323,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private fun minScrollPosition(adapter: ArrayWheelAdapter<*>): Int {
         return if (minSelectedPosition in 0 until maxSelectedPosition
                 && maxSelectedPosition < adapter.getItemCount()
-                && selectedRangeMode == OVER_RANGE_CANT_SCROLL) {
+                && mOverRangeMode == CANT_SCROLL) {
             minSelectedPosition
         } else {
             0
@@ -2370,7 +2370,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         forceFinishScroll()
         calculateLimitY()
         calculateScrollOffsetY()
-        if (this.selectedRangeMode == OVER_RANGE_HIDE_ITEM) {
+        if (this.mOverRangeMode == HIDE_ITEM) {
             isDataSetChanged = true
             requestLayout()
             invalidate()
@@ -2658,7 +2658,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     private fun isSelectedRangeInvalid(): Boolean {
         return (maxSelectedPosition < 0 && minSelectedPosition < 0)
-                || selectedRangeMode == OVER_RANGE_HIDE_ITEM
+                || mOverRangeMode == HIDE_ITEM
     }
 
     /**
@@ -2678,27 +2678,45 @@ open class WheelView @JvmOverloads constructor(context: Context,
     }
 
     /**
-     * 设置选中范围 限制最小 最大选中下标
+     * 设置可选中范围 限制最小 最大选中下标
      */
     @JvmOverloads
+    @Deprecated("renamed to setSelectableRange", ReplaceWith("setSelectableRange(min,max)"))
     fun setSelectedRange(@IntRange(from = 0) min: Int = 0, @IntRange(from = 0) max: Int) {
-        setSelectedRange(min, max, OVER_RANGE_SCROLL)
+        setSelectableRange(min, max)
     }
 
     /**
-     * 设置选中范围 限制最小 最大选中下标
-     *
+     * 设置可选中范围 限制最小 最大选中下标
      */
     @JvmOverloads
+    @Deprecated("renamed to setSelectableRange", ReplaceWith("setSelectableRange(min,max,selectableRangeMode)"))
     fun setSelectedRange(@IntRange(from = 0) min: Int = 0, @IntRange(from = 0) max: Int,
-                         selectedRangeMode: SelectedRangeMode) {
+                         overRangeMode: OverRangeMode) {
+        setSelectableRange(min, max, overRangeMode)
+    }
+
+    /**
+     * 设置可选中范围 限制最小 最大选中下标
+     */
+    @JvmOverloads
+    fun setSelectableRange(@IntRange(from = 0) min: Int = 0, @IntRange(from = 0) max: Int) {
+        setSelectableRange(min, max, NORMAL)
+    }
+
+    /**
+     * 设置可选中范围 限制最小 最大选中下标
+     */
+    @JvmOverloads
+    fun setSelectableRange(@IntRange(from = 0) min: Int = 0, @IntRange(from = 0) max: Int,
+                           overRangeMode: OverRangeMode) {
         require(max >= min) {
             "maxSelectedPosition must be greater than minSelectedPosition in WheelView."
         }
         if (min < 0 && max < 0) {
             minSelectedPosition = -1
             maxSelectedPosition = -1
-            resetAdapterDataRange(selectedRangeMode)
+            resetAdapterDataRange(overRangeMode)
             calculateLimitY()
             return
         }
@@ -2707,8 +2725,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
             if (max >= it.getRealItemCount()) it.getRealItemCount() - 1 else max
         } ?: max
 
-        resetAdapterDataRange(selectedRangeMode)
-        if (selectedRangeMode == OVER_RANGE_HIDE_ITEM) {
+        resetAdapterDataRange(overRangeMode)
+        if (overRangeMode == HIDE_ITEM) {
             wheelAdapter?.setDataRange(minSelectedPosition, maxSelectedPosition)
             notifyDataSetChanged()
             if (selectedPosition < minSelectedPosition) {
@@ -2726,13 +2744,13 @@ open class WheelView @JvmOverloads constructor(context: Context,
         calculateLimitY()
     }
 
-    private fun resetAdapterDataRange(selectedRangeMode: SelectedRangeMode) {
-        if (this.selectedRangeMode == OVER_RANGE_HIDE_ITEM
-                || selectedRangeMode != this.selectedRangeMode) {
+    private fun resetAdapterDataRange(overRangeMode: OverRangeMode) {
+        if (this.mOverRangeMode == HIDE_ITEM
+                || overRangeMode != this.mOverRangeMode) {
             wheelAdapter?.setDataRange(-1, -1)
             notifyDataSetChanged()
         }
-        this.selectedRangeMode = selectedRangeMode
+        this.mOverRangeMode = overRangeMode
     }
 
     /**
@@ -2879,11 +2897,11 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /**
      * 自定义 setSelectedRange 后，展示和操作形式
      *
-     * [OVER_RANGE_SCROLL] 可以超过选中范围，滚动停止后自动跳到最小/最大范围处
-     * [OVER_RANGE_CANT_SCROLL] 不可以超过选中范围滚动
-     * [OVER_RANGE_HIDE_ITEM]   超过选中范围的 item 会被隐藏
+     * [NORMAL] 可以超过选中范围，滚动停止后自动跳到最小/最大范围处
+     * [CANT_SCROLL] 不可以超过选中范围滚动
+     * [HIDE_ITEM]   选中范围外的 item 会被隐藏
      */
-    enum class SelectedRangeMode { OVER_RANGE_SCROLL, OVER_RANGE_CANT_SCROLL, OVER_RANGE_HIDE_ITEM }
+    enum class OverRangeMode { NORMAL, CANT_SCROLL, HIDE_ITEM }
 
     /*
       ---------- 一些枚举 ----------

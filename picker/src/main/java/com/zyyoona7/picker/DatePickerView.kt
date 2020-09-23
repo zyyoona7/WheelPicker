@@ -202,24 +202,24 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         datePickerHelper.setMaxSelectedDate(maxDate)
     }
 
-    override fun setMaxSelectedDate(maxDate: Date, selectedRangeMode: WheelView.SelectedRangeMode) {
-        datePickerHelper.setMaxSelectedDate(maxDate, selectedRangeMode)
+    override fun setMaxSelectedDate(maxDate: Date, overRangeMode: WheelView.OverRangeMode) {
+        datePickerHelper.setMaxSelectedDate(maxDate, overRangeMode)
     }
 
     override fun setMaxSelectedDate(maxCalendar: Calendar) {
         datePickerHelper.setMaxSelectedDate(maxCalendar)
     }
 
-    override fun setMaxSelectedDate(maxCalendar: Calendar, selectedRangeMode: WheelView.SelectedRangeMode) {
-        datePickerHelper.setMaxSelectedDate(maxCalendar, selectedRangeMode)
+    override fun setMaxSelectedDate(maxCalendar: Calendar, overRangeMode: WheelView.OverRangeMode) {
+        datePickerHelper.setMaxSelectedDate(maxCalendar, overRangeMode)
     }
 
     override fun setDateRange(minDate: Date, maxDate: Date) {
         datePickerHelper.setDateRange(minDate, maxDate)
     }
 
-    override fun setDateRange(minDate: Date, maxDate: Date, selectedRangeMode: WheelView.SelectedRangeMode) {
-        datePickerHelper.setDateRange(minDate, maxDate, selectedRangeMode)
+    override fun setDateRange(minDate: Date, maxDate: Date, overRangeMode: WheelView.OverRangeMode) {
+        datePickerHelper.setDateRange(minDate, maxDate, overRangeMode)
     }
 
     override fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar) {
@@ -227,8 +227,8 @@ class DatePickerView @JvmOverloads constructor(context: Context,
     }
 
     override fun setDateRange(minCalendar: Calendar, maxCalendar: Calendar,
-                              selectedRangeMode: WheelView.SelectedRangeMode) {
-        datePickerHelper.setDateRange(minCalendar, maxCalendar, selectedRangeMode)
+                              overRangeMode: WheelView.OverRangeMode) {
+        datePickerHelper.setDateRange(minCalendar, maxCalendar, overRangeMode)
     }
 
     override fun setShowYear(isShow: Boolean) {
