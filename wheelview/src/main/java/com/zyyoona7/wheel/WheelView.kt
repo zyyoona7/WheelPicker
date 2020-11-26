@@ -7,6 +7,7 @@ import android.graphics.*
 import android.media.AudioManager
 import android.os.SystemClock
 import android.text.TextPaint
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.util.SparseArray
@@ -1494,6 +1495,21 @@ open class WheelView @JvmOverloads constructor(context: Context,
     }
 
     /**
+     * 检查文字是否需要省略，如果 [isAutoFitTextSize] 为 false，则检查是否需要省略
+     */
+    private fun checkEllipseText(oriText: String?): String {
+        val originText = oriText ?: return ""
+        if (originText.trim().isEmpty()) {
+            return ""
+        }
+        if (isAutoFitTextSize) {
+            return originText
+        }
+        return TextUtils.ellipsize(originText, mainTextPaint,
+                mainTextMaxWidth.toFloat(), TextUtils.TruncateAt.END)?.toString() ?: ""
+    }
+
+    /**
      * 绘制2D效果
      *
      * @param canvas         画布
@@ -1503,7 +1519,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     private fun drawNormalItem(canvas: Canvas, index: Int,
                                scrolledOffset: Int, scrolledItem: Int) {
-        val text = wheelAdapter?.getItemTextByIndex(index) ?: ""
+        val text = checkEllipseText(wheelAdapter?.getItemTextByIndex(index))
         if (text.trim().isEmpty()) {
             return
         }
@@ -1605,8 +1621,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     private fun drawCurvedItem(canvas: Canvas, index: Int,
                                scrolledOffset: Int, scrolledItem: Int) {
-        val text = wheelAdapter?.getItemTextByIndex(index) ?: ""
-        if (text.isEmpty()) {
+        val text = checkEllipseText(wheelAdapter?.getItemTextByIndex(index))
+        if (text.trim().isEmpty()) {
             return
         }
         // 滚轮的半径
@@ -2097,7 +2113,28 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 计算当前滚动偏移与[position]处偏移的距离
      */
     private fun calculateItemDistance(position: Int): Int {
+        if (isCyclic) {
+            val dataHeight = (wheelAdapter?.getRealItemCount() ?: 0) * itemHeight
+            val offsetY = scrollOffsetY % dataHeight
+            val positionDistance = position * itemHeight
+            return if (scrollOffsetY >= 0 || offsetY == 0) {
+                val deltaDistance = positionDistance - offsetY
+                calculateCyclicDeltaDistance(dataHeight, deltaDistance)
+            } else {
+                val deltaDistance = -(dataHeight - positionDistance) - offsetY
+                calculateCyclicDeltaDistance(dataHeight, deltaDistance)
+            }
+        }
         return position * itemHeight - scrollOffsetY
+    }
+
+    private fun calculateCyclicDeltaDistance(dataHeight: Int, deltaDistance: Int): Int {
+        return if (abs(deltaDistance) >= dataHeight / 2) {
+            val dy = dataHeight - abs(deltaDistance)
+            if (deltaDistance < 0) dy else -dy
+        } else {
+            deltaDistance
+        }
     }
 
     /**
@@ -2599,7 +2636,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         val itemDistance = calculateItemDistance(realPosition)
         if (itemDistance == 0) {
             if (itemHeight == 0) {
-                //此时还没有测量结束，直接赋值selctedPosition
+                //此时还没有测量结束，直接赋值selectedPosition
                 selectedPosition = realPosition
                 currentScrollPosition = realPosition
                 wheelAdapter?.let {
