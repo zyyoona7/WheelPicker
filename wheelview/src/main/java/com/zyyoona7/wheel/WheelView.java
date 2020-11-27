@@ -23,6 +23,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -81,7 +82,7 @@ public class WheelView<T> extends View implements Runnable {
     public static final int DIVIDER_TYPE_FILL = 0;
     public static final int DIVIDER_TYPE_WRAP = 1;
 
-    private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final TextPaint mPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
     //字体大小
     private float mTextSize;
     //是否自动调整字体大小以显示完全
@@ -380,8 +381,12 @@ public class WheelView<T> extends View implements Runnable {
             int towardRange = (int) (Math.sin(Math.PI / 48) * height);
             width += towardRange;
         }
-        setMeasuredDimension(resolveSizeAndState(width, widthMeasureSpec, 0),
+        int realWidth = resolveSizeAndState(width, widthMeasureSpec, 0);
+        setMeasuredDimension(realWidth,
                 resolveSizeAndState(height, heightMeasureSpec, 0));
+        if (mMaxTextWidth > realWidth) {
+            mMaxTextWidth = realWidth - getPaddingLeft() - getPaddingRight();
+        }
     }
 
     @Override
@@ -523,6 +528,21 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     /**
+     * 检查文字是否需要省略，如果 [isAutoFitTextSize] 为 false，则检查是否需要省略
+     */
+    private String checkEllipseText(String oriText) {
+        if (TextUtils.isEmpty(oriText)) {
+            return "";
+        }
+        if (isAutoFitTextSize) {
+            return oriText;
+        }
+        CharSequence ellipsizeCharSequence = TextUtils.ellipsize(oriText, mPaint,
+                mMaxTextWidth * 1f, TextUtils.TruncateAt.END);
+        return ellipsizeCharSequence == null ? "" : ellipsizeCharSequence.toString();
+    }
+
+    /**
      * 绘制2D效果
      *
      * @param canvas         画布
@@ -530,7 +550,7 @@ public class WheelView<T> extends View implements Runnable {
      * @param scrolledOffset 滚动偏移
      */
     private void drawItem(Canvas canvas, int index, int scrolledOffset) {
-        String text = getDataByIndex(index);
+        String text = checkEllipseText(getDataByIndex(index));
         if (text == null) {
             return;
         }
@@ -689,7 +709,7 @@ public class WheelView<T> extends View implements Runnable {
      * @param scrolledOffset 滚动偏移
      */
     private void draw3DItem(Canvas canvas, int index, int scrolledOffset) {
-        String text = getDataByIndex(index);
+        String text = checkEllipseText(getDataByIndex(index));
         if (text == null) {
             return;
         }
@@ -1831,7 +1851,28 @@ public class WheelView<T> extends View implements Runnable {
     }
 
     private int calculateItemDistance(int position) {
+        if (isCyclic) {
+            int dataHeight = mDataList.size() * mItemHeight;
+            int offsetY = mScrollOffsetY % (dataHeight == 0 ? 1 : dataHeight);
+            int positionDistance = position * mItemHeight;
+            int deltaDistance;
+            if (mScrollOffsetY >= 0 || offsetY == 0) {
+                deltaDistance = positionDistance - offsetY;
+            } else {
+                deltaDistance = -(dataHeight - positionDistance) - offsetY;
+            }
+            return calculateCyclicDeltaDistance(dataHeight, deltaDistance);
+        }
         return position * mItemHeight - mScrollOffsetY;
+    }
+
+    private int calculateCyclicDeltaDistance(int dataHeight, int deltaDistance) {
+        if (Math.abs(deltaDistance) >= dataHeight / 2) {
+            int dy = dataHeight - Math.abs(deltaDistance);
+            return deltaDistance < 0 ? dy : -dy;
+        } else {
+            return deltaDistance;
+        }
     }
 
     /**
