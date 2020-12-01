@@ -2115,15 +2115,14 @@ open class WheelView @JvmOverloads constructor(context: Context,
     private fun calculateItemDistance(position: Int): Int {
         if (isCyclic) {
             val dataHeight = (wheelAdapter?.getRealItemCount() ?: 0) * itemHeight
-            val offsetY = scrollOffsetY % dataHeight
+            val offsetY = scrollOffsetY % (if (dataHeight == 0) 1 else dataHeight)
             val positionDistance = position * itemHeight
-            return if (scrollOffsetY >= 0 || offsetY == 0) {
-                val deltaDistance = positionDistance - offsetY
-                calculateCyclicDeltaDistance(dataHeight, deltaDistance)
+            val deltaDistance = if (scrollOffsetY >= 0 || offsetY == 0) {
+                positionDistance - offsetY
             } else {
-                val deltaDistance = -(dataHeight - positionDistance) - offsetY
-                calculateCyclicDeltaDistance(dataHeight, deltaDistance)
+                -(dataHeight - positionDistance) - offsetY
             }
+            return calculateCyclicDeltaDistance(dataHeight, deltaDistance)
         }
         return position * itemHeight - scrollOffsetY
     }
@@ -2630,6 +2629,9 @@ open class WheelView @JvmOverloads constructor(context: Context,
             }
         } ?: return
 
+        //如果Scroller滑动未停止，强制结束动画
+        abortFinishScroll()
+
         val realPosition = checkPositionInSelectedRange(position)
 
         //item之间差值
@@ -2648,8 +2650,6 @@ open class WheelView @JvmOverloads constructor(context: Context,
             }
             return
         }
-        //如果Scroller滑动未停止，强制结束动画
-        abortFinishScroll()
 
         if (isSmoothScroll) {
             //如果是平滑滚动并且之前的Scroll滚动完成
@@ -2944,10 +2944,12 @@ open class WheelView @JvmOverloads constructor(context: Context,
       ---------- 一些枚举 ----------
      */
 
-    class QuinticInterpolator : Interpolator {
+    /**
+     * from RecyclerView#sQuinticInterpolator
+     */
+    internal class QuinticInterpolator : Interpolator {
         override fun getInterpolation(input: Float): Float {
-            var newT = input
-            newT -= 1.0f
+            val newT = input - 1.0f
             return newT * newT * newT * newT * newT + 1.0f
         }
     }
