@@ -837,6 +837,16 @@ open class WheelView @JvmOverloads constructor(context: Context,
         const val MEASURED_BY_DEFAULT = 3
 
         /**
+         * 按照相同宽度测量，即只测量一个 item 的宽度来作为数据的最大宽度,数字按照最大数字宽度替换并测量
+         */
+        const val MEASURED_BY_SAME_WIDTH_WITH_NUM = 4
+
+        /**
+         * 按照文本最大长度测量，即最长的文本 item 的宽度就是最大宽度,数字按照最大数字宽度替换并测量
+         */
+        const val MEASURED_BY_MAX_LENGTH_WITH_NUM = 5
+
+        /**
          * dp转换px
          *
          * @param dp dp值
@@ -1210,17 +1220,26 @@ open class WheelView @JvmOverloads constructor(context: Context,
             mainTextPaint.textSize = textSize.toFloat()
             if (maxTextWidthMeasureType == MeasureType.SAME_WIDTH) {
                 mainTextMaxWidth = mainTextPaint.measureText(it.getItemText(it.getItemData(0))).toInt()
+            } else if (maxTextWidthMeasureType == MeasureType.SAME_WIDTH_WITH_NUM) {
+                mainTextMaxWidth = calculateMainTextMaxWidthBySameWidthWithNum(it.getItemText(it.getItemData(0)))
             } else {
                 var maxLength = -1
                 for (i in 0 until it.getItemCount()) {
                     val text = it.getItemText(it.getItemData(i))
                     //按照文字长度测量宽度，可以减少测量耗时
-                    if (maxTextWidthMeasureType == MeasureType.MAX_LENGTH
+                    if ((maxTextWidthMeasureType == MeasureType.MAX_LENGTH
+                                    || maxTextWidthMeasureType == MeasureType.MAX_LENGTH_WITH_NUM)
                             && text.length <= maxLength) {
                         continue
                     }
                     maxLength = text.length
-                    val textWidth = mainTextPaint.measureText(text).toInt()
+                    val realText = if (maxTextWidthMeasureType == MeasureType.MAX_LENGTH_WITH_NUM) {
+                        val maxWidthNum = calculateMaxWidthNum()
+                        text.replace(Regex("\\d"), maxWidthNum.toString())
+                    } else {
+                        text
+                    }
+                    val textWidth = mainTextPaint.measureText(realText).toInt()
                     mainTextMaxWidth = max(textWidth, mainTextMaxWidth)
                 }
             }
@@ -1228,6 +1247,26 @@ open class WheelView @JvmOverloads constructor(context: Context,
             originTextMaxWidth = mainTextMaxWidth
             mainTextHeight = (mainTextPaint.fontMetrics.bottom - mainTextPaint.fontMetrics.top).toInt()
         } ?: logAdapterNull()
+    }
+
+    private fun calculateMainTextMaxWidthBySameWidthWithNum(itemText: String): Int {
+        val maxWidthNum = calculateMaxWidthNum()
+        val measureText = itemText.replace(Regex("\\d"), maxWidthNum.toString())
+        return mainTextPaint.measureText(measureText).roundToInt()
+    }
+
+    private fun calculateMaxWidthNum(): Int {
+        //首先测量 0-9 最宽的数字（这里主要防止字体原因导致的数字宽度不一致问题）
+        var maxNumWidth = 0
+        var maxNum = 0
+        for (i in 0..9) {
+            val currentWidth = mainTextPaint.measureText(i.toString()).roundToInt()
+            if (currentWidth > maxNumWidth) {
+                maxNum = i
+                maxNumWidth = currentWidth
+            }
+        }
+        return maxNum
     }
 
     private fun calculateTextRect() {
@@ -2095,7 +2134,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 检查是否选中的下标在限制的下标范围内
      */
     private fun checkSelectedPositionInRange(adapter: ArrayWheelAdapter<*>): Boolean {
-        if (isSelectedRangeInvalid()) {
+        if (isSelectedRangeInvalid() || mOverRangeMode == HIDE_ITEM) {
             return true
         }
         if (isLessThanMinSelected(selectedPosition)) {
@@ -2624,7 +2663,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
                             smoothDuration: Int = DEFAULT_SCROLL_DURATION) {
         //adapter null or position not in range return
         wheelAdapter?.let {
-            if (position !in 0 until it.getItemCount()) {
+            if (position !in 0 until it.getRealItemCount()) {
                 return
             }
         } ?: return
@@ -2678,6 +2717,19 @@ open class WheelView @JvmOverloads constructor(context: Context,
         if (isSelectedRangeInvalid()) {
             return position
         }
+        if (mOverRangeMode == HIDE_ITEM) {
+            return when {
+                position in minSelectedPosition..maxSelectedPosition -> {
+                    position - minSelectedPosition
+                }
+                position < minSelectedPosition -> {
+                    minSelectedPosition
+                }
+                else -> {
+                    maxSelectedPosition
+                }
+            }
+        }
         if (isLessThanMinSelected(position)) {
             return minSelectedPosition
         }
@@ -2695,7 +2747,6 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     private fun isSelectedRangeInvalid(): Boolean {
         return (maxSelectedPosition < 0 && minSelectedPosition < 0)
-                || mOverRangeMode == HIDE_ITEM
     }
 
     /**
@@ -2766,17 +2817,11 @@ open class WheelView @JvmOverloads constructor(context: Context,
         if (overRangeMode == HIDE_ITEM) {
             wheelAdapter?.setDataRange(minSelectedPosition, maxSelectedPosition)
             notifyDataSetChanged()
-            if (selectedPosition < minSelectedPosition) {
-                setSelectedPosition(0)
-            } else if (selectedPosition > maxSelectedPosition) {
-                setSelectedPosition(getItemCount() - 1)
-            }
-        } else {
-            if (selectedPosition < minSelectedPosition) {
-                setSelectedPosition(min)
-            } else if (selectedPosition > maxSelectedPosition) {
-                setSelectedPosition(max)
-            }
+        }
+        if (selectedPosition < minSelectedPosition) {
+            setSelectedPosition(minSelectedPosition)
+        } else if (selectedPosition > maxSelectedPosition) {
+            setSelectedPosition(maxSelectedPosition)
         }
         calculateLimitY()
     }
@@ -2795,6 +2840,19 @@ open class WheelView @JvmOverloads constructor(context: Context,
      */
     fun getSelectedPosition(): Int {
         onFinishScroll()
+        if (mOverRangeMode == HIDE_ITEM) {
+            return when {
+                selectedPosition in minSelectedPosition..maxSelectedPosition -> {
+                    selectedPosition + minSelectedPosition
+                }
+                selectedPosition < minSelectedPosition -> {
+                    minSelectedPosition
+                }
+                else -> {
+                    maxSelectedPosition
+                }
+            }
+        }
         return selectedPosition
     }
 
@@ -2926,10 +2984,11 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 自定义最大文字宽度测量类型枚举
      *
      * @see [MEASURED_BY_SAME_WIDTH]
+     * @see [MEASURED_BY_SAME_WIDTH_WITH_NUM]
      * @see [MEASURED_BY_MAX_LENGTH]
      * @see [MEASURED_BY_DEFAULT]
      */
-    enum class MeasureType { SAME_WIDTH, MAX_LENGTH, DEFAULT }
+    enum class MeasureType { SAME_WIDTH, MAX_LENGTH, DEFAULT, SAME_WIDTH_WITH_NUM, MAX_LENGTH_WITH_NUM }
 
     /**
      * 自定义 setSelectedRange 后，展示和操作形式

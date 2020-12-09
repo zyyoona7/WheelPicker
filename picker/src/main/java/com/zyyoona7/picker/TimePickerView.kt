@@ -68,9 +68,9 @@ class TimePickerView @JvmOverloads constructor(context: Context,
         setMinuteTextFormatter(IntTextFormatter())
         setSecondTextFormatter(IntTextFormatter())
         setMaxTextWidthMeasureType(WheelView.MeasureType.MAX_LENGTH,
-                WheelView.MeasureType.MAX_LENGTH,
-                WheelView.MeasureType.SAME_WIDTH,
-                WheelView.MeasureType.SAME_WIDTH)
+                WheelView.MeasureType.MAX_LENGTH_WITH_NUM,
+                WheelView.MeasureType.SAME_WIDTH_WITH_NUM,
+                WheelView.MeasureType.SAME_WIDTH_WITH_NUM)
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet) {

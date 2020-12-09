@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 24
-        versionName "2.0.3"
+        versionCode 25
+        versionName "2.0.4"
     }
 
     buildTypes {
@@ -36,7 +36,7 @@ publish {
     //项目名称 project name
     artifactId = 'wheelview'
     //版本号 version code
-    publishVersion = '2.0.3'
+    publishVersion = '2.0.4'
     //项目描述 description
     desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
     //项目网址链接 link

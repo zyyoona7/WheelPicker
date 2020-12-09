@@ -60,7 +60,7 @@ class DatePickerView @JvmOverloads constructor(context: Context,
         wheelYearView.setTextFormatter(IntTextFormatter("%04d"))
         wheelMonthView.setTextFormatter(IntTextFormatter("%02d"))
         wheelDayView.setTextFormatter(IntTextFormatter("%02d"))
-        setMaxTextWidthMeasureType(WheelView.MeasureType.SAME_WIDTH)
+        setMaxTextWidthMeasureType(WheelView.MeasureType.SAME_WIDTH_WITH_NUM)
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet) {
