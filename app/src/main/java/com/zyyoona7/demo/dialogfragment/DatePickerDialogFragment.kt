@@ -5,6 +5,7 @@ import android.util.Log
 import com.zyyoona7.demo.R
 import com.zyyoona7.demo.databinding.DfDatePickerBinding
 import com.zyyoona7.picker.listener.OnDateSelectedListener
+import com.zyyoona7.wheel.WheelView
 import java.util.*
 
 class DatePickerDialogFragment : BaseDialogFragment<DfDatePickerBinding>() {
@@ -52,16 +53,33 @@ class DatePickerDialogFragment : BaseDialogFragment<DfDatePickerBinding>() {
         if (day != -1) {
             calendar.set(Calendar.DAY_OF_MONTH, day)
         }
-        binding.datePicker.setSelectedDate(calendar)
+        val tempCalendar = Calendar.getInstance()
+
+        val currentYear = tempCalendar.get(Calendar.YEAR)
+        val startYear = if (currentYear - 100 <= 0) 1 else currentYear - 100
+        val startCalendar = Calendar.getInstance()
+        startCalendar.set(startYear, 0, 1)
+
+        val endCalendar = Calendar.getInstance()
+        endCalendar.set(
+                currentYear - 18,
+                tempCalendar.get(Calendar.MONTH),
+                tempCalendar.get(Calendar.DAY_OF_MONTH)
+        )
+        endCalendar.add(Calendar.DAY_OF_MONTH, -1)
+
+        binding.datePicker.setYearRange(startYear, currentYear)
+        binding.datePicker.setDateRange(startCalendar, endCalendar, WheelView.OverRangeMode.HIDE_ITEM)
+        binding.datePicker.setSelectedDate(endCalendar)
     }
 
     override fun initListeners(savedInstanceState: Bundle?) {
 
-        binding.datePicker.setOnDateSelectedListener(object :OnDateSelectedListener{
+        binding.datePicker.setOnDateSelectedListener(object : OnDateSelectedListener {
             override fun onDateSelected(year: Int, month: Int, day: Int, date: Date) {
 //                getDialogListener(OnDateSelectedListener::class.java)
 //                        ?.onDateSelected(year, month, day, date)
-                Log.d("DatePickerDF","selectedDate:$year-$month-$day")
+                Log.d("DatePickerDF", "selectedDate:$year-$month-$day")
             }
         })
 

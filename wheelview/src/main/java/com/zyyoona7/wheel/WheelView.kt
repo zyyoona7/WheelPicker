@@ -2798,10 +2798,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
     @JvmOverloads
     fun setSelectableRange(@IntRange(from = 0) min: Int = 0, @IntRange(from = 0) max: Int,
                            overRangeMode: OverRangeMode) {
-        require(max >= min) {
-            "maxSelectedPosition must be greater than minSelectedPosition in WheelView."
-        }
-        if (min < 0 && max < 0) {
+        val realMax = if (max < min) min else max
+        if (min < 0 && realMax < 0) {
             minSelectedPosition = -1
             maxSelectedPosition = -1
             resetAdapterDataRange(overRangeMode)
@@ -2810,8 +2808,8 @@ open class WheelView @JvmOverloads constructor(context: Context,
         }
         minSelectedPosition = max(0, min)
         maxSelectedPosition = wheelAdapter?.let {
-            if (max >= it.getRealItemCount()) it.getRealItemCount() - 1 else max
-        } ?: max
+            if (realMax >= it.getRealItemCount()) it.getRealItemCount() - 1 else realMax
+        } ?: realMax
 
         resetAdapterDataRange(overRangeMode)
         if (overRangeMode == HIDE_ITEM) {
