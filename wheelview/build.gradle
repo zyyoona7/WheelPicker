@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 30
@@ -27,17 +28,19 @@ dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-//publish {
-//    //bintray.com 用户名/组织名 user/org name
-//    userOrg = 'zyyoona7'
-//    //JCenter上显示的路径 path
-//    groupId = 'com.github.zyyoona7'
-//    //项目名称 project name
-//    artifactId = 'wheelview'
-//    //版本号 version code
-//    publishVersion = '2.0.6'
-//    //项目描述 description
-//    desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
-//    //项目网址链接 link
-//    website = 'https://github.com/zyyoona7/WheelPicker'
-//}
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = 'com.github.zyyoona7'
+                artifactId = 'wheelview'
+                version = '2.0.6'
+            }
+        }
+    }
+}
