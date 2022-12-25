@@ -1092,7 +1092,7 @@ open class WheelView @JvmOverloads constructor(context: Context,
         }
 
         val realWidth = resolveSize(width, widthMeasureSpec)
-        if (width > realWidth) {
+        if (realWidth > 0 && width > realWidth) {
             //测量的宽度比实际宽度要大，重新设置 mainTextMaxWidth
             mainTextMaxWidth = realWidth - textPaddingLeft - textPaddingRight -
                     leftAndRightExtraWidth - paddingLeft - paddingRight - curvedArcWidth
