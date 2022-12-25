@@ -384,7 +384,7 @@ public class WheelView<T> extends View implements Runnable {
         int realWidth = resolveSizeAndState(width, widthMeasureSpec, 0);
         setMeasuredDimension(realWidth,
                 resolveSizeAndState(height, heightMeasureSpec, 0));
-        if (mMaxTextWidth > realWidth) {
+        if (realWidth > 0 && mMaxTextWidth > realWidth) {
             mMaxTextWidth = realWidth - getPaddingLeft() - getPaddingRight();
         }
     }
@@ -1809,8 +1809,8 @@ public class WheelView<T> extends View implements Runnable {
         int itemDistance = calculateItemDistance(position);
         if (itemDistance == 0) {
             //如果最开始设置了下标为0，则itemDistance==0
-            if (position!=mSelectedItemPosition) {
-                mSelectedItemPosition=position;
+            if (position != mSelectedItemPosition) {
+                mSelectedItemPosition = position;
                 //选中条目回调
                 if (mOnItemSelectedListener != null) {
                     mOnItemSelectedListener.onItemSelected(this, mDataList.get(mSelectedItemPosition), mSelectedItemPosition);
