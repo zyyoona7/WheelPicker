@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'org.jetbrains.kotlin.kapt'
 
 android {
     compileSdkVersion 29
@@ -40,5 +39,4 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.github.QuadFlask:colorpicker:0.0.15'
     implementation 'com.github.Jay-Goo:RangeSeekBar:3.0.0'
-    implementation 'com.zjun:rule-view:0.0.1'
 }

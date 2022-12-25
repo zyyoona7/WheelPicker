@@ -122,12 +122,12 @@ open class WheelView @JvmOverloads constructor(context: Context,
     /**
      * 最小滚动距离，上边界
      */
-    private var minScrollY: Int = 0
+    private var minScrollY: Int = -1
 
     /**
      * 最大滚动距离，下边界
      */
-    private var maxScrollY: Int = 0
+    private var maxScrollY: Int = -1
 
     /**
      * Y轴滚动偏移
@@ -764,6 +764,11 @@ open class WheelView @JvmOverloads constructor(context: Context,
      * 标记 数据是否有变化，如果变化了则重新测量文字宽度
      */
     private var isDataSetChanged: Boolean = false
+
+    /**
+     * 延迟选中 runnable
+     */
+    private var selectedPositionRunnable: Runnable? = null
 
     companion object {
         private const val TAG = "WheelView"
@@ -2072,6 +2077,10 @@ open class WheelView @JvmOverloads constructor(context: Context,
         //循环滚动的话 最大值和最小值都是 int 类型的边界，
         //小于 min value 则会变成正数
         //大于 max value 则会变成负数
+        if (isScrollYInvalid()) {
+            //测量还没完成
+            return
+        }
         if (!isCyclic) {
             //修正边界
             if (scrollOffsetY < minScrollY) {
@@ -2080,6 +2089,13 @@ open class WheelView @JvmOverloads constructor(context: Context,
                 scrollOffsetY = maxScrollY
             }
         }
+    }
+
+    /**
+     * scrollY 还没有被赋值
+     */
+    private fun isScrollYInvalid(): Boolean {
+        return minScrollY == -1 || maxScrollY == -1
     }
 
     /**
@@ -2676,16 +2692,9 @@ open class WheelView @JvmOverloads constructor(context: Context,
         //item之间差值
         val itemDistance = calculateItemDistance(realPosition)
         if (itemDistance == 0) {
-            if (itemHeight == 0) {
-                //此时还没有测量结束，直接赋值selectedPosition
-                selectedPosition = realPosition
-                currentScrollPosition = realPosition
-                wheelAdapter?.let {
-                    it.selectedItemPosition = selectedPosition
-                    //选中条目回调
-                    onItemSelected(it, selectedPosition)
-                    itemSelectedListener?.onItemSelected(this, it, selectedPosition)
-                }
+            if (isScrollYInvalid()) {
+                //没测量结束时，等待测量完成后再执行
+                postSelectedPosition(position)
             }
             return
         }
@@ -2697,6 +2706,11 @@ open class WheelView @JvmOverloads constructor(context: Context,
             invalidateIfYChanged()
             ViewCompat.postOnAnimation(this, this)
         } else {
+            if (isScrollYInvalid()) {
+                //没测量结束时，等待测量完成后再执行
+                postSelectedPosition(position)
+                return
+            }
             doScroll(itemDistance)
             selectedPosition = realPosition
             currentScrollPosition = realPosition
@@ -2708,6 +2722,14 @@ open class WheelView @JvmOverloads constructor(context: Context,
             }
             invalidateIfYChanged()
         }
+    }
+
+    private fun postSelectedPosition(position: Int) {
+        removeCallbacks(selectedPositionRunnable)
+        selectedPositionRunnable = Runnable {
+            setSelectedPosition(position, false, 0)
+        }
+        post(selectedPositionRunnable)
     }
 
     /**

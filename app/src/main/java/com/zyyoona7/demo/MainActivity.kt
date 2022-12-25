@@ -1,9 +1,10 @@
 package com.zyyoona7.demo
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.view.Gravity
 import android.widget.SeekBar
 import android.widget.Toast
@@ -18,9 +19,10 @@ import com.zyyoona7.demo.utils.typefaceMedium
 import com.zyyoona7.demo.utils.typefaceRegular
 import com.zyyoona7.demo.utils.vibrateShot
 import com.zyyoona7.wheel.WheelView
+import com.zyyoona7.wheel.adapter.ArrayWheelAdapter
 import com.zyyoona7.wheel.formatter.IntTextFormatter
 import com.zyyoona7.wheel.listener.OnItemPositionChangedListener
-import kotlinx.android.synthetic.main.activity_main.*
+import com.zyyoona7.wheel.listener.OnItemSelectedListener
 import java.util.*
 import kotlin.random.Random
 
@@ -40,7 +42,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), SeekBar.OnSeekBarChang
     override fun initListeners(savedInstanceState: Bundle?) {
 
         binding.btnMore.setOnClickListener {
-            DetailsActivity.start(this)
+//            DetailsActivity.start(this)
+
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("tingdao://room_announcement_detail?announcementId=7")))
         }
 
         binding.inNormal.sbVisibleItems.setOnSeekBarChangeListener(this)
@@ -230,7 +234,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), SeekBar.OnSeekBarChang
         }
 
         binding.inNormal.scDebug.setOnCheckedChangeListener { _, isChecked ->
-            wheelview.drawDebugRectEnabled = isChecked
+            binding.wheelview.drawDebugRectEnabled = isChecked
         }
 
         binding.inNormal.rgGravity.setOnCheckedChangeListener { _, checkedId ->
@@ -253,12 +257,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), SeekBar.OnSeekBarChang
         }
         binding.wheelview.setData(daysList)
         binding.wheelview.setTextFormatter(IntTextFormatter("%d日"))
+        binding.wheelview.setOnItemSelectedListener(object : OnItemSelectedListener {
+            override fun onItemSelected(wheelView: WheelView, adapter: ArrayWheelAdapter<*>, position: Int) {
+                Toast.makeText(this@MainActivity, "选中${binding.wheelview.getSelectedItem<Int>() ?: -1}",
+                        Toast.LENGTH_LONG).show()
+            }
+        })
         binding.wheelview.setSelectedPosition(currentDay)
 
-        Handler().postDelayed({
-            Toast.makeText(this, "选中${binding.wheelview.getSelectedItem<Int>() ?: -1}",
-                    Toast.LENGTH_LONG).show()
-        }, 1000)
 
     }
 

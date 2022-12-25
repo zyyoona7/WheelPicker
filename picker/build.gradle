@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 30
@@ -9,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 26
-        versionName "2.0.5"
+        versionCode 27
+        versionName "2.0.6"
     }
 
     buildTypes {
@@ -41,17 +40,17 @@ dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-publish {
-    //bintray.com 用户名/组织名 user/org name
-    userOrg = 'zyyoona7'
-    //JCenter上显示的路径 path
-    groupId = 'com.github.zyyoona7'
-    //项目名称 project name
-    artifactId = 'pickerview'
-    //版本号 version code
-    publishVersion = '2.0.5'
-    //项目描述 description
-    desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
-    //项目网址链接 link
-    website = 'https://github.com/zyyoona7/WheelPicker'
-}
+//publish {
+//    //bintray.com 用户名/组织名 user/org name
+//    userOrg = 'zyyoona7'
+//    //JCenter上显示的路径 path
+//    groupId = 'com.github.zyyoona7'
+//    //项目名称 project name
+//    artifactId = 'pickerview'
+//    //版本号 version code
+//    publishVersion = '2.0.6'
+//    //项目描述 description
+//    desc = 'A smooth, highly customizable wheel view and picker view, support 3D effects like iOS. '
+//    //项目网址链接 link
+//    website = 'https://github.com/zyyoona7/WheelPicker'
+//}

@@ -25,4 +25,6 @@
     <string name="curvedArcDirectionValue">弯曲（3D）效果左右圆弧偏移效果方向为：%s</string>
     <string name="curvedArcDirectionBiasValue">弯曲（3D）效果左右圆弧偏移效果方向系数为：%s</string>
     <string name="curvedRefractXValue">选中条目折射偏移为：%s</string>
+
+    <string name="balance_text">剩余金额</string>
 </resources>

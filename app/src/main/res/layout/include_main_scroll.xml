@@ -30,7 +30,7 @@
             android:text="设置选中下标"
             android:textAppearance="@style/TitleAppearance" />
 
-        <com.zjun.widget.RuleView
+        <com.zyyoona7.demo.widgets.RuleView
             android:id="@+id/br_selected_position"
             android:layout_width="match_parent"
             android:layout_height="70dp" />
