@@ -39,7 +39,7 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'com.github.zyyoona7'
                 artifactId = 'wheelview'
-                version = '2.0.6'
+                version = '2.0.7'
             }
         }
     }
