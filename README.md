@@ -12,6 +12,9 @@
 
 **注意：2.0.0 与 1.x 不兼容，需要重新接入**
 
+### 注意
+**jcenter 源已无法下载，仓库整体切换到 jitpack 源，groupId 由原来的 com.github.zyyoona7 变为 com.github.zyyoona7.WheelPicker**
+
 ### 使用（Usage）：
 
 #### WheelView Usage
@@ -25,14 +28,14 @@
 
 #### 单独使用 wheelview
 ```groovy
-    implementation 'com.github.zyyoona7.WheelPicker:wheelview:v2.0.6-release'
+    implementation 'com.github.zyyoona7.WheelPicker:wheelview:2.0.7'
 ```
 
 
 #### PickerView Usage
 
 ```groovy
-    implementation 'com.github.zyyoona7.WheelPicker:pickerview:v2.0.6-release'
+    implementation 'com.github.zyyoona7.WheelPicker:pickerview:2.0.7
 ```
 ### 详细文档
 
