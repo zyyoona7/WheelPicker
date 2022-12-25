@@ -2,8 +2,6 @@
 
 ![](https://img.shields.io/badge/platform-android-brightgreen.svg)
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
-[![](https://img.shields.io/badge/pickerview-2.0.4-brightgreen.svg)](https://bintray.com/zyyoona7/maven/pickerview)
-[![](https://img.shields.io/badge/wheelview-2.0.4-brightgreen.svg)](https://bintray.com/zyyoona7/maven/wheelview)
 [![](https://img.shields.io/github/license/zyyoona7/WheelPicker.svg)](https://github.com/zyyoona7/WheelPicker#license)
 ### 简介（Introduction）
 
@@ -20,15 +18,21 @@
 
 #### 1.依赖（dependency）
 
+#### 添加 jitpack 源
 ```groovy
-    implementation 'com.github.zyyoona7:wheelview:2.0.4'
+    maven { url 'https://jitpack.io' }
+```
+
+#### 单独使用 wheelview
+```groovy
+    implementation 'com.github.zyyoona7.WheelPicker:wheelview:v2.0.6-release'
 ```
 
 
 #### PickerView Usage
 
 ```groovy
-    implementation 'com.github.zyyoona7:pickerview:2.0.4'
+    implementation 'com.github.zyyoona7.WheelPicker:pickerview:v2.0.6-release'
 ```
 ### 详细文档
 
