@@ -7,7 +7,7 @@
 
 自定义 View 实现滑动流畅、功能齐全、用法简单、高度自定义的 WheelView，并在 WheelView 基础之上封装了常用的日期选择器（包括年、月、日 WheelView）、选项选择器。
 
-
+## [停止维护]
 ### 使用（Usage）
 
 **注意：2.0.0 与 1.x 不兼容，需要重新接入**
@@ -40,9 +40,6 @@
 ### 详细文档
 
 待续...
-   
-### 交流群
-![qrcode](https://github.com/zyyoona7/WheelPicker/blob/master/perview/QQ_qrcode.png)
 
 ### 感谢（Thanks）
 [**WheelPicker**](https://github.com/AigeStudio/WheelPicker)<br>
